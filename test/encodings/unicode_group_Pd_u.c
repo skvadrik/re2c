@@ -14,84 +14,86 @@ Pd:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0x00002E3F) {
-		if (yych <= 0x00001805) {
-			if (yych <= 0x0000058A) {
-				if (yych == '-') goto yy2;
-				if (yych >= 0x0000058A) goto yy2;
-			} else {
-				if (yych <= 0x000005BE) {
-					if (yych >= 0x000005BE) goto yy2;
+	if (yych <= 0x00002E40) {
+		if (yych <= 0x00001806) {
+			if (yych <= 0x000005BD) {
+				if (yych <= '-') {
+					if (yych >= '-') goto yy1;
 				} else {
-					if (yych == 0x00001400) goto yy2;
+					if (yych == 0x0000058A) goto yy1;
+				}
+			} else {
+				if (yych <= 0x000013FF) {
+					if (yych <= 0x000005BE) goto yy1;
+				} else {
+					if (yych <= 0x00001400) goto yy1;
+					if (yych >= 0x00001806) goto yy1;
 				}
 			}
 		} else {
-			if (yych <= 0x00002E17) {
-				if (yych <= 0x0000200F) {
-					if (yych <= 0x00001806) goto yy2;
+			if (yych <= 0x00002E19) {
+				if (yych <= 0x00002015) {
+					if (yych >= 0x00002010) goto yy1;
 				} else {
-					if (yych <= 0x00002015) goto yy2;
-					if (yych >= 0x00002E17) goto yy2;
+					if (yych == 0x00002E17) goto yy1;
 				}
 			} else {
-				if (yych <= 0x00002E1A) {
-					if (yych >= 0x00002E1A) goto yy2;
+				if (yych <= 0x00002E39) {
+					if (yych <= 0x00002E1A) goto yy1;
 				} else {
-					if (yych <= 0x00002E39) goto yy1;
-					if (yych <= 0x00002E3B) goto yy2;
+					if (yych <= 0x00002E3B) goto yy1;
+					if (yych >= 0x00002E40) goto yy1;
 				}
 			}
 		}
 	} else {
-		if (yych <= 0x0000FE30) {
-			if (yych <= 0x0000301C) {
-				if (yych <= 0x00002E5C) {
-					if (yych <= 0x00002E40) goto yy2;
+		if (yych <= 0x0000FE32) {
+			if (yych <= 0x0000302F) {
+				if (yych <= 0x00002E5D) {
+					if (yych >= 0x00002E5D) goto yy1;
 				} else {
-					if (yych <= 0x00002E5D) goto yy2;
-					if (yych >= 0x0000301C) goto yy2;
+					if (yych == 0x0000301C) goto yy1;
 				}
 			} else {
-				if (yych <= 0x00003030) {
-					if (yych >= 0x00003030) goto yy2;
+				if (yych <= 0x0000309F) {
+					if (yych <= 0x00003030) goto yy1;
 				} else {
-					if (yych == 0x000030A0) goto yy2;
+					if (yych <= 0x000030A0) goto yy1;
+					if (yych >= 0x0000FE31) goto yy1;
 				}
 			}
 		} else {
-			if (yych <= 0x0000FE63) {
-				if (yych <= 0x0000FE57) {
-					if (yych <= 0x0000FE32) goto yy2;
+			if (yych <= 0x0000FF0C) {
+				if (yych <= 0x0000FE58) {
+					if (yych >= 0x0000FE58) goto yy1;
 				} else {
-					if (yych <= 0x0000FE58) goto yy2;
-					if (yych >= 0x0000FE63) goto yy2;
+					if (yych == 0x0000FE63) goto yy1;
 				}
 			} else {
-				if (yych <= 0x0000FF0D) {
-					if (yych >= 0x0000FF0D) goto yy2;
+				if (yych <= 0x00010D6E) {
+					if (yych <= 0x0000FF0D) goto yy1;
+					if (yych >= 0x00010D6E) goto yy1;
 				} else {
-					if (yych == 0x00010EAD) goto yy2;
+					if (yych == 0x00010EAD) goto yy1;
 				}
 			}
 		}
 	}
-yy1:
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Pd_u.re"
 	{ return YYCURSOR - 1 == limit; }
-#line 84 "encodings/unicode_group_Pd_u.c"
-yy2:
+#line 86 "encodings/unicode_group_Pd_u.c"
+yy1:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Pd_u.re"
 	{ goto Pd; }
-#line 89 "encodings/unicode_group_Pd_u.c"
+#line 91 "encodings/unicode_group_Pd_u.c"
 }
 #line 15 "encodings/unicode_group_Pd_u.re"
 
 }
 
-static const uint32_t chars_Pd[] = {0x2d,0x2d,0x58a,0x58a,0x5be,0x5be,0x1400,0x1400,0x1806,0x1806,0x2010,0x2015,0x2e17,0x2e17,0x2e1a,0x2e1a,0x2e3a,0x2e3b,0x2e40,0x2e40,0x2e5d,0x2e5d,0x301c,0x301c,0x3030,0x3030,0x30a0,0x30a0,0xfe31,0xfe32,0xfe58,0xfe58,0xfe63,0xfe63,0xff0d,0xff0d,0x10ead,0x10ead,};
+static const uint32_t chars_Pd[] = {0x2d,0x2d,0x58a,0x58a,0x5be,0x5be,0x1400,0x1400,0x1806,0x1806,0x2010,0x2015,0x2e17,0x2e17,0x2e1a,0x2e1a,0x2e3a,0x2e3b,0x2e40,0x2e40,0x2e5d,0x2e5d,0x301c,0x301c,0x3030,0x3030,0x30a0,0x30a0,0xfe31,0xfe32,0xfe58,0xfe58,0xfe63,0xfe63,0xff0d,0xff0d,0x10d6e,0x10d6e,0x10ead,0x10ead,};
 
 static uint32_t encode_utf32(const uint32_t* ranges, uint32_t ranges_count, uint32_t* s) {
 	uint32_t* const s0 = s;
@@ -102,7 +104,7 @@ static uint32_t encode_utf32(const uint32_t* ranges, uint32_t ranges_count, uint
 }
 
 int main() {
-	YYCTYPE* buffer_Pd = new YYCTYPE[27];
+	YYCTYPE* buffer_Pd = new YYCTYPE[28];
 	uint32_t buffer_Pd_len = encode_utf32(chars_Pd, sizeof(chars_Pd) / sizeof(uint32_t), buffer_Pd);
 	if (!scan(buffer_Pd, buffer_Pd + buffer_Pd_len)) printf("test 'Pd' failed\n");
 	delete[] buffer_Pd;

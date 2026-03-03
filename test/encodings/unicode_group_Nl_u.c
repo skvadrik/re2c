@@ -14,7 +14,7 @@ Nl:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0x0000303A) {
+	if (yych <= 0x0000A6E5) {
 		if (yych <= 0x00002188) {
 			if (yych <= 0x0000215F) {
 				if (yych <= 0x000016ED) goto yy1;
@@ -28,25 +28,27 @@ Nl:
 				if (yych == 0x00003007) goto yy2;
 			} else {
 				if (yych <= 0x00003029) goto yy2;
-				if (yych >= 0x00003038) goto yy2;
+				if (yych <= 0x00003037) goto yy1;
+				if (yych <= 0x0000303A) goto yy2;
 			}
 		}
 	} else {
-		if (yych <= 0x00010341) {
-			if (yych <= 0x0001013F) {
-				if (yych <= 0x0000A6E5) goto yy1;
+		if (yych <= 0x0001034A) {
+			if (yych <= 0x00010174) {
 				if (yych <= 0x0000A6EF) goto yy2;
+				if (yych >= 0x00010140) goto yy2;
 			} else {
-				if (yych <= 0x00010174) goto yy2;
-				if (yych >= 0x00010341) goto yy2;
+				if (yych == 0x00010341) goto yy2;
+				if (yych >= 0x0001034A) goto yy2;
 			}
 		} else {
-			if (yych <= 0x000103D0) {
-				if (yych == 0x0001034A) goto yy2;
-			} else {
+			if (yych <= 0x000123FF) {
+				if (yych <= 0x000103D0) goto yy1;
 				if (yych <= 0x000103D5) goto yy2;
-				if (yych <= 0x000123FF) goto yy1;
+			} else {
 				if (yych <= 0x0001246E) goto yy2;
+				if (yych <= 0x00016FF3) goto yy1;
+				if (yych <= 0x00016FF6) goto yy2;
 			}
 		}
 	}
@@ -54,18 +56,18 @@ yy1:
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Nl_u.re"
 	{ return YYCURSOR - 1 == limit; }
-#line 58 "encodings/unicode_group_Nl_u.c"
+#line 60 "encodings/unicode_group_Nl_u.c"
 yy2:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Nl_u.re"
 	{ goto Nl; }
-#line 63 "encodings/unicode_group_Nl_u.c"
+#line 65 "encodings/unicode_group_Nl_u.c"
 }
 #line 15 "encodings/unicode_group_Nl_u.re"
 
 }
 
-static const uint32_t chars_Nl[] = {0x16ee,0x16f0,0x2160,0x2182,0x2185,0x2188,0x3007,0x3007,0x3021,0x3029,0x3038,0x303a,0xa6e6,0xa6ef,0x10140,0x10174,0x10341,0x10341,0x1034a,0x1034a,0x103d1,0x103d5,0x12400,0x1246e,};
+static const uint32_t chars_Nl[] = {0x16ee,0x16f0,0x2160,0x2182,0x2185,0x2188,0x3007,0x3007,0x3021,0x3029,0x3038,0x303a,0xa6e6,0xa6ef,0x10140,0x10174,0x10341,0x10341,0x1034a,0x1034a,0x103d1,0x103d5,0x12400,0x1246e,0x16ff4,0x16ff6,};
 
 static uint32_t encode_utf32(const uint32_t* ranges, uint32_t ranges_count, uint32_t* s) {
 	uint32_t* const s0 = s;
@@ -76,7 +78,7 @@ static uint32_t encode_utf32(const uint32_t* ranges, uint32_t ranges_count, uint
 }
 
 int main() {
-	YYCTYPE* buffer_Nl = new YYCTYPE[237];
+	YYCTYPE* buffer_Nl = new YYCTYPE[240];
 	uint32_t buffer_Nl_len = encode_utf32(chars_Nl, sizeof(chars_Nl) / sizeof(uint32_t), buffer_Nl);
 	if (!scan(buffer_Nl, buffer_Nl + buffer_Nl_len)) printf("test 'Nl' failed\n");
 	delete[] buffer_Nl;

@@ -189,6 +189,7 @@ enum Block {
 	Elbasan,
 	Caucasian_Albanian,
 	Vithkuqi,
+	Todhri,
 	Linear_A,
 	Latin_Extended_F,
 	Cypriot_Syllabary,
@@ -198,6 +199,7 @@ enum Block {
 	Hatran,
 	Phoenician,
 	Lydian,
+	Sidetic,
 	Meroitic_Hieroglyphs,
 	Meroitic_Cursive,
 	Kharoshthi,
@@ -211,6 +213,7 @@ enum Block {
 	Old_Turkic,
 	Old_Hungarian,
 	Hanifi_Rohingya,
+	Garay,
 	Rumi_Numeral_Symbols,
 	Yezidi,
 	Arabic_Extended_C,
@@ -230,12 +233,14 @@ enum Block {
 	Multani,
 	Khudawadi,
 	Grantha,
+	Tulu_Tigalari,
 	Newa,
 	Tirhuta,
 	Siddham,
 	Modi,
 	Mongolian_Supplement,
 	Takri,
+	Myanmar_Extended_C,
 	Ahom,
 	Dogra,
 	Warang_Citi,
@@ -246,10 +251,13 @@ enum Block {
 	Unified_Canadian_Aboriginal_Syllabics_Extended_A,
 	Pau_Cin_Hau,
 	Devanagari_Extended_A,
+	Sharada_Supplement,
+	Sunuwar,
 	Bhaiksuki,
 	Marchen,
 	Masaram_Gondi,
 	Gunjala_Gondi,
+	Tolong_Siki,
 	Makasar,
 	Kawi,
 	Lisu_Supplement,
@@ -260,19 +268,24 @@ enum Block {
 	Cypro_Minoan,
 	Egyptian_Hieroglyphs,
 	Egyptian_Hieroglyph_Format_Controls,
+	Egyptian_Hieroglyphs_Extended_A,
 	Anatolian_Hieroglyphs,
+	Gurung_Khema,
 	Bamum_Supplement,
 	Mro,
 	Tangsa,
 	Bassa_Vah,
 	Pahawh_Hmong,
+	Kirat_Rai,
 	Medefaidrin,
+	Beria_Erfe,
 	Miao,
 	Ideographic_Symbols_and_Punctuation,
 	Tangut,
 	Tangut_Components,
 	Khitan_Small_Script,
 	Tangut_Supplement,
+	Tangut_Components_Supplement,
 	Kana_Extended_B,
 	Kana_Supplement,
 	Kana_Extended_A,
@@ -280,6 +293,8 @@ enum Block {
 	Nushu,
 	Duployan,
 	Shorthand_Format_Controls,
+	Symbols_for_Legacy_Computing_Supplement,
+	Miscellaneous_Symbols_Supplement,
 	Znamenny_Musical_Notation,
 	Byzantine_Musical_Symbols,
 	Musical_Symbols,
@@ -297,6 +312,8 @@ enum Block {
 	Toto,
 	Wancho,
 	Nag_Mundari,
+	Ol_Onal,
+	Tai_Yo,
 	Ethiopic_Extended_B,
 	Mende_Kikakui,
 	Adlam,
@@ -328,6 +345,7 @@ enum Block {
 	CJK_Compatibility_Ideographs_Supplement,
 	CJK_Unified_Ideographs_Extension_G,
 	CJK_Unified_Ideographs_Extension_H,
+	CJK_Unified_Ideographs_Extension_J,
 	Tags,
 	Variation_Selectors_Supplement,
 	Supplementary_Private_Use_Area_A,
@@ -524,6 +542,7 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Elbasan: goto Elbasan;
 		case Caucasian_Albanian: goto Caucasian_Albanian;
 		case Vithkuqi: goto Vithkuqi;
+		case Todhri: goto Todhri;
 		case Linear_A: goto Linear_A;
 		case Latin_Extended_F: goto Latin_Extended_F;
 		case Cypriot_Syllabary: goto Cypriot_Syllabary;
@@ -533,6 +552,7 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Hatran: goto Hatran;
 		case Phoenician: goto Phoenician;
 		case Lydian: goto Lydian;
+		case Sidetic: goto Sidetic;
 		case Meroitic_Hieroglyphs: goto Meroitic_Hieroglyphs;
 		case Meroitic_Cursive: goto Meroitic_Cursive;
 		case Kharoshthi: goto Kharoshthi;
@@ -546,6 +566,7 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Old_Turkic: goto Old_Turkic;
 		case Old_Hungarian: goto Old_Hungarian;
 		case Hanifi_Rohingya: goto Hanifi_Rohingya;
+		case Garay: goto Garay;
 		case Rumi_Numeral_Symbols: goto Rumi_Numeral_Symbols;
 		case Yezidi: goto Yezidi;
 		case Arabic_Extended_C: goto Arabic_Extended_C;
@@ -565,12 +586,14 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Multani: goto Multani;
 		case Khudawadi: goto Khudawadi;
 		case Grantha: goto Grantha;
+		case Tulu_Tigalari: goto Tulu_Tigalari;
 		case Newa: goto Newa;
 		case Tirhuta: goto Tirhuta;
 		case Siddham: goto Siddham;
 		case Modi: goto Modi;
 		case Mongolian_Supplement: goto Mongolian_Supplement;
 		case Takri: goto Takri;
+		case Myanmar_Extended_C: goto Myanmar_Extended_C;
 		case Ahom: goto Ahom;
 		case Dogra: goto Dogra;
 		case Warang_Citi: goto Warang_Citi;
@@ -581,10 +604,13 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Unified_Canadian_Aboriginal_Syllabics_Extended_A: goto Unified_Canadian_Aboriginal_Syllabics_Extended_A;
 		case Pau_Cin_Hau: goto Pau_Cin_Hau;
 		case Devanagari_Extended_A: goto Devanagari_Extended_A;
+		case Sharada_Supplement: goto Sharada_Supplement;
+		case Sunuwar: goto Sunuwar;
 		case Bhaiksuki: goto Bhaiksuki;
 		case Marchen: goto Marchen;
 		case Masaram_Gondi: goto Masaram_Gondi;
 		case Gunjala_Gondi: goto Gunjala_Gondi;
+		case Tolong_Siki: goto Tolong_Siki;
 		case Makasar: goto Makasar;
 		case Kawi: goto Kawi;
 		case Lisu_Supplement: goto Lisu_Supplement;
@@ -595,19 +621,24 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Cypro_Minoan: goto Cypro_Minoan;
 		case Egyptian_Hieroglyphs: goto Egyptian_Hieroglyphs;
 		case Egyptian_Hieroglyph_Format_Controls: goto Egyptian_Hieroglyph_Format_Controls;
+		case Egyptian_Hieroglyphs_Extended_A: goto Egyptian_Hieroglyphs_Extended_A;
 		case Anatolian_Hieroglyphs: goto Anatolian_Hieroglyphs;
+		case Gurung_Khema: goto Gurung_Khema;
 		case Bamum_Supplement: goto Bamum_Supplement;
 		case Mro: goto Mro;
 		case Tangsa: goto Tangsa;
 		case Bassa_Vah: goto Bassa_Vah;
 		case Pahawh_Hmong: goto Pahawh_Hmong;
+		case Kirat_Rai: goto Kirat_Rai;
 		case Medefaidrin: goto Medefaidrin;
+		case Beria_Erfe: goto Beria_Erfe;
 		case Miao: goto Miao;
 		case Ideographic_Symbols_and_Punctuation: goto Ideographic_Symbols_and_Punctuation;
 		case Tangut: goto Tangut;
 		case Tangut_Components: goto Tangut_Components;
 		case Khitan_Small_Script: goto Khitan_Small_Script;
 		case Tangut_Supplement: goto Tangut_Supplement;
+		case Tangut_Components_Supplement: goto Tangut_Components_Supplement;
 		case Kana_Extended_B: goto Kana_Extended_B;
 		case Kana_Supplement: goto Kana_Supplement;
 		case Kana_Extended_A: goto Kana_Extended_A;
@@ -615,6 +646,8 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Nushu: goto Nushu;
 		case Duployan: goto Duployan;
 		case Shorthand_Format_Controls: goto Shorthand_Format_Controls;
+		case Symbols_for_Legacy_Computing_Supplement: goto Symbols_for_Legacy_Computing_Supplement;
+		case Miscellaneous_Symbols_Supplement: goto Miscellaneous_Symbols_Supplement;
 		case Znamenny_Musical_Notation: goto Znamenny_Musical_Notation;
 		case Byzantine_Musical_Symbols: goto Byzantine_Musical_Symbols;
 		case Musical_Symbols: goto Musical_Symbols;
@@ -632,6 +665,8 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Toto: goto Toto;
 		case Wancho: goto Wancho;
 		case Nag_Mundari: goto Nag_Mundari;
+		case Ol_Onal: goto Ol_Onal;
+		case Tai_Yo: goto Tai_Yo;
 		case Ethiopic_Extended_B: goto Ethiopic_Extended_B;
 		case Mende_Kikakui: goto Mende_Kikakui;
 		case Adlam: goto Adlam;
@@ -663,6 +698,7 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case CJK_Compatibility_Ideographs_Supplement: goto CJK_Compatibility_Ideographs_Supplement;
 		case CJK_Unified_Ideographs_Extension_G: goto CJK_Unified_Ideographs_Extension_G;
 		case CJK_Unified_Ideographs_Extension_H: goto CJK_Unified_Ideographs_Extension_H;
+		case CJK_Unified_Ideographs_Extension_J: goto CJK_Unified_Ideographs_Extension_J;
 		case Tags: goto Tags;
 		case Variation_Selectors_Supplement: goto Variation_Selectors_Supplement;
 		case Supplementary_Private_Use_Area_A: goto Supplementary_Private_Use_Area_A;
@@ -855,6 +891,7 @@ Osage = [\U000104b0-\U000104ff];
 Elbasan = [\U00010500-\U0001052f];
 Caucasian_Albanian = [\U00010530-\U0001056f];
 Vithkuqi = [\U00010570-\U000105bf];
+Todhri = [\U000105c0-\U000105ff];
 Linear_A = [\U00010600-\U0001077f];
 Latin_Extended_F = [\U00010780-\U000107bf];
 Cypriot_Syllabary = [\U00010800-\U0001083f];
@@ -864,6 +901,7 @@ Nabataean = [\U00010880-\U000108af];
 Hatran = [\U000108e0-\U000108ff];
 Phoenician = [\U00010900-\U0001091f];
 Lydian = [\U00010920-\U0001093f];
+Sidetic = [\U00010940-\U0001095f];
 Meroitic_Hieroglyphs = [\U00010980-\U0001099f];
 Meroitic_Cursive = [\U000109a0-\U000109ff];
 Kharoshthi = [\U00010a00-\U00010a5f];
@@ -877,6 +915,7 @@ Psalter_Pahlavi = [\U00010b80-\U00010baf];
 Old_Turkic = [\U00010c00-\U00010c4f];
 Old_Hungarian = [\U00010c80-\U00010cff];
 Hanifi_Rohingya = [\U00010d00-\U00010d3f];
+Garay = [\U00010d40-\U00010d8f];
 Rumi_Numeral_Symbols = [\U00010e60-\U00010e7f];
 Yezidi = [\U00010e80-\U00010ebf];
 Arabic_Extended_C = [\U00010ec0-\U00010eff];
@@ -896,12 +935,14 @@ Khojki = [\U00011200-\U0001124f];
 Multani = [\U00011280-\U000112af];
 Khudawadi = [\U000112b0-\U000112ff];
 Grantha = [\U00011300-\U0001137f];
+Tulu_Tigalari = [\U00011380-\U000113ff];
 Newa = [\U00011400-\U0001147f];
 Tirhuta = [\U00011480-\U000114df];
 Siddham = [\U00011580-\U000115ff];
 Modi = [\U00011600-\U0001165f];
 Mongolian_Supplement = [\U00011660-\U0001167f];
 Takri = [\U00011680-\U000116cf];
+Myanmar_Extended_C = [\U000116d0-\U000116ff];
 Ahom = [\U00011700-\U0001174f];
 Dogra = [\U00011800-\U0001184f];
 Warang_Citi = [\U000118a0-\U000118ff];
@@ -912,10 +953,13 @@ Soyombo = [\U00011a50-\U00011aaf];
 Unified_Canadian_Aboriginal_Syllabics_Extended_A = [\U00011ab0-\U00011abf];
 Pau_Cin_Hau = [\U00011ac0-\U00011aff];
 Devanagari_Extended_A = [\U00011b00-\U00011b5f];
+Sharada_Supplement = [\U00011b60-\U00011b7f];
+Sunuwar = [\U00011bc0-\U00011bff];
 Bhaiksuki = [\U00011c00-\U00011c6f];
 Marchen = [\U00011c70-\U00011cbf];
 Masaram_Gondi = [\U00011d00-\U00011d5f];
 Gunjala_Gondi = [\U00011d60-\U00011daf];
+Tolong_Siki = [\U00011db0-\U00011def];
 Makasar = [\U00011ee0-\U00011eff];
 Kawi = [\U00011f00-\U00011f5f];
 Lisu_Supplement = [\U00011fb0-\U00011fbf];
@@ -926,19 +970,24 @@ Early_Dynastic_Cuneiform = [\U00012480-\U0001254f];
 Cypro_Minoan = [\U00012f90-\U00012fff];
 Egyptian_Hieroglyphs = [\U00013000-\U0001342f];
 Egyptian_Hieroglyph_Format_Controls = [\U00013430-\U0001345f];
+Egyptian_Hieroglyphs_Extended_A = [\U00013460-\U000143ff];
 Anatolian_Hieroglyphs = [\U00014400-\U0001467f];
+Gurung_Khema = [\U00016100-\U0001613f];
 Bamum_Supplement = [\U00016800-\U00016a3f];
 Mro = [\U00016a40-\U00016a6f];
 Tangsa = [\U00016a70-\U00016acf];
 Bassa_Vah = [\U00016ad0-\U00016aff];
 Pahawh_Hmong = [\U00016b00-\U00016b8f];
+Kirat_Rai = [\U00016d40-\U00016d7f];
 Medefaidrin = [\U00016e40-\U00016e9f];
+Beria_Erfe = [\U00016ea0-\U00016edf];
 Miao = [\U00016f00-\U00016f9f];
 Ideographic_Symbols_and_Punctuation = [\U00016fe0-\U00016fff];
 Tangut = [\U00017000-\U000187ff];
 Tangut_Components = [\U00018800-\U00018aff];
 Khitan_Small_Script = [\U00018b00-\U00018cff];
 Tangut_Supplement = [\U00018d00-\U00018d7f];
+Tangut_Components_Supplement = [\U00018d80-\U00018dff];
 Kana_Extended_B = [\U0001aff0-\U0001afff];
 Kana_Supplement = [\U0001b000-\U0001b0ff];
 Kana_Extended_A = [\U0001b100-\U0001b12f];
@@ -946,6 +995,8 @@ Small_Kana_Extension = [\U0001b130-\U0001b16f];
 Nushu = [\U0001b170-\U0001b2ff];
 Duployan = [\U0001bc00-\U0001bc9f];
 Shorthand_Format_Controls = [\U0001bca0-\U0001bcaf];
+Symbols_for_Legacy_Computing_Supplement = [\U0001cc00-\U0001cebf];
+Miscellaneous_Symbols_Supplement = [\U0001cec0-\U0001ceff];
 Znamenny_Musical_Notation = [\U0001cf00-\U0001cfcf];
 Byzantine_Musical_Symbols = [\U0001d000-\U0001d0ff];
 Musical_Symbols = [\U0001d100-\U0001d1ff];
@@ -963,6 +1014,8 @@ Nyiakeng_Puachue_Hmong = [\U0001e100-\U0001e14f];
 Toto = [\U0001e290-\U0001e2bf];
 Wancho = [\U0001e2c0-\U0001e2ff];
 Nag_Mundari = [\U0001e4d0-\U0001e4ff];
+Ol_Onal = [\U0001e5d0-\U0001e5ff];
+Tai_Yo = [\U0001e6c0-\U0001e6ff];
 Ethiopic_Extended_B = [\U0001e7e0-\U0001e7ff];
 Mende_Kikakui = [\U0001e800-\U0001e8df];
 Adlam = [\U0001e900-\U0001e95f];
@@ -994,6 +1047,7 @@ CJK_Unified_Ideographs_Extension_I = [\U0002ebf0-\U0002ee5f];
 CJK_Compatibility_Ideographs_Supplement = [\U0002f800-\U0002fa1f];
 CJK_Unified_Ideographs_Extension_G = [\U00030000-\U0003134f];
 CJK_Unified_Ideographs_Extension_H = [\U00031350-\U000323af];
+CJK_Unified_Ideographs_Extension_J = [\U000323b0-\U0003347f];
 Tags = [\U000e0000-\U000e007f];
 Variation_Selectors_Supplement = [\U000e0100-\U000e01ef];
 Supplementary_Private_Use_Area_A = [\U000f0000-\U000fffff];
@@ -2109,6 +2163,12 @@ Vithkuqi:
 		Vithkuqi { goto Vithkuqi; }
 		* { if (YYCURSOR - 1 == limit) return Vithkuqi; else return Error; }
 	*/
+Todhri:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Todhri { goto Todhri; }
+		* { if (YYCURSOR - 1 == limit) return Todhri; else return Error; }
+	*/
 Linear_A:
 	/*!re2c
 		re2c:yyfill:enable = 0;
@@ -2162,6 +2222,12 @@ Lydian:
 		re2c:yyfill:enable = 0;
 		Lydian { goto Lydian; }
 		* { if (YYCURSOR - 1 == limit) return Lydian; else return Error; }
+	*/
+Sidetic:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Sidetic { goto Sidetic; }
+		* { if (YYCURSOR - 1 == limit) return Sidetic; else return Error; }
 	*/
 Meroitic_Hieroglyphs:
 	/*!re2c
@@ -2240,6 +2306,12 @@ Hanifi_Rohingya:
 		re2c:yyfill:enable = 0;
 		Hanifi_Rohingya { goto Hanifi_Rohingya; }
 		* { if (YYCURSOR - 1 == limit) return Hanifi_Rohingya; else return Error; }
+	*/
+Garay:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Garay { goto Garay; }
+		* { if (YYCURSOR - 1 == limit) return Garay; else return Error; }
 	*/
 Rumi_Numeral_Symbols:
 	/*!re2c
@@ -2355,6 +2427,12 @@ Grantha:
 		Grantha { goto Grantha; }
 		* { if (YYCURSOR - 1 == limit) return Grantha; else return Error; }
 	*/
+Tulu_Tigalari:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Tulu_Tigalari { goto Tulu_Tigalari; }
+		* { if (YYCURSOR - 1 == limit) return Tulu_Tigalari; else return Error; }
+	*/
 Newa:
 	/*!re2c
 		re2c:yyfill:enable = 0;
@@ -2390,6 +2468,12 @@ Takri:
 		re2c:yyfill:enable = 0;
 		Takri { goto Takri; }
 		* { if (YYCURSOR - 1 == limit) return Takri; else return Error; }
+	*/
+Myanmar_Extended_C:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Myanmar_Extended_C { goto Myanmar_Extended_C; }
+		* { if (YYCURSOR - 1 == limit) return Myanmar_Extended_C; else return Error; }
 	*/
 Ahom:
 	/*!re2c
@@ -2451,6 +2535,18 @@ Devanagari_Extended_A:
 		Devanagari_Extended_A { goto Devanagari_Extended_A; }
 		* { if (YYCURSOR - 1 == limit) return Devanagari_Extended_A; else return Error; }
 	*/
+Sharada_Supplement:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Sharada_Supplement { goto Sharada_Supplement; }
+		* { if (YYCURSOR - 1 == limit) return Sharada_Supplement; else return Error; }
+	*/
+Sunuwar:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Sunuwar { goto Sunuwar; }
+		* { if (YYCURSOR - 1 == limit) return Sunuwar; else return Error; }
+	*/
 Bhaiksuki:
 	/*!re2c
 		re2c:yyfill:enable = 0;
@@ -2474,6 +2570,12 @@ Gunjala_Gondi:
 		re2c:yyfill:enable = 0;
 		Gunjala_Gondi { goto Gunjala_Gondi; }
 		* { if (YYCURSOR - 1 == limit) return Gunjala_Gondi; else return Error; }
+	*/
+Tolong_Siki:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Tolong_Siki { goto Tolong_Siki; }
+		* { if (YYCURSOR - 1 == limit) return Tolong_Siki; else return Error; }
 	*/
 Makasar:
 	/*!re2c
@@ -2535,11 +2637,23 @@ Egyptian_Hieroglyph_Format_Controls:
 		Egyptian_Hieroglyph_Format_Controls { goto Egyptian_Hieroglyph_Format_Controls; }
 		* { if (YYCURSOR - 1 == limit) return Egyptian_Hieroglyph_Format_Controls; else return Error; }
 	*/
+Egyptian_Hieroglyphs_Extended_A:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Egyptian_Hieroglyphs_Extended_A { goto Egyptian_Hieroglyphs_Extended_A; }
+		* { if (YYCURSOR - 1 == limit) return Egyptian_Hieroglyphs_Extended_A; else return Error; }
+	*/
 Anatolian_Hieroglyphs:
 	/*!re2c
 		re2c:yyfill:enable = 0;
 		Anatolian_Hieroglyphs { goto Anatolian_Hieroglyphs; }
 		* { if (YYCURSOR - 1 == limit) return Anatolian_Hieroglyphs; else return Error; }
+	*/
+Gurung_Khema:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Gurung_Khema { goto Gurung_Khema; }
+		* { if (YYCURSOR - 1 == limit) return Gurung_Khema; else return Error; }
 	*/
 Bamum_Supplement:
 	/*!re2c
@@ -2571,11 +2685,23 @@ Pahawh_Hmong:
 		Pahawh_Hmong { goto Pahawh_Hmong; }
 		* { if (YYCURSOR - 1 == limit) return Pahawh_Hmong; else return Error; }
 	*/
+Kirat_Rai:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Kirat_Rai { goto Kirat_Rai; }
+		* { if (YYCURSOR - 1 == limit) return Kirat_Rai; else return Error; }
+	*/
 Medefaidrin:
 	/*!re2c
 		re2c:yyfill:enable = 0;
 		Medefaidrin { goto Medefaidrin; }
 		* { if (YYCURSOR - 1 == limit) return Medefaidrin; else return Error; }
+	*/
+Beria_Erfe:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Beria_Erfe { goto Beria_Erfe; }
+		* { if (YYCURSOR - 1 == limit) return Beria_Erfe; else return Error; }
 	*/
 Miao:
 	/*!re2c
@@ -2612,6 +2738,12 @@ Tangut_Supplement:
 		re2c:yyfill:enable = 0;
 		Tangut_Supplement { goto Tangut_Supplement; }
 		* { if (YYCURSOR - 1 == limit) return Tangut_Supplement; else return Error; }
+	*/
+Tangut_Components_Supplement:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Tangut_Components_Supplement { goto Tangut_Components_Supplement; }
+		* { if (YYCURSOR - 1 == limit) return Tangut_Components_Supplement; else return Error; }
 	*/
 Kana_Extended_B:
 	/*!re2c
@@ -2654,6 +2786,18 @@ Shorthand_Format_Controls:
 		re2c:yyfill:enable = 0;
 		Shorthand_Format_Controls { goto Shorthand_Format_Controls; }
 		* { if (YYCURSOR - 1 == limit) return Shorthand_Format_Controls; else return Error; }
+	*/
+Symbols_for_Legacy_Computing_Supplement:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Symbols_for_Legacy_Computing_Supplement { goto Symbols_for_Legacy_Computing_Supplement; }
+		* { if (YYCURSOR - 1 == limit) return Symbols_for_Legacy_Computing_Supplement; else return Error; }
+	*/
+Miscellaneous_Symbols_Supplement:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Miscellaneous_Symbols_Supplement { goto Miscellaneous_Symbols_Supplement; }
+		* { if (YYCURSOR - 1 == limit) return Miscellaneous_Symbols_Supplement; else return Error; }
 	*/
 Znamenny_Musical_Notation:
 	/*!re2c
@@ -2756,6 +2900,18 @@ Nag_Mundari:
 		re2c:yyfill:enable = 0;
 		Nag_Mundari { goto Nag_Mundari; }
 		* { if (YYCURSOR - 1 == limit) return Nag_Mundari; else return Error; }
+	*/
+Ol_Onal:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Ol_Onal { goto Ol_Onal; }
+		* { if (YYCURSOR - 1 == limit) return Ol_Onal; else return Error; }
+	*/
+Tai_Yo:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		Tai_Yo { goto Tai_Yo; }
+		* { if (YYCURSOR - 1 == limit) return Tai_Yo; else return Error; }
 	*/
 Ethiopic_Extended_B:
 	/*!re2c
@@ -2942,6 +3098,12 @@ CJK_Unified_Ideographs_Extension_H:
 		re2c:yyfill:enable = 0;
 		CJK_Unified_Ideographs_Extension_H { goto CJK_Unified_Ideographs_Extension_H; }
 		* { if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_H; else return Error; }
+	*/
+CJK_Unified_Ideographs_Extension_J:
+	/*!re2c
+		re2c:yyfill:enable = 0;
+		CJK_Unified_Ideographs_Extension_J { goto CJK_Unified_Ideographs_Extension_J; }
+		* { if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_J; else return Error; }
 	*/
 Tags:
 	/*!re2c
@@ -3154,6 +3316,7 @@ static const uint32_t chars_Osage[] = {0x104b0,0x104ff};
 static const uint32_t chars_Elbasan[] = {0x10500,0x1052f};
 static const uint32_t chars_Caucasian_Albanian[] = {0x10530,0x1056f};
 static const uint32_t chars_Vithkuqi[] = {0x10570,0x105bf};
+static const uint32_t chars_Todhri[] = {0x105c0,0x105ff};
 static const uint32_t chars_Linear_A[] = {0x10600,0x1077f};
 static const uint32_t chars_Latin_Extended_F[] = {0x10780,0x107bf};
 static const uint32_t chars_Cypriot_Syllabary[] = {0x10800,0x1083f};
@@ -3163,6 +3326,7 @@ static const uint32_t chars_Nabataean[] = {0x10880,0x108af};
 static const uint32_t chars_Hatran[] = {0x108e0,0x108ff};
 static const uint32_t chars_Phoenician[] = {0x10900,0x1091f};
 static const uint32_t chars_Lydian[] = {0x10920,0x1093f};
+static const uint32_t chars_Sidetic[] = {0x10940,0x1095f};
 static const uint32_t chars_Meroitic_Hieroglyphs[] = {0x10980,0x1099f};
 static const uint32_t chars_Meroitic_Cursive[] = {0x109a0,0x109ff};
 static const uint32_t chars_Kharoshthi[] = {0x10a00,0x10a5f};
@@ -3176,6 +3340,7 @@ static const uint32_t chars_Psalter_Pahlavi[] = {0x10b80,0x10baf};
 static const uint32_t chars_Old_Turkic[] = {0x10c00,0x10c4f};
 static const uint32_t chars_Old_Hungarian[] = {0x10c80,0x10cff};
 static const uint32_t chars_Hanifi_Rohingya[] = {0x10d00,0x10d3f};
+static const uint32_t chars_Garay[] = {0x10d40,0x10d8f};
 static const uint32_t chars_Rumi_Numeral_Symbols[] = {0x10e60,0x10e7f};
 static const uint32_t chars_Yezidi[] = {0x10e80,0x10ebf};
 static const uint32_t chars_Arabic_Extended_C[] = {0x10ec0,0x10eff};
@@ -3195,12 +3360,14 @@ static const uint32_t chars_Khojki[] = {0x11200,0x1124f};
 static const uint32_t chars_Multani[] = {0x11280,0x112af};
 static const uint32_t chars_Khudawadi[] = {0x112b0,0x112ff};
 static const uint32_t chars_Grantha[] = {0x11300,0x1137f};
+static const uint32_t chars_Tulu_Tigalari[] = {0x11380,0x113ff};
 static const uint32_t chars_Newa[] = {0x11400,0x1147f};
 static const uint32_t chars_Tirhuta[] = {0x11480,0x114df};
 static const uint32_t chars_Siddham[] = {0x11580,0x115ff};
 static const uint32_t chars_Modi[] = {0x11600,0x1165f};
 static const uint32_t chars_Mongolian_Supplement[] = {0x11660,0x1167f};
 static const uint32_t chars_Takri[] = {0x11680,0x116cf};
+static const uint32_t chars_Myanmar_Extended_C[] = {0x116d0,0x116ff};
 static const uint32_t chars_Ahom[] = {0x11700,0x1174f};
 static const uint32_t chars_Dogra[] = {0x11800,0x1184f};
 static const uint32_t chars_Warang_Citi[] = {0x118a0,0x118ff};
@@ -3211,10 +3378,13 @@ static const uint32_t chars_Soyombo[] = {0x11a50,0x11aaf};
 static const uint32_t chars_Unified_Canadian_Aboriginal_Syllabics_Extended_A[] = {0x11ab0,0x11abf};
 static const uint32_t chars_Pau_Cin_Hau[] = {0x11ac0,0x11aff};
 static const uint32_t chars_Devanagari_Extended_A[] = {0x11b00,0x11b5f};
+static const uint32_t chars_Sharada_Supplement[] = {0x11b60,0x11b7f};
+static const uint32_t chars_Sunuwar[] = {0x11bc0,0x11bff};
 static const uint32_t chars_Bhaiksuki[] = {0x11c00,0x11c6f};
 static const uint32_t chars_Marchen[] = {0x11c70,0x11cbf};
 static const uint32_t chars_Masaram_Gondi[] = {0x11d00,0x11d5f};
 static const uint32_t chars_Gunjala_Gondi[] = {0x11d60,0x11daf};
+static const uint32_t chars_Tolong_Siki[] = {0x11db0,0x11def};
 static const uint32_t chars_Makasar[] = {0x11ee0,0x11eff};
 static const uint32_t chars_Kawi[] = {0x11f00,0x11f5f};
 static const uint32_t chars_Lisu_Supplement[] = {0x11fb0,0x11fbf};
@@ -3225,19 +3395,24 @@ static const uint32_t chars_Early_Dynastic_Cuneiform[] = {0x12480,0x1254f};
 static const uint32_t chars_Cypro_Minoan[] = {0x12f90,0x12fff};
 static const uint32_t chars_Egyptian_Hieroglyphs[] = {0x13000,0x1342f};
 static const uint32_t chars_Egyptian_Hieroglyph_Format_Controls[] = {0x13430,0x1345f};
+static const uint32_t chars_Egyptian_Hieroglyphs_Extended_A[] = {0x13460,0x143ff};
 static const uint32_t chars_Anatolian_Hieroglyphs[] = {0x14400,0x1467f};
+static const uint32_t chars_Gurung_Khema[] = {0x16100,0x1613f};
 static const uint32_t chars_Bamum_Supplement[] = {0x16800,0x16a3f};
 static const uint32_t chars_Mro[] = {0x16a40,0x16a6f};
 static const uint32_t chars_Tangsa[] = {0x16a70,0x16acf};
 static const uint32_t chars_Bassa_Vah[] = {0x16ad0,0x16aff};
 static const uint32_t chars_Pahawh_Hmong[] = {0x16b00,0x16b8f};
+static const uint32_t chars_Kirat_Rai[] = {0x16d40,0x16d7f};
 static const uint32_t chars_Medefaidrin[] = {0x16e40,0x16e9f};
+static const uint32_t chars_Beria_Erfe[] = {0x16ea0,0x16edf};
 static const uint32_t chars_Miao[] = {0x16f00,0x16f9f};
 static const uint32_t chars_Ideographic_Symbols_and_Punctuation[] = {0x16fe0,0x16fff};
 static const uint32_t chars_Tangut[] = {0x17000,0x187ff};
 static const uint32_t chars_Tangut_Components[] = {0x18800,0x18aff};
 static const uint32_t chars_Khitan_Small_Script[] = {0x18b00,0x18cff};
 static const uint32_t chars_Tangut_Supplement[] = {0x18d00,0x18d7f};
+static const uint32_t chars_Tangut_Components_Supplement[] = {0x18d80,0x18dff};
 static const uint32_t chars_Kana_Extended_B[] = {0x1aff0,0x1afff};
 static const uint32_t chars_Kana_Supplement[] = {0x1b000,0x1b0ff};
 static const uint32_t chars_Kana_Extended_A[] = {0x1b100,0x1b12f};
@@ -3245,6 +3420,8 @@ static const uint32_t chars_Small_Kana_Extension[] = {0x1b130,0x1b16f};
 static const uint32_t chars_Nushu[] = {0x1b170,0x1b2ff};
 static const uint32_t chars_Duployan[] = {0x1bc00,0x1bc9f};
 static const uint32_t chars_Shorthand_Format_Controls[] = {0x1bca0,0x1bcaf};
+static const uint32_t chars_Symbols_for_Legacy_Computing_Supplement[] = {0x1cc00,0x1cebf};
+static const uint32_t chars_Miscellaneous_Symbols_Supplement[] = {0x1cec0,0x1ceff};
 static const uint32_t chars_Znamenny_Musical_Notation[] = {0x1cf00,0x1cfcf};
 static const uint32_t chars_Byzantine_Musical_Symbols[] = {0x1d000,0x1d0ff};
 static const uint32_t chars_Musical_Symbols[] = {0x1d100,0x1d1ff};
@@ -3262,6 +3439,8 @@ static const uint32_t chars_Nyiakeng_Puachue_Hmong[] = {0x1e100,0x1e14f};
 static const uint32_t chars_Toto[] = {0x1e290,0x1e2bf};
 static const uint32_t chars_Wancho[] = {0x1e2c0,0x1e2ff};
 static const uint32_t chars_Nag_Mundari[] = {0x1e4d0,0x1e4ff};
+static const uint32_t chars_Ol_Onal[] = {0x1e5d0,0x1e5ff};
+static const uint32_t chars_Tai_Yo[] = {0x1e6c0,0x1e6ff};
 static const uint32_t chars_Ethiopic_Extended_B[] = {0x1e7e0,0x1e7ff};
 static const uint32_t chars_Mende_Kikakui[] = {0x1e800,0x1e8df};
 static const uint32_t chars_Adlam[] = {0x1e900,0x1e95f};
@@ -3293,6 +3472,7 @@ static const uint32_t chars_CJK_Unified_Ideographs_Extension_I[] = {0x2ebf0,0x2e
 static const uint32_t chars_CJK_Compatibility_Ideographs_Supplement[] = {0x2f800,0x2fa1f};
 static const uint32_t chars_CJK_Unified_Ideographs_Extension_G[] = {0x30000,0x3134f};
 static const uint32_t chars_CJK_Unified_Ideographs_Extension_H[] = {0x31350,0x323af};
+static const uint32_t chars_CJK_Unified_Ideographs_Extension_J[] = {0x323b0,0x3347f};
 static const uint32_t chars_Tags[] = {0xe0000,0xe007f};
 static const uint32_t chars_Variation_Selectors_Supplement[] = {0xe0100,0xe01ef};
 static const uint32_t chars_Supplementary_Private_Use_Area_A[] = {0xf0000,0xfffff};
@@ -4416,6 +4596,12 @@ int main() {
 		printf("test 'Vithkuqi' failed\n");
 	delete[] buffer_Vithkuqi;
 
+	YYCTYPE *buffer_Todhri = new YYCTYPE[65];
+	uint32_t buffer_Todhri_len = encode_utf32(chars_Todhri[0], chars_Todhri[1], buffer_Todhri) - 1;
+	if (scan(buffer_Todhri, buffer_Todhri + buffer_Todhri_len, Todhri) != Todhri)
+		printf("test 'Todhri' failed\n");
+	delete[] buffer_Todhri;
+
 	YYCTYPE *buffer_Linear_A = new YYCTYPE[385];
 	uint32_t buffer_Linear_A_len = encode_utf32(chars_Linear_A[0], chars_Linear_A[1], buffer_Linear_A) - 1;
 	if (scan(buffer_Linear_A, buffer_Linear_A + buffer_Linear_A_len, Linear_A) != Linear_A)
@@ -4469,6 +4655,12 @@ int main() {
 	if (scan(buffer_Lydian, buffer_Lydian + buffer_Lydian_len, Lydian) != Lydian)
 		printf("test 'Lydian' failed\n");
 	delete[] buffer_Lydian;
+
+	YYCTYPE *buffer_Sidetic = new YYCTYPE[33];
+	uint32_t buffer_Sidetic_len = encode_utf32(chars_Sidetic[0], chars_Sidetic[1], buffer_Sidetic) - 1;
+	if (scan(buffer_Sidetic, buffer_Sidetic + buffer_Sidetic_len, Sidetic) != Sidetic)
+		printf("test 'Sidetic' failed\n");
+	delete[] buffer_Sidetic;
 
 	YYCTYPE *buffer_Meroitic_Hieroglyphs = new YYCTYPE[33];
 	uint32_t buffer_Meroitic_Hieroglyphs_len = encode_utf32(chars_Meroitic_Hieroglyphs[0], chars_Meroitic_Hieroglyphs[1], buffer_Meroitic_Hieroglyphs) - 1;
@@ -4547,6 +4739,12 @@ int main() {
 	if (scan(buffer_Hanifi_Rohingya, buffer_Hanifi_Rohingya + buffer_Hanifi_Rohingya_len, Hanifi_Rohingya) != Hanifi_Rohingya)
 		printf("test 'Hanifi_Rohingya' failed\n");
 	delete[] buffer_Hanifi_Rohingya;
+
+	YYCTYPE *buffer_Garay = new YYCTYPE[81];
+	uint32_t buffer_Garay_len = encode_utf32(chars_Garay[0], chars_Garay[1], buffer_Garay) - 1;
+	if (scan(buffer_Garay, buffer_Garay + buffer_Garay_len, Garay) != Garay)
+		printf("test 'Garay' failed\n");
+	delete[] buffer_Garay;
 
 	YYCTYPE *buffer_Rumi_Numeral_Symbols = new YYCTYPE[33];
 	uint32_t buffer_Rumi_Numeral_Symbols_len = encode_utf32(chars_Rumi_Numeral_Symbols[0], chars_Rumi_Numeral_Symbols[1], buffer_Rumi_Numeral_Symbols) - 1;
@@ -4662,6 +4860,12 @@ int main() {
 		printf("test 'Grantha' failed\n");
 	delete[] buffer_Grantha;
 
+	YYCTYPE *buffer_Tulu_Tigalari = new YYCTYPE[129];
+	uint32_t buffer_Tulu_Tigalari_len = encode_utf32(chars_Tulu_Tigalari[0], chars_Tulu_Tigalari[1], buffer_Tulu_Tigalari) - 1;
+	if (scan(buffer_Tulu_Tigalari, buffer_Tulu_Tigalari + buffer_Tulu_Tigalari_len, Tulu_Tigalari) != Tulu_Tigalari)
+		printf("test 'Tulu_Tigalari' failed\n");
+	delete[] buffer_Tulu_Tigalari;
+
 	YYCTYPE *buffer_Newa = new YYCTYPE[129];
 	uint32_t buffer_Newa_len = encode_utf32(chars_Newa[0], chars_Newa[1], buffer_Newa) - 1;
 	if (scan(buffer_Newa, buffer_Newa + buffer_Newa_len, Newa) != Newa)
@@ -4697,6 +4901,12 @@ int main() {
 	if (scan(buffer_Takri, buffer_Takri + buffer_Takri_len, Takri) != Takri)
 		printf("test 'Takri' failed\n");
 	delete[] buffer_Takri;
+
+	YYCTYPE *buffer_Myanmar_Extended_C = new YYCTYPE[49];
+	uint32_t buffer_Myanmar_Extended_C_len = encode_utf32(chars_Myanmar_Extended_C[0], chars_Myanmar_Extended_C[1], buffer_Myanmar_Extended_C) - 1;
+	if (scan(buffer_Myanmar_Extended_C, buffer_Myanmar_Extended_C + buffer_Myanmar_Extended_C_len, Myanmar_Extended_C) != Myanmar_Extended_C)
+		printf("test 'Myanmar_Extended_C' failed\n");
+	delete[] buffer_Myanmar_Extended_C;
 
 	YYCTYPE *buffer_Ahom = new YYCTYPE[81];
 	uint32_t buffer_Ahom_len = encode_utf32(chars_Ahom[0], chars_Ahom[1], buffer_Ahom) - 1;
@@ -4758,6 +4968,18 @@ int main() {
 		printf("test 'Devanagari_Extended_A' failed\n");
 	delete[] buffer_Devanagari_Extended_A;
 
+	YYCTYPE *buffer_Sharada_Supplement = new YYCTYPE[33];
+	uint32_t buffer_Sharada_Supplement_len = encode_utf32(chars_Sharada_Supplement[0], chars_Sharada_Supplement[1], buffer_Sharada_Supplement) - 1;
+	if (scan(buffer_Sharada_Supplement, buffer_Sharada_Supplement + buffer_Sharada_Supplement_len, Sharada_Supplement) != Sharada_Supplement)
+		printf("test 'Sharada_Supplement' failed\n");
+	delete[] buffer_Sharada_Supplement;
+
+	YYCTYPE *buffer_Sunuwar = new YYCTYPE[65];
+	uint32_t buffer_Sunuwar_len = encode_utf32(chars_Sunuwar[0], chars_Sunuwar[1], buffer_Sunuwar) - 1;
+	if (scan(buffer_Sunuwar, buffer_Sunuwar + buffer_Sunuwar_len, Sunuwar) != Sunuwar)
+		printf("test 'Sunuwar' failed\n");
+	delete[] buffer_Sunuwar;
+
 	YYCTYPE *buffer_Bhaiksuki = new YYCTYPE[113];
 	uint32_t buffer_Bhaiksuki_len = encode_utf32(chars_Bhaiksuki[0], chars_Bhaiksuki[1], buffer_Bhaiksuki) - 1;
 	if (scan(buffer_Bhaiksuki, buffer_Bhaiksuki + buffer_Bhaiksuki_len, Bhaiksuki) != Bhaiksuki)
@@ -4781,6 +5003,12 @@ int main() {
 	if (scan(buffer_Gunjala_Gondi, buffer_Gunjala_Gondi + buffer_Gunjala_Gondi_len, Gunjala_Gondi) != Gunjala_Gondi)
 		printf("test 'Gunjala_Gondi' failed\n");
 	delete[] buffer_Gunjala_Gondi;
+
+	YYCTYPE *buffer_Tolong_Siki = new YYCTYPE[65];
+	uint32_t buffer_Tolong_Siki_len = encode_utf32(chars_Tolong_Siki[0], chars_Tolong_Siki[1], buffer_Tolong_Siki) - 1;
+	if (scan(buffer_Tolong_Siki, buffer_Tolong_Siki + buffer_Tolong_Siki_len, Tolong_Siki) != Tolong_Siki)
+		printf("test 'Tolong_Siki' failed\n");
+	delete[] buffer_Tolong_Siki;
 
 	YYCTYPE *buffer_Makasar = new YYCTYPE[33];
 	uint32_t buffer_Makasar_len = encode_utf32(chars_Makasar[0], chars_Makasar[1], buffer_Makasar) - 1;
@@ -4842,11 +5070,23 @@ int main() {
 		printf("test 'Egyptian_Hieroglyph_Format_Controls' failed\n");
 	delete[] buffer_Egyptian_Hieroglyph_Format_Controls;
 
+	YYCTYPE *buffer_Egyptian_Hieroglyphs_Extended_A = new YYCTYPE[4001];
+	uint32_t buffer_Egyptian_Hieroglyphs_Extended_A_len = encode_utf32(chars_Egyptian_Hieroglyphs_Extended_A[0], chars_Egyptian_Hieroglyphs_Extended_A[1], buffer_Egyptian_Hieroglyphs_Extended_A) - 1;
+	if (scan(buffer_Egyptian_Hieroglyphs_Extended_A, buffer_Egyptian_Hieroglyphs_Extended_A + buffer_Egyptian_Hieroglyphs_Extended_A_len, Egyptian_Hieroglyphs_Extended_A) != Egyptian_Hieroglyphs_Extended_A)
+		printf("test 'Egyptian_Hieroglyphs_Extended_A' failed\n");
+	delete[] buffer_Egyptian_Hieroglyphs_Extended_A;
+
 	YYCTYPE *buffer_Anatolian_Hieroglyphs = new YYCTYPE[641];
 	uint32_t buffer_Anatolian_Hieroglyphs_len = encode_utf32(chars_Anatolian_Hieroglyphs[0], chars_Anatolian_Hieroglyphs[1], buffer_Anatolian_Hieroglyphs) - 1;
 	if (scan(buffer_Anatolian_Hieroglyphs, buffer_Anatolian_Hieroglyphs + buffer_Anatolian_Hieroglyphs_len, Anatolian_Hieroglyphs) != Anatolian_Hieroglyphs)
 		printf("test 'Anatolian_Hieroglyphs' failed\n");
 	delete[] buffer_Anatolian_Hieroglyphs;
+
+	YYCTYPE *buffer_Gurung_Khema = new YYCTYPE[65];
+	uint32_t buffer_Gurung_Khema_len = encode_utf32(chars_Gurung_Khema[0], chars_Gurung_Khema[1], buffer_Gurung_Khema) - 1;
+	if (scan(buffer_Gurung_Khema, buffer_Gurung_Khema + buffer_Gurung_Khema_len, Gurung_Khema) != Gurung_Khema)
+		printf("test 'Gurung_Khema' failed\n");
+	delete[] buffer_Gurung_Khema;
 
 	YYCTYPE *buffer_Bamum_Supplement = new YYCTYPE[577];
 	uint32_t buffer_Bamum_Supplement_len = encode_utf32(chars_Bamum_Supplement[0], chars_Bamum_Supplement[1], buffer_Bamum_Supplement) - 1;
@@ -4878,11 +5118,23 @@ int main() {
 		printf("test 'Pahawh_Hmong' failed\n");
 	delete[] buffer_Pahawh_Hmong;
 
+	YYCTYPE *buffer_Kirat_Rai = new YYCTYPE[65];
+	uint32_t buffer_Kirat_Rai_len = encode_utf32(chars_Kirat_Rai[0], chars_Kirat_Rai[1], buffer_Kirat_Rai) - 1;
+	if (scan(buffer_Kirat_Rai, buffer_Kirat_Rai + buffer_Kirat_Rai_len, Kirat_Rai) != Kirat_Rai)
+		printf("test 'Kirat_Rai' failed\n");
+	delete[] buffer_Kirat_Rai;
+
 	YYCTYPE *buffer_Medefaidrin = new YYCTYPE[97];
 	uint32_t buffer_Medefaidrin_len = encode_utf32(chars_Medefaidrin[0], chars_Medefaidrin[1], buffer_Medefaidrin) - 1;
 	if (scan(buffer_Medefaidrin, buffer_Medefaidrin + buffer_Medefaidrin_len, Medefaidrin) != Medefaidrin)
 		printf("test 'Medefaidrin' failed\n");
 	delete[] buffer_Medefaidrin;
+
+	YYCTYPE *buffer_Beria_Erfe = new YYCTYPE[65];
+	uint32_t buffer_Beria_Erfe_len = encode_utf32(chars_Beria_Erfe[0], chars_Beria_Erfe[1], buffer_Beria_Erfe) - 1;
+	if (scan(buffer_Beria_Erfe, buffer_Beria_Erfe + buffer_Beria_Erfe_len, Beria_Erfe) != Beria_Erfe)
+		printf("test 'Beria_Erfe' failed\n");
+	delete[] buffer_Beria_Erfe;
 
 	YYCTYPE *buffer_Miao = new YYCTYPE[161];
 	uint32_t buffer_Miao_len = encode_utf32(chars_Miao[0], chars_Miao[1], buffer_Miao) - 1;
@@ -4919,6 +5171,12 @@ int main() {
 	if (scan(buffer_Tangut_Supplement, buffer_Tangut_Supplement + buffer_Tangut_Supplement_len, Tangut_Supplement) != Tangut_Supplement)
 		printf("test 'Tangut_Supplement' failed\n");
 	delete[] buffer_Tangut_Supplement;
+
+	YYCTYPE *buffer_Tangut_Components_Supplement = new YYCTYPE[129];
+	uint32_t buffer_Tangut_Components_Supplement_len = encode_utf32(chars_Tangut_Components_Supplement[0], chars_Tangut_Components_Supplement[1], buffer_Tangut_Components_Supplement) - 1;
+	if (scan(buffer_Tangut_Components_Supplement, buffer_Tangut_Components_Supplement + buffer_Tangut_Components_Supplement_len, Tangut_Components_Supplement) != Tangut_Components_Supplement)
+		printf("test 'Tangut_Components_Supplement' failed\n");
+	delete[] buffer_Tangut_Components_Supplement;
 
 	YYCTYPE *buffer_Kana_Extended_B = new YYCTYPE[17];
 	uint32_t buffer_Kana_Extended_B_len = encode_utf32(chars_Kana_Extended_B[0], chars_Kana_Extended_B[1], buffer_Kana_Extended_B) - 1;
@@ -4961,6 +5219,18 @@ int main() {
 	if (scan(buffer_Shorthand_Format_Controls, buffer_Shorthand_Format_Controls + buffer_Shorthand_Format_Controls_len, Shorthand_Format_Controls) != Shorthand_Format_Controls)
 		printf("test 'Shorthand_Format_Controls' failed\n");
 	delete[] buffer_Shorthand_Format_Controls;
+
+	YYCTYPE *buffer_Symbols_for_Legacy_Computing_Supplement = new YYCTYPE[705];
+	uint32_t buffer_Symbols_for_Legacy_Computing_Supplement_len = encode_utf32(chars_Symbols_for_Legacy_Computing_Supplement[0], chars_Symbols_for_Legacy_Computing_Supplement[1], buffer_Symbols_for_Legacy_Computing_Supplement) - 1;
+	if (scan(buffer_Symbols_for_Legacy_Computing_Supplement, buffer_Symbols_for_Legacy_Computing_Supplement + buffer_Symbols_for_Legacy_Computing_Supplement_len, Symbols_for_Legacy_Computing_Supplement) != Symbols_for_Legacy_Computing_Supplement)
+		printf("test 'Symbols_for_Legacy_Computing_Supplement' failed\n");
+	delete[] buffer_Symbols_for_Legacy_Computing_Supplement;
+
+	YYCTYPE *buffer_Miscellaneous_Symbols_Supplement = new YYCTYPE[65];
+	uint32_t buffer_Miscellaneous_Symbols_Supplement_len = encode_utf32(chars_Miscellaneous_Symbols_Supplement[0], chars_Miscellaneous_Symbols_Supplement[1], buffer_Miscellaneous_Symbols_Supplement) - 1;
+	if (scan(buffer_Miscellaneous_Symbols_Supplement, buffer_Miscellaneous_Symbols_Supplement + buffer_Miscellaneous_Symbols_Supplement_len, Miscellaneous_Symbols_Supplement) != Miscellaneous_Symbols_Supplement)
+		printf("test 'Miscellaneous_Symbols_Supplement' failed\n");
+	delete[] buffer_Miscellaneous_Symbols_Supplement;
 
 	YYCTYPE *buffer_Znamenny_Musical_Notation = new YYCTYPE[209];
 	uint32_t buffer_Znamenny_Musical_Notation_len = encode_utf32(chars_Znamenny_Musical_Notation[0], chars_Znamenny_Musical_Notation[1], buffer_Znamenny_Musical_Notation) - 1;
@@ -5063,6 +5333,18 @@ int main() {
 	if (scan(buffer_Nag_Mundari, buffer_Nag_Mundari + buffer_Nag_Mundari_len, Nag_Mundari) != Nag_Mundari)
 		printf("test 'Nag_Mundari' failed\n");
 	delete[] buffer_Nag_Mundari;
+
+	YYCTYPE *buffer_Ol_Onal = new YYCTYPE[49];
+	uint32_t buffer_Ol_Onal_len = encode_utf32(chars_Ol_Onal[0], chars_Ol_Onal[1], buffer_Ol_Onal) - 1;
+	if (scan(buffer_Ol_Onal, buffer_Ol_Onal + buffer_Ol_Onal_len, Ol_Onal) != Ol_Onal)
+		printf("test 'Ol_Onal' failed\n");
+	delete[] buffer_Ol_Onal;
+
+	YYCTYPE *buffer_Tai_Yo = new YYCTYPE[65];
+	uint32_t buffer_Tai_Yo_len = encode_utf32(chars_Tai_Yo[0], chars_Tai_Yo[1], buffer_Tai_Yo) - 1;
+	if (scan(buffer_Tai_Yo, buffer_Tai_Yo + buffer_Tai_Yo_len, Tai_Yo) != Tai_Yo)
+		printf("test 'Tai_Yo' failed\n");
+	delete[] buffer_Tai_Yo;
 
 	YYCTYPE *buffer_Ethiopic_Extended_B = new YYCTYPE[33];
 	uint32_t buffer_Ethiopic_Extended_B_len = encode_utf32(chars_Ethiopic_Extended_B[0], chars_Ethiopic_Extended_B[1], buffer_Ethiopic_Extended_B) - 1;
@@ -5249,6 +5531,12 @@ int main() {
 	if (scan(buffer_CJK_Unified_Ideographs_Extension_H, buffer_CJK_Unified_Ideographs_Extension_H + buffer_CJK_Unified_Ideographs_Extension_H_len, CJK_Unified_Ideographs_Extension_H) != CJK_Unified_Ideographs_Extension_H)
 		printf("test 'CJK_Unified_Ideographs_Extension_H' failed\n");
 	delete[] buffer_CJK_Unified_Ideographs_Extension_H;
+
+	YYCTYPE *buffer_CJK_Unified_Ideographs_Extension_J = new YYCTYPE[4305];
+	uint32_t buffer_CJK_Unified_Ideographs_Extension_J_len = encode_utf32(chars_CJK_Unified_Ideographs_Extension_J[0], chars_CJK_Unified_Ideographs_Extension_J[1], buffer_CJK_Unified_Ideographs_Extension_J) - 1;
+	if (scan(buffer_CJK_Unified_Ideographs_Extension_J, buffer_CJK_Unified_Ideographs_Extension_J + buffer_CJK_Unified_Ideographs_Extension_J_len, CJK_Unified_Ideographs_Extension_J) != CJK_Unified_Ideographs_Extension_J)
+		printf("test 'CJK_Unified_Ideographs_Extension_J' failed\n");
+	delete[] buffer_CJK_Unified_Ideographs_Extension_J;
 
 	YYCTYPE *buffer_Tags = new YYCTYPE[129];
 	uint32_t buffer_Tags_len = encode_utf32(chars_Tags[0], chars_Tags[1], buffer_Tags) - 1;

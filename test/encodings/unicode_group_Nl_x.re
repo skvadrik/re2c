@@ -10,13 +10,13 @@ bool scan(const YYCTYPE* start, const YYCTYPE* const limit) {
 Nl:
 /*!re2c
 	re2c:yyfill:enable = 0;
-	Nl = [\u16ee-\u16f0\u2160-\u2182\u2185-\u2188\u3007\u3021-\u3029\u3038-\u303a\ua6e6-\ua6ef\U00010140-\U00010174\U00010341\U0001034a\U000103d1-\U000103d5\U00012400-\U0001246e];
+	Nl = [\u16ee-\u16f0\u2160-\u2182\u2185-\u2188\u3007\u3021-\u3029\u3038-\u303a\ua6e6-\ua6ef\U00010140-\U00010174\U00010341\U0001034a\U000103d1-\U000103d5\U00012400-\U0001246e\U00016ff4-\U00016ff6];
 		Nl { goto Nl; }
 		* { return YYCURSOR - 1 == limit; }
 	*/
 }
 
-static const uint32_t chars_Nl[] = {0x16ee,0x16f0,0x2160,0x2182,0x2185,0x2188,0x3007,0x3007,0x3021,0x3029,0x3038,0x303a,0xa6e6,0xa6ef,0x10140,0x10174,0x10341,0x10341,0x1034a,0x1034a,0x103d1,0x103d5,0x12400,0x1246e,};
+static const uint32_t chars_Nl[] = {0x16ee,0x16f0,0x2160,0x2182,0x2185,0x2188,0x3007,0x3007,0x3021,0x3029,0x3038,0x303a,0xa6e6,0xa6ef,0x10140,0x10174,0x10341,0x10341,0x1034a,0x1034a,0x103d1,0x103d5,0x12400,0x1246e,0x16ff4,0x16ff6,};
 
 static uint32_t encode_utf16(const uint32_t* ranges, uint32_t ranges_count, uint16_t* s) {
 	uint16_t* const s0 = s;
@@ -33,7 +33,7 @@ static uint32_t encode_utf16(const uint32_t* ranges, uint32_t ranges_count, uint
 }
 
 int main() {
-	YYCTYPE* buffer_Nl = new YYCTYPE[474];
+	YYCTYPE* buffer_Nl = new YYCTYPE[480];
 	uint32_t buffer_Nl_len = encode_utf16(chars_Nl, sizeof(chars_Nl) / sizeof(uint32_t), buffer_Nl);
 	if (!scan(buffer_Nl, buffer_Nl + buffer_Nl_len)) printf("test 'Nl' failed\n");
 	delete[] buffer_Nl;

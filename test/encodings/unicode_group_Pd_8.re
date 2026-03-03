@@ -10,13 +10,13 @@ bool scan(const YYCTYPE* start, const YYCTYPE* const limit) {
 Pd:
 /*!re2c
 	re2c:yyfill:enable = 0;
-	Pd = [\x2d\u058a\u05be\u1400\u1806\u2010-\u2015\u2e17\u2e1a\u2e3a-\u2e3b\u2e40\u2e5d\u301c\u3030\u30a0\ufe31-\ufe32\ufe58\ufe63\uff0d\U00010ead];
+	Pd = [\x2d\u058a\u05be\u1400\u1806\u2010-\u2015\u2e17\u2e1a\u2e3a-\u2e3b\u2e40\u2e5d\u301c\u3030\u30a0\ufe31-\ufe32\ufe58\ufe63\uff0d\U00010d6e\U00010ead];
 		Pd { goto Pd; }
 		* { return YYCURSOR - 1 == limit; }
 	*/
 }
 
-static const uint32_t chars_Pd[] = {0x2d,0x2d,0x58a,0x58a,0x5be,0x5be,0x1400,0x1400,0x1806,0x1806,0x2010,0x2015,0x2e17,0x2e17,0x2e1a,0x2e1a,0x2e3a,0x2e3b,0x2e40,0x2e40,0x2e5d,0x2e5d,0x301c,0x301c,0x3030,0x3030,0x30a0,0x30a0,0xfe31,0xfe32,0xfe58,0xfe58,0xfe63,0xfe63,0xff0d,0xff0d,0x10ead,0x10ead,};
+static const uint32_t chars_Pd[] = {0x2d,0x2d,0x58a,0x58a,0x5be,0x5be,0x1400,0x1400,0x1806,0x1806,0x2010,0x2015,0x2e17,0x2e17,0x2e1a,0x2e1a,0x2e3a,0x2e3b,0x2e40,0x2e40,0x2e5d,0x2e5d,0x301c,0x301c,0x3030,0x3030,0x30a0,0x30a0,0xfe31,0xfe32,0xfe58,0xfe58,0xfe63,0xfe63,0xff0d,0xff0d,0x10d6e,0x10d6e,0x10ead,0x10ead,};
 
 static uint32_t encode_utf8(const uint32_t* ranges, uint32_t ranges_count, uint8_t* s) {
 	uint8_t* const s0 = s;
@@ -27,7 +27,7 @@ static uint32_t encode_utf8(const uint32_t* ranges, uint32_t ranges_count, uint8
 }
 
 int main() {
-	YYCTYPE* buffer_Pd = new YYCTYPE[162];
+	YYCTYPE* buffer_Pd = new YYCTYPE[168];
 	uint32_t buffer_Pd_len = encode_utf8(chars_Pd, sizeof(chars_Pd) / sizeof(uint32_t), buffer_Pd);
 	if (!scan(buffer_Pd, buffer_Pd + buffer_Pd_len)) printf("test 'Pd' failed\n");
 	delete[] buffer_Pd;

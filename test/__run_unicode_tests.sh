@@ -8,7 +8,7 @@ fi
 srcdir="$1"
 blddir="$2"
 
-for fre in encodings/unicode_{blocks,group_*}_{8,x,u}_encoding_policy_{ignore,substitute,fail}.re; do
+for fre in encodings/unicode_{blocks,group_*}_{8,x,u}*.re; do
     echo $fre
     fc=${fre/.re/.c}
     fe=${fre/.re/}

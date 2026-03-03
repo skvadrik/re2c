@@ -1731,6 +1731,7 @@ class Main {
                     case 0xA9:
                     case 0xAD:
                     case 0xB0:
+                    case 0xB2:
                         yycursor += 1;
                         yystate = 59;
                         continue yyl;
@@ -1778,7 +1779,7 @@ class Main {
                         yycursor += 1;
                         yystate = 207;
                         continue yyl;
-                    case 0xB2:
+                    case 0xB3:
                         yycursor += 1;
                         yystate = 208;
                         continue yyl;
@@ -3062,6 +3063,7 @@ class Main {
                     case 0xA9:
                     case 0xAD:
                     case 0xB0:
+                    case 0xB2:
                         yycursor += 1;
                         yystate = 59;
                         continue yyl;
@@ -3109,7 +3111,7 @@ class Main {
                         yycursor += 1;
                         yystate = 207;
                         continue yyl;
-                    case 0xB2:
+                    case 0xB3:
                         yycursor += 1;
                         yystate = 208;
                         continue yyl;
@@ -3202,7 +3204,7 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 } else {
-                    if (yych <= 0x8E) {
+                    if (yych <= 0x8F) {
                         yycursor += 1;
                         yystate = 3;
                         continue yyl;
@@ -3754,7 +3756,7 @@ class Main {
                 }
             case 81:
                 yych = yyinput.charAt(yycursor);
-                if (yych <= 0x9C) {
+                if (yych <= 0x9B) {
                     if (yych <= 0x97) {
                         yystate = 35;
                         continue yyl;
@@ -3839,7 +3841,7 @@ class Main {
             case 83:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x9F) {
-                    if (yych <= 0x9C) {
+                    if (yych <= 0x9B) {
                         yystate = 35;
                         continue yyl;
                     }
@@ -4967,7 +4969,7 @@ class Main {
                         yystate = 35;
                         continue yyl;
                     }
-                    if (yych <= 0x88) {
+                    if (yych <= 0x8A) {
                         yycursor += 1;
                         yystate = 3;
                         continue yyl;
@@ -5783,51 +5785,26 @@ class Main {
                 continue yyl;
             case 158:
                 yych = yyinput.charAt(yycursor);
-                if (yych <= 0x92) {
-                    if (yych <= 0x8A) {
-                        if (yych <= 0x7F) {
-                            yystate = 35;
-                            continue yyl;
-                        }
-                        yycursor += 1;
-                        yystate = 3;
-                        continue yyl;
-                    } else {
-                        if (yych <= 0x8F) {
-                            yystate = 35;
-                            continue yyl;
-                        }
-                        if (yych <= 0x91) {
-                            yycursor += 1;
-                            yystate = 3;
-                            continue yyl;
-                        }
-                        yystate = 35;
-                        continue yyl;
-                    }
-                } else {
-                    if (yych <= 0x99) {
-                        if (yych == 0x94) {
-                            yystate = 35;
-                            continue yyl;
-                        }
-                        yycursor += 1;
-                        yystate = 3;
-                        continue yyl;
-                    } else {
-                        if (yych <= 0xB1) {
-                            yystate = 35;
-                            continue yyl;
-                        }
-                        if (yych <= 0xBF) {
-                            yycursor += 1;
-                            yystate = 3;
-                            continue yyl;
-                        }
-                        yystate = 35;
-                        continue yyl;
-                    }
+                if (yych <= 0x7F) {
+                    yystate = 35;
+                    continue yyl;
                 }
+                if (yych <= 0x9C) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                if (yych <= 0xB0) {
+                    yystate = 35;
+                    continue yyl;
+                }
+                if (yych <= 0xBF) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                yystate = 35;
+                continue yyl;
             case 159:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x85) {
@@ -6703,6 +6680,10 @@ class Main {
                         yycursor += 1;
                         yystate = 222;
                         continue yyl;
+                    case 0x97:
+                        yycursor += 1;
+                        yystate = 111;
+                        continue yyl;
                     case 0x9C:
                         yycursor += 1;
                         yystate = 223;
@@ -6734,6 +6715,10 @@ class Main {
                     case 0xA4:
                         yycursor += 1;
                         yystate = 229;
+                        continue yyl;
+                    case 0xA5:
+                        yycursor += 1;
+                        yystate = 176;
                         continue yyl;
                     case 0xA6:
                         yycursor += 1;
@@ -6780,25 +6765,37 @@ class Main {
                         yycursor += 1;
                         yystate = 126;
                         continue yyl;
-                    case 0xBA:
+                    case 0xB5:
                         yycursor += 1;
                         yystate = 238;
                         continue yyl;
-                    case 0xBC:
+                    case 0xB6:
                         yycursor += 1;
                         yystate = 239;
                         continue yyl;
-                    case 0xBD:
+                    case 0xBA:
                         yycursor += 1;
                         yystate = 240;
                         continue yyl;
-                    case 0xBE:
+                    case 0xBB:
                         yycursor += 1;
                         yystate = 241;
                         continue yyl;
-                    case 0xBF:
+                    case 0xBC:
                         yycursor += 1;
                         yystate = 242;
+                        continue yyl;
+                    case 0xBD:
+                        yycursor += 1;
+                        yystate = 243;
+                        continue yyl;
+                    case 0xBE:
+                        yycursor += 1;
+                        yystate = 244;
+                        continue yyl;
+                    case 0xBF:
+                        yycursor += 1;
+                        yystate = 245;
                         continue yyl;
                     default:
                         yystate = 35;
@@ -6809,39 +6806,39 @@ class Main {
                 switch (yych) {
                     case 0x80:
                         yycursor += 1;
-                        yystate = 243;
+                        yystate = 246;
                         continue yyl;
                     case 0x81:
                         yycursor += 1;
-                        yystate = 244;
+                        yystate = 247;
                         continue yyl;
                     case 0x82:
                         yycursor += 1;
-                        yystate = 245;
+                        yystate = 248;
                         continue yyl;
                     case 0x83:
                         yycursor += 1;
-                        yystate = 246;
+                        yystate = 249;
                         continue yyl;
                     case 0x84:
                         yycursor += 1;
-                        yystate = 247;
+                        yystate = 250;
                         continue yyl;
                     case 0x85:
                         yycursor += 1;
-                        yystate = 248;
+                        yystate = 251;
                         continue yyl;
                     case 0x86:
                         yycursor += 1;
-                        yystate = 249;
+                        yystate = 252;
                         continue yyl;
                     case 0x87:
                         yycursor += 1;
-                        yystate = 250;
+                        yystate = 253;
                         continue yyl;
                     case 0x88:
                         yycursor += 1;
-                        yystate = 251;
+                        yystate = 254;
                         continue yyl;
                     case 0x89:
                         yycursor += 1;
@@ -6849,7 +6846,7 @@ class Main {
                         continue yyl;
                     case 0x8A:
                         yycursor += 1;
-                        yystate = 252;
+                        yystate = 255;
                         continue yyl;
                     case 0x8B:
                         yycursor += 1;
@@ -6861,7 +6858,15 @@ class Main {
                         continue yyl;
                     case 0x8D:
                         yycursor += 1;
-                        yystate = 253;
+                        yystate = 256;
+                        continue yyl;
+                    case 0x8E:
+                        yycursor += 1;
+                        yystate = 257;
+                        continue yyl;
+                    case 0x8F:
+                        yycursor += 1;
+                        yystate = 258;
                         continue yyl;
                     case 0x90:
                         yycursor += 1;
@@ -6869,7 +6874,7 @@ class Main {
                         continue yyl;
                     case 0x91:
                         yycursor += 1;
-                        yystate = 254;
+                        yystate = 259;
                         continue yyl;
                     case 0x92:
                     case 0x98:
@@ -6878,23 +6883,23 @@ class Main {
                         continue yyl;
                     case 0x93:
                         yycursor += 1;
-                        yystate = 255;
+                        yystate = 260;
                         continue yyl;
                     case 0x96:
                         yycursor += 1;
-                        yystate = 256;
+                        yystate = 261;
                         continue yyl;
                     case 0x97:
                         yycursor += 1;
-                        yystate = 257;
+                        yystate = 262;
                         continue yyl;
                     case 0x99:
                         yycursor += 1;
-                        yystate = 258;
+                        yystate = 263;
                         continue yyl;
                     case 0x9A:
                         yycursor += 1;
-                        yystate = 259;
+                        yystate = 264;
                         continue yyl;
                     case 0x9C:
                         yycursor += 1;
@@ -6906,7 +6911,7 @@ class Main {
                         continue yyl;
                     case 0xA0:
                         yycursor += 1;
-                        yystate = 260;
+                        yystate = 265;
                         continue yyl;
                     case 0xA2:
                         yycursor += 1;
@@ -6914,75 +6919,83 @@ class Main {
                         continue yyl;
                     case 0xA3:
                         yycursor += 1;
-                        yystate = 261;
+                        yystate = 266;
                         continue yyl;
                     case 0xA4:
                         yycursor += 1;
-                        yystate = 262;
+                        yystate = 267;
                         continue yyl;
                     case 0xA5:
                         yycursor += 1;
-                        yystate = 263;
+                        yystate = 268;
                         continue yyl;
                     case 0xA6:
                         yycursor += 1;
-                        yystate = 264;
+                        yystate = 269;
                         continue yyl;
                     case 0xA7:
                         yycursor += 1;
-                        yystate = 265;
+                        yystate = 270;
                         continue yyl;
                     case 0xA8:
                         yycursor += 1;
-                        yystate = 266;
+                        yystate = 271;
                         continue yyl;
                     case 0xA9:
                         yycursor += 1;
-                        yystate = 267;
+                        yystate = 272;
                         continue yyl;
                     case 0xAA:
                         yycursor += 1;
-                        yystate = 268;
+                        yystate = 273;
                         continue yyl;
                     case 0xAB:
                         yycursor += 1;
                         yystate = 113;
                         continue yyl;
-                    case 0xB0:
-                        yycursor += 1;
-                        yystate = 269;
-                        continue yyl;
-                    case 0xB1:
-                        yycursor += 1;
-                        yystate = 270;
-                        continue yyl;
-                    case 0xB2:
-                        yycursor += 1;
-                        yystate = 271;
-                        continue yyl;
-                    case 0xB4:
-                        yycursor += 1;
-                        yystate = 272;
-                        continue yyl;
-                    case 0xB5:
-                        yycursor += 1;
-                        yystate = 273;
-                        continue yyl;
-                    case 0xB6:
+                    case 0xAF:
                         yycursor += 1;
                         yystate = 274;
                         continue yyl;
-                    case 0xBB:
+                    case 0xB0:
                         yycursor += 1;
                         yystate = 275;
                         continue yyl;
-                    case 0xBC:
+                    case 0xB1:
                         yycursor += 1;
                         yystate = 276;
                         continue yyl;
-                    case 0xBE:
+                    case 0xB2:
                         yycursor += 1;
                         yystate = 277;
+                        continue yyl;
+                    case 0xB4:
+                        yycursor += 1;
+                        yystate = 278;
+                        continue yyl;
+                    case 0xB5:
+                        yycursor += 1;
+                        yystate = 279;
+                        continue yyl;
+                    case 0xB6:
+                        yycursor += 1;
+                        yystate = 280;
+                        continue yyl;
+                    case 0xB7:
+                        yycursor += 1;
+                        yystate = 281;
+                        continue yyl;
+                    case 0xBB:
+                        yycursor += 1;
+                        yystate = 282;
+                        continue yyl;
+                    case 0xBC:
+                        yycursor += 1;
+                        yystate = 283;
+                        continue yyl;
+                    case 0xBE:
+                        yycursor += 1;
+                        yystate = 284;
                         continue yyl;
                     default:
                         yystate = 35;
@@ -7015,7 +7028,7 @@ class Main {
                             continue yyl;
                         }
                         yycursor += 1;
-                        yystate = 256;
+                        yystate = 261;
                         continue yyl;
                     }
                 } else {
@@ -7027,7 +7040,7 @@ class Main {
                         }
                         if (yych <= 0x95) {
                             yycursor += 1;
-                            yystate = 278;
+                            yystate = 285;
                             continue yyl;
                         }
                         yystate = 35;
@@ -7040,7 +7053,7 @@ class Main {
                         }
                         if (yych <= 0xBF) {
                             yycursor += 1;
-                            yystate = 279;
+                            yystate = 286;
                             continue yyl;
                         }
                         yystate = 35;
@@ -7049,48 +7062,69 @@ class Main {
                 }
             case 194:
                 yych = yyinput.charAt(yycursor);
-                if (yych <= 0x7F) {
-                    yystate = 35;
-                    continue yyl;
-                }
-                if (yych <= 0x8F) {
-                    yycursor += 1;
-                    yystate = 37;
-                    continue yyl;
-                }
                 if (yych <= 0x90) {
+                    if (yych <= 0x7F) {
+                        yystate = 35;
+                        continue yyl;
+                    }
+                    if (yych <= 0x8F) {
+                        yycursor += 1;
+                        yystate = 37;
+                        continue yyl;
+                    }
                     yycursor += 1;
                     yystate = 155;
                     continue yyl;
-                }
-                if (yych <= 0x91) {
-                    yycursor += 1;
-                    yystate = 280;
-                    continue yyl;
-                }
-                yystate = 35;
-                continue yyl;
-            case 195:
-                yych = yyinput.charAt(yycursor);
-                if (yych <= 0x8F) {
+                } else {
+                    if (yych <= 0x91) {
+                        yycursor += 1;
+                        yystate = 287;
+                        continue yyl;
+                    }
+                    if (yych <= 0xBF) {
+                        yycursor += 1;
+                        yystate = 37;
+                        continue yyl;
+                    }
                     yystate = 35;
                     continue yyl;
                 }
-                if (yych <= 0x98) {
+            case 195:
+                yych = yyinput.charAt(yycursor);
+                if (yych <= 0x8F) {
+                    if (yych <= 0x7F) {
+                        yystate = 35;
+                        continue yyl;
+                    }
+                    if (yych <= 0x8E) {
+                        yycursor += 1;
+                        yystate = 37;
+                        continue yyl;
+                    }
                     yycursor += 1;
-                    yystate = 37;
+                    yystate = 211;
+                    continue yyl;
+                } else {
+                    if (yych <= 0x98) {
+                        yycursor += 1;
+                        yystate = 37;
+                        continue yyl;
+                    }
+                    if (yych <= 0x99) {
+                        yycursor += 1;
+                        yystate = 87;
+                        continue yyl;
+                    }
+                    yystate = 35;
                     continue yyl;
                 }
-                if (yych <= 0x99) {
-                    yycursor += 1;
-                    yystate = 87;
-                    continue yyl;
-                }
-                yystate = 35;
-                continue yyl;
             case 196:
                 yych = yyinput.charAt(yycursor);
                 switch (yych) {
+                    case 0x84:
+                        yycursor += 1;
+                        yystate = 288;
+                        continue yyl;
                     case 0xA0:
                     case 0xA1:
                     case 0xA2:
@@ -7110,7 +7144,7 @@ class Main {
                         continue yyl;
                     case 0xA9:
                         yycursor += 1;
-                        yystate = 281;
+                        yystate = 289;
                         continue yyl;
                     case 0xAA:
                         yycursor += 1;
@@ -7118,7 +7152,7 @@ class Main {
                         continue yyl;
                     case 0xAB:
                         yycursor += 1;
-                        yystate = 282;
+                        yystate = 290;
                         continue yyl;
                     case 0xAC:
                         yycursor += 1;
@@ -7126,23 +7160,35 @@ class Main {
                         continue yyl;
                     case 0xAD:
                         yycursor += 1;
-                        yystate = 283;
+                        yystate = 291;
                         continue yyl;
                     case 0xAE:
                         yycursor += 1;
-                        yystate = 271;
+                        yystate = 277;
+                        continue yyl;
+                    case 0xB5:
+                        yycursor += 1;
+                        yystate = 292;
+                        continue yyl;
+                    case 0xBA:
+                        yycursor += 1;
+                        yystate = 293;
+                        continue yyl;
+                    case 0xBB:
+                        yycursor += 1;
+                        yystate = 294;
                         continue yyl;
                     case 0xBD:
                         yycursor += 1;
-                        yystate = 284;
+                        yystate = 295;
                         continue yyl;
                     case 0xBE:
                         yycursor += 1;
-                        yystate = 285;
+                        yystate = 296;
                         continue yyl;
                     case 0xBF:
                         yycursor += 1;
-                        yystate = 286;
+                        yystate = 297;
                         continue yyl;
                     default:
                         yystate = 35;
@@ -7150,20 +7196,11 @@ class Main {
                 }
             case 197:
                 yych = yyinput.charAt(yycursor);
-                if (yych <= 0x9F) {
+                if (yych <= 0xB4) {
                     if (yych <= 0x7F) {
                         yystate = 35;
                         continue yyl;
                     }
-                    if (yych <= 0x9E) {
-                        yycursor += 1;
-                        yystate = 37;
-                        continue yyl;
-                    }
-                    yycursor += 1;
-                    yystate = 287;
-                    continue yyl;
-                } else {
                     if (yych <= 0xB2) {
                         yycursor += 1;
                         yystate = 37;
@@ -7171,12 +7208,25 @@ class Main {
                     }
                     if (yych <= 0xB3) {
                         yycursor += 1;
-                        yystate = 288;
+                        yystate = 298;
                         continue yyl;
                     }
-                    if (yych <= 0xB4) {
+                    yycursor += 1;
+                    yystate = 116;
+                    continue yyl;
+                } else {
+                    if (yych <= 0xB5) {
+                        yystate = 35;
+                        continue yyl;
+                    }
+                    if (yych <= 0xB6) {
                         yycursor += 1;
-                        yystate = 45;
+                        yystate = 37;
+                        continue yyl;
+                    }
+                    if (yych <= 0xB7) {
+                        yycursor += 1;
+                        yystate = 237;
                         continue yyl;
                     }
                     yystate = 35;
@@ -7186,7 +7236,7 @@ class Main {
                 yych = yyinput.charAt(yycursor);
                 if (yych == 0xBF) {
                     yycursor += 1;
-                    yystate = 289;
+                    yystate = 299;
                     continue yyl;
                 }
                 yystate = 35;
@@ -7205,12 +7255,12 @@ class Main {
                     } else {
                         if (yych <= 0x84) {
                             yycursor += 1;
-                            yystate = 290;
+                            yystate = 300;
                             continue yyl;
                         }
                         if (yych <= 0x85) {
                             yycursor += 1;
-                            yystate = 291;
+                            yystate = 301;
                             continue yyl;
                         }
                         yycursor += 1;
@@ -7221,7 +7271,7 @@ class Main {
                     if (yych <= 0xB0) {
                         if (yych <= 0x8B) {
                             yycursor += 1;
-                            yystate = 292;
+                            yystate = 302;
                             continue yyl;
                         }
                         if (yych <= 0xAF) {
@@ -7234,12 +7284,12 @@ class Main {
                     } else {
                         if (yych <= 0xB1) {
                             yycursor += 1;
-                            yystate = 293;
+                            yystate = 303;
                             continue yyl;
                         }
                         if (yych <= 0xB2) {
                             yycursor += 1;
-                            yystate = 294;
+                            yystate = 304;
                             continue yyl;
                         }
                         yystate = 35;
@@ -7259,51 +7309,51 @@ class Main {
                         continue yyl;
                     case 0x91:
                         yycursor += 1;
-                        yystate = 295;
+                        yystate = 305;
                         continue yyl;
                     case 0x92:
                         yycursor += 1;
-                        yystate = 296;
+                        yystate = 306;
                         continue yyl;
                     case 0x93:
                         yycursor += 1;
-                        yystate = 297;
+                        yystate = 307;
                         continue yyl;
                     case 0x94:
                         yycursor += 1;
-                        yystate = 298;
+                        yystate = 308;
                         continue yyl;
                     case 0x95:
                         yycursor += 1;
-                        yystate = 299;
+                        yystate = 309;
                         continue yyl;
                     case 0x9A:
                         yycursor += 1;
-                        yystate = 300;
+                        yystate = 310;
                         continue yyl;
                     case 0x9B:
                         yycursor += 1;
-                        yystate = 301;
+                        yystate = 311;
                         continue yyl;
                     case 0x9C:
                         yycursor += 1;
-                        yystate = 302;
+                        yystate = 312;
                         continue yyl;
                     case 0x9D:
                         yycursor += 1;
-                        yystate = 303;
+                        yystate = 313;
                         continue yyl;
                     case 0x9E:
                         yycursor += 1;
-                        yystate = 304;
+                        yystate = 314;
                         continue yyl;
                     case 0x9F:
                         yycursor += 1;
-                        yystate = 305;
+                        yystate = 315;
                         continue yyl;
                     case 0xBC:
                         yycursor += 1;
-                        yystate = 306;
+                        yystate = 316;
                         continue yyl;
                     default:
                         yystate = 35;
@@ -7318,31 +7368,39 @@ class Main {
                         continue yyl;
                     case 0x81:
                         yycursor += 1;
-                        yystate = 307;
+                        yystate = 317;
                         continue yyl;
                     case 0x84:
                         yycursor += 1;
-                        yystate = 308;
+                        yystate = 318;
                         continue yyl;
                     case 0x85:
                         yycursor += 1;
-                        yystate = 309;
+                        yystate = 319;
                         continue yyl;
                     case 0x8A:
                         yycursor += 1;
-                        yystate = 282;
+                        yystate = 290;
                         continue yyl;
                     case 0x8B:
                         yycursor += 1;
-                        yystate = 260;
+                        yystate = 265;
                         continue yyl;
                     case 0x93:
                         yycursor += 1;
-                        yystate = 310;
+                        yystate = 320;
+                        continue yyl;
+                    case 0x97:
+                        yycursor += 1;
+                        yystate = 321;
+                        continue yyl;
+                    case 0x9B:
+                        yycursor += 1;
+                        yystate = 322;
                         continue yyl;
                     case 0x9F:
                         yycursor += 1;
-                        yystate = 311;
+                        yystate = 323;
                         continue yyl;
                     case 0xA0:
                     case 0xA1:
@@ -7353,23 +7411,23 @@ class Main {
                         continue yyl;
                     case 0xA3:
                         yycursor += 1;
-                        yystate = 312;
+                        yystate = 324;
                         continue yyl;
                     case 0xA5:
                         yycursor += 1;
-                        yystate = 313;
+                        yystate = 325;
                         continue yyl;
                     case 0xB8:
                         yycursor += 1;
-                        yystate = 314;
+                        yystate = 326;
                         continue yyl;
                     case 0xB9:
                         yycursor += 1;
-                        yystate = 315;
+                        yystate = 327;
                         continue yyl;
                     case 0xBA:
                         yycursor += 1;
-                        yystate = 316;
+                        yystate = 328;
                         continue yyl;
                     default:
                         yystate = 35;
@@ -7383,7 +7441,7 @@ class Main {
                 }
                 if (yych == 0x9B) {
                     yycursor += 1;
-                    yystate = 317;
+                    yystate = 329;
                     continue yyl;
                 }
                 if (yych <= 0xBF) {
@@ -7395,33 +7453,22 @@ class Main {
                 continue yyl;
             case 203:
                 yych = yyinput.charAt(yycursor);
-                if (yych <= 0x9C) {
-                    if (yych <= 0x7F) {
-                        yystate = 35;
-                        continue yyl;
-                    }
-                    if (yych <= 0x9B) {
-                        yycursor += 1;
-                        yystate = 37;
-                        continue yyl;
-                    }
-                    yycursor += 1;
-                    yystate = 318;
-                    continue yyl;
-                } else {
-                    if (yych == 0xA0) {
-                        yycursor += 1;
-                        yystate = 154;
-                        continue yyl;
-                    }
-                    if (yych <= 0xBF) {
-                        yycursor += 1;
-                        yystate = 37;
-                        continue yyl;
-                    }
+                if (yych <= 0x7F) {
                     yystate = 35;
                     continue yyl;
                 }
+                if (yych == 0xA0) {
+                    yycursor += 1;
+                    yystate = 154;
+                    continue yyl;
+                }
+                if (yych <= 0xBF) {
+                    yycursor += 1;
+                    yystate = 37;
+                    continue yyl;
+                }
+                yystate = 35;
+                continue yyl;
             case 204:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
@@ -7430,7 +7477,7 @@ class Main {
                 }
                 if (yych == 0xBA) {
                     yycursor += 1;
-                    yystate = 319;
+                    yystate = 175;
                     continue yyl;
                 }
                 if (yych <= 0xBF) {
@@ -7453,7 +7500,7 @@ class Main {
                         continue yyl;
                     }
                     yycursor += 1;
-                    yystate = 320;
+                    yystate = 330;
                     continue yyl;
                 } else {
                     if (yych <= 0xB8) {
@@ -7463,7 +7510,7 @@ class Main {
                     }
                     if (yych <= 0xB9) {
                         yycursor += 1;
-                        yystate = 321;
+                        yystate = 288;
                         continue yyl;
                     }
                     yystate = 35;
@@ -7482,7 +7529,7 @@ class Main {
                 }
                 if (yych <= 0xA8) {
                     yycursor += 1;
-                    yystate = 321;
+                    yystate = 288;
                     continue yyl;
                 }
                 yystate = 35;
@@ -7495,7 +7542,7 @@ class Main {
                 }
                 if (yych == 0x8D) {
                     yycursor += 1;
-                    yystate = 322;
+                    yystate = 331;
                     continue yyl;
                 }
                 if (yych <= 0xBF) {
@@ -7511,14 +7558,14 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 }
-                if (yych <= 0x8D) {
+                if (yych <= 0x90) {
                     yycursor += 1;
                     yystate = 37;
                     continue yyl;
                 }
-                if (yych <= 0x8E) {
+                if (yych <= 0x91) {
                     yycursor += 1;
-                    yystate = 155;
+                    yystate = 332;
                     continue yyl;
                 }
                 yystate = 35;
@@ -8196,6 +8243,41 @@ class Main {
                 continue yyl;
             case 238:
                 yych = yyinput.charAt(yycursor);
+                if (yych <= 0x89) {
+                    yystate = 35;
+                    continue yyl;
+                }
+                if (yych <= 0xA5) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                if (yych <= 0xAE) {
+                    yystate = 35;
+                    continue yyl;
+                }
+                if (yych <= 0xBF) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                yystate = 35;
+                continue yyl;
+            case 239:
+                yych = yyinput.charAt(yycursor);
+                if (yych <= 0x7F) {
+                    yystate = 35;
+                    continue yyl;
+                }
+                if (yych <= 0x85) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                yystate = 35;
+                continue yyl;
+            case 240:
+                yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
                     continue yyl;
@@ -8216,7 +8298,20 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 239:
+            case 241:
+                yych = yyinput.charAt(yycursor);
+                if (yych <= 0x81) {
+                    yystate = 35;
+                    continue yyl;
+                }
+                if (yych <= 0x87) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                yystate = 35;
+                continue yyl;
+            case 242:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0xA6) {
                     if (yych <= 0x7F) {
@@ -8248,7 +8343,7 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 }
-            case 240:
+            case 243:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -8270,7 +8365,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 241:
+            case 244:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -8292,7 +8387,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 242:
+            case 245:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -8314,7 +8409,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 243:
+            case 246:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x82) {
                     yystate = 35;
@@ -8327,7 +8422,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 244:
+            case 247:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0xB0) {
                     yystate = 35;
@@ -8345,7 +8440,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 245:
+            case 248:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x82) {
                     yystate = 35;
@@ -8358,7 +8453,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 246:
+            case 249:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x8F) {
                     yystate = 35;
@@ -8371,7 +8466,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 247:
+            case 250:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x82) {
                     yystate = 35;
@@ -8384,7 +8479,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 248:
+            case 251:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x87) {
                     if (yych == 0x84) {
@@ -8418,7 +8513,7 @@ class Main {
                         continue yyl;
                     }
                 }
-            case 249:
+            case 252:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x82) {
                     yystate = 35;
@@ -8431,7 +8526,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 250:
+            case 253:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x99) {
                     if (yych <= 0x80) {
@@ -8458,7 +8553,7 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 }
-            case 251:
+            case 254:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x92) {
                     if (yych <= 0x7F) {
@@ -8486,7 +8581,7 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 }
-            case 252:
+            case 255:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x8D) {
                     if (yych <= 0x87) {
@@ -8542,7 +8637,7 @@ class Main {
                         continue yyl;
                     }
                 }
-            case 253:
+            case 256:
                 yych = yyinput.charAt(yycursor);
                 if (yych == 0x90) {
                     yycursor += 1;
@@ -8560,7 +8655,60 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 254:
+            case 257:
+                yych = yyinput.charAt(yycursor);
+                if (yych <= 0x8D) {
+                    if (yych <= 0x89) {
+                        if (yych <= 0x7F) {
+                            yystate = 35;
+                            continue yyl;
+                        }
+                        yycursor += 1;
+                        yystate = 3;
+                        continue yyl;
+                    } else {
+                        if (yych == 0x8B) {
+                            yycursor += 1;
+                            yystate = 3;
+                            continue yyl;
+                        }
+                        yystate = 35;
+                        continue yyl;
+                    }
+                } else {
+                    if (yych <= 0xB5) {
+                        if (yych == 0x8F) {
+                            yystate = 35;
+                            continue yyl;
+                        }
+                        yycursor += 1;
+                        yystate = 3;
+                        continue yyl;
+                    } else {
+                        if (yych == 0xB7) {
+                            yycursor += 1;
+                            yystate = 3;
+                            continue yyl;
+                        }
+                        yystate = 35;
+                        continue yyl;
+                    }
+                }
+            case 258:
+                yych = yyinput.charAt(yycursor);
+                if (yych == 0x91) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                if (yych == 0x93) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                yystate = 35;
+                continue yyl;
+            case 259:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x86) {
                     yystate = 35;
@@ -8582,7 +8730,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 255:
+            case 260:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x83) {
                     yystate = 35;
@@ -8599,7 +8747,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 256:
+            case 261:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -8612,7 +8760,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 257:
+            case 262:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x97) {
                     yystate = 35;
@@ -8625,7 +8773,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 258:
+            case 263:
                 yych = yyinput.charAt(yycursor);
                 if (yych == 0x84) {
                     yycursor += 1;
@@ -8634,7 +8782,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 259:
+            case 264:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -8652,7 +8800,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 260:
+            case 265:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -8665,7 +8813,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 261:
+            case 266:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -8683,7 +8831,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 262:
+            case 267:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x93) {
                     if (yych <= 0x88) {
@@ -8740,7 +8888,7 @@ class Main {
                         continue yyl;
                     }
                 }
-            case 263:
+            case 268:
                 yych = yyinput.charAt(yycursor);
                 if (yych == 0x81) {
                     yycursor += 1;
@@ -8749,7 +8897,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 264:
+            case 269:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x9F) {
                     yystate = 35;
@@ -8771,7 +8919,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 265:
+            case 270:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0xA0) {
                     if (yych <= 0x7F) {
@@ -8798,7 +8946,7 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 }
-            case 266:
+            case 271:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x8A) {
                     if (yych == 0x80) {
@@ -8822,7 +8970,7 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 }
-            case 267:
+            case 272:
                 yych = yyinput.charAt(yycursor);
                 if (yych == 0x90) {
                     yycursor += 1;
@@ -8840,7 +8988,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 268:
+            case 273:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x9C) {
                     if (yych <= 0x7F) {
@@ -8872,7 +9020,20 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 }
-            case 269:
+            case 274:
+                yych = yyinput.charAt(yycursor);
+                if (yych <= 0x7F) {
+                    yystate = 35;
+                    continue yyl;
+                }
+                if (yych <= 0xA0) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                yystate = 35;
+                continue yyl;
+            case 275:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -8889,7 +9050,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 270:
+            case 276:
                 yych = yyinput.charAt(yycursor);
                 if (yych == 0x80) {
                     yycursor += 1;
@@ -8907,7 +9068,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 271:
+            case 277:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -8920,7 +9081,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 272:
+            case 278:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x87) {
                     if (yych <= 0x7F) {
@@ -8947,7 +9108,7 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 }
-            case 273:
+            case 279:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0xA5) {
                     if (yych == 0x86) {
@@ -8985,25 +9146,52 @@ class Main {
                         continue yyl;
                     }
                 }
-            case 274:
+            case 280:
+                yych = yyinput.charAt(yycursor);
+                if (yych <= 0x97) {
+                    if (yych <= 0x7F) {
+                        yystate = 35;
+                        continue yyl;
+                    }
+                    if (yych <= 0x89) {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue yyl;
+                    }
+                    yystate = 35;
+                    continue yyl;
+                } else {
+                    if (yych <= 0x98) {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue yyl;
+                    }
+                    if (yych <= 0xAF) {
+                        yystate = 35;
+                        continue yyl;
+                    }
+                    if (yych <= 0xBF) {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue yyl;
+                    }
+                    yystate = 35;
+                    continue yyl;
+                }
+            case 281:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
                     continue yyl;
                 }
-                if (yych <= 0x89) {
-                    yycursor += 1;
-                    yystate = 3;
-                    continue yyl;
-                }
-                if (yych == 0x98) {
+                if (yych <= 0x9B) {
                     yycursor += 1;
                     yystate = 3;
                     continue yyl;
                 }
                 yystate = 35;
                 continue yyl;
-            case 275:
+            case 282:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x9F) {
                     yystate = 35;
@@ -9016,7 +9204,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 276:
+            case 283:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x83) {
                     if (yych == 0x82) {
@@ -9039,7 +9227,7 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 }
-            case 277:
+            case 284:
                 yych = yyinput.charAt(yycursor);
                 if (yych == 0xB0) {
                     yycursor += 1;
@@ -9048,7 +9236,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 278:
+            case 285:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9061,7 +9249,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 279:
+            case 286:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9074,7 +9262,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 280:
+            case 287:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x80) {
                     yystate = 35;
@@ -9085,9 +9273,31 @@ class Main {
                     yystate = 3;
                     continue yyl;
                 }
+                if (yych <= 0x9F) {
+                    yystate = 35;
+                    continue yyl;
+                }
+                if (yych <= 0xBF) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
                 yystate = 35;
                 continue yyl;
-            case 281:
+            case 288:
+                yych = yyinput.charAt(yycursor);
+                if (yych <= 0x7F) {
+                    yystate = 35;
+                    continue yyl;
+                }
+                if (yych <= 0x9D) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                yystate = 35;
+                continue yyl;
+            case 289:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9109,7 +9319,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 282:
+            case 290:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x8F) {
                     yystate = 35;
@@ -9122,7 +9332,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 283:
+            case 291:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0xA2) {
                     if (yych <= 0x7F) {
@@ -9154,7 +9364,55 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 }
-            case 284:
+            case 292:
+                yych = yyinput.charAt(yycursor);
+                if (yych <= 0x7F) {
+                    yystate = 35;
+                    continue yyl;
+                }
+                if (yych <= 0xAC) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                yystate = 35;
+                continue yyl;
+            case 293:
+                yych = yyinput.charAt(yycursor);
+                if (yych <= 0x9F) {
+                    yystate = 35;
+                    continue yyl;
+                }
+                if (yych <= 0xB8) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                if (yych <= 0xBA) {
+                    yystate = 35;
+                    continue yyl;
+                }
+                if (yych <= 0xBF) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                yystate = 35;
+                continue yyl;
+            case 294:
+                yych = yyinput.charAt(yycursor);
+                if (yych <= 0x7F) {
+                    yystate = 35;
+                    continue yyl;
+                }
+                if (yych <= 0x93) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                yystate = 35;
+                continue yyl;
+            case 295:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9172,7 +9430,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 285:
+            case 296:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x92) {
                     yystate = 35;
@@ -9185,37 +9443,39 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 286:
+            case 297:
                 yych = yyinput.charAt(yycursor);
-                if (yych <= 0x9F) {
+                if (yych <= 0xA2) {
+                    if (yych <= 0x9F) {
+                        yystate = 35;
+                        continue yyl;
+                    }
+                    if (yych <= 0xA1) {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue yyl;
+                    }
+                    yystate = 35;
+                    continue yyl;
+                } else {
+                    if (yych <= 0xA3) {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue yyl;
+                    }
+                    if (yych <= 0xB1) {
+                        yystate = 35;
+                        continue yyl;
+                    }
+                    if (yych <= 0xB6) {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue yyl;
+                    }
                     yystate = 35;
                     continue yyl;
                 }
-                if (yych == 0xA2) {
-                    yystate = 35;
-                    continue yyl;
-                }
-                if (yych <= 0xA3) {
-                    yycursor += 1;
-                    yystate = 3;
-                    continue yyl;
-                }
-                yystate = 35;
-                continue yyl;
-            case 287:
-                yych = yyinput.charAt(yycursor);
-                if (yych <= 0x7F) {
-                    yystate = 35;
-                    continue yyl;
-                }
-                if (yych <= 0xB7) {
-                    yycursor += 1;
-                    yystate = 3;
-                    continue yyl;
-                }
-                yystate = 35;
-                continue yyl;
-            case 288:
+            case 298:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9226,9 +9486,14 @@ class Main {
                     yystate = 3;
                     continue yyl;
                 }
+                if (yych == 0xBF) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
                 yystate = 35;
                 continue yyl;
-            case 289:
+            case 299:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0xB4) {
                     if (yych <= 0xAF) {
@@ -9255,7 +9520,7 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 }
-            case 290:
+            case 300:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9273,7 +9538,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 291:
+            case 301:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x95) {
                     if (yych <= 0x8F) {
@@ -9315,7 +9580,7 @@ class Main {
                         continue yyl;
                     }
                 }
-            case 292:
+            case 302:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9328,7 +9593,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 293:
+            case 303:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9350,7 +9615,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 294:
+            case 304:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9372,7 +9637,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 295:
+            case 305:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9389,7 +9654,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 296:
+            case 306:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0xA6) {
                     if (yych <= 0x9F) {
@@ -9455,7 +9720,7 @@ class Main {
                         }
                     }
                 }
-            case 297:
+            case 307:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9472,7 +9737,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 298:
+            case 308:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x94) {
                     if (yych <= 0x86) {
@@ -9528,7 +9793,7 @@ class Main {
                         continue yyl;
                     }
                 }
-            case 299:
+            case 309:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x86) {
                     if (yych <= 0x7F) {
@@ -9565,7 +9830,7 @@ class Main {
                         continue yyl;
                     }
                 }
-            case 300:
+            case 310:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9587,7 +9852,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 301:
+            case 311:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x9A) {
                     if (yych == 0x80) {
@@ -9625,7 +9890,7 @@ class Main {
                         continue yyl;
                     }
                 }
-            case 302:
+            case 312:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x95) {
                     if (yych <= 0x7F) {
@@ -9652,7 +9917,7 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 }
-            case 303:
+            case 313:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x8F) {
                     if (yych <= 0x7F) {
@@ -9679,7 +9944,7 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 }
-            case 304:
+            case 314:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x89) {
                     if (yych <= 0x7F) {
@@ -9706,7 +9971,7 @@ class Main {
                     yystate = 35;
                     continue yyl;
                 }
-            case 305:
+            case 315:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9723,7 +9988,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 306:
+            case 316:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9745,7 +10010,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 307:
+            case 317:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9758,7 +10023,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 308:
+            case 318:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9780,7 +10045,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 309:
+            case 319:
                 yych = yyinput.charAt(yycursor);
                 if (yych == 0x8E) {
                     yycursor += 1;
@@ -9789,7 +10054,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 310:
+            case 320:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x8F) {
                     yystate = 35;
@@ -9802,7 +10067,81 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 311:
+            case 321:
+                yych = yyinput.charAt(yycursor);
+                if (yych <= 0x8F) {
+                    yystate = 35;
+                    continue yyl;
+                }
+                if (yych <= 0xAD) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                if (yych == 0xB0) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                yystate = 35;
+                continue yyl;
+            case 322:
+                yych = yyinput.charAt(yycursor);
+                if (yych <= 0xA5) {
+                    if (yych <= 0x9F) {
+                        if (yych <= 0x7F) {
+                            yystate = 35;
+                            continue yyl;
+                        }
+                        if (yych <= 0x9E) {
+                            yycursor += 1;
+                            yystate = 3;
+                            continue yyl;
+                        }
+                        yystate = 35;
+                        continue yyl;
+                    } else {
+                        if (yych == 0xA3) {
+                            yystate = 35;
+                            continue yyl;
+                        }
+                        yycursor += 1;
+                        yystate = 3;
+                        continue yyl;
+                    }
+                } else {
+                    if (yych <= 0xAF) {
+                        if (yych <= 0xA6) {
+                            yystate = 35;
+                            continue yyl;
+                        }
+                        if (yych <= 0xAD) {
+                            yycursor += 1;
+                            yystate = 3;
+                            continue yyl;
+                        }
+                        yystate = 35;
+                        continue yyl;
+                    } else {
+                        if (yych <= 0xB4) {
+                            yycursor += 1;
+                            yystate = 3;
+                            continue yyl;
+                        }
+                        if (yych <= 0xBD) {
+                            yystate = 35;
+                            continue yyl;
+                        }
+                        if (yych <= 0xBF) {
+                            yycursor += 1;
+                            yystate = 3;
+                            continue yyl;
+                        }
+                        yystate = 35;
+                        continue yyl;
+                    }
+                }
+            case 323:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0xAB) {
                     if (yych <= 0x9F) {
@@ -9839,7 +10178,7 @@ class Main {
                         continue yyl;
                     }
                 }
-            case 312:
+            case 324:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9852,7 +10191,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 313:
+            case 325:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -9870,7 +10209,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 314:
+            case 326:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0xA6) {
                     if (yych <= 0x9F) {
@@ -9943,7 +10282,7 @@ class Main {
                         }
                     }
                 }
-            case 315:
+            case 327:
                 yych = yyinput.charAt(yycursor);
                 switch (yych) {
                     case 0x82:
@@ -9991,7 +10330,7 @@ class Main {
                         yystate = 35;
                         continue yyl;
                 }
-            case 316:
+            case 328:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0xA0) {
                     if (yych <= 0x89) {
@@ -10038,7 +10377,7 @@ class Main {
                         continue yyl;
                     }
                 }
-            case 317:
+            case 329:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -10051,42 +10390,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 318:
-                yych = yyinput.charAt(yycursor);
-                if (yych <= 0x7F) {
-                    yystate = 35;
-                    continue yyl;
-                }
-                if (yych <= 0xB9) {
-                    yycursor += 1;
-                    yystate = 3;
-                    continue yyl;
-                }
-                yystate = 35;
-                continue yyl;
-            case 319:
-                yych = yyinput.charAt(yycursor);
-                if (yych <= 0x7F) {
-                    yystate = 35;
-                    continue yyl;
-                }
-                if (yych <= 0xA1) {
-                    yycursor += 1;
-                    yystate = 3;
-                    continue yyl;
-                }
-                if (yych <= 0xAF) {
-                    yystate = 35;
-                    continue yyl;
-                }
-                if (yych <= 0xBF) {
-                    yycursor += 1;
-                    yystate = 3;
-                    continue yyl;
-                }
-                yystate = 35;
-                continue yyl;
-            case 320:
+            case 330:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -10108,20 +10412,7 @@ class Main {
                 }
                 yystate = 35;
                 continue yyl;
-            case 321:
-                yych = yyinput.charAt(yycursor);
-                if (yych <= 0x7F) {
-                    yystate = 35;
-                    continue yyl;
-                }
-                if (yych <= 0x9D) {
-                    yycursor += 1;
-                    yystate = 3;
-                    continue yyl;
-                }
-                yystate = 35;
-                continue yyl;
-            case 322:
+            case 331:
                 yych = yyinput.charAt(yycursor);
                 if (yych <= 0x7F) {
                     yystate = 35;
@@ -10137,6 +10428,19 @@ class Main {
                     continue yyl;
                 }
                 if (yych <= 0xBF) {
+                    yycursor += 1;
+                    yystate = 3;
+                    continue yyl;
+                }
+                yystate = 35;
+                continue yyl;
+            case 332:
+                yych = yyinput.charAt(yycursor);
+                if (yych <= 0x7F) {
+                    yystate = 35;
+                    continue yyl;
+                }
+                if (yych <= 0xB9) {
                     yycursor += 1;
                     yystate = 3;
                     continue yyl;

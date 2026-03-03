@@ -881,7 +881,8 @@ and yy33 (yyrecord : state) : bool =
         | '\x97'
         | '\xA0'..'\xA9'
         | '\xAD'
-        | '\xB0' ->
+        | '\xB0'
+        | '\xB2' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy59 [@tailcall]) yyrecord
         | '\x98' ->
@@ -917,7 +918,7 @@ and yy33 (yyrecord : state) : bool =
         | '\xB1' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy208 [@tailcall]) yyrecord
-        | '\xB2' ->
+        | '\xB3' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy209 [@tailcall]) yyrecord
         | _ -> (yy2 [@tailcall]) yyrecord
@@ -1617,7 +1618,8 @@ and yy63 (yyrecord : state) : bool =
         | '\x97'
         | '\xA0'..'\xA9'
         | '\xAD'
-        | '\xB0' ->
+        | '\xB0'
+        | '\xB2' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy59 [@tailcall]) yyrecord
         | '\x98' ->
@@ -1659,7 +1661,7 @@ and yy63 (yyrecord : state) : bool =
         | '\xB1' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy208 [@tailcall]) yyrecord
-        | '\xB2' ->
+        | '\xB3' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy209 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
@@ -1697,7 +1699,7 @@ and yy67 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x87'
-        | '\x89'..'\x8E'
+        | '\x89'..'\x8F'
         | '\xA0'..'\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
@@ -1870,7 +1872,7 @@ and yy82 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x98'..'\x9A'
-        | '\x9D'
+        | '\x9C'..'\x9D'
         | '\xA0'..'\xA1' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
@@ -1893,7 +1895,7 @@ and yy83 (yyrecord : state) : bool =
 and yy84 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
-        | '\x9D'..'\x9E'
+        | '\x9C'..'\x9E'
         | '\xA0'..'\xA1'
         | '\xB1'..'\xB2' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -2327,7 +2329,7 @@ and yy129 (yyrecord : state) : bool =
 and yy130 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
-        | '\x80'..'\x88'
+        | '\x80'..'\x8A'
         | '\x90'..'\xBA'
         | '\xBD'..'\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -2636,11 +2638,8 @@ and yy160 (yyrecord : state) : bool =
 and yy161 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
-        | '\x80'..'\x8A'
-        | '\x90'..'\x91'
-        | '\x93'
-        | '\x95'..'\x99'
-        | '\xB2'..'\xBF' ->
+        | '\x80'..'\x9C'
+        | '\xB1'..'\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
@@ -2985,6 +2984,9 @@ and yy192 (yyrecord : state) : bool =
         | '\x96' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy304 [@tailcall]) yyrecord
+        | '\x97' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy112 [@tailcall]) yyrecord
         | '\x9C' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy273 [@tailcall]) yyrecord
@@ -3009,6 +3011,9 @@ and yy192 (yyrecord : state) : bool =
         | '\xA4' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy310 [@tailcall]) yyrecord
+        | '\xA5' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy179 [@tailcall]) yyrecord
         | '\xA6' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy311 [@tailcall]) yyrecord
@@ -3042,21 +3047,30 @@ and yy192 (yyrecord : state) : bool =
         | '\xB4' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy128 [@tailcall]) yyrecord
-        | '\xBA' ->
+        | '\xB5' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy319 [@tailcall]) yyrecord
-        | '\xBC' ->
+        | '\xB6' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy320 [@tailcall]) yyrecord
-        | '\xBD' ->
+        | '\xBA' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy321 [@tailcall]) yyrecord
-        | '\xBE' ->
+        | '\xBB' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy322 [@tailcall]) yyrecord
-        | '\xBF' ->
+        | '\xBC' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy323 [@tailcall]) yyrecord
+        | '\xBD' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy324 [@tailcall]) yyrecord
+        | '\xBE' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy325 [@tailcall]) yyrecord
+        | '\xBF' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy326 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy193 (yyrecord : state) : bool =
@@ -3064,37 +3078,37 @@ and yy193 (yyrecord : state) : bool =
     match yych with
         | '\x80' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy324 [@tailcall]) yyrecord
+            (yy327 [@tailcall]) yyrecord
         | '\x81' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy325 [@tailcall]) yyrecord
+            (yy328 [@tailcall]) yyrecord
         | '\x82' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy326 [@tailcall]) yyrecord
+            (yy329 [@tailcall]) yyrecord
         | '\x83' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy327 [@tailcall]) yyrecord
+            (yy330 [@tailcall]) yyrecord
         | '\x84' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy328 [@tailcall]) yyrecord
+            (yy331 [@tailcall]) yyrecord
         | '\x85' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy329 [@tailcall]) yyrecord
+            (yy332 [@tailcall]) yyrecord
         | '\x86' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy330 [@tailcall]) yyrecord
+            (yy333 [@tailcall]) yyrecord
         | '\x87' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy331 [@tailcall]) yyrecord
+            (yy334 [@tailcall]) yyrecord
         | '\x88' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy332 [@tailcall]) yyrecord
+            (yy335 [@tailcall]) yyrecord
         | '\x89' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy92 [@tailcall]) yyrecord
         | '\x8A' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy333 [@tailcall]) yyrecord
+            (yy336 [@tailcall]) yyrecord
         | '\x8B' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy118 [@tailcall]) yyrecord
@@ -3103,32 +3117,38 @@ and yy193 (yyrecord : state) : bool =
             (yy77 [@tailcall]) yyrecord
         | '\x8D' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy334 [@tailcall]) yyrecord
+            (yy337 [@tailcall]) yyrecord
+        | '\x8E' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy338 [@tailcall]) yyrecord
+        | '\x8F' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy339 [@tailcall]) yyrecord
         | '\x90' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy294 [@tailcall]) yyrecord
         | '\x91' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy335 [@tailcall]) yyrecord
+            (yy340 [@tailcall]) yyrecord
         | '\x92'
         | '\x98' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy158 [@tailcall]) yyrecord
         | '\x93' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy336 [@tailcall]) yyrecord
+            (yy341 [@tailcall]) yyrecord
         | '\x96' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy337 [@tailcall]) yyrecord
+            (yy342 [@tailcall]) yyrecord
         | '\x97' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy338 [@tailcall]) yyrecord
+            (yy343 [@tailcall]) yyrecord
         | '\x99' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy339 [@tailcall]) yyrecord
+            (yy344 [@tailcall]) yyrecord
         | '\x9A' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy340 [@tailcall]) yyrecord
+            (yy345 [@tailcall]) yyrecord
         | '\x9C' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy103 [@tailcall]) yyrecord
@@ -3137,64 +3157,70 @@ and yy193 (yyrecord : state) : bool =
             (yy88 [@tailcall]) yyrecord
         | '\xA0' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy341 [@tailcall]) yyrecord
+            (yy346 [@tailcall]) yyrecord
         | '\xA2' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy114 [@tailcall]) yyrecord
         | '\xA3' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy342 [@tailcall]) yyrecord
+            (yy347 [@tailcall]) yyrecord
         | '\xA4' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy343 [@tailcall]) yyrecord
+            (yy348 [@tailcall]) yyrecord
         | '\xA5' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy344 [@tailcall]) yyrecord
+            (yy349 [@tailcall]) yyrecord
         | '\xA6' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy345 [@tailcall]) yyrecord
+            (yy350 [@tailcall]) yyrecord
         | '\xA7' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy346 [@tailcall]) yyrecord
+            (yy351 [@tailcall]) yyrecord
         | '\xA8' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy347 [@tailcall]) yyrecord
+            (yy352 [@tailcall]) yyrecord
         | '\xA9' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy348 [@tailcall]) yyrecord
+            (yy353 [@tailcall]) yyrecord
         | '\xAA' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy349 [@tailcall]) yyrecord
+            (yy354 [@tailcall]) yyrecord
         | '\xAB' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy115 [@tailcall]) yyrecord
-        | '\xB0' ->
-            yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy350 [@tailcall]) yyrecord
-        | '\xB1' ->
-            yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy351 [@tailcall]) yyrecord
-        | '\xB2' ->
-            yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy352 [@tailcall]) yyrecord
-        | '\xB4' ->
-            yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy353 [@tailcall]) yyrecord
-        | '\xB5' ->
-            yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy354 [@tailcall]) yyrecord
-        | '\xB6' ->
+        | '\xAF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy355 [@tailcall]) yyrecord
-        | '\xBB' ->
+        | '\xB0' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy356 [@tailcall]) yyrecord
-        | '\xBC' ->
+        | '\xB1' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy357 [@tailcall]) yyrecord
-        | '\xBE' ->
+        | '\xB2' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy358 [@tailcall]) yyrecord
+        | '\xB4' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy359 [@tailcall]) yyrecord
+        | '\xB5' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy360 [@tailcall]) yyrecord
+        | '\xB6' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy361 [@tailcall]) yyrecord
+        | '\xB7' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy362 [@tailcall]) yyrecord
+        | '\xBB' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy363 [@tailcall]) yyrecord
+        | '\xBC' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy364 [@tailcall]) yyrecord
+        | '\xBE' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy365 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy194 (yyrecord : state) : bool =
@@ -3210,22 +3236,23 @@ and yy194 (yyrecord : state) : bool =
             (yy179 [@tailcall]) yyrecord
         | '\x91' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy337 [@tailcall]) yyrecord
+            (yy342 [@tailcall]) yyrecord
         | '\x95' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy359 [@tailcall]) yyrecord
+            (yy366 [@tailcall]) yyrecord
         | '\xBE' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy50 [@tailcall]) yyrecord
         | '\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy360 [@tailcall]) yyrecord
+            (yy367 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy195 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
-        | '\x80'..'\x8F' ->
+        | '\x80'..'\x8F'
+        | '\x92'..'\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy37 [@tailcall]) yyrecord
         | '\x90' ->
@@ -3233,15 +3260,19 @@ and yy195 (yyrecord : state) : bool =
             (yy158 [@tailcall]) yyrecord
         | '\x91' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy361 [@tailcall]) yyrecord
+            (yy368 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy196 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
+        | '\x80'..'\x8E'
         | '\x90'..'\x98' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy37 [@tailcall]) yyrecord
+        | '\x8F' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy293 [@tailcall]) yyrecord
         | '\x99' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy88 [@tailcall]) yyrecord
@@ -3250,6 +3281,9 @@ and yy196 (yyrecord : state) : bool =
 and yy197 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
+        | '\x84' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy369 [@tailcall]) yyrecord
         | '\xA0'..'\xA7'
         | '\xB9'
         | '\xBC' ->
@@ -3260,49 +3294,58 @@ and yy197 (yyrecord : state) : bool =
             (yy115 [@tailcall]) yyrecord
         | '\xA9' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy362 [@tailcall]) yyrecord
+            (yy370 [@tailcall]) yyrecord
         | '\xAA' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy190 [@tailcall]) yyrecord
         | '\xAB' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy363 [@tailcall]) yyrecord
+            (yy371 [@tailcall]) yyrecord
         | '\xAC' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy158 [@tailcall]) yyrecord
         | '\xAD' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy364 [@tailcall]) yyrecord
+            (yy372 [@tailcall]) yyrecord
         | '\xAE' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy352 [@tailcall]) yyrecord
+            (yy358 [@tailcall]) yyrecord
+        | '\xB5' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy373 [@tailcall]) yyrecord
+        | '\xBA' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy374 [@tailcall]) yyrecord
+        | '\xBB' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy375 [@tailcall]) yyrecord
         | '\xBD' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy365 [@tailcall]) yyrecord
+            (yy376 [@tailcall]) yyrecord
         | '\xBE' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy366 [@tailcall]) yyrecord
+            (yy377 [@tailcall]) yyrecord
         | '\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy367 [@tailcall]) yyrecord
+            (yy378 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy198 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
-        | '\x80'..'\x9E'
-        | '\xA0'..'\xB2' ->
+        | '\x80'..'\xB2'
+        | '\xB6' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy37 [@tailcall]) yyrecord
-        | '\x9F' ->
-            yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy256 [@tailcall]) yyrecord
         | '\xB3' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy368 [@tailcall]) yyrecord
+            (yy379 [@tailcall]) yyrecord
         | '\xB4' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy140 [@tailcall]) yyrecord
+            (yy118 [@tailcall]) yyrecord
+        | '\xB7' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy318 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy199 (yyrecord : state) : bool =
@@ -3310,7 +3353,7 @@ and yy199 (yyrecord : state) : bool =
     match yych with
         | '\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy369 [@tailcall]) yyrecord
+            (yy380 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy200 (yyrecord : state) : bool =
@@ -3323,19 +3366,19 @@ and yy200 (yyrecord : state) : bool =
             (yy37 [@tailcall]) yyrecord
         | '\x84' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy370 [@tailcall]) yyrecord
+            (yy381 [@tailcall]) yyrecord
         | '\x85' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy371 [@tailcall]) yyrecord
+            (yy382 [@tailcall]) yyrecord
         | '\x8B' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy372 [@tailcall]) yyrecord
+            (yy383 [@tailcall]) yyrecord
         | '\xB1' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy373 [@tailcall]) yyrecord
+            (yy384 [@tailcall]) yyrecord
         | '\xB2' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy374 [@tailcall]) yyrecord
+            (yy385 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy201 (yyrecord : state) : bool =
@@ -3347,40 +3390,40 @@ and yy201 (yyrecord : state) : bool =
             (yy37 [@tailcall]) yyrecord
         | '\x91' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy375 [@tailcall]) yyrecord
+            (yy386 [@tailcall]) yyrecord
         | '\x92' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy376 [@tailcall]) yyrecord
+            (yy387 [@tailcall]) yyrecord
         | '\x93' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy377 [@tailcall]) yyrecord
+            (yy388 [@tailcall]) yyrecord
         | '\x94' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy378 [@tailcall]) yyrecord
+            (yy389 [@tailcall]) yyrecord
         | '\x95' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy379 [@tailcall]) yyrecord
+            (yy390 [@tailcall]) yyrecord
         | '\x9A' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy380 [@tailcall]) yyrecord
+            (yy391 [@tailcall]) yyrecord
         | '\x9B' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy381 [@tailcall]) yyrecord
+            (yy392 [@tailcall]) yyrecord
         | '\x9C' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy382 [@tailcall]) yyrecord
+            (yy393 [@tailcall]) yyrecord
         | '\x9D' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy383 [@tailcall]) yyrecord
+            (yy394 [@tailcall]) yyrecord
         | '\x9E' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy384 [@tailcall]) yyrecord
+            (yy395 [@tailcall]) yyrecord
         | '\x9F' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy385 [@tailcall]) yyrecord
+            (yy396 [@tailcall]) yyrecord
         | '\xBC' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy386 [@tailcall]) yyrecord
+            (yy397 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy202 (yyrecord : state) : bool =
@@ -3394,41 +3437,47 @@ and yy202 (yyrecord : state) : bool =
             (yy210 [@tailcall]) yyrecord
         | '\x84' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy387 [@tailcall]) yyrecord
+            (yy398 [@tailcall]) yyrecord
         | '\x85' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy388 [@tailcall]) yyrecord
+            (yy399 [@tailcall]) yyrecord
         | '\x8A' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy363 [@tailcall]) yyrecord
+            (yy371 [@tailcall]) yyrecord
         | '\x8B' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy341 [@tailcall]) yyrecord
+            (yy346 [@tailcall]) yyrecord
         | '\x93' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy389 [@tailcall]) yyrecord
+            (yy400 [@tailcall]) yyrecord
+        | '\x97' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy401 [@tailcall]) yyrecord
+        | '\x9B' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy402 [@tailcall]) yyrecord
         | '\x9F' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy390 [@tailcall]) yyrecord
+            (yy403 [@tailcall]) yyrecord
         | '\xA0'..'\xA2'
         | '\xA4' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy37 [@tailcall]) yyrecord
         | '\xA3' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy391 [@tailcall]) yyrecord
+            (yy404 [@tailcall]) yyrecord
         | '\xA5' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy392 [@tailcall]) yyrecord
+            (yy405 [@tailcall]) yyrecord
         | '\xB8' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy393 [@tailcall]) yyrecord
+            (yy406 [@tailcall]) yyrecord
         | '\xB9' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy394 [@tailcall]) yyrecord
+            (yy407 [@tailcall]) yyrecord
         | '\xBA' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy395 [@tailcall]) yyrecord
+            (yy408 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy203 (yyrecord : state) : bool =
@@ -3440,20 +3489,16 @@ and yy203 (yyrecord : state) : bool =
             (yy37 [@tailcall]) yyrecord
         | '\x9B' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy396 [@tailcall]) yyrecord
+            (yy409 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy204 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
-        | '\x80'..'\x9B'
-        | '\x9D'..'\x9F'
+        | '\x80'..'\x9F'
         | '\xA1'..'\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy37 [@tailcall]) yyrecord
-        | '\x9C' ->
-            yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy397 [@tailcall]) yyrecord
         | '\xA0' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy157 [@tailcall]) yyrecord
@@ -3468,7 +3513,7 @@ and yy205 (yyrecord : state) : bool =
             (yy37 [@tailcall]) yyrecord
         | '\xBA' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy398 [@tailcall]) yyrecord
+            (yy178 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy206 (yyrecord : state) : bool =
@@ -3480,10 +3525,10 @@ and yy206 (yyrecord : state) : bool =
             (yy37 [@tailcall]) yyrecord
         | '\xAF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy399 [@tailcall]) yyrecord
+            (yy410 [@tailcall]) yyrecord
         | '\xB9' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy400 [@tailcall]) yyrecord
+            (yy369 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy207 (yyrecord : state) : bool =
@@ -3494,7 +3539,7 @@ and yy207 (yyrecord : state) : bool =
             (yy37 [@tailcall]) yyrecord
         | '\xA8' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy400 [@tailcall]) yyrecord
+            (yy369 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy208 (yyrecord : state) : bool =
@@ -3506,18 +3551,18 @@ and yy208 (yyrecord : state) : bool =
             (yy37 [@tailcall]) yyrecord
         | '\x8D' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy401 [@tailcall]) yyrecord
+            (yy411 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy209 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
-        | '\x80'..'\x8D' ->
+        | '\x80'..'\x90' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy37 [@tailcall]) yyrecord
-        | '\x8E' ->
+        | '\x91' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy158 [@tailcall]) yyrecord
+            (yy412 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy210 (yyrecord : state) : bool =
@@ -3542,8 +3587,8 @@ and yy212 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x87'
-        | '\x89'..'\x8E'
-        | '\x98'..'\xBF' ->
+        | '\x89'..'\x8F'
+        | '\x97'..'\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
@@ -3739,7 +3784,7 @@ and yy226 (yyrecord : state) : bool =
         | '\x8A'..'\x8D'
         | '\x95'..'\x96'
         | '\x98'..'\x9A'
-        | '\x9D'
+        | '\x9C'..'\x9D'
         | '\xA0'..'\xA3'
         | '\xA6'..'\xAF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -3767,7 +3812,7 @@ and yy228 (yyrecord : state) : bool =
         | '\x86'..'\x88'
         | '\x8A'..'\x8D'
         | '\x95'..'\x96'
-        | '\x9D'..'\x9E'
+        | '\x9C'..'\x9E'
         | '\xA0'..'\xA3'
         | '\xA6'..'\xAF'
         | '\xB1'..'\xB3' ->
@@ -4039,7 +4084,8 @@ and yy253 (yyrecord : state) : bool =
 and yy254 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
-        | '\x80'..'\x8E' ->
+        | '\x80'..'\x9D'
+        | '\xA0'..'\xAB' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
@@ -4328,19 +4374,19 @@ and yy281 (yyrecord : state) : bool =
             (yy294 [@tailcall]) yyrecord
         | '\x87' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy402 [@tailcall]) yyrecord
+            (yy413 [@tailcall]) yyrecord
         | '\x8A' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy295 [@tailcall]) yyrecord
         | '\x8B' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy403 [@tailcall]) yyrecord
+            (yy414 [@tailcall]) yyrecord
         | '\x8C' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy297 [@tailcall]) yyrecord
         | '\x8D' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy404 [@tailcall]) yyrecord
+            (yy415 [@tailcall]) yyrecord
         | '\x8E' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy157 [@tailcall]) yyrecord
@@ -4349,7 +4395,7 @@ and yy281 (yyrecord : state) : bool =
             (yy299 [@tailcall]) yyrecord
         | '\x92' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy405 [@tailcall]) yyrecord
+            (yy416 [@tailcall]) yyrecord
         | '\x93' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy301 [@tailcall]) yyrecord
@@ -4362,6 +4408,9 @@ and yy281 (yyrecord : state) : bool =
         | '\x96' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy304 [@tailcall]) yyrecord
+        | '\x97' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy112 [@tailcall]) yyrecord
         | '\x9C' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy273 [@tailcall]) yyrecord
@@ -4386,12 +4435,15 @@ and yy281 (yyrecord : state) : bool =
         | '\xA4' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy310 [@tailcall]) yyrecord
+        | '\xA5' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy179 [@tailcall]) yyrecord
         | '\xA6' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy311 [@tailcall]) yyrecord
         | '\xA8' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy406 [@tailcall]) yyrecord
+            (yy417 [@tailcall]) yyrecord
         | '\xA9' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy313 [@tailcall]) yyrecord
@@ -4400,7 +4452,7 @@ and yy281 (yyrecord : state) : bool =
             (yy314 [@tailcall]) yyrecord
         | '\xAB' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy407 [@tailcall]) yyrecord
+            (yy418 [@tailcall]) yyrecord
         | '\xAC' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy117 [@tailcall]) yyrecord
@@ -4418,25 +4470,31 @@ and yy281 (yyrecord : state) : bool =
             (yy318 [@tailcall]) yyrecord
         | '\xB4' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy408 [@tailcall]) yyrecord
-        | '\xBA' ->
+            (yy419 [@tailcall]) yyrecord
+        | '\xB5' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy409 [@tailcall]) yyrecord
-        | '\xBB' ->
-            yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy410 [@tailcall]) yyrecord
-        | '\xBC' ->
+            (yy420 [@tailcall]) yyrecord
+        | '\xB6' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy320 [@tailcall]) yyrecord
-        | '\xBD' ->
+        | '\xBA' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy411 [@tailcall]) yyrecord
-        | '\xBE' ->
+            (yy421 [@tailcall]) yyrecord
+        | '\xBB' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy321 [@tailcall]) yyrecord
-        | '\xBF' ->
+            (yy422 [@tailcall]) yyrecord
+        | '\xBC' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy323 [@tailcall]) yyrecord
+        | '\xBD' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy423 [@tailcall]) yyrecord
+        | '\xBE' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy324 [@tailcall]) yyrecord
+        | '\xBF' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy326 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy282 (yyrecord : state) : bool =
@@ -4451,66 +4509,72 @@ and yy282 (yyrecord : state) : bool =
             (yy37 [@tailcall]) yyrecord
         | '\x81' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy412 [@tailcall]) yyrecord
+            (yy424 [@tailcall]) yyrecord
         | '\x82'
         | '\xA0' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy293 [@tailcall]) yyrecord
         | '\x83' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy413 [@tailcall]) yyrecord
+            (yy425 [@tailcall]) yyrecord
         | '\x84' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy414 [@tailcall]) yyrecord
+            (yy426 [@tailcall]) yyrecord
         | '\x85' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy415 [@tailcall]) yyrecord
+            (yy427 [@tailcall]) yyrecord
         | '\x87' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy416 [@tailcall]) yyrecord
+            (yy428 [@tailcall]) yyrecord
         | '\x88' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy417 [@tailcall]) yyrecord
+            (yy429 [@tailcall]) yyrecord
         | '\x89' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy418 [@tailcall]) yyrecord
+            (yy430 [@tailcall]) yyrecord
         | '\x8A' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy333 [@tailcall]) yyrecord
+            (yy336 [@tailcall]) yyrecord
         | '\x8B' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy419 [@tailcall]) yyrecord
+            (yy431 [@tailcall]) yyrecord
         | '\x8C' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy420 [@tailcall]) yyrecord
+            (yy432 [@tailcall]) yyrecord
         | '\x8D' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy421 [@tailcall]) yyrecord
+            (yy433 [@tailcall]) yyrecord
+        | '\x8E' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy434 [@tailcall]) yyrecord
+        | '\x8F' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy435 [@tailcall]) yyrecord
         | '\x91' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy422 [@tailcall]) yyrecord
+            (yy436 [@tailcall]) yyrecord
         | '\x93' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy423 [@tailcall]) yyrecord
+            (yy437 [@tailcall]) yyrecord
         | '\x96' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy424 [@tailcall]) yyrecord
+            (yy438 [@tailcall]) yyrecord
         | '\x97' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy425 [@tailcall]) yyrecord
+            (yy439 [@tailcall]) yyrecord
         | '\x99' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy426 [@tailcall]) yyrecord
+            (yy440 [@tailcall]) yyrecord
         | '\x9A'
         | '\xAB' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy115 [@tailcall]) yyrecord
         | '\x9B' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy68 [@tailcall]) yyrecord
+            (yy441 [@tailcall]) yyrecord
         | '\x9C' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy427 [@tailcall]) yyrecord
+            (yy442 [@tailcall]) yyrecord
         | '\x9D' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy88 [@tailcall]) yyrecord
@@ -4519,64 +4583,74 @@ and yy282 (yyrecord : state) : bool =
             (yy114 [@tailcall]) yyrecord
         | '\xA3' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy428 [@tailcall]) yyrecord
+            (yy443 [@tailcall]) yyrecord
         | '\xA4' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy429 [@tailcall]) yyrecord
+            (yy444 [@tailcall]) yyrecord
         | '\xA5' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy430 [@tailcall]) yyrecord
+            (yy445 [@tailcall]) yyrecord
         | '\xA6' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy345 [@tailcall]) yyrecord
+            (yy350 [@tailcall]) yyrecord
         | '\xA7' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy431 [@tailcall]) yyrecord
+            (yy446 [@tailcall]) yyrecord
         | '\xA8' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy190 [@tailcall]) yyrecord
         | '\xA9' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy432 [@tailcall]) yyrecord
+            (yy447 [@tailcall]) yyrecord
         | '\xAA' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy433 [@tailcall]) yyrecord
+            (yy448 [@tailcall]) yyrecord
+        | '\xAD' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy449 [@tailcall]) yyrecord
+        | '\xAF' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy450 [@tailcall]) yyrecord
         | '\xB0' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy434 [@tailcall]) yyrecord
+            (yy451 [@tailcall]) yyrecord
         | '\xB1' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy435 [@tailcall]) yyrecord
+            (yy452 [@tailcall]) yyrecord
         | '\xB2' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy436 [@tailcall]) yyrecord
+            (yy453 [@tailcall]) yyrecord
         | '\xB4' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy437 [@tailcall]) yyrecord
+            (yy454 [@tailcall]) yyrecord
         | '\xB5' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy438 [@tailcall]) yyrecord
+            (yy455 [@tailcall]) yyrecord
         | '\xB6' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy439 [@tailcall]) yyrecord
+            (yy456 [@tailcall]) yyrecord
+        | '\xB7' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy457 [@tailcall]) yyrecord
         | '\xBB' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy440 [@tailcall]) yyrecord
+            (yy458 [@tailcall]) yyrecord
         | '\xBC' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy441 [@tailcall]) yyrecord
+            (yy459 [@tailcall]) yyrecord
         | '\xBD' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy442 [@tailcall]) yyrecord
+            (yy460 [@tailcall]) yyrecord
         | '\xBE' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy358 [@tailcall]) yyrecord
+            (yy365 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy283 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
-        | '\x80'..'\x8F' ->
+        | '\x80'..'\x8F'
+        | '\x92'..'\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy37 [@tailcall]) yyrecord
         | '\x90' ->
@@ -4584,12 +4658,15 @@ and yy283 (yyrecord : state) : bool =
             (yy158 [@tailcall]) yyrecord
         | '\x91' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy368 [@tailcall]) yyrecord
+            (yy461 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy284 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
+        | '\x84' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy412 [@tailcall]) yyrecord
         | '\xA0'..'\xA7'
         | '\xB9'
         | '\xBC' ->
@@ -4600,31 +4677,40 @@ and yy284 (yyrecord : state) : bool =
             (yy115 [@tailcall]) yyrecord
         | '\xA9' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy443 [@tailcall]) yyrecord
+            (yy462 [@tailcall]) yyrecord
         | '\xAA' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy190 [@tailcall]) yyrecord
         | '\xAB' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy444 [@tailcall]) yyrecord
+            (yy463 [@tailcall]) yyrecord
         | '\xAC' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy273 [@tailcall]) yyrecord
         | '\xAD' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy445 [@tailcall]) yyrecord
+            (yy464 [@tailcall]) yyrecord
         | '\xAE' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy352 [@tailcall]) yyrecord
+            (yy358 [@tailcall]) yyrecord
+        | '\xB5' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy465 [@tailcall]) yyrecord
+        | '\xBA' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy374 [@tailcall]) yyrecord
+        | '\xBB' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy375 [@tailcall]) yyrecord
         | '\xBD' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy446 [@tailcall]) yyrecord
+            (yy466 [@tailcall]) yyrecord
         | '\xBE' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy447 [@tailcall]) yyrecord
+            (yy467 [@tailcall]) yyrecord
         | '\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy448 [@tailcall]) yyrecord
+            (yy468 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy285 (yyrecord : state) : bool =
@@ -4637,24 +4723,27 @@ and yy285 (yyrecord : state) : bool =
             (yy37 [@tailcall]) yyrecord
         | '\x84' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy370 [@tailcall]) yyrecord
+            (yy381 [@tailcall]) yyrecord
         | '\x85' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy371 [@tailcall]) yyrecord
+            (yy382 [@tailcall]) yyrecord
         | '\x8B' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy372 [@tailcall]) yyrecord
+            (yy383 [@tailcall]) yyrecord
         | '\xB1' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy373 [@tailcall]) yyrecord
+            (yy384 [@tailcall]) yyrecord
         | '\xB2' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy449 [@tailcall]) yyrecord
+            (yy469 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy286 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
+        | '\xB3' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy470 [@tailcall]) yyrecord
         | '\xBC' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy178 [@tailcall]) yyrecord
@@ -4668,62 +4757,62 @@ and yy287 (yyrecord : state) : bool =
     match yych with
         | '\x85' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy450 [@tailcall]) yyrecord
+            (yy471 [@tailcall]) yyrecord
         | '\x86' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy451 [@tailcall]) yyrecord
+            (yy472 [@tailcall]) yyrecord
         | '\x89' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy452 [@tailcall]) yyrecord
+            (yy473 [@tailcall]) yyrecord
         | '\x90'
         | '\x96'..'\x99' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy37 [@tailcall]) yyrecord
         | '\x91' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy375 [@tailcall]) yyrecord
+            (yy386 [@tailcall]) yyrecord
         | '\x92' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy376 [@tailcall]) yyrecord
+            (yy387 [@tailcall]) yyrecord
         | '\x93' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy377 [@tailcall]) yyrecord
+            (yy388 [@tailcall]) yyrecord
         | '\x94' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy378 [@tailcall]) yyrecord
+            (yy389 [@tailcall]) yyrecord
         | '\x95' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy379 [@tailcall]) yyrecord
+            (yy390 [@tailcall]) yyrecord
         | '\x9A' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy380 [@tailcall]) yyrecord
+            (yy391 [@tailcall]) yyrecord
         | '\x9B' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy381 [@tailcall]) yyrecord
+            (yy392 [@tailcall]) yyrecord
         | '\x9C' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy382 [@tailcall]) yyrecord
+            (yy393 [@tailcall]) yyrecord
         | '\x9D' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy383 [@tailcall]) yyrecord
+            (yy394 [@tailcall]) yyrecord
         | '\x9E' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy384 [@tailcall]) yyrecord
+            (yy395 [@tailcall]) yyrecord
         | '\x9F' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy453 [@tailcall]) yyrecord
+            (yy474 [@tailcall]) yyrecord
         | '\xA8' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy454 [@tailcall]) yyrecord
+            (yy475 [@tailcall]) yyrecord
         | '\xA9' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy455 [@tailcall]) yyrecord
+            (yy476 [@tailcall]) yyrecord
         | '\xAA' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy456 [@tailcall]) yyrecord
+            (yy477 [@tailcall]) yyrecord
         | '\xBC' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy386 [@tailcall]) yyrecord
+            (yy397 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy288 (yyrecord : state) : bool =
@@ -4731,50 +4820,56 @@ and yy288 (yyrecord : state) : bool =
     match yych with
         | '\x80' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy457 [@tailcall]) yyrecord
+            (yy478 [@tailcall]) yyrecord
         | '\x81' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy210 [@tailcall]) yyrecord
         | '\x82' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy458 [@tailcall]) yyrecord
+            (yy479 [@tailcall]) yyrecord
         | '\x84' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy459 [@tailcall]) yyrecord
+            (yy480 [@tailcall]) yyrecord
         | '\x85' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy460 [@tailcall]) yyrecord
+            (yy481 [@tailcall]) yyrecord
         | '\x8A' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy461 [@tailcall]) yyrecord
+            (yy482 [@tailcall]) yyrecord
         | '\x8B' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy397 [@tailcall]) yyrecord
+            (yy412 [@tailcall]) yyrecord
         | '\x93' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy462 [@tailcall]) yyrecord
+            (yy483 [@tailcall]) yyrecord
+        | '\x97' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy484 [@tailcall]) yyrecord
+        | '\x9B' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy485 [@tailcall]) yyrecord
         | '\x9F' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy390 [@tailcall]) yyrecord
+            (yy403 [@tailcall]) yyrecord
         | '\xA0'..'\xA2'
         | '\xA4' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy37 [@tailcall]) yyrecord
         | '\xA3' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy463 [@tailcall]) yyrecord
+            (yy486 [@tailcall]) yyrecord
         | '\xA5' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy464 [@tailcall]) yyrecord
+            (yy487 [@tailcall]) yyrecord
         | '\xB8' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy393 [@tailcall]) yyrecord
+            (yy406 [@tailcall]) yyrecord
         | '\xB9' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy394 [@tailcall]) yyrecord
+            (yy407 [@tailcall]) yyrecord
         | '\xBA' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy395 [@tailcall]) yyrecord
+            (yy408 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy289 (yyrecord : state) : bool =
@@ -4782,7 +4877,7 @@ and yy289 (yyrecord : state) : bool =
     match yych with
         | '\xAF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy465 [@tailcall]) yyrecord
+            (yy470 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
 and yy290 (yyrecord : state) : bool =
@@ -5061,13 +5156,38 @@ and yy318 (yyrecord : state) : bool =
 and yy319 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
+        | '\x8A'..'\xA5'
+        | '\xAF'..'\xBF' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy320 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\x85' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy321 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
         | '\x80'..'\xA9'
         | '\xB0'..'\xB1' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy320 (yyrecord : state) : bool =
+and yy322 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x82'..'\x87' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy323 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x9C'
@@ -5077,7 +5197,7 @@ and yy320 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy321 (yyrecord : state) : bool =
+and yy324 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x85'
@@ -5086,7 +5206,7 @@ and yy321 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy322 (yyrecord : state) : bool =
+and yy325 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x81'
@@ -5095,7 +5215,7 @@ and yy322 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy323 (yyrecord : state) : bool =
+and yy326 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x84'
@@ -5104,7 +5224,7 @@ and yy323 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy324 (yyrecord : state) : bool =
+and yy327 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x83'..'\xB7' ->
@@ -5112,7 +5232,7 @@ and yy324 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy325 (yyrecord : state) : bool =
+and yy328 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\xB1'..'\xB2'
@@ -5121,7 +5241,7 @@ and yy325 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy326 (yyrecord : state) : bool =
+and yy329 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x83'..'\xAF' ->
@@ -5129,7 +5249,7 @@ and yy326 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy327 (yyrecord : state) : bool =
+and yy330 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x90'..'\xA8' ->
@@ -5137,7 +5257,7 @@ and yy327 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy328 (yyrecord : state) : bool =
+and yy331 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x83'..'\xA6' ->
@@ -5145,7 +5265,7 @@ and yy328 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy329 (yyrecord : state) : bool =
+and yy332 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x84'
@@ -5156,7 +5276,7 @@ and yy329 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy330 (yyrecord : state) : bool =
+and yy333 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x83'..'\xB2' ->
@@ -5164,7 +5284,7 @@ and yy330 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy331 (yyrecord : state) : bool =
+and yy334 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x81'..'\x84'
@@ -5174,7 +5294,7 @@ and yy331 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy332 (yyrecord : state) : bool =
+and yy335 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x91'
@@ -5184,7 +5304,7 @@ and yy332 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy333 (yyrecord : state) : bool =
+and yy336 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x86'
@@ -5197,7 +5317,7 @@ and yy333 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy334 (yyrecord : state) : bool =
+and yy337 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x90'
@@ -5206,7 +5326,28 @@ and yy334 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy335 (yyrecord : state) : bool =
+and yy338 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\x89'
+        | '\x8B'
+        | '\x8E'
+        | '\x90'..'\xB5'
+        | '\xB7' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy339 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x91'
+        | '\x93' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy340 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x87'..'\x8A'
@@ -5215,7 +5356,7 @@ and yy335 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy336 (yyrecord : state) : bool =
+and yy341 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x84'..'\x85'
@@ -5224,7 +5365,7 @@ and yy336 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy337 (yyrecord : state) : bool =
+and yy342 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xAE' ->
@@ -5232,7 +5373,7 @@ and yy337 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy338 (yyrecord : state) : bool =
+and yy343 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x98'..'\x9B' ->
@@ -5240,7 +5381,7 @@ and yy338 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy339 (yyrecord : state) : bool =
+and yy344 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x84' ->
@@ -5248,7 +5389,7 @@ and yy339 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy340 (yyrecord : state) : bool =
+and yy345 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xAA'
@@ -5257,7 +5398,7 @@ and yy340 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy341 (yyrecord : state) : bool =
+and yy346 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xAB' ->
@@ -5265,7 +5406,7 @@ and yy341 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy342 (yyrecord : state) : bool =
+and yy347 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x9F'
@@ -5274,7 +5415,7 @@ and yy342 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy343 (yyrecord : state) : bool =
+and yy348 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x86'
@@ -5287,7 +5428,7 @@ and yy343 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy344 (yyrecord : state) : bool =
+and yy349 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x81' ->
@@ -5295,7 +5436,7 @@ and yy344 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy345 (yyrecord : state) : bool =
+and yy350 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\xA0'..'\xA7'
@@ -5304,7 +5445,7 @@ and yy345 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy346 (yyrecord : state) : bool =
+and yy351 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x90'
@@ -5314,7 +5455,7 @@ and yy346 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy347 (yyrecord : state) : bool =
+and yy352 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'
@@ -5324,7 +5465,7 @@ and yy347 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy348 (yyrecord : state) : bool =
+and yy353 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x90'
@@ -5333,7 +5474,7 @@ and yy348 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy349 (yyrecord : state) : bool =
+and yy354 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x89'
@@ -5343,7 +5484,15 @@ and yy349 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy350 (yyrecord : state) : bool =
+and yy355 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\xA0' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy356 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x88'
@@ -5352,7 +5501,7 @@ and yy350 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy351 (yyrecord : state) : bool =
+and yy357 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'
@@ -5361,7 +5510,7 @@ and yy351 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy352 (yyrecord : state) : bool =
+and yy358 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x8F' ->
@@ -5369,7 +5518,7 @@ and yy352 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy353 (yyrecord : state) : bool =
+and yy359 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x86'
@@ -5379,7 +5528,7 @@ and yy353 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy354 (yyrecord : state) : bool =
+and yy360 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x86'
@@ -5390,16 +5539,25 @@ and yy354 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy355 (yyrecord : state) : bool =
+and yy361 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x89'
-        | '\x98' ->
+        | '\x98'
+        | '\xB0'..'\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy356 (yyrecord : state) : bool =
+and yy362 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\x9B' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy363 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\xA0'..'\xB2' ->
@@ -5407,7 +5565,7 @@ and yy356 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy357 (yyrecord : state) : bool =
+and yy364 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x82'
@@ -5417,7 +5575,7 @@ and yy357 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy358 (yyrecord : state) : bool =
+and yy365 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\xB0' ->
@@ -5425,7 +5583,7 @@ and yy358 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy359 (yyrecord : state) : bool =
+and yy366 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x83' ->
@@ -5433,7 +5591,7 @@ and yy359 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy360 (yyrecord : state) : bool =
+and yy367 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xB0' ->
@@ -5441,15 +5599,24 @@ and yy360 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy361 (yyrecord : state) : bool =
+and yy368 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
-        | '\x81'..'\x86' ->
+        | '\x81'..'\x86'
+        | '\xA0'..'\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy362 (yyrecord : state) : bool =
+and yy369 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\x9D' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy370 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x9E'
@@ -5458,7 +5625,7 @@ and yy362 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy363 (yyrecord : state) : bool =
+and yy371 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x90'..'\xAD' ->
@@ -5466,7 +5633,7 @@ and yy363 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy364 (yyrecord : state) : bool =
+and yy372 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x83'
@@ -5476,7 +5643,32 @@ and yy364 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy365 (yyrecord : state) : bool =
+and yy373 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\xAC' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy374 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\xA0'..'\xB8'
+        | '\xBB'..'\xBF' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy375 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\x93' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy376 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x8A'
@@ -5485,7 +5677,7 @@ and yy365 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy366 (yyrecord : state) : bool =
+and yy377 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x93'..'\x9F' ->
@@ -5493,24 +5685,26 @@ and yy366 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy367 (yyrecord : state) : bool =
+and yy378 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\xA0'..'\xA1'
-        | '\xA3' ->
+        | '\xA3'
+        | '\xB2'..'\xB6' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy368 (yyrecord : state) : bool =
+and yy379 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
-        | '\x80'..'\x95' ->
+        | '\x80'..'\x95'
+        | '\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy369 (yyrecord : state) : bool =
+and yy380 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\xB0'..'\xB3'
@@ -5520,7 +5714,7 @@ and yy369 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy370 (yyrecord : state) : bool =
+and yy381 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xA2'
@@ -5529,7 +5723,7 @@ and yy370 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy371 (yyrecord : state) : bool =
+and yy382 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x90'..'\x92'
@@ -5540,7 +5734,7 @@ and yy371 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy372 (yyrecord : state) : bool =
+and yy383 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xBB' ->
@@ -5548,7 +5742,7 @@ and yy372 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy373 (yyrecord : state) : bool =
+and yy384 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xAA'
@@ -5557,7 +5751,7 @@ and yy373 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy374 (yyrecord : state) : bool =
+and yy385 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x88'
@@ -5566,7 +5760,7 @@ and yy374 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy375 (yyrecord : state) : bool =
+and yy386 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x94'
@@ -5575,7 +5769,7 @@ and yy375 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy376 (yyrecord : state) : bool =
+and yy387 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x9C'
@@ -5590,7 +5784,7 @@ and yy376 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy377 (yyrecord : state) : bool =
+and yy388 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x83'
@@ -5599,7 +5793,7 @@ and yy377 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy378 (yyrecord : state) : bool =
+and yy389 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x85'
@@ -5612,7 +5806,7 @@ and yy378 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy379 (yyrecord : state) : bool =
+and yy390 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x84'
@@ -5623,7 +5817,7 @@ and yy379 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy380 (yyrecord : state) : bool =
+and yy391 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xA5'
@@ -5632,7 +5826,7 @@ and yy380 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy381 (yyrecord : state) : bool =
+and yy392 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'
@@ -5643,7 +5837,7 @@ and yy381 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy382 (yyrecord : state) : bool =
+and yy393 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x94'
@@ -5653,7 +5847,7 @@ and yy382 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy383 (yyrecord : state) : bool =
+and yy394 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x8E'
@@ -5663,7 +5857,7 @@ and yy383 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy384 (yyrecord : state) : bool =
+and yy395 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x88'
@@ -5673,7 +5867,7 @@ and yy384 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy385 (yyrecord : state) : bool =
+and yy396 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x82'
@@ -5682,7 +5876,7 @@ and yy385 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy386 (yyrecord : state) : bool =
+and yy397 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x9E'
@@ -5691,7 +5885,7 @@ and yy386 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy387 (yyrecord : state) : bool =
+and yy398 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xAC'
@@ -5700,7 +5894,7 @@ and yy387 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy388 (yyrecord : state) : bool =
+and yy399 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x8E' ->
@@ -5708,7 +5902,7 @@ and yy388 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy389 (yyrecord : state) : bool =
+and yy400 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x90'..'\xAB' ->
@@ -5716,7 +5910,29 @@ and yy389 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy390 (yyrecord : state) : bool =
+and yy401 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x90'..'\xAD'
+        | '\xB0' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy402 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\x9E'
+        | '\xA0'..'\xA2'
+        | '\xA4'..'\xA5'
+        | '\xA7'..'\xAD'
+        | '\xB0'..'\xB4'
+        | '\xBE'..'\xBF' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy403 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\xA0'..'\xA6'
@@ -5727,7 +5943,7 @@ and yy390 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy391 (yyrecord : state) : bool =
+and yy404 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x84' ->
@@ -5735,7 +5951,7 @@ and yy391 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy392 (yyrecord : state) : bool =
+and yy405 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x83'
@@ -5744,7 +5960,7 @@ and yy392 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy393 (yyrecord : state) : bool =
+and yy406 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x83'
@@ -5760,7 +5976,7 @@ and yy393 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy394 (yyrecord : state) : bool =
+and yy407 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x82'
@@ -5786,7 +6002,7 @@ and yy394 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy395 (yyrecord : state) : bool =
+and yy408 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x89'
@@ -5798,7 +6014,7 @@ and yy395 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy396 (yyrecord : state) : bool =
+and yy409 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x9F' ->
@@ -5806,24 +6022,7 @@ and yy396 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy397 (yyrecord : state) : bool =
-    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
-    match yych with
-        | '\x80'..'\xB9' ->
-            yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy3 [@tailcall]) yyrecord
-        | _ -> (yy35 [@tailcall]) yyrecord
-
-and yy398 (yyrecord : state) : bool =
-    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
-    match yych with
-        | '\x80'..'\xA1'
-        | '\xB0'..'\xBF' ->
-            yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy3 [@tailcall]) yyrecord
-        | _ -> (yy35 [@tailcall]) yyrecord
-
-and yy399 (yyrecord : state) : bool =
+and yy410 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xA0'
@@ -5832,15 +6031,7 @@ and yy399 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy400 (yyrecord : state) : bool =
-    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
-    match yych with
-        | '\x80'..'\x9D' ->
-            yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy3 [@tailcall]) yyrecord
-        | _ -> (yy35 [@tailcall]) yyrecord
-
-and yy401 (yyrecord : state) : bool =
+and yy411 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x8A'
@@ -5849,7 +6040,15 @@ and yy401 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy402 (yyrecord : state) : bool =
+and yy412 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\xB9' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy413 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\xBD' ->
@@ -5857,7 +6056,7 @@ and yy402 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy403 (yyrecord : state) : bool =
+and yy414 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x90'
@@ -5866,7 +6065,7 @@ and yy403 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy404 (yyrecord : state) : bool =
+and yy415 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x8A'
@@ -5875,7 +6074,7 @@ and yy404 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy405 (yyrecord : state) : bool =
+and yy416 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x9D'
@@ -5885,7 +6084,7 @@ and yy405 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy406 (yyrecord : state) : bool =
+and yy417 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x83'
@@ -5899,7 +6098,7 @@ and yy406 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy407 (yyrecord : state) : bool =
+and yy418 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x87'
@@ -5908,7 +6107,7 @@ and yy407 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy408 (yyrecord : state) : bool =
+and yy419 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xA7'
@@ -5917,7 +6116,17 @@ and yy408 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy409 (yyrecord : state) : bool =
+and yy420 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\xA5'
+        | '\xA9'..'\xAD'
+        | '\xAF'..'\xBF' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy421 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xA9'
@@ -5927,15 +6136,16 @@ and yy409 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy410 (yyrecord : state) : bool =
+and yy422 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
-        | '\xBD'..'\xBF' ->
+        | '\x82'..'\x87'
+        | '\xBA'..'\xBF' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy411 (yyrecord : state) : bool =
+and yy423 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x90'
@@ -5944,7 +6154,7 @@ and yy411 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy412 (yyrecord : state) : bool =
+and yy424 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x86'
@@ -5954,7 +6164,7 @@ and yy412 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy413 (yyrecord : state) : bool =
+and yy425 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x82'
@@ -5964,7 +6174,7 @@ and yy413 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy414 (yyrecord : state) : bool =
+and yy426 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xB4'
@@ -5973,7 +6183,7 @@ and yy414 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy415 (yyrecord : state) : bool =
+and yy427 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x84'..'\x87'
@@ -5983,7 +6193,7 @@ and yy415 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy416 (yyrecord : state) : bool =
+and yy428 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x84'
@@ -5994,7 +6204,7 @@ and yy416 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy417 (yyrecord : state) : bool =
+and yy429 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x91'
@@ -6004,7 +6214,7 @@ and yy417 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy418 (yyrecord : state) : bool =
+and yy430 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x81' ->
@@ -6012,7 +6222,7 @@ and yy418 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy419 (yyrecord : state) : bool =
+and yy431 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xAA'
@@ -6021,7 +6231,7 @@ and yy419 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy420 (yyrecord : state) : bool =
+and yy432 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x83'
@@ -6036,7 +6246,7 @@ and yy420 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy421 (yyrecord : state) : bool =
+and yy433 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x84'
@@ -6051,7 +6261,32 @@ and yy421 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy422 (yyrecord : state) : bool =
+and yy434 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\x89'
+        | '\x8B'
+        | '\x8E'
+        | '\x90'..'\xB5'
+        | '\xB7'..'\xBF' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy435 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'
+        | '\x82'
+        | '\x85'
+        | '\x87'..'\x8A'
+        | '\x8C'..'\x93'
+        | '\xA1'..'\xA2' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy436 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x8A'
@@ -6061,7 +6296,7 @@ and yy422 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy423 (yyrecord : state) : bool =
+and yy437 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x85'
@@ -6071,7 +6306,7 @@ and yy423 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy424 (yyrecord : state) : bool =
+and yy438 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xB5'
@@ -6080,7 +6315,7 @@ and yy424 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy425 (yyrecord : state) : bool =
+and yy439 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'
@@ -6089,7 +6324,7 @@ and yy425 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy426 (yyrecord : state) : bool =
+and yy440 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'
@@ -6099,7 +6334,16 @@ and yy426 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy427 (yyrecord : state) : bool =
+and yy441 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\x89'
+        | '\x90'..'\xA3' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy442 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x9A'
@@ -6109,7 +6353,7 @@ and yy427 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy428 (yyrecord : state) : bool =
+and yy443 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xA9'
@@ -6118,7 +6362,7 @@ and yy428 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy429 (yyrecord : state) : bool =
+and yy444 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x86'
@@ -6132,7 +6376,7 @@ and yy429 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy430 (yyrecord : state) : bool =
+and yy445 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x83'
@@ -6141,7 +6385,7 @@ and yy430 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy431 (yyrecord : state) : bool =
+and yy446 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x97'
@@ -6151,7 +6395,7 @@ and yy431 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy432 (yyrecord : state) : bool =
+and yy447 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x87'
@@ -6160,7 +6404,7 @@ and yy432 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy433 (yyrecord : state) : bool =
+and yy448 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x99'
@@ -6170,7 +6414,24 @@ and yy433 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy434 (yyrecord : state) : bool =
+and yy449 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\xA0'..'\xA7' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy450 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\xA0'
+        | '\xB0'..'\xB9' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy451 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x88'
@@ -6180,7 +6441,7 @@ and yy434 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy435 (yyrecord : state) : bool =
+and yy452 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'
@@ -6190,7 +6451,7 @@ and yy435 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy436 (yyrecord : state) : bool =
+and yy453 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x8F'
@@ -6200,7 +6461,7 @@ and yy436 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy437 (yyrecord : state) : bool =
+and yy454 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x86'
@@ -6213,7 +6474,7 @@ and yy437 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy438 (yyrecord : state) : bool =
+and yy455 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x87'
@@ -6225,18 +6486,28 @@ and yy438 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy439 (yyrecord : state) : bool =
+and yy456 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x8E'
         | '\x90'..'\x91'
         | '\x93'..'\x98'
+        | '\xA0'..'\xA9'
+        | '\xB0'..'\xBF' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy457 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\x9B'
         | '\xA0'..'\xA9' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy440 (yyrecord : state) : bool =
+and yy458 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\xA0'..'\xB6' ->
@@ -6244,7 +6515,7 @@ and yy440 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy441 (yyrecord : state) : bool =
+and yy459 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x90'
@@ -6254,16 +6525,25 @@ and yy441 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy442 (yyrecord : state) : bool =
+and yy460 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x82'
-        | '\x90'..'\x99' ->
+        | '\x90'..'\x9A' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy443 (yyrecord : state) : bool =
+and yy461 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\x95'
+        | '\xA0'..'\xBF' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy462 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x9E'
@@ -6273,7 +6553,7 @@ and yy443 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy444 (yyrecord : state) : bool =
+and yy463 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x89'
@@ -6283,7 +6563,7 @@ and yy444 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy445 (yyrecord : state) : bool =
+and yy464 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x83'
@@ -6294,7 +6574,16 @@ and yy445 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy446 (yyrecord : state) : bool =
+and yy465 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\xAC'
+        | '\xB0'..'\xB9' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy466 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x8A'
@@ -6303,7 +6592,7 @@ and yy446 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy447 (yyrecord : state) : bool =
+and yy467 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x87'
@@ -6312,17 +6601,17 @@ and yy447 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy448 (yyrecord : state) : bool =
+and yy468 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\xA0'..'\xA1'
         | '\xA3'..'\xA4'
-        | '\xB0'..'\xB1' ->
+        | '\xB0'..'\xB6' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy449 (yyrecord : state) : bool =
+and yy469 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x88'
@@ -6332,7 +6621,15 @@ and yy449 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy450 (yyrecord : state) : bool =
+and yy470 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\xB0'..'\xB9' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy471 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\xA5'..'\xA9'
@@ -6342,7 +6639,7 @@ and yy450 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy451 (yyrecord : state) : bool =
+and yy472 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x82'
@@ -6352,7 +6649,7 @@ and yy451 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy452 (yyrecord : state) : bool =
+and yy473 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x82'..'\x84' ->
@@ -6360,7 +6657,7 @@ and yy452 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy453 (yyrecord : state) : bool =
+and yy474 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x82'
@@ -6370,7 +6667,7 @@ and yy453 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy454 (yyrecord : state) : bool =
+and yy475 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xB6'
@@ -6379,7 +6676,7 @@ and yy454 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy455 (yyrecord : state) : bool =
+and yy476 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xAC'
@@ -6388,7 +6685,7 @@ and yy455 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy456 (yyrecord : state) : bool =
+and yy477 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x84'
@@ -6398,7 +6695,7 @@ and yy456 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy457 (yyrecord : state) : bool =
+and yy478 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x86'
@@ -6411,7 +6708,7 @@ and yy457 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy458 (yyrecord : state) : bool =
+and yy479 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x8F' ->
@@ -6419,7 +6716,7 @@ and yy458 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy459 (yyrecord : state) : bool =
+and yy480 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\xAC'
@@ -6428,7 +6725,7 @@ and yy459 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy460 (yyrecord : state) : bool =
+and yy481 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x89'
@@ -6437,7 +6734,7 @@ and yy460 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy461 (yyrecord : state) : bool =
+and yy482 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x90'..'\xAE' ->
@@ -6445,7 +6742,7 @@ and yy461 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy462 (yyrecord : state) : bool =
+and yy483 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x90'..'\xB9' ->
@@ -6453,7 +6750,25 @@ and yy462 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy463 (yyrecord : state) : bool =
+and yy484 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x90'..'\xBA' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy485 (yyrecord : state) : bool =
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '\x80'..'\x9E'
+        | '\xA0'..'\xB5'
+        | '\xBE'..'\xBF' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ -> (yy35 [@tailcall]) yyrecord
+
+and yy486 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x84'
@@ -6462,19 +6777,11 @@ and yy463 (yyrecord : state) : bool =
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord
 
-and yy464 (yyrecord : state) : bool =
+and yy487 (yyrecord : state) : bool =
     let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x80'..'\x8B'
         | '\x90'..'\x99' ->
-            yyrecord.yycursor <- yyrecord.yycursor + 1;
-            (yy3 [@tailcall]) yyrecord
-        | _ -> (yy35 [@tailcall]) yyrecord
-
-and yy465 (yyrecord : state) : bool =
-    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
-    match yych with
-        | '\xB0'..'\xB9' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
             (yy3 [@tailcall]) yyrecord
         | _ -> (yy35 [@tailcall]) yyrecord

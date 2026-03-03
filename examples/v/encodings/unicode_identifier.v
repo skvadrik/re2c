@@ -942,7 +942,7 @@ yy33:
         0x93 { unsafe { goto yy195 } }
         0x94 { unsafe { goto yy196 } }
         0x96 { unsafe { goto yy197 } }
-        0x97, 0xA0...0xA9, 0xAD, 0xB0 { unsafe { goto yy59 } }
+        0x97, 0xA0...0xA9, 0xAD, 0xB0, 0xB2 { unsafe { goto yy59 } }
         0x98 { unsafe { goto yy198 } }
         0x9A { unsafe { goto yy199 } }
         0x9B { unsafe { goto yy200 } }
@@ -954,7 +954,7 @@ yy33:
         0xAE { unsafe { goto yy206 } }
         0xAF { unsafe { goto yy207 } }
         0xB1 { unsafe { goto yy208 } }
-        0xB2 { unsafe { goto yy209 } }
+        0xB3 { unsafe { goto yy209 } }
         else { unsafe { goto yy2 } }
     }
 yy34:
@@ -1629,7 +1629,7 @@ yy63:
         0x93 { unsafe { goto yy283 } }
         0x94 { unsafe { goto yy196 } }
         0x96 { unsafe { goto yy284 } }
-        0x97, 0xA0...0xA9, 0xAD, 0xB0 { unsafe { goto yy59 } }
+        0x97, 0xA0...0xA9, 0xAD, 0xB0, 0xB2 { unsafe { goto yy59 } }
         0x98 { unsafe { goto yy198 } }
         0x9A { unsafe { goto yy199 } }
         0x9B { unsafe { goto yy285 } }
@@ -1643,7 +1643,7 @@ yy63:
         0xAE { unsafe { goto yy206 } }
         0xAF { unsafe { goto yy207 } }
         0xB1 { unsafe { goto yy208 } }
-        0xB2 { unsafe { goto yy209 } }
+        0xB3 { unsafe { goto yy209 } }
         else { unsafe { goto yy35 } }
     }
 yy64:
@@ -1715,7 +1715,7 @@ yy67:
         }
         unsafe { goto yy35 }
     } else {
-        if yych <= 0x8E {
+        if yych <= 0x8F {
             unsafe { goto yy3 }
         }
         if yych <= 0x9F {
@@ -2084,7 +2084,7 @@ yy81:
 yy82:
     yycursor += 1
     yych = yyinput[yycursor]
-    if yych <= 0x9C {
+    if yych <= 0x9B {
         if yych <= 0x97 {
             unsafe { goto yy35 }
         }
@@ -2145,7 +2145,7 @@ yy84:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x9F {
-        if yych <= 0x9C {
+        if yych <= 0x9B {
             unsafe { goto yy35 }
         }
         if yych <= 0x9E {
@@ -2976,7 +2976,7 @@ yy130:
         if yych <= 0x7F {
             unsafe { goto yy35 }
         }
-        if yych <= 0x88 {
+        if yych <= 0x8A {
             unsafe { goto yy3 }
         }
         unsafe { goto yy35 }
@@ -3541,37 +3541,19 @@ yy160:
 yy161:
     yycursor += 1
     yych = yyinput[yycursor]
-    if yych <= 0x92 {
-        if yych <= 0x8A {
-            if yych <= 0x7F {
-                unsafe { goto yy35 }
-            }
-            unsafe { goto yy3 }
-        } else {
-            if yych <= 0x8F {
-                unsafe { goto yy35 }
-            }
-            if yych <= 0x91 {
-                unsafe { goto yy3 }
-            }
-            unsafe { goto yy35 }
-        }
-    } else {
-        if yych <= 0x99 {
-            if yych == 0x94 {
-                unsafe { goto yy35 }
-            }
-            unsafe { goto yy3 }
-        } else {
-            if yych <= 0xB1 {
-                unsafe { goto yy35 }
-            }
-            if yych <= 0xBF {
-                unsafe { goto yy3 }
-            }
-            unsafe { goto yy35 }
-        }
+    if yych <= 0x7F {
+        unsafe { goto yy35 }
     }
+    if yych <= 0x9C {
+        unsafe { goto yy3 }
+    }
+    if yych <= 0xB0 {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xBF {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
 yy162:
     yycursor += 1
     yych = yyinput[yycursor]
@@ -4158,6 +4140,7 @@ yy192:
         0x94 { unsafe { goto yy302 } }
         0x95 { unsafe { goto yy303 } }
         0x96 { unsafe { goto yy304 } }
+        0x97 { unsafe { goto yy112 } }
         0x9C { unsafe { goto yy273 } }
         0x9D { unsafe { goto yy305 } }
         0x9E { unsafe { goto yy306 } }
@@ -4166,6 +4149,7 @@ yy192:
         0xA2 { unsafe { goto yy118 } }
         0xA3 { unsafe { goto yy309 } }
         0xA4 { unsafe { goto yy310 } }
+        0xA5 { unsafe { goto yy179 } }
         0xA6 { unsafe { goto yy311 } }
         0xA8 { unsafe { goto yy312 } }
         0xA9 { unsafe { goto yy313 } }
@@ -4177,61 +4161,68 @@ yy192:
         0xB1 { unsafe { goto yy140 } }
         0xB2...0xB3 { unsafe { goto yy318 } }
         0xB4 { unsafe { goto yy128 } }
-        0xBA { unsafe { goto yy319 } }
-        0xBC { unsafe { goto yy320 } }
-        0xBD { unsafe { goto yy321 } }
-        0xBE { unsafe { goto yy322 } }
-        0xBF { unsafe { goto yy323 } }
+        0xB5 { unsafe { goto yy319 } }
+        0xB6 { unsafe { goto yy320 } }
+        0xBA { unsafe { goto yy321 } }
+        0xBB { unsafe { goto yy322 } }
+        0xBC { unsafe { goto yy323 } }
+        0xBD { unsafe { goto yy324 } }
+        0xBE { unsafe { goto yy325 } }
+        0xBF { unsafe { goto yy326 } }
         else { unsafe { goto yy35 } }
     }
 yy193:
     yycursor += 1
     yych = yyinput[yycursor]
     match yych {
-        0x80 { unsafe { goto yy324 } }
-        0x81 { unsafe { goto yy325 } }
-        0x82 { unsafe { goto yy326 } }
-        0x83 { unsafe { goto yy327 } }
-        0x84 { unsafe { goto yy328 } }
-        0x85 { unsafe { goto yy329 } }
-        0x86 { unsafe { goto yy330 } }
-        0x87 { unsafe { goto yy331 } }
-        0x88 { unsafe { goto yy332 } }
+        0x80 { unsafe { goto yy327 } }
+        0x81 { unsafe { goto yy328 } }
+        0x82 { unsafe { goto yy329 } }
+        0x83 { unsafe { goto yy330 } }
+        0x84 { unsafe { goto yy331 } }
+        0x85 { unsafe { goto yy332 } }
+        0x86 { unsafe { goto yy333 } }
+        0x87 { unsafe { goto yy334 } }
+        0x88 { unsafe { goto yy335 } }
         0x89 { unsafe { goto yy92 } }
-        0x8A { unsafe { goto yy333 } }
+        0x8A { unsafe { goto yy336 } }
         0x8B { unsafe { goto yy118 } }
         0x8C { unsafe { goto yy77 } }
-        0x8D { unsafe { goto yy334 } }
+        0x8D { unsafe { goto yy337 } }
+        0x8E { unsafe { goto yy338 } }
+        0x8F { unsafe { goto yy339 } }
         0x90 { unsafe { goto yy294 } }
-        0x91 { unsafe { goto yy335 } }
+        0x91 { unsafe { goto yy340 } }
         0x92, 0x98 { unsafe { goto yy158 } }
-        0x93 { unsafe { goto yy336 } }
-        0x96 { unsafe { goto yy337 } }
-        0x97 { unsafe { goto yy338 } }
-        0x99 { unsafe { goto yy339 } }
-        0x9A { unsafe { goto yy340 } }
+        0x93 { unsafe { goto yy341 } }
+        0x96 { unsafe { goto yy342 } }
+        0x97 { unsafe { goto yy343 } }
+        0x99 { unsafe { goto yy344 } }
+        0x9A { unsafe { goto yy345 } }
         0x9C { unsafe { goto yy103 } }
         0x9D { unsafe { goto yy88 } }
-        0xA0 { unsafe { goto yy341 } }
+        0xA0 { unsafe { goto yy346 } }
         0xA2 { unsafe { goto yy114 } }
-        0xA3 { unsafe { goto yy342 } }
-        0xA4 { unsafe { goto yy343 } }
-        0xA5 { unsafe { goto yy344 } }
-        0xA6 { unsafe { goto yy345 } }
-        0xA7 { unsafe { goto yy346 } }
-        0xA8 { unsafe { goto yy347 } }
-        0xA9 { unsafe { goto yy348 } }
-        0xAA { unsafe { goto yy349 } }
+        0xA3 { unsafe { goto yy347 } }
+        0xA4 { unsafe { goto yy348 } }
+        0xA5 { unsafe { goto yy349 } }
+        0xA6 { unsafe { goto yy350 } }
+        0xA7 { unsafe { goto yy351 } }
+        0xA8 { unsafe { goto yy352 } }
+        0xA9 { unsafe { goto yy353 } }
+        0xAA { unsafe { goto yy354 } }
         0xAB { unsafe { goto yy115 } }
-        0xB0 { unsafe { goto yy350 } }
-        0xB1 { unsafe { goto yy351 } }
-        0xB2 { unsafe { goto yy352 } }
-        0xB4 { unsafe { goto yy353 } }
-        0xB5 { unsafe { goto yy354 } }
-        0xB6 { unsafe { goto yy355 } }
-        0xBB { unsafe { goto yy356 } }
-        0xBC { unsafe { goto yy357 } }
-        0xBE { unsafe { goto yy358 } }
+        0xAF { unsafe { goto yy355 } }
+        0xB0 { unsafe { goto yy356 } }
+        0xB1 { unsafe { goto yy357 } }
+        0xB2 { unsafe { goto yy358 } }
+        0xB4 { unsafe { goto yy359 } }
+        0xB5 { unsafe { goto yy360 } }
+        0xB6 { unsafe { goto yy361 } }
+        0xB7 { unsafe { goto yy362 } }
+        0xBB { unsafe { goto yy363 } }
+        0xBC { unsafe { goto yy364 } }
+        0xBE { unsafe { goto yy365 } }
         else { unsafe { goto yy35 } }
     }
 yy194:
@@ -4253,7 +4244,7 @@ yy194:
             if yych <= 0x90 {
                 unsafe { goto yy37 }
             }
-            unsafe { goto yy337 }
+            unsafe { goto yy342 }
         }
     } else {
         if yych <= 0xBD {
@@ -4261,7 +4252,7 @@ yy194:
                 unsafe { goto yy37 }
             }
             if yych <= 0x95 {
-                unsafe { goto yy359 }
+                unsafe { goto yy366 }
             }
             unsafe { goto yy35 }
         } else {
@@ -4269,7 +4260,7 @@ yy194:
                 unsafe { goto yy50 }
             }
             if yych <= 0xBF {
-                unsafe { goto yy360 }
+                unsafe { goto yy367 }
             }
             unsafe { goto yy35 }
         }
@@ -4277,69 +4268,87 @@ yy194:
 yy195:
     yycursor += 1
     yych = yyinput[yycursor]
-    if yych <= 0x7F {
+    if yych <= 0x90 {
+        if yych <= 0x7F {
+            unsafe { goto yy35 }
+        }
+        if yych <= 0x8F {
+            unsafe { goto yy37 }
+        }
+        unsafe { goto yy158 }
+    } else {
+        if yych <= 0x91 {
+            unsafe { goto yy368 }
+        }
+        if yych <= 0xBF {
+            unsafe { goto yy37 }
+        }
         unsafe { goto yy35 }
     }
-    if yych <= 0x8F {
-        unsafe { goto yy37 }
-    }
-    if yych <= 0x90 {
-        unsafe { goto yy158 }
-    }
-    if yych <= 0x91 {
-        unsafe { goto yy361 }
-    }
-    unsafe { goto yy35 }
 yy196:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8F {
+        if yych <= 0x7F {
+            unsafe { goto yy35 }
+        }
+        if yych <= 0x8E {
+            unsafe { goto yy37 }
+        }
+        unsafe { goto yy293 }
+    } else {
+        if yych <= 0x98 {
+            unsafe { goto yy37 }
+        }
+        if yych <= 0x99 {
+            unsafe { goto yy88 }
+        }
         unsafe { goto yy35 }
     }
-    if yych <= 0x98 {
-        unsafe { goto yy37 }
-    }
-    if yych <= 0x99 {
-        unsafe { goto yy88 }
-    }
-    unsafe { goto yy35 }
 yy197:
     yycursor += 1
     yych = yyinput[yycursor]
     match yych {
+        0x84 { unsafe { goto yy369 } }
         0xA0...0xA7, 0xB9, 0xBC { unsafe { goto yy37 } }
         0xA8 { unsafe { goto yy115 } }
-        0xA9 { unsafe { goto yy362 } }
+        0xA9 { unsafe { goto yy370 } }
         0xAA { unsafe { goto yy190 } }
-        0xAB { unsafe { goto yy363 } }
+        0xAB { unsafe { goto yy371 } }
         0xAC { unsafe { goto yy158 } }
-        0xAD { unsafe { goto yy364 } }
-        0xAE { unsafe { goto yy352 } }
-        0xBD { unsafe { goto yy365 } }
-        0xBE { unsafe { goto yy366 } }
-        0xBF { unsafe { goto yy367 } }
+        0xAD { unsafe { goto yy372 } }
+        0xAE { unsafe { goto yy358 } }
+        0xB5 { unsafe { goto yy373 } }
+        0xBA { unsafe { goto yy374 } }
+        0xBB { unsafe { goto yy375 } }
+        0xBD { unsafe { goto yy376 } }
+        0xBE { unsafe { goto yy377 } }
+        0xBF { unsafe { goto yy378 } }
         else { unsafe { goto yy35 } }
     }
 yy198:
     yycursor += 1
     yych = yyinput[yycursor]
-    if yych <= 0x9F {
+    if yych <= 0xB4 {
         if yych <= 0x7F {
             unsafe { goto yy35 }
         }
-        if yych <= 0x9E {
-            unsafe { goto yy37 }
-        }
-        unsafe { goto yy256 }
-    } else {
         if yych <= 0xB2 {
             unsafe { goto yy37 }
         }
         if yych <= 0xB3 {
-            unsafe { goto yy368 }
+            unsafe { goto yy379 }
         }
-        if yych <= 0xB4 {
-            unsafe { goto yy140 }
+        unsafe { goto yy118 }
+    } else {
+        if yych <= 0xB5 {
+            unsafe { goto yy35 }
+        }
+        if yych <= 0xB6 {
+            unsafe { goto yy37 }
+        }
+        if yych <= 0xB7 {
+            unsafe { goto yy318 }
         }
         unsafe { goto yy35 }
     }
@@ -4347,7 +4356,7 @@ yy199:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych == 0xBF {
-        unsafe { goto yy369 }
+        unsafe { goto yy380 }
     }
     unsafe { goto yy35 }
 yy200:
@@ -4361,17 +4370,17 @@ yy200:
             unsafe { goto yy37 }
         } else {
             if yych <= 0x84 {
-                unsafe { goto yy370 }
+                unsafe { goto yy381 }
             }
             if yych <= 0x85 {
-                unsafe { goto yy371 }
+                unsafe { goto yy382 }
             }
             unsafe { goto yy37 }
         }
     } else {
         if yych <= 0xB0 {
             if yych <= 0x8B {
-                unsafe { goto yy372 }
+                unsafe { goto yy383 }
             }
             if yych <= 0xAF {
                 unsafe { goto yy35 }
@@ -4379,10 +4388,10 @@ yy200:
             unsafe { goto yy37 }
         } else {
             if yych <= 0xB1 {
-                unsafe { goto yy373 }
+                unsafe { goto yy384 }
             }
             if yych <= 0xB2 {
-                unsafe { goto yy374 }
+                unsafe { goto yy385 }
             }
             unsafe { goto yy35 }
         }
@@ -4392,18 +4401,18 @@ yy201:
     yych = yyinput[yycursor]
     match yych {
         0x90, 0x96...0x99 { unsafe { goto yy37 } }
-        0x91 { unsafe { goto yy375 } }
-        0x92 { unsafe { goto yy376 } }
-        0x93 { unsafe { goto yy377 } }
-        0x94 { unsafe { goto yy378 } }
-        0x95 { unsafe { goto yy379 } }
-        0x9A { unsafe { goto yy380 } }
-        0x9B { unsafe { goto yy381 } }
-        0x9C { unsafe { goto yy382 } }
-        0x9D { unsafe { goto yy383 } }
-        0x9E { unsafe { goto yy384 } }
-        0x9F { unsafe { goto yy385 } }
-        0xBC { unsafe { goto yy386 } }
+        0x91 { unsafe { goto yy386 } }
+        0x92 { unsafe { goto yy387 } }
+        0x93 { unsafe { goto yy388 } }
+        0x94 { unsafe { goto yy389 } }
+        0x95 { unsafe { goto yy390 } }
+        0x9A { unsafe { goto yy391 } }
+        0x9B { unsafe { goto yy392 } }
+        0x9C { unsafe { goto yy393 } }
+        0x9D { unsafe { goto yy394 } }
+        0x9E { unsafe { goto yy395 } }
+        0x9F { unsafe { goto yy396 } }
+        0xBC { unsafe { goto yy397 } }
         else { unsafe { goto yy35 } }
     }
 yy202:
@@ -4412,18 +4421,20 @@ yy202:
     match yych {
         0x80 { unsafe { goto yy152 } }
         0x81 { unsafe { goto yy210 } }
-        0x84 { unsafe { goto yy387 } }
-        0x85 { unsafe { goto yy388 } }
-        0x8A { unsafe { goto yy363 } }
-        0x8B { unsafe { goto yy341 } }
-        0x93 { unsafe { goto yy389 } }
-        0x9F { unsafe { goto yy390 } }
+        0x84 { unsafe { goto yy398 } }
+        0x85 { unsafe { goto yy399 } }
+        0x8A { unsafe { goto yy371 } }
+        0x8B { unsafe { goto yy346 } }
+        0x93 { unsafe { goto yy400 } }
+        0x97 { unsafe { goto yy401 } }
+        0x9B { unsafe { goto yy402 } }
+        0x9F { unsafe { goto yy403 } }
         0xA0...0xA2, 0xA4 { unsafe { goto yy37 } }
-        0xA3 { unsafe { goto yy391 } }
-        0xA5 { unsafe { goto yy392 } }
-        0xB8 { unsafe { goto yy393 } }
-        0xB9 { unsafe { goto yy394 } }
-        0xBA { unsafe { goto yy395 } }
+        0xA3 { unsafe { goto yy404 } }
+        0xA5 { unsafe { goto yy405 } }
+        0xB8 { unsafe { goto yy406 } }
+        0xB9 { unsafe { goto yy407 } }
+        0xBA { unsafe { goto yy408 } }
         else { unsafe { goto yy35 } }
     }
 yy203:
@@ -4433,7 +4444,7 @@ yy203:
         unsafe { goto yy35 }
     }
     if yych == 0x9B {
-        unsafe { goto yy396 }
+        unsafe { goto yy409 }
     }
     if yych <= 0xBF {
         unsafe { goto yy37 }
@@ -4442,23 +4453,16 @@ yy203:
 yy204:
     yycursor += 1
     yych = yyinput[yycursor]
-    if yych <= 0x9C {
-        if yych <= 0x7F {
-            unsafe { goto yy35 }
-        }
-        if yych <= 0x9B {
-            unsafe { goto yy37 }
-        }
-        unsafe { goto yy397 }
-    } else {
-        if yych == 0xA0 {
-            unsafe { goto yy157 }
-        }
-        if yych <= 0xBF {
-            unsafe { goto yy37 }
-        }
+    if yych <= 0x7F {
         unsafe { goto yy35 }
     }
+    if yych == 0xA0 {
+        unsafe { goto yy157 }
+    }
+    if yych <= 0xBF {
+        unsafe { goto yy37 }
+    }
+    unsafe { goto yy35 }
 yy205:
     yycursor += 1
     yych = yyinput[yycursor]
@@ -4466,7 +4470,7 @@ yy205:
         unsafe { goto yy35 }
     }
     if yych == 0xBA {
-        unsafe { goto yy398 }
+        unsafe { goto yy178 }
     }
     if yych <= 0xBF {
         unsafe { goto yy37 }
@@ -4482,13 +4486,13 @@ yy206:
         if yych <= 0xAE {
             unsafe { goto yy37 }
         }
-        unsafe { goto yy399 }
+        unsafe { goto yy410 }
     } else {
         if yych <= 0xB8 {
             unsafe { goto yy37 }
         }
         if yych <= 0xB9 {
-            unsafe { goto yy400 }
+            unsafe { goto yy369 }
         }
         unsafe { goto yy35 }
     }
@@ -4502,7 +4506,7 @@ yy207:
         unsafe { goto yy37 }
     }
     if yych <= 0xA8 {
-        unsafe { goto yy400 }
+        unsafe { goto yy369 }
     }
     unsafe { goto yy35 }
 yy208:
@@ -4512,7 +4516,7 @@ yy208:
         unsafe { goto yy35 }
     }
     if yych == 0x8D {
-        unsafe { goto yy401 }
+        unsafe { goto yy411 }
     }
     if yych <= 0xBF {
         unsafe { goto yy37 }
@@ -4524,11 +4528,11 @@ yy209:
     if yych <= 0x7F {
         unsafe { goto yy35 }
     }
-    if yych <= 0x8D {
+    if yych <= 0x90 {
         unsafe { goto yy37 }
     }
-    if yych <= 0x8E {
-        unsafe { goto yy158 }
+    if yych <= 0x91 {
+        unsafe { goto yy412 }
     }
     unsafe { goto yy35 }
 yy210:
@@ -4576,10 +4580,10 @@ yy212:
         }
         unsafe { goto yy35 }
     } else {
-        if yych <= 0x8E {
+        if yych <= 0x8F {
             unsafe { goto yy3 }
         }
-        if yych <= 0x97 {
+        if yych <= 0x96 {
             unsafe { goto yy35 }
         }
         if yych <= 0xBF {
@@ -5145,10 +5149,7 @@ yy226:
             if yych <= 0x97 {
                 unsafe { goto yy35 }
             }
-            if yych <= 0x9A {
-                unsafe { goto yy3 }
-            }
-            if yych <= 0x9C {
+            if yych == 0x9B {
                 unsafe { goto yy35 }
             }
             unsafe { goto yy3 }
@@ -5238,7 +5239,7 @@ yy228:
         }
     } else {
         if yych <= 0xA3 {
-            if yych <= 0x9C {
+            if yych <= 0x9B {
                 unsafe { goto yy35 }
             }
             if yych == 0x9F {
@@ -5867,7 +5868,13 @@ yy254:
     if yych <= 0x7F {
         unsafe { goto yy35 }
     }
-    if yych <= 0x8E {
+    if yych <= 0x9D {
+        unsafe { goto yy3 }
+    }
+    if yych <= 0x9F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xAB {
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
@@ -6447,18 +6454,19 @@ yy281:
         0x82, 0x90...0x91, 0x98...0x9B, 0xB0 { unsafe { goto yy37 } }
         0x83 { unsafe { goto yy293 } }
         0x85 { unsafe { goto yy294 } }
-        0x87 { unsafe { goto yy402 } }
+        0x87 { unsafe { goto yy413 } }
         0x8A { unsafe { goto yy295 } }
-        0x8B { unsafe { goto yy403 } }
+        0x8B { unsafe { goto yy414 } }
         0x8C { unsafe { goto yy297 } }
-        0x8D { unsafe { goto yy404 } }
+        0x8D { unsafe { goto yy415 } }
         0x8E { unsafe { goto yy157 } }
         0x8F { unsafe { goto yy299 } }
-        0x92 { unsafe { goto yy405 } }
+        0x92 { unsafe { goto yy416 } }
         0x93 { unsafe { goto yy301 } }
         0x94 { unsafe { goto yy302 } }
         0x95 { unsafe { goto yy303 } }
         0x96 { unsafe { goto yy304 } }
+        0x97 { unsafe { goto yy112 } }
         0x9C { unsafe { goto yy273 } }
         0x9D { unsafe { goto yy305 } }
         0x9E { unsafe { goto yy306 } }
@@ -6467,23 +6475,26 @@ yy281:
         0xA2 { unsafe { goto yy118 } }
         0xA3 { unsafe { goto yy309 } }
         0xA4 { unsafe { goto yy310 } }
+        0xA5 { unsafe { goto yy179 } }
         0xA6 { unsafe { goto yy311 } }
-        0xA8 { unsafe { goto yy406 } }
+        0xA8 { unsafe { goto yy417 } }
         0xA9 { unsafe { goto yy313 } }
         0xAA { unsafe { goto yy314 } }
-        0xAB { unsafe { goto yy407 } }
+        0xAB { unsafe { goto yy418 } }
         0xAC { unsafe { goto yy117 } }
         0xAD { unsafe { goto yy316 } }
         0xAE { unsafe { goto yy317 } }
         0xB1 { unsafe { goto yy140 } }
         0xB2...0xB3 { unsafe { goto yy318 } }
-        0xB4 { unsafe { goto yy408 } }
-        0xBA { unsafe { goto yy409 } }
-        0xBB { unsafe { goto yy410 } }
-        0xBC { unsafe { goto yy320 } }
-        0xBD { unsafe { goto yy411 } }
-        0xBE { unsafe { goto yy321 } }
-        0xBF { unsafe { goto yy323 } }
+        0xB4 { unsafe { goto yy419 } }
+        0xB5 { unsafe { goto yy420 } }
+        0xB6 { unsafe { goto yy320 } }
+        0xBA { unsafe { goto yy421 } }
+        0xBB { unsafe { goto yy422 } }
+        0xBC { unsafe { goto yy323 } }
+        0xBD { unsafe { goto yy423 } }
+        0xBE { unsafe { goto yy324 } }
+        0xBF { unsafe { goto yy326 } }
         else { unsafe { goto yy35 } }
     }
 yy282:
@@ -6491,79 +6502,92 @@ yy282:
     yych = yyinput[yycursor]
     match yych {
         0x80, 0x86, 0x90, 0x92, 0x98 { unsafe { goto yy37 } }
-        0x81 { unsafe { goto yy412 } }
+        0x81 { unsafe { goto yy424 } }
         0x82, 0xA0 { unsafe { goto yy293 } }
-        0x83 { unsafe { goto yy413 } }
-        0x84 { unsafe { goto yy414 } }
-        0x85 { unsafe { goto yy415 } }
-        0x87 { unsafe { goto yy416 } }
-        0x88 { unsafe { goto yy417 } }
-        0x89 { unsafe { goto yy418 } }
-        0x8A { unsafe { goto yy333 } }
-        0x8B { unsafe { goto yy419 } }
-        0x8C { unsafe { goto yy420 } }
-        0x8D { unsafe { goto yy421 } }
-        0x91 { unsafe { goto yy422 } }
-        0x93 { unsafe { goto yy423 } }
-        0x96 { unsafe { goto yy424 } }
-        0x97 { unsafe { goto yy425 } }
-        0x99 { unsafe { goto yy426 } }
+        0x83 { unsafe { goto yy425 } }
+        0x84 { unsafe { goto yy426 } }
+        0x85 { unsafe { goto yy427 } }
+        0x87 { unsafe { goto yy428 } }
+        0x88 { unsafe { goto yy429 } }
+        0x89 { unsafe { goto yy430 } }
+        0x8A { unsafe { goto yy336 } }
+        0x8B { unsafe { goto yy431 } }
+        0x8C { unsafe { goto yy432 } }
+        0x8D { unsafe { goto yy433 } }
+        0x8E { unsafe { goto yy434 } }
+        0x8F { unsafe { goto yy435 } }
+        0x91 { unsafe { goto yy436 } }
+        0x93 { unsafe { goto yy437 } }
+        0x96 { unsafe { goto yy438 } }
+        0x97 { unsafe { goto yy439 } }
+        0x99 { unsafe { goto yy440 } }
         0x9A, 0xAB { unsafe { goto yy115 } }
-        0x9B { unsafe { goto yy68 } }
-        0x9C { unsafe { goto yy427 } }
+        0x9B { unsafe { goto yy441 } }
+        0x9C { unsafe { goto yy442 } }
         0x9D { unsafe { goto yy88 } }
         0xA2 { unsafe { goto yy114 } }
-        0xA3 { unsafe { goto yy428 } }
-        0xA4 { unsafe { goto yy429 } }
-        0xA5 { unsafe { goto yy430 } }
-        0xA6 { unsafe { goto yy345 } }
-        0xA7 { unsafe { goto yy431 } }
+        0xA3 { unsafe { goto yy443 } }
+        0xA4 { unsafe { goto yy444 } }
+        0xA5 { unsafe { goto yy445 } }
+        0xA6 { unsafe { goto yy350 } }
+        0xA7 { unsafe { goto yy446 } }
         0xA8 { unsafe { goto yy190 } }
-        0xA9 { unsafe { goto yy432 } }
-        0xAA { unsafe { goto yy433 } }
-        0xB0 { unsafe { goto yy434 } }
-        0xB1 { unsafe { goto yy435 } }
-        0xB2 { unsafe { goto yy436 } }
-        0xB4 { unsafe { goto yy437 } }
-        0xB5 { unsafe { goto yy438 } }
-        0xB6 { unsafe { goto yy439 } }
-        0xBB { unsafe { goto yy440 } }
-        0xBC { unsafe { goto yy441 } }
-        0xBD { unsafe { goto yy442 } }
-        0xBE { unsafe { goto yy358 } }
+        0xA9 { unsafe { goto yy447 } }
+        0xAA { unsafe { goto yy448 } }
+        0xAD { unsafe { goto yy449 } }
+        0xAF { unsafe { goto yy450 } }
+        0xB0 { unsafe { goto yy451 } }
+        0xB1 { unsafe { goto yy452 } }
+        0xB2 { unsafe { goto yy453 } }
+        0xB4 { unsafe { goto yy454 } }
+        0xB5 { unsafe { goto yy455 } }
+        0xB6 { unsafe { goto yy456 } }
+        0xB7 { unsafe { goto yy457 } }
+        0xBB { unsafe { goto yy458 } }
+        0xBC { unsafe { goto yy459 } }
+        0xBD { unsafe { goto yy460 } }
+        0xBE { unsafe { goto yy365 } }
         else { unsafe { goto yy35 } }
     }
 yy283:
     yycursor += 1
     yych = yyinput[yycursor]
-    if yych <= 0x7F {
+    if yych <= 0x90 {
+        if yych <= 0x7F {
+            unsafe { goto yy35 }
+        }
+        if yych <= 0x8F {
+            unsafe { goto yy37 }
+        }
+        unsafe { goto yy158 }
+    } else {
+        if yych <= 0x91 {
+            unsafe { goto yy461 }
+        }
+        if yych <= 0xBF {
+            unsafe { goto yy37 }
+        }
         unsafe { goto yy35 }
     }
-    if yych <= 0x8F {
-        unsafe { goto yy37 }
-    }
-    if yych <= 0x90 {
-        unsafe { goto yy158 }
-    }
-    if yych <= 0x91 {
-        unsafe { goto yy368 }
-    }
-    unsafe { goto yy35 }
 yy284:
     yycursor += 1
     yych = yyinput[yycursor]
     match yych {
+        0x84 { unsafe { goto yy412 } }
         0xA0...0xA7, 0xB9, 0xBC { unsafe { goto yy37 } }
         0xA8 { unsafe { goto yy115 } }
-        0xA9 { unsafe { goto yy443 } }
+        0xA9 { unsafe { goto yy462 } }
         0xAA { unsafe { goto yy190 } }
-        0xAB { unsafe { goto yy444 } }
+        0xAB { unsafe { goto yy463 } }
         0xAC { unsafe { goto yy273 } }
-        0xAD { unsafe { goto yy445 } }
-        0xAE { unsafe { goto yy352 } }
-        0xBD { unsafe { goto yy446 } }
-        0xBE { unsafe { goto yy447 } }
-        0xBF { unsafe { goto yy448 } }
+        0xAD { unsafe { goto yy464 } }
+        0xAE { unsafe { goto yy358 } }
+        0xB5 { unsafe { goto yy465 } }
+        0xBA { unsafe { goto yy374 } }
+        0xBB { unsafe { goto yy375 } }
+        0xBD { unsafe { goto yy466 } }
+        0xBE { unsafe { goto yy467 } }
+        0xBF { unsafe { goto yy468 } }
         else { unsafe { goto yy35 } }
     }
 yy285:
@@ -6577,17 +6601,17 @@ yy285:
             unsafe { goto yy37 }
         } else {
             if yych <= 0x84 {
-                unsafe { goto yy370 }
+                unsafe { goto yy381 }
             }
             if yych <= 0x85 {
-                unsafe { goto yy371 }
+                unsafe { goto yy382 }
             }
             unsafe { goto yy37 }
         }
     } else {
         if yych <= 0xB0 {
             if yych <= 0x8B {
-                unsafe { goto yy372 }
+                unsafe { goto yy383 }
             }
             if yych <= 0xAF {
                 unsafe { goto yy35 }
@@ -6595,10 +6619,10 @@ yy285:
             unsafe { goto yy37 }
         } else {
             if yych <= 0xB1 {
-                unsafe { goto yy373 }
+                unsafe { goto yy384 }
             }
             if yych <= 0xB2 {
-                unsafe { goto yy449 }
+                unsafe { goto yy469 }
             }
             unsafe { goto yy35 }
         }
@@ -6607,66 +6631,72 @@ yy286:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xBB {
+        if yych == 0xB3 {
+            unsafe { goto yy470 }
+        }
+        unsafe { goto yy35 }
+    } else {
+        if yych <= 0xBC {
+            unsafe { goto yy178 }
+        }
+        if yych <= 0xBD {
+            unsafe { goto yy88 }
+        }
         unsafe { goto yy35 }
     }
-    if yych <= 0xBC {
-        unsafe { goto yy178 }
-    }
-    if yych <= 0xBD {
-        unsafe { goto yy88 }
-    }
-    unsafe { goto yy35 }
 yy287:
     yycursor += 1
     yych = yyinput[yycursor]
     match yych {
-        0x85 { unsafe { goto yy450 } }
-        0x86 { unsafe { goto yy451 } }
-        0x89 { unsafe { goto yy452 } }
+        0x85 { unsafe { goto yy471 } }
+        0x86 { unsafe { goto yy472 } }
+        0x89 { unsafe { goto yy473 } }
         0x90, 0x96...0x99 { unsafe { goto yy37 } }
-        0x91 { unsafe { goto yy375 } }
-        0x92 { unsafe { goto yy376 } }
-        0x93 { unsafe { goto yy377 } }
-        0x94 { unsafe { goto yy378 } }
-        0x95 { unsafe { goto yy379 } }
-        0x9A { unsafe { goto yy380 } }
-        0x9B { unsafe { goto yy381 } }
-        0x9C { unsafe { goto yy382 } }
-        0x9D { unsafe { goto yy383 } }
-        0x9E { unsafe { goto yy384 } }
-        0x9F { unsafe { goto yy453 } }
-        0xA8 { unsafe { goto yy454 } }
-        0xA9 { unsafe { goto yy455 } }
-        0xAA { unsafe { goto yy456 } }
-        0xBC { unsafe { goto yy386 } }
+        0x91 { unsafe { goto yy386 } }
+        0x92 { unsafe { goto yy387 } }
+        0x93 { unsafe { goto yy388 } }
+        0x94 { unsafe { goto yy389 } }
+        0x95 { unsafe { goto yy390 } }
+        0x9A { unsafe { goto yy391 } }
+        0x9B { unsafe { goto yy392 } }
+        0x9C { unsafe { goto yy393 } }
+        0x9D { unsafe { goto yy394 } }
+        0x9E { unsafe { goto yy395 } }
+        0x9F { unsafe { goto yy474 } }
+        0xA8 { unsafe { goto yy475 } }
+        0xA9 { unsafe { goto yy476 } }
+        0xAA { unsafe { goto yy477 } }
+        0xBC { unsafe { goto yy397 } }
         else { unsafe { goto yy35 } }
     }
 yy288:
     yycursor += 1
     yych = yyinput[yycursor]
     match yych {
-        0x80 { unsafe { goto yy457 } }
+        0x80 { unsafe { goto yy478 } }
         0x81 { unsafe { goto yy210 } }
-        0x82 { unsafe { goto yy458 } }
-        0x84 { unsafe { goto yy459 } }
-        0x85 { unsafe { goto yy460 } }
-        0x8A { unsafe { goto yy461 } }
-        0x8B { unsafe { goto yy397 } }
-        0x93 { unsafe { goto yy462 } }
-        0x9F { unsafe { goto yy390 } }
+        0x82 { unsafe { goto yy479 } }
+        0x84 { unsafe { goto yy480 } }
+        0x85 { unsafe { goto yy481 } }
+        0x8A { unsafe { goto yy482 } }
+        0x8B { unsafe { goto yy412 } }
+        0x93 { unsafe { goto yy483 } }
+        0x97 { unsafe { goto yy484 } }
+        0x9B { unsafe { goto yy485 } }
+        0x9F { unsafe { goto yy403 } }
         0xA0...0xA2, 0xA4 { unsafe { goto yy37 } }
-        0xA3 { unsafe { goto yy463 } }
-        0xA5 { unsafe { goto yy464 } }
-        0xB8 { unsafe { goto yy393 } }
-        0xB9 { unsafe { goto yy394 } }
-        0xBA { unsafe { goto yy395 } }
+        0xA3 { unsafe { goto yy486 } }
+        0xA5 { unsafe { goto yy487 } }
+        0xB8 { unsafe { goto yy406 } }
+        0xB9 { unsafe { goto yy407 } }
+        0xBA { unsafe { goto yy408 } }
         else { unsafe { goto yy35 } }
     }
 yy289:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych == 0xAF {
-        unsafe { goto yy465 }
+        unsafe { goto yy470 }
     }
     unsafe { goto yy35 }
 yy290:
@@ -7168,6 +7198,32 @@ yy318:
 yy319:
     yycursor += 1
     yych = yyinput[yycursor]
+    if yych <= 0x89 {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xA5 {
+        unsafe { goto yy3 }
+    }
+    if yych <= 0xAE {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xBF {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy320:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x7F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0x85 {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy321:
+    yycursor += 1
+    yych = yyinput[yycursor]
     if yych <= 0x7F {
         unsafe { goto yy35 }
     }
@@ -7181,7 +7237,17 @@ yy319:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy320:
+yy322:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x81 {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0x87 {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy323:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xA6 {
@@ -7204,7 +7270,7 @@ yy320:
         }
         unsafe { goto yy35 }
     }
-yy321:
+yy324:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7220,7 +7286,7 @@ yy321:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy322:
+yy325:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7236,7 +7302,7 @@ yy322:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy323:
+yy326:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7252,7 +7318,7 @@ yy323:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy324:
+yy327:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x82 {
@@ -7262,7 +7328,7 @@ yy324:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy325:
+yy328:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xB0 {
@@ -7275,7 +7341,7 @@ yy325:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy326:
+yy329:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x82 {
@@ -7285,7 +7351,7 @@ yy326:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy327:
+yy330:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8F {
@@ -7295,7 +7361,7 @@ yy327:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy328:
+yy331:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x82 {
@@ -7305,7 +7371,7 @@ yy328:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy329:
+yy332:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x87 {
@@ -7329,7 +7395,7 @@ yy329:
             unsafe { goto yy35 }
         }
     }
-yy330:
+yy333:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x82 {
@@ -7339,7 +7405,7 @@ yy330:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy331:
+yy334:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x99 {
@@ -7359,7 +7425,7 @@ yy331:
         }
         unsafe { goto yy35 }
     }
-yy332:
+yy335:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x92 {
@@ -7379,7 +7445,7 @@ yy332:
         }
         unsafe { goto yy35 }
     }
-yy333:
+yy336:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8D {
@@ -7419,7 +7485,7 @@ yy333:
             unsafe { goto yy35 }
         }
     }
-yy334:
+yy337:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych == 0x90 {
@@ -7432,7 +7498,45 @@ yy334:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy335:
+yy338:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x8D {
+        if yych <= 0x89 {
+            if yych <= 0x7F {
+                unsafe { goto yy35 }
+            }
+            unsafe { goto yy3 }
+        } else {
+            if yych == 0x8B {
+                unsafe { goto yy3 }
+            }
+            unsafe { goto yy35 }
+        }
+    } else {
+        if yych <= 0xB5 {
+            if yych == 0x8F {
+                unsafe { goto yy35 }
+            }
+            unsafe { goto yy3 }
+        } else {
+            if yych == 0xB7 {
+                unsafe { goto yy3 }
+            }
+            unsafe { goto yy35 }
+        }
+    }
+yy339:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych == 0x91 {
+        unsafe { goto yy3 }
+    }
+    if yych == 0x93 {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy340:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x86 {
@@ -7448,7 +7552,7 @@ yy335:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy336:
+yy341:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x83 {
@@ -7461,7 +7565,7 @@ yy336:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy337:
+yy342:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7471,7 +7575,7 @@ yy337:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy338:
+yy343:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x97 {
@@ -7481,14 +7585,14 @@ yy338:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy339:
+yy344:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych == 0x84 {
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy340:
+yy345:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7501,7 +7605,7 @@ yy340:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy341:
+yy346:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7511,7 +7615,7 @@ yy341:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy342:
+yy347:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7524,7 +7628,7 @@ yy342:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy343:
+yy348:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x93 {
@@ -7564,14 +7668,14 @@ yy343:
             unsafe { goto yy35 }
         }
     }
-yy344:
+yy349:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych == 0x81 {
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy345:
+yy350:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x9F {
@@ -7587,7 +7691,7 @@ yy345:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy346:
+yy351:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xA0 {
@@ -7607,7 +7711,7 @@ yy346:
         }
         unsafe { goto yy35 }
     }
-yy347:
+yy352:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8A {
@@ -7624,7 +7728,7 @@ yy347:
         }
         unsafe { goto yy35 }
     }
-yy348:
+yy353:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych == 0x90 {
@@ -7637,7 +7741,7 @@ yy348:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy349:
+yy354:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x9C {
@@ -7660,7 +7764,17 @@ yy349:
         }
         unsafe { goto yy35 }
     }
-yy350:
+yy355:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x7F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xA0 {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy356:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7673,7 +7787,7 @@ yy350:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy351:
+yy357:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych == 0x80 {
@@ -7686,7 +7800,7 @@ yy351:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy352:
+yy358:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7696,7 +7810,7 @@ yy352:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy353:
+yy359:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x87 {
@@ -7716,7 +7830,7 @@ yy353:
         }
         unsafe { goto yy35 }
     }
-yy354:
+yy360:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xA5 {
@@ -7743,20 +7857,40 @@ yy354:
             unsafe { goto yy35 }
         }
     }
-yy355:
+yy361:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x97 {
+        if yych <= 0x7F {
+            unsafe { goto yy35 }
+        }
+        if yych <= 0x89 {
+            unsafe { goto yy3 }
+        }
+        unsafe { goto yy35 }
+    } else {
+        if yych <= 0x98 {
+            unsafe { goto yy3 }
+        }
+        if yych <= 0xAF {
+            unsafe { goto yy35 }
+        }
+        if yych <= 0xBF {
+            unsafe { goto yy3 }
+        }
+        unsafe { goto yy35 }
+    }
+yy362:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
         unsafe { goto yy35 }
     }
-    if yych <= 0x89 {
-        unsafe { goto yy3 }
-    }
-    if yych == 0x98 {
+    if yych <= 0x9B {
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy356:
+yy363:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x9F {
@@ -7766,7 +7900,7 @@ yy356:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy357:
+yy364:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x83 {
@@ -7783,14 +7917,14 @@ yy357:
         }
         unsafe { goto yy35 }
     }
-yy358:
+yy365:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych == 0xB0 {
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy359:
+yy366:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7800,7 +7934,7 @@ yy359:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy360:
+yy367:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7810,7 +7944,7 @@ yy360:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy361:
+yy368:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x80 {
@@ -7819,8 +7953,24 @@ yy361:
     if yych <= 0x86 {
         unsafe { goto yy3 }
     }
+    if yych <= 0x9F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xBF {
+        unsafe { goto yy3 }
+    }
     unsafe { goto yy35 }
-yy362:
+yy369:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x7F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0x9D {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy370:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7836,7 +7986,7 @@ yy362:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy363:
+yy371:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8F {
@@ -7846,7 +7996,7 @@ yy363:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy364:
+yy372:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xA2 {
@@ -7869,7 +8019,43 @@ yy364:
         }
         unsafe { goto yy35 }
     }
-yy365:
+yy373:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x7F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xAC {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy374:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x9F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xB8 {
+        unsafe { goto yy3 }
+    }
+    if yych <= 0xBA {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xBF {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy375:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x7F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0x93 {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy376:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7882,7 +8068,7 @@ yy365:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy366:
+yy377:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x92 {
@@ -7892,20 +8078,30 @@ yy366:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy367:
+yy378:
     yycursor += 1
     yych = yyinput[yycursor]
-    if yych <= 0x9F {
+    if yych <= 0xA2 {
+        if yych <= 0x9F {
+            unsafe { goto yy35 }
+        }
+        if yych <= 0xA1 {
+            unsafe { goto yy3 }
+        }
+        unsafe { goto yy35 }
+    } else {
+        if yych <= 0xA3 {
+            unsafe { goto yy3 }
+        }
+        if yych <= 0xB1 {
+            unsafe { goto yy35 }
+        }
+        if yych <= 0xB6 {
+            unsafe { goto yy3 }
+        }
         unsafe { goto yy35 }
     }
-    if yych == 0xA2 {
-        unsafe { goto yy35 }
-    }
-    if yych <= 0xA3 {
-        unsafe { goto yy3 }
-    }
-    unsafe { goto yy35 }
-yy368:
+yy379:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7914,8 +8110,11 @@ yy368:
     if yych <= 0x95 {
         unsafe { goto yy3 }
     }
+    if yych == 0xBF {
+        unsafe { goto yy3 }
+    }
     unsafe { goto yy35 }
-yy369:
+yy380:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xB4 {
@@ -7935,7 +8134,7 @@ yy369:
         }
         unsafe { goto yy35 }
     }
-yy370:
+yy381:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7948,7 +8147,7 @@ yy370:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy371:
+yy382:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x95 {
@@ -7978,7 +8177,7 @@ yy371:
             unsafe { goto yy35 }
         }
     }
-yy372:
+yy383:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -7988,7 +8187,7 @@ yy372:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy373:
+yy384:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8004,7 +8203,7 @@ yy373:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy374:
+yy385:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8020,7 +8219,7 @@ yy374:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy375:
+yy386:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8033,7 +8232,7 @@ yy375:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy376:
+yy387:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xA6 {
@@ -8080,7 +8279,7 @@ yy376:
             }
         }
     }
-yy377:
+yy388:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8093,7 +8292,7 @@ yy377:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy378:
+yy389:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x94 {
@@ -8133,7 +8332,7 @@ yy378:
             unsafe { goto yy35 }
         }
     }
-yy379:
+yy390:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x86 {
@@ -8160,7 +8359,7 @@ yy379:
             unsafe { goto yy35 }
         }
     }
-yy380:
+yy391:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8176,7 +8375,7 @@ yy380:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy381:
+yy392:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x9A {
@@ -8203,7 +8402,7 @@ yy381:
             unsafe { goto yy35 }
         }
     }
-yy382:
+yy393:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x95 {
@@ -8223,7 +8422,7 @@ yy382:
         }
         unsafe { goto yy35 }
     }
-yy383:
+yy394:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8F {
@@ -8243,7 +8442,7 @@ yy383:
         }
         unsafe { goto yy35 }
     }
-yy384:
+yy395:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x89 {
@@ -8263,7 +8462,7 @@ yy384:
         }
         unsafe { goto yy35 }
     }
-yy385:
+yy396:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8276,7 +8475,7 @@ yy385:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy386:
+yy397:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8292,7 +8491,7 @@ yy386:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy387:
+yy398:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8308,14 +8507,14 @@ yy387:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy388:
+yy399:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych == 0x8E {
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy389:
+yy400:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8F {
@@ -8325,7 +8524,60 @@ yy389:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy390:
+yy401:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x8F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xAD {
+        unsafe { goto yy3 }
+    }
+    if yych == 0xB0 {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy402:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0xA5 {
+        if yych <= 0x9F {
+            if yych <= 0x7F {
+                unsafe { goto yy35 }
+            }
+            if yych <= 0x9E {
+                unsafe { goto yy3 }
+            }
+            unsafe { goto yy35 }
+        } else {
+            if yych == 0xA3 {
+                unsafe { goto yy35 }
+            }
+            unsafe { goto yy3 }
+        }
+    } else {
+        if yych <= 0xAF {
+            if yych <= 0xA6 {
+                unsafe { goto yy35 }
+            }
+            if yych <= 0xAD {
+                unsafe { goto yy3 }
+            }
+            unsafe { goto yy35 }
+        } else {
+            if yych <= 0xB4 {
+                unsafe { goto yy3 }
+            }
+            if yych <= 0xBD {
+                unsafe { goto yy35 }
+            }
+            if yych <= 0xBF {
+                unsafe { goto yy3 }
+            }
+            unsafe { goto yy35 }
+        }
+    }
+yy403:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xAB {
@@ -8352,7 +8604,7 @@ yy390:
             unsafe { goto yy35 }
         }
     }
-yy391:
+yy404:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8362,7 +8614,7 @@ yy391:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy392:
+yy405:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8375,7 +8627,7 @@ yy392:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy393:
+yy406:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xA6 {
@@ -8427,14 +8679,14 @@ yy393:
             }
         }
     }
-yy394:
+yy407:
     yycursor += 1
     yych = yyinput[yycursor]
     match yych {
         0x82, 0x87, 0x89, 0x8B, 0x8D...0x8F, 0x91...0x92, 0x94, 0x97, 0x99, 0x9B, 0x9D, 0x9F, 0xA1...0xA2, 0xA4, 0xA7...0xAA, 0xAC...0xB2, 0xB4...0xB7, 0xB9...0xBC, 0xBE { unsafe { goto yy3 } }
         else { unsafe { goto yy35 } }
     }
-yy395:
+yy408:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xA0 {
@@ -8468,7 +8720,7 @@ yy395:
             unsafe { goto yy35 }
         }
     }
-yy396:
+yy409:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8478,33 +8730,7 @@ yy396:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy397:
-    yycursor += 1
-    yych = yyinput[yycursor]
-    if yych <= 0x7F {
-        unsafe { goto yy35 }
-    }
-    if yych <= 0xB9 {
-        unsafe { goto yy3 }
-    }
-    unsafe { goto yy35 }
-yy398:
-    yycursor += 1
-    yych = yyinput[yycursor]
-    if yych <= 0x7F {
-        unsafe { goto yy35 }
-    }
-    if yych <= 0xA1 {
-        unsafe { goto yy3 }
-    }
-    if yych <= 0xAF {
-        unsafe { goto yy35 }
-    }
-    if yych <= 0xBF {
-        unsafe { goto yy3 }
-    }
-    unsafe { goto yy35 }
-yy399:
+yy410:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8520,17 +8746,7 @@ yy399:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy400:
-    yycursor += 1
-    yych = yyinput[yycursor]
-    if yych <= 0x7F {
-        unsafe { goto yy35 }
-    }
-    if yych <= 0x9D {
-        unsafe { goto yy3 }
-    }
-    unsafe { goto yy35 }
-yy401:
+yy411:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8546,14 +8762,24 @@ yy401:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy402:
+yy412:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x7F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xB9 {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy413:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych == 0xBD {
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy403:
+yy414:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8566,7 +8792,7 @@ yy403:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy404:
+yy415:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8582,7 +8808,7 @@ yy404:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy405:
+yy416:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x9F {
@@ -8605,7 +8831,7 @@ yy405:
         }
         unsafe { goto yy35 }
     }
-yy406:
+yy417:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x94 {
@@ -8648,7 +8874,7 @@ yy406:
             unsafe { goto yy35 }
         }
     }
-yy407:
+yy418:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8661,7 +8887,7 @@ yy407:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy408:
+yy419:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8677,7 +8903,27 @@ yy408:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy409:
+yy420:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0xA8 {
+        if yych <= 0x7F {
+            unsafe { goto yy35 }
+        }
+        if yych <= 0xA5 {
+            unsafe { goto yy3 }
+        }
+        unsafe { goto yy35 }
+    } else {
+        if yych == 0xAE {
+            unsafe { goto yy35 }
+        }
+        if yych <= 0xBF {
+            unsafe { goto yy3 }
+        }
+        unsafe { goto yy35 }
+    }
+yy421:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xAA {
@@ -8700,17 +8946,23 @@ yy409:
         }
         unsafe { goto yy35 }
     }
-yy410:
+yy422:
     yycursor += 1
     yych = yyinput[yycursor]
-    if yych <= 0xBC {
+    if yych <= 0x81 {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0x87 {
+        unsafe { goto yy3 }
+    }
+    if yych <= 0xB9 {
         unsafe { goto yy35 }
     }
     if yych <= 0xBF {
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy411:
+yy423:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8726,7 +8978,7 @@ yy411:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy412:
+yy424:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xA5 {
@@ -8746,7 +8998,7 @@ yy412:
         }
         unsafe { goto yy35 }
     }
-yy413:
+yy425:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8F {
@@ -8766,7 +9018,7 @@ yy413:
         }
         unsafe { goto yy35 }
     }
-yy414:
+yy426:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8779,7 +9031,7 @@ yy414:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy415:
+yy427:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8F {
@@ -8799,7 +9051,7 @@ yy415:
         }
         unsafe { goto yy35 }
     }
-yy416:
+yy428:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8C {
@@ -8826,7 +9078,7 @@ yy416:
             unsafe { goto yy35 }
         }
     }
-yy417:
+yy429:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x92 {
@@ -8849,7 +9101,7 @@ yy417:
         }
         unsafe { goto yy35 }
     }
-yy418:
+yy430:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8859,7 +9111,7 @@ yy418:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy419:
+yy431:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -8875,7 +9127,7 @@ yy419:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy420:
+yy432:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xA8 {
@@ -8925,7 +9177,7 @@ yy420:
             }
         }
     }
-yy421:
+yy433:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x90 {
@@ -8978,7 +9230,78 @@ yy421:
             }
         }
     }
-yy422:
+yy434:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x8D {
+        if yych <= 0x89 {
+            if yych <= 0x7F {
+                unsafe { goto yy35 }
+            }
+            unsafe { goto yy3 }
+        } else {
+            if yych == 0x8B {
+                unsafe { goto yy3 }
+            }
+            unsafe { goto yy35 }
+        }
+    } else {
+        if yych <= 0xB5 {
+            if yych == 0x8F {
+                unsafe { goto yy35 }
+            }
+            unsafe { goto yy3 }
+        } else {
+            if yych <= 0xB6 {
+                unsafe { goto yy35 }
+            }
+            if yych <= 0xBF {
+                unsafe { goto yy3 }
+            }
+            unsafe { goto yy35 }
+        }
+    }
+yy435:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x85 {
+        if yych <= 0x81 {
+            if yych == 0x80 {
+                unsafe { goto yy3 }
+            }
+            unsafe { goto yy35 }
+        } else {
+            if yych <= 0x82 {
+                unsafe { goto yy3 }
+            }
+            if yych <= 0x84 {
+                unsafe { goto yy35 }
+            }
+            unsafe { goto yy3 }
+        }
+    } else {
+        if yych <= 0x8B {
+            if yych <= 0x86 {
+                unsafe { goto yy35 }
+            }
+            if yych <= 0x8A {
+                unsafe { goto yy3 }
+            }
+            unsafe { goto yy35 }
+        } else {
+            if yych <= 0x93 {
+                unsafe { goto yy3 }
+            }
+            if yych <= 0xA0 {
+                unsafe { goto yy35 }
+            }
+            if yych <= 0xA2 {
+                unsafe { goto yy3 }
+            }
+            unsafe { goto yy35 }
+        }
+    }
+yy436:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8F {
@@ -9001,7 +9324,7 @@ yy422:
         }
         unsafe { goto yy35 }
     }
-yy423:
+yy437:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x86 {
@@ -9024,7 +9347,7 @@ yy423:
         }
         unsafe { goto yy35 }
     }
-yy424:
+yy438:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -9040,7 +9363,7 @@ yy424:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy425:
+yy439:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych == 0x80 {
@@ -9053,7 +9376,7 @@ yy425:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy426:
+yy440:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x83 {
@@ -9073,7 +9396,23 @@ yy426:
         }
         unsafe { goto yy35 }
     }
-yy427:
+yy441:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x7F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0x89 {
+        unsafe { goto yy3 }
+    }
+    if yych <= 0x8F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xA3 {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy442:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x9C {
@@ -9096,7 +9435,7 @@ yy427:
         }
         unsafe { goto yy35 }
     }
-yy428:
+yy443:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -9109,7 +9448,7 @@ yy428:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy429:
+yy444:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x94 {
@@ -9155,7 +9494,7 @@ yy429:
             unsafe { goto yy35 }
         }
     }
-yy430:
+yy445:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -9171,7 +9510,7 @@ yy430:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy431:
+yy446:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x99 {
@@ -9191,7 +9530,7 @@ yy431:
         }
         unsafe { goto yy35 }
     }
-yy432:
+yy447:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych == 0x87 {
@@ -9204,7 +9543,7 @@ yy432:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy433:
+yy448:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x9C {
@@ -9227,7 +9566,33 @@ yy433:
         }
         unsafe { goto yy35 }
     }
-yy434:
+yy449:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x9F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xA7 {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy450:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x7F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xA0 {
+        unsafe { goto yy3 }
+    }
+    if yych <= 0xAF {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xB9 {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy451:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x89 {
@@ -9247,7 +9612,7 @@ yy434:
         }
         unsafe { goto yy35 }
     }
-yy435:
+yy452:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8F {
@@ -9267,7 +9632,7 @@ yy435:
         }
         unsafe { goto yy35 }
     }
-yy436:
+yy453:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x91 {
@@ -9287,7 +9652,7 @@ yy436:
         }
         unsafe { goto yy35 }
     }
-yy437:
+yy454:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xB6 {
@@ -9321,7 +9686,7 @@ yy437:
             unsafe { goto yy35 }
         }
     }
-yy438:
+yy455:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x9F {
@@ -9355,34 +9720,60 @@ yy438:
             unsafe { goto yy35 }
         }
     }
-yy439:
+yy456:
     yycursor += 1
     yych = yyinput[yycursor]
-    if yych <= 0x91 {
-        if yych <= 0x7F {
-            unsafe { goto yy35 }
-        }
-        if yych == 0x8F {
-            unsafe { goto yy35 }
-        }
-        unsafe { goto yy3 }
-    } else {
-        if yych <= 0x98 {
-            if yych <= 0x92 {
+    if yych <= 0x92 {
+        if yych <= 0x8E {
+            if yych <= 0x7F {
                 unsafe { goto yy35 }
             }
             unsafe { goto yy3 }
         } else {
+            if yych <= 0x8F {
+                unsafe { goto yy35 }
+            }
+            if yych <= 0x91 {
+                unsafe { goto yy3 }
+            }
+            unsafe { goto yy35 }
+        }
+    } else {
+        if yych <= 0xA9 {
+            if yych <= 0x98 {
+                unsafe { goto yy3 }
+            }
             if yych <= 0x9F {
                 unsafe { goto yy35 }
             }
-            if yych <= 0xA9 {
+            unsafe { goto yy3 }
+        } else {
+            if yych <= 0xAF {
+                unsafe { goto yy35 }
+            }
+            if yych <= 0xBF {
                 unsafe { goto yy3 }
             }
             unsafe { goto yy35 }
         }
     }
-yy440:
+yy457:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x7F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0x9B {
+        unsafe { goto yy3 }
+    }
+    if yych <= 0x9F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xA9 {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy458:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x9F {
@@ -9392,7 +9783,7 @@ yy440:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy441:
+yy459:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x91 {
@@ -9415,7 +9806,7 @@ yy441:
         }
         unsafe { goto yy35 }
     }
-yy442:
+yy460:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -9427,11 +9818,27 @@ yy442:
     if yych <= 0x8F {
         unsafe { goto yy35 }
     }
-    if yych <= 0x99 {
+    if yych <= 0x9A {
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy443:
+yy461:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x7F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0x95 {
+        unsafe { goto yy3 }
+    }
+    if yych <= 0x9F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xBF {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy462:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x9F {
@@ -9454,7 +9861,7 @@ yy443:
         }
         unsafe { goto yy35 }
     }
-yy444:
+yy463:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8F {
@@ -9477,7 +9884,7 @@ yy444:
         }
         unsafe { goto yy35 }
     }
-yy445:
+yy464:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x99 {
@@ -9507,7 +9914,23 @@ yy445:
             unsafe { goto yy35 }
         }
     }
-yy446:
+yy465:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x7F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xAC {
+        unsafe { goto yy3 }
+    }
+    if yych <= 0xAF {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xB9 {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy466:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -9523,7 +9946,7 @@ yy446:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy447:
+yy467:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -9539,7 +9962,7 @@ yy447:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy448:
+yy468:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xA2 {
@@ -9557,12 +9980,12 @@ yy448:
         if yych <= 0xAF {
             unsafe { goto yy35 }
         }
-        if yych <= 0xB1 {
+        if yych <= 0xB6 {
             unsafe { goto yy3 }
         }
         unsafe { goto yy35 }
     }
-yy449:
+yy469:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8F {
@@ -9585,7 +10008,17 @@ yy449:
         }
         unsafe { goto yy35 }
     }
-yy450:
+yy470:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0xAF {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xB9 {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy471:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xAC {
@@ -9608,7 +10041,7 @@ yy450:
         }
         unsafe { goto yy35 }
     }
-yy451:
+yy472:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x84 {
@@ -9631,7 +10064,7 @@ yy451:
         }
         unsafe { goto yy35 }
     }
-yy452:
+yy473:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x81 {
@@ -9641,7 +10074,7 @@ yy452:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy453:
+yy474:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x83 {
@@ -9664,7 +10097,7 @@ yy453:
         }
         unsafe { goto yy35 }
     }
-yy454:
+yy475:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -9680,7 +10113,7 @@ yy454:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy455:
+yy476:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -9693,7 +10126,7 @@ yy455:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy456:
+yy477:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x9A {
@@ -9710,7 +10143,7 @@ yy456:
         }
         unsafe { goto yy35 }
     }
-yy457:
+yy478:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0xA1 {
@@ -9753,14 +10186,14 @@ yy457:
             unsafe { goto yy35 }
         }
     }
-yy458:
+yy479:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych == 0x8F {
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy459:
+yy480:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -9776,7 +10209,7 @@ yy459:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy460:
+yy481:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -9789,7 +10222,7 @@ yy460:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy461:
+yy482:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8F {
@@ -9799,7 +10232,7 @@ yy461:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy462:
+yy483:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x8F {
@@ -9809,7 +10242,40 @@ yy462:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy463:
+yy484:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x8F {
+        unsafe { goto yy35 }
+    }
+    if yych <= 0xBA {
+        unsafe { goto yy3 }
+    }
+    unsafe { goto yy35 }
+yy485:
+    yycursor += 1
+    yych = yyinput[yycursor]
+    if yych <= 0x9F {
+        if yych <= 0x7F {
+            unsafe { goto yy35 }
+        }
+        if yych <= 0x9E {
+            unsafe { goto yy3 }
+        }
+        unsafe { goto yy35 }
+    } else {
+        if yych <= 0xB5 {
+            unsafe { goto yy3 }
+        }
+        if yych <= 0xBD {
+            unsafe { goto yy35 }
+        }
+        if yych <= 0xBF {
+            unsafe { goto yy3 }
+        }
+        unsafe { goto yy35 }
+    }
+yy486:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -9825,7 +10291,7 @@ yy463:
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }
-yy464:
+yy487:
     yycursor += 1
     yych = yyinput[yycursor]
     if yych <= 0x7F {
@@ -9838,16 +10304,6 @@ yy464:
         unsafe { goto yy35 }
     }
     if yych <= 0x99 {
-        unsafe { goto yy3 }
-    }
-    unsafe { goto yy35 }
-yy465:
-    yycursor += 1
-    yych = yyinput[yycursor]
-    if yych <= 0xAF {
-        unsafe { goto yy35 }
-    }
-    if yych <= 0xB9 {
         unsafe { goto yy3 }
     }
     unsafe { goto yy35 }

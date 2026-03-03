@@ -59,6 +59,7 @@ yy7:
 	switch (yych) {
 		case 0x90: goto yy14;
 		case 0x92: goto yy15;
+		case 0x96: goto yy16;
 		default: goto yy2;
 	}
 yy8:
@@ -66,7 +67,7 @@ yy8:
 	switch (yych) {
 		case 0xAE:
 		case 0xAF:
-		case 0xB0: goto yy16;
+		case 0xB0: goto yy17;
 		default: goto yy9;
 	}
 yy9:
@@ -106,7 +107,7 @@ yy10:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy16;
+		case 0xBF: goto yy17;
 		default: goto yy9;
 	}
 yy11:
@@ -118,7 +119,7 @@ yy11:
 		case 0x85:
 		case 0x86:
 		case 0x87:
-		case 0x88: goto yy16;
+		case 0x88: goto yy17;
 		default: goto yy9;
 	}
 yy12:
@@ -136,7 +137,7 @@ yy12:
 		case 0xA9:
 		case 0xB8:
 		case 0xB9:
-		case 0xBA: goto yy16;
+		case 0xBA: goto yy17;
 		default: goto yy9;
 	}
 yy13:
@@ -151,30 +152,36 @@ yy13:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy16;
+		case 0xAF: goto yy17;
 		default: goto yy9;
 	}
 yy14:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x85: goto yy17;
-		case 0x8D: goto yy18;
-		case 0x8F: goto yy19;
+		case 0x85: goto yy18;
+		case 0x8D: goto yy19;
+		case 0x8F: goto yy20;
 		default: goto yy9;
 	}
 yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x90: goto yy20;
-		case 0x91: goto yy21;
+		case 0x90: goto yy21;
+		case 0x91: goto yy22;
 		default: goto yy9;
 	}
 yy16:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBF: goto yy23;
+		default: goto yy9;
+	}
+yy17:
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Nl_8.re"
 	{ goto Nl; }
-#line 177 "encodings/unicode_group_Nl_8.c"
-yy17:
+#line 184 "encodings/unicode_group_Nl_8.c"
+yy18:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -229,93 +236,24 @@ yy17:
 		case 0xB1:
 		case 0xB2:
 		case 0xB3:
-		case 0xB4: goto yy16;
-		default: goto yy9;
-	}
-yy18:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x81:
-		case 0x8A: goto yy16;
+		case 0xB4: goto yy17;
 		default: goto yy9;
 	}
 yy19:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95: goto yy16;
+		case 0x81:
+		case 0x8A: goto yy17;
 		default: goto yy9;
 	}
 yy20:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
 		case 0x91:
 		case 0x92:
 		case 0x93:
 		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy16;
+		case 0x95: goto yy17;
 		default: goto yy9;
 	}
 yy21:
@@ -367,7 +305,84 @@ yy21:
 		case 0xAB:
 		case 0xAC:
 		case 0xAD:
-		case 0xAE: goto yy16;
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy17;
+		default: goto yy9;
+	}
+yy22:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE: goto yy17;
+		default: goto yy9;
+	}
+yy23:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB4:
+		case 0xB5:
+		case 0xB6: goto yy17;
 		default: goto yy9;
 	}
 }
@@ -375,7 +390,7 @@ yy21:
 
 }
 
-static const uint32_t chars_Nl[] = {0x16ee,0x16f0,0x2160,0x2182,0x2185,0x2188,0x3007,0x3007,0x3021,0x3029,0x3038,0x303a,0xa6e6,0xa6ef,0x10140,0x10174,0x10341,0x10341,0x1034a,0x1034a,0x103d1,0x103d5,0x12400,0x1246e,};
+static const uint32_t chars_Nl[] = {0x16ee,0x16f0,0x2160,0x2182,0x2185,0x2188,0x3007,0x3007,0x3021,0x3029,0x3038,0x303a,0xa6e6,0xa6ef,0x10140,0x10174,0x10341,0x10341,0x1034a,0x1034a,0x103d1,0x103d5,0x12400,0x1246e,0x16ff4,0x16ff6,};
 
 static uint32_t encode_utf8(const uint32_t* ranges, uint32_t ranges_count, uint8_t* s) {
 	uint8_t* const s0 = s;
@@ -386,7 +401,7 @@ static uint32_t encode_utf8(const uint32_t* ranges, uint32_t ranges_count, uint8
 }
 
 int main() {
-	YYCTYPE* buffer_Nl = new YYCTYPE[1422];
+	YYCTYPE* buffer_Nl = new YYCTYPE[1440];
 	uint32_t buffer_Nl_len = encode_utf8(chars_Nl, sizeof(chars_Nl) / sizeof(uint32_t), buffer_Nl);
 	if (!scan(buffer_Nl, buffer_Nl + buffer_Nl_len)) printf("test 'Nl' failed\n");
 	delete[] buffer_Nl;

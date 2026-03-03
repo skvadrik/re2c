@@ -192,6 +192,7 @@ enum Block {
 	Elbasan,
 	Caucasian_Albanian,
 	Vithkuqi,
+	Todhri,
 	Linear_A,
 	Latin_Extended_F,
 	Cypriot_Syllabary,
@@ -201,6 +202,7 @@ enum Block {
 	Hatran,
 	Phoenician,
 	Lydian,
+	Sidetic,
 	Meroitic_Hieroglyphs,
 	Meroitic_Cursive,
 	Kharoshthi,
@@ -214,6 +216,7 @@ enum Block {
 	Old_Turkic,
 	Old_Hungarian,
 	Hanifi_Rohingya,
+	Garay,
 	Rumi_Numeral_Symbols,
 	Yezidi,
 	Arabic_Extended_C,
@@ -233,12 +236,14 @@ enum Block {
 	Multani,
 	Khudawadi,
 	Grantha,
+	Tulu_Tigalari,
 	Newa,
 	Tirhuta,
 	Siddham,
 	Modi,
 	Mongolian_Supplement,
 	Takri,
+	Myanmar_Extended_C,
 	Ahom,
 	Dogra,
 	Warang_Citi,
@@ -249,10 +254,13 @@ enum Block {
 	Unified_Canadian_Aboriginal_Syllabics_Extended_A,
 	Pau_Cin_Hau,
 	Devanagari_Extended_A,
+	Sharada_Supplement,
+	Sunuwar,
 	Bhaiksuki,
 	Marchen,
 	Masaram_Gondi,
 	Gunjala_Gondi,
+	Tolong_Siki,
 	Makasar,
 	Kawi,
 	Lisu_Supplement,
@@ -263,19 +271,24 @@ enum Block {
 	Cypro_Minoan,
 	Egyptian_Hieroglyphs,
 	Egyptian_Hieroglyph_Format_Controls,
+	Egyptian_Hieroglyphs_Extended_A,
 	Anatolian_Hieroglyphs,
+	Gurung_Khema,
 	Bamum_Supplement,
 	Mro,
 	Tangsa,
 	Bassa_Vah,
 	Pahawh_Hmong,
+	Kirat_Rai,
 	Medefaidrin,
+	Beria_Erfe,
 	Miao,
 	Ideographic_Symbols_and_Punctuation,
 	Tangut,
 	Tangut_Components,
 	Khitan_Small_Script,
 	Tangut_Supplement,
+	Tangut_Components_Supplement,
 	Kana_Extended_B,
 	Kana_Supplement,
 	Kana_Extended_A,
@@ -283,6 +296,8 @@ enum Block {
 	Nushu,
 	Duployan,
 	Shorthand_Format_Controls,
+	Symbols_for_Legacy_Computing_Supplement,
+	Miscellaneous_Symbols_Supplement,
 	Znamenny_Musical_Notation,
 	Byzantine_Musical_Symbols,
 	Musical_Symbols,
@@ -300,6 +315,8 @@ enum Block {
 	Toto,
 	Wancho,
 	Nag_Mundari,
+	Ol_Onal,
+	Tai_Yo,
 	Ethiopic_Extended_B,
 	Mende_Kikakui,
 	Adlam,
@@ -331,6 +348,7 @@ enum Block {
 	CJK_Compatibility_Ideographs_Supplement,
 	CJK_Unified_Ideographs_Extension_G,
 	CJK_Unified_Ideographs_Extension_H,
+	CJK_Unified_Ideographs_Extension_J,
 	Tags,
 	Variation_Selectors_Supplement,
 	Supplementary_Private_Use_Area_A,
@@ -527,6 +545,7 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Elbasan: goto Elbasan;
 		case Caucasian_Albanian: goto Caucasian_Albanian;
 		case Vithkuqi: goto Vithkuqi;
+		case Todhri: goto Todhri;
 		case Linear_A: goto Linear_A;
 		case Latin_Extended_F: goto Latin_Extended_F;
 		case Cypriot_Syllabary: goto Cypriot_Syllabary;
@@ -536,6 +555,7 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Hatran: goto Hatran;
 		case Phoenician: goto Phoenician;
 		case Lydian: goto Lydian;
+		case Sidetic: goto Sidetic;
 		case Meroitic_Hieroglyphs: goto Meroitic_Hieroglyphs;
 		case Meroitic_Cursive: goto Meroitic_Cursive;
 		case Kharoshthi: goto Kharoshthi;
@@ -549,6 +569,7 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Old_Turkic: goto Old_Turkic;
 		case Old_Hungarian: goto Old_Hungarian;
 		case Hanifi_Rohingya: goto Hanifi_Rohingya;
+		case Garay: goto Garay;
 		case Rumi_Numeral_Symbols: goto Rumi_Numeral_Symbols;
 		case Yezidi: goto Yezidi;
 		case Arabic_Extended_C: goto Arabic_Extended_C;
@@ -568,12 +589,14 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Multani: goto Multani;
 		case Khudawadi: goto Khudawadi;
 		case Grantha: goto Grantha;
+		case Tulu_Tigalari: goto Tulu_Tigalari;
 		case Newa: goto Newa;
 		case Tirhuta: goto Tirhuta;
 		case Siddham: goto Siddham;
 		case Modi: goto Modi;
 		case Mongolian_Supplement: goto Mongolian_Supplement;
 		case Takri: goto Takri;
+		case Myanmar_Extended_C: goto Myanmar_Extended_C;
 		case Ahom: goto Ahom;
 		case Dogra: goto Dogra;
 		case Warang_Citi: goto Warang_Citi;
@@ -584,10 +607,13 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Unified_Canadian_Aboriginal_Syllabics_Extended_A: goto Unified_Canadian_Aboriginal_Syllabics_Extended_A;
 		case Pau_Cin_Hau: goto Pau_Cin_Hau;
 		case Devanagari_Extended_A: goto Devanagari_Extended_A;
+		case Sharada_Supplement: goto Sharada_Supplement;
+		case Sunuwar: goto Sunuwar;
 		case Bhaiksuki: goto Bhaiksuki;
 		case Marchen: goto Marchen;
 		case Masaram_Gondi: goto Masaram_Gondi;
 		case Gunjala_Gondi: goto Gunjala_Gondi;
+		case Tolong_Siki: goto Tolong_Siki;
 		case Makasar: goto Makasar;
 		case Kawi: goto Kawi;
 		case Lisu_Supplement: goto Lisu_Supplement;
@@ -598,19 +624,24 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Cypro_Minoan: goto Cypro_Minoan;
 		case Egyptian_Hieroglyphs: goto Egyptian_Hieroglyphs;
 		case Egyptian_Hieroglyph_Format_Controls: goto Egyptian_Hieroglyph_Format_Controls;
+		case Egyptian_Hieroglyphs_Extended_A: goto Egyptian_Hieroglyphs_Extended_A;
 		case Anatolian_Hieroglyphs: goto Anatolian_Hieroglyphs;
+		case Gurung_Khema: goto Gurung_Khema;
 		case Bamum_Supplement: goto Bamum_Supplement;
 		case Mro: goto Mro;
 		case Tangsa: goto Tangsa;
 		case Bassa_Vah: goto Bassa_Vah;
 		case Pahawh_Hmong: goto Pahawh_Hmong;
+		case Kirat_Rai: goto Kirat_Rai;
 		case Medefaidrin: goto Medefaidrin;
+		case Beria_Erfe: goto Beria_Erfe;
 		case Miao: goto Miao;
 		case Ideographic_Symbols_and_Punctuation: goto Ideographic_Symbols_and_Punctuation;
 		case Tangut: goto Tangut;
 		case Tangut_Components: goto Tangut_Components;
 		case Khitan_Small_Script: goto Khitan_Small_Script;
 		case Tangut_Supplement: goto Tangut_Supplement;
+		case Tangut_Components_Supplement: goto Tangut_Components_Supplement;
 		case Kana_Extended_B: goto Kana_Extended_B;
 		case Kana_Supplement: goto Kana_Supplement;
 		case Kana_Extended_A: goto Kana_Extended_A;
@@ -618,6 +649,8 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Nushu: goto Nushu;
 		case Duployan: goto Duployan;
 		case Shorthand_Format_Controls: goto Shorthand_Format_Controls;
+		case Symbols_for_Legacy_Computing_Supplement: goto Symbols_for_Legacy_Computing_Supplement;
+		case Miscellaneous_Symbols_Supplement: goto Miscellaneous_Symbols_Supplement;
 		case Znamenny_Musical_Notation: goto Znamenny_Musical_Notation;
 		case Byzantine_Musical_Symbols: goto Byzantine_Musical_Symbols;
 		case Musical_Symbols: goto Musical_Symbols;
@@ -635,6 +668,8 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Toto: goto Toto;
 		case Wancho: goto Wancho;
 		case Nag_Mundari: goto Nag_Mundari;
+		case Ol_Onal: goto Ol_Onal;
+		case Tai_Yo: goto Tai_Yo;
 		case Ethiopic_Extended_B: goto Ethiopic_Extended_B;
 		case Mende_Kikakui: goto Mende_Kikakui;
 		case Adlam: goto Adlam;
@@ -666,36 +701,37 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case CJK_Compatibility_Ideographs_Supplement: goto CJK_Compatibility_Ideographs_Supplement;
 		case CJK_Unified_Ideographs_Extension_G: goto CJK_Unified_Ideographs_Extension_G;
 		case CJK_Unified_Ideographs_Extension_H: goto CJK_Unified_Ideographs_Extension_H;
+		case CJK_Unified_Ideographs_Extension_J: goto CJK_Unified_Ideographs_Extension_J;
 		case Tags: goto Tags;
 		case Variation_Selectors_Supplement: goto Variation_Selectors_Supplement;
 		case Supplementary_Private_Use_Area_A: goto Supplementary_Private_Use_Area_A;
 		case Supplementary_Private_Use_Area_B: goto Supplementary_Private_Use_Area_B;
 		default: return Error;
 	}
-#line 1002 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1056 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Basic_Latin:
 	
-#line 680 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 716 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych >= 0x80) goto yy1;
 	++YYCURSOR;
-#line 1006 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1060 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Basic_Latin; }
-#line 688 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 724 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1:
 	++YYCURSOR;
-#line 1007 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1061 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Basic_Latin; else return Error; }
-#line 693 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 729 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1008 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1062 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Latin_1_Supplement:
 	
-#line 699 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 735 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -707,9 +743,9 @@ Latin_1_Supplement:
 yy3:
 	++YYCURSOR;
 yy4:
-#line 1013 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1067 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Latin_1_Supplement; else return Error; }
-#line 713 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 749 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -781,15 +817,15 @@ yy5:
 	}
 yy6:
 	++YYCURSOR;
-#line 1012 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1066 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Latin_1_Supplement; }
-#line 787 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 823 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1014 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1068 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Latin_Extended_A:
 	
-#line 793 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 829 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -801,9 +837,9 @@ Latin_Extended_A:
 yy8:
 	++YYCURSOR;
 yy9:
-#line 1019 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1073 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Latin_Extended_A; else return Error; }
-#line 807 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 843 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -875,15 +911,15 @@ yy10:
 	}
 yy11:
 	++YYCURSOR;
-#line 1018 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1072 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Latin_Extended_A; }
-#line 881 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 917 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1020 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1074 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Latin_Extended_B:
 	
-#line 887 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 923 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -897,9 +933,9 @@ Latin_Extended_B:
 yy13:
 	++YYCURSOR;
 yy14:
-#line 1025 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1079 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Latin_Extended_B; else return Error; }
-#line 903 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 939 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -992,15 +1028,15 @@ yy16:
 	}
 yy17:
 	++YYCURSOR;
-#line 1024 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1078 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Latin_Extended_B; }
-#line 998 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1034 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1026 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1080 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 IPA_Extensions:
 	
-#line 1004 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1040 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1012,9 +1048,9 @@ IPA_Extensions:
 yy19:
 	++YYCURSOR;
 yy20:
-#line 1031 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1085 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return IPA_Extensions; else return Error; }
-#line 1018 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1054 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy21:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1123,15 +1159,15 @@ yy22:
 	}
 yy23:
 	++YYCURSOR;
-#line 1030 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1084 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto IPA_Extensions; }
-#line 1129 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1165 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1032 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1086 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Spacing_Modifier_Letters:
 	
-#line 1135 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1171 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1143,9 +1179,9 @@ Spacing_Modifier_Letters:
 yy25:
 	++YYCURSOR;
 yy26:
-#line 1037 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1091 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Spacing_Modifier_Letters; else return Error; }
-#line 1149 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1185 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy27:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1238,15 +1274,15 @@ yy28:
 	}
 yy29:
 	++YYCURSOR;
-#line 1036 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1090 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Spacing_Modifier_Letters; }
-#line 1244 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1280 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1038 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1092 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Combining_Diacritical_Marks:
 	
-#line 1250 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1286 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1258,9 +1294,9 @@ Combining_Diacritical_Marks:
 yy31:
 	++YYCURSOR;
 yy32:
-#line 1043 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1097 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Combining_Diacritical_Marks; else return Error; }
-#line 1264 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1300 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy33:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1385,15 +1421,15 @@ yy34:
 	}
 yy35:
 	++YYCURSOR;
-#line 1042 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1096 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Combining_Diacritical_Marks; }
-#line 1391 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1427 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1044 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1098 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Greek_and_Coptic:
 	
-#line 1397 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1433 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1406,9 +1442,9 @@ Greek_and_Coptic:
 yy37:
 	++YYCURSOR;
 yy38:
-#line 1049 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1103 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Greek_and_Coptic; else return Error; }
-#line 1412 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1448 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy39:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1501,15 +1537,15 @@ yy40:
 	}
 yy41:
 	++YYCURSOR;
-#line 1048 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1102 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Greek_and_Coptic; }
-#line 1507 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1543 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1050 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1104 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Cyrillic:
 	
-#line 1513 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1549 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1523,9 +1559,9 @@ Cyrillic:
 yy43:
 	++YYCURSOR;
 yy44:
-#line 1055 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1109 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cyrillic; else return Error; }
-#line 1529 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1565 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy45:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1597,15 +1633,15 @@ yy45:
 	}
 yy46:
 	++YYCURSOR;
-#line 1054 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1108 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Cyrillic; }
-#line 1603 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1639 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1056 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1110 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Cyrillic_Supplement:
 	
-#line 1609 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1645 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1616,9 +1652,9 @@ Cyrillic_Supplement:
 yy48:
 	++YYCURSOR;
 yy49:
-#line 1061 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1115 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cyrillic_Supplement; else return Error; }
-#line 1622 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1658 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy50:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1674,15 +1710,15 @@ yy50:
 	}
 yy51:
 	++YYCURSOR;
-#line 1060 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1114 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Cyrillic_Supplement; }
-#line 1680 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1716 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1062 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1116 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Armenian:
 	
-#line 1686 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1722 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1695,9 +1731,9 @@ Armenian:
 yy53:
 	++YYCURSOR;
 yy54:
-#line 1067 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1121 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Armenian; else return Error; }
-#line 1701 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1737 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy55:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1811,15 +1847,15 @@ yy57:
 	}
 yy58:
 	++YYCURSOR;
-#line 1066 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1120 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Armenian; }
-#line 1817 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1853 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1068 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1122 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Hebrew:
 	
-#line 1823 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1859 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1831,9 +1867,9 @@ Hebrew:
 yy60:
 	++YYCURSOR;
 yy61:
-#line 1073 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1127 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hebrew; else return Error; }
-#line 1837 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 1873 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy62:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1958,15 +1994,15 @@ yy63:
 	}
 yy64:
 	++YYCURSOR;
-#line 1072 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1126 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Hebrew; }
-#line 1964 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2000 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1074 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1128 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Arabic:
 	
-#line 1970 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2006 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1980,9 +2016,9 @@ Arabic:
 yy66:
 	++YYCURSOR;
 yy67:
-#line 1079 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1133 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Arabic; else return Error; }
-#line 1986 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2022 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy68:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2054,15 +2090,15 @@ yy68:
 	}
 yy69:
 	++YYCURSOR;
-#line 1078 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1132 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Arabic; }
-#line 2060 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2096 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1080 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1134 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Syriac:
 	
-#line 2066 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2102 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2074,9 +2110,9 @@ Syriac:
 yy71:
 	++YYCURSOR;
 yy72:
-#line 1085 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1139 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Syriac; else return Error; }
-#line 2080 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2116 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy73:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2169,15 +2205,15 @@ yy74:
 	}
 yy75:
 	++YYCURSOR;
-#line 1084 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1138 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Syriac; }
-#line 2175 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2211 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1086 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1140 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Arabic_Supplement:
 	
-#line 2181 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2217 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2188,9 +2224,9 @@ Arabic_Supplement:
 yy77:
 	++YYCURSOR;
 yy78:
-#line 1091 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1145 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Arabic_Supplement; else return Error; }
-#line 2194 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2230 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy79:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2246,15 +2282,15 @@ yy79:
 	}
 yy80:
 	++YYCURSOR;
-#line 1090 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1144 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Arabic_Supplement; }
-#line 2252 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2288 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1092 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1146 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Thaana:
 	
-#line 2258 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2294 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2265,9 +2301,9 @@ Thaana:
 yy82:
 	++YYCURSOR;
 yy83:
-#line 1097 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1151 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Thaana; else return Error; }
-#line 2271 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2307 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy84:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2339,15 +2375,15 @@ yy84:
 	}
 yy85:
 	++YYCURSOR;
-#line 1096 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1150 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Thaana; }
-#line 2345 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2381 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1098 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1152 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 NKo:
 	
-#line 2351 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2387 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2358,9 +2394,9 @@ NKo:
 yy87:
 	++YYCURSOR;
 yy88:
-#line 1103 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1157 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return NKo; else return Error; }
-#line 2364 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2400 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy89:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2432,15 +2468,15 @@ yy89:
 	}
 yy90:
 	++YYCURSOR;
-#line 1102 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1156 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto NKo; }
-#line 2438 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2474 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1104 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1158 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Samaritan:
 	
-#line 2444 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2480 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2451,9 +2487,9 @@ Samaritan:
 yy92:
 	++YYCURSOR;
 yy93:
-#line 1109 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1163 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Samaritan; else return Error; }
-#line 2457 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2493 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy94:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -2534,15 +2570,15 @@ yy96:
 	goto yy93;
 yy97:
 	++YYCURSOR;
-#line 1108 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1162 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Samaritan; }
-#line 2540 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2576 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1110 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1164 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Mandaic:
 	
-#line 2546 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2582 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2553,9 +2589,9 @@ Mandaic:
 yy99:
 	++YYCURSOR;
 yy100:
-#line 1115 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1169 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Mandaic; else return Error; }
-#line 2559 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2595 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy101:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -2604,15 +2640,15 @@ yy103:
 	goto yy100;
 yy104:
 	++YYCURSOR;
-#line 1114 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1168 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Mandaic; }
-#line 2610 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2646 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1116 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1170 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Syriac_Supplement:
 	
-#line 2616 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2652 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2623,9 +2659,9 @@ Syriac_Supplement:
 yy106:
 	++YYCURSOR;
 yy107:
-#line 1121 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1175 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Syriac_Supplement; else return Error; }
-#line 2629 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2665 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy108:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -2658,15 +2694,15 @@ yy110:
 	goto yy107;
 yy111:
 	++YYCURSOR;
-#line 1120 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1174 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Syriac_Supplement; }
-#line 2664 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2700 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1122 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1176 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Arabic_Extended_B:
 	
-#line 2670 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2706 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2677,9 +2713,9 @@ Arabic_Extended_B:
 yy113:
 	++YYCURSOR;
 yy114:
-#line 1127 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1181 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Arabic_Extended_B; else return Error; }
-#line 2683 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2719 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy115:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -2750,15 +2786,15 @@ yy118:
 	}
 yy119:
 	++YYCURSOR;
-#line 1126 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1180 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Arabic_Extended_B; }
-#line 2756 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2792 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1128 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1182 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Arabic_Extended_A:
 	
-#line 2762 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2798 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2769,9 +2805,9 @@ Arabic_Extended_A:
 yy121:
 	++YYCURSOR;
 yy122:
-#line 1133 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1187 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Arabic_Extended_A; else return Error; }
-#line 2775 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2811 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy123:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -2890,15 +2926,15 @@ yy126:
 	}
 yy127:
 	++YYCURSOR;
-#line 1132 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1186 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Arabic_Extended_A; }
-#line 2896 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2932 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1134 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1188 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Devanagari:
 	
-#line 2902 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2938 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2909,9 +2945,9 @@ Devanagari:
 yy129:
 	++YYCURSOR;
 yy130:
-#line 1139 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1193 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Devanagari; else return Error; }
-#line 2915 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2951 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy131:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -2993,15 +3029,15 @@ yy133:
 	goto yy130;
 yy134:
 	++YYCURSOR;
-#line 1138 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1192 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Devanagari; }
-#line 2999 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3035 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1140 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1194 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Bengali:
 	
-#line 3005 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3041 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3012,9 +3048,9 @@ Bengali:
 yy136:
 	++YYCURSOR;
 yy137:
-#line 1145 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1199 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Bengali; else return Error; }
-#line 3018 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3054 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy138:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -3096,15 +3132,15 @@ yy140:
 	goto yy137;
 yy141:
 	++YYCURSOR;
-#line 1144 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1198 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Bengali; }
-#line 3102 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3138 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1146 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1200 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Gurmukhi:
 	
-#line 3108 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3144 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3115,9 +3151,9 @@ Gurmukhi:
 yy143:
 	++YYCURSOR;
 yy144:
-#line 1151 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1205 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Gurmukhi; else return Error; }
-#line 3121 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3157 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy145:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -3199,15 +3235,15 @@ yy147:
 	goto yy144;
 yy148:
 	++YYCURSOR;
-#line 1150 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1204 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Gurmukhi; }
-#line 3205 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3241 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1152 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1206 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Gujarati:
 	
-#line 3211 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3247 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3218,9 +3254,9 @@ Gujarati:
 yy150:
 	++YYCURSOR;
 yy151:
-#line 1157 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1211 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Gujarati; else return Error; }
-#line 3224 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3260 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy152:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -3302,15 +3338,15 @@ yy154:
 	goto yy151;
 yy155:
 	++YYCURSOR;
-#line 1156 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1210 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Gujarati; }
-#line 3308 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3344 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1158 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1212 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Oriya:
 	
-#line 3314 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3350 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3321,9 +3357,9 @@ Oriya:
 yy157:
 	++YYCURSOR;
 yy158:
-#line 1163 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1217 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Oriya; else return Error; }
-#line 3327 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3363 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy159:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -3405,15 +3441,15 @@ yy161:
 	goto yy158;
 yy162:
 	++YYCURSOR;
-#line 1162 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1216 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Oriya; }
-#line 3411 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3447 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1164 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1218 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Tamil:
 	
-#line 3417 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3453 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3424,9 +3460,9 @@ Tamil:
 yy164:
 	++YYCURSOR;
 yy165:
-#line 1169 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1223 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tamil; else return Error; }
-#line 3430 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3466 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy166:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -3508,15 +3544,15 @@ yy168:
 	goto yy165;
 yy169:
 	++YYCURSOR;
-#line 1168 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1222 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Tamil; }
-#line 3514 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3550 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1170 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1224 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Telugu:
 	
-#line 3520 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3556 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3527,9 +3563,9 @@ Telugu:
 yy171:
 	++YYCURSOR;
 yy172:
-#line 1175 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1229 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Telugu; else return Error; }
-#line 3533 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3569 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy173:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -3611,15 +3647,15 @@ yy175:
 	goto yy172;
 yy176:
 	++YYCURSOR;
-#line 1174 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1228 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Telugu; }
-#line 3617 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3653 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1176 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1230 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Kannada:
 	
-#line 3623 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3659 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3630,9 +3666,9 @@ Kannada:
 yy178:
 	++YYCURSOR;
 yy179:
-#line 1181 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1235 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Kannada; else return Error; }
-#line 3636 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3672 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy180:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -3714,15 +3750,15 @@ yy182:
 	goto yy179;
 yy183:
 	++YYCURSOR;
-#line 1180 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1234 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Kannada; }
-#line 3720 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3756 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1182 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1236 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Malayalam:
 	
-#line 3726 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3762 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3733,9 +3769,9 @@ Malayalam:
 yy185:
 	++YYCURSOR;
 yy186:
-#line 1187 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1241 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Malayalam; else return Error; }
-#line 3739 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3775 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy187:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -3817,15 +3853,15 @@ yy189:
 	goto yy186;
 yy190:
 	++YYCURSOR;
-#line 1186 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1240 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Malayalam; }
-#line 3823 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3859 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1188 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1242 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Sinhala:
 	
-#line 3829 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3865 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3836,9 +3872,9 @@ Sinhala:
 yy192:
 	++YYCURSOR;
 yy193:
-#line 1193 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1247 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Sinhala; else return Error; }
-#line 3842 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3878 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy194:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -3920,15 +3956,15 @@ yy196:
 	goto yy193;
 yy197:
 	++YYCURSOR;
-#line 1192 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1246 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Sinhala; }
-#line 3926 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3962 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1194 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1248 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Thai:
 	
-#line 3932 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3968 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3939,9 +3975,9 @@ Thai:
 yy199:
 	++YYCURSOR;
 yy200:
-#line 1199 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1253 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Thai; else return Error; }
-#line 3945 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3981 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy201:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -4023,15 +4059,15 @@ yy203:
 	goto yy200;
 yy204:
 	++YYCURSOR;
-#line 1198 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1252 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Thai; }
-#line 4029 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4065 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1200 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1254 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Lao:
 	
-#line 4035 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4071 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -4042,9 +4078,9 @@ Lao:
 yy206:
 	++YYCURSOR;
 yy207:
-#line 1205 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1259 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Lao; else return Error; }
-#line 4048 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4084 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy208:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -4126,15 +4162,15 @@ yy210:
 	goto yy207;
 yy211:
 	++YYCURSOR;
-#line 1204 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1258 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Lao; }
-#line 4132 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4168 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1206 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1260 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Tibetan:
 	
-#line 4138 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4174 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -4145,9 +4181,9 @@ Tibetan:
 yy213:
 	++YYCURSOR;
 yy214:
-#line 1211 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1265 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tibetan; else return Error; }
-#line 4151 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4187 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy215:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -4231,15 +4267,15 @@ yy217:
 	goto yy214;
 yy218:
 	++YYCURSOR;
-#line 1210 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1264 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Tibetan; }
-#line 4237 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4273 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1212 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1266 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Myanmar:
 	
-#line 4243 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4279 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -4250,9 +4286,9 @@ Myanmar:
 yy220:
 	++YYCURSOR;
 yy221:
-#line 1217 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1271 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Myanmar; else return Error; }
-#line 4256 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4292 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy222:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -4372,15 +4408,15 @@ yy225:
 	}
 yy226:
 	++YYCURSOR;
-#line 1216 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1270 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Myanmar; }
-#line 4378 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4414 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1218 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1272 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Georgian:
 	
-#line 4384 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4420 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -4391,9 +4427,9 @@ Georgian:
 yy228:
 	++YYCURSOR;
 yy229:
-#line 1223 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1277 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Georgian; else return Error; }
-#line 4397 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4433 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy230:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -4512,15 +4548,15 @@ yy233:
 	}
 yy234:
 	++YYCURSOR;
-#line 1222 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1276 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Georgian; }
-#line 4518 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4554 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1224 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1278 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Hangul_Jamo:
 	
-#line 4524 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4560 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -4531,9 +4567,9 @@ Hangul_Jamo:
 yy236:
 	++YYCURSOR;
 yy237:
-#line 1229 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1283 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hangul_Jamo; else return Error; }
-#line 4537 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4573 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy238:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -4617,15 +4653,15 @@ yy240:
 	goto yy237;
 yy241:
 	++YYCURSOR;
-#line 1228 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1282 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Hangul_Jamo; }
-#line 4623 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4659 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1230 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1284 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Ethiopic:
 	
-#line 4629 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4665 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -4636,9 +4672,9 @@ Ethiopic:
 yy243:
 	++YYCURSOR;
 yy244:
-#line 1235 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1289 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ethiopic; else return Error; }
-#line 4642 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4678 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy245:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -4724,15 +4760,15 @@ yy247:
 	goto yy244;
 yy248:
 	++YYCURSOR;
-#line 1234 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1288 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Ethiopic; }
-#line 4730 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4766 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1236 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1290 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Ethiopic_Supplement:
 	
-#line 4736 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4772 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -4743,9 +4779,9 @@ Ethiopic_Supplement:
 yy250:
 	++YYCURSOR;
 yy251:
-#line 1241 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1295 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ethiopic_Supplement; else return Error; }
-#line 4749 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4785 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy252:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -4794,15 +4830,15 @@ yy254:
 	goto yy251;
 yy255:
 	++YYCURSOR;
-#line 1240 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1294 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Ethiopic_Supplement; }
-#line 4800 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4836 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1242 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1296 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Cherokee:
 	
-#line 4806 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4842 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -4813,9 +4849,9 @@ Cherokee:
 yy257:
 	++YYCURSOR;
 yy258:
-#line 1247 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1301 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cherokee; else return Error; }
-#line 4819 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4855 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy259:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -4934,15 +4970,15 @@ yy262:
 	}
 yy263:
 	++YYCURSOR;
-#line 1246 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1300 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Cherokee; }
-#line 4940 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4976 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1248 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1302 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Unified_Canadian_Aboriginal_Syllabics:
 	
-#line 4946 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4982 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -4953,9 +4989,9 @@ Unified_Canadian_Aboriginal_Syllabics:
 yy265:
 	++YYCURSOR;
 yy266:
-#line 1253 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1307 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Unified_Canadian_Aboriginal_Syllabics; else return Error; }
-#line 4959 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 4995 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy267:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -5045,15 +5081,15 @@ yy269:
 	goto yy266;
 yy270:
 	++YYCURSOR;
-#line 1252 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1306 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Unified_Canadian_Aboriginal_Syllabics; }
-#line 5051 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5087 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1254 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1308 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Ogham:
 	
-#line 5057 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5093 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -5064,9 +5100,9 @@ Ogham:
 yy272:
 	++YYCURSOR;
 yy273:
-#line 1259 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1313 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ogham; else return Error; }
-#line 5070 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5106 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy274:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -5115,15 +5151,15 @@ yy276:
 	goto yy273;
 yy277:
 	++YYCURSOR;
-#line 1258 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1312 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Ogham; }
-#line 5121 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5157 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1260 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1314 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Runic:
 	
-#line 5127 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5163 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -5134,9 +5170,9 @@ Runic:
 yy279:
 	++YYCURSOR;
 yy280:
-#line 1265 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1319 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Runic; else return Error; }
-#line 5140 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5176 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy281:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -5255,15 +5291,15 @@ yy284:
 	}
 yy285:
 	++YYCURSOR;
-#line 1264 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1318 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Runic; }
-#line 5261 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5297 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1266 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1320 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Tagalog:
 	
-#line 5267 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5303 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -5274,9 +5310,9 @@ Tagalog:
 yy287:
 	++YYCURSOR;
 yy288:
-#line 1271 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1325 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tagalog; else return Error; }
-#line 5280 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5316 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy289:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -5325,15 +5361,15 @@ yy291:
 	goto yy288;
 yy292:
 	++YYCURSOR;
-#line 1270 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1324 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Tagalog; }
-#line 5331 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5367 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1272 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1326 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Hanunoo:
 	
-#line 5337 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5373 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -5344,9 +5380,9 @@ Hanunoo:
 yy294:
 	++YYCURSOR;
 yy295:
-#line 1277 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1331 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hanunoo; else return Error; }
-#line 5350 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5386 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy296:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -5395,15 +5431,15 @@ yy298:
 	goto yy295;
 yy299:
 	++YYCURSOR;
-#line 1276 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1330 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Hanunoo; }
-#line 5401 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5437 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1278 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1332 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Buhid:
 	
-#line 5407 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5443 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -5414,9 +5450,9 @@ Buhid:
 yy301:
 	++YYCURSOR;
 yy302:
-#line 1283 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1337 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Buhid; else return Error; }
-#line 5420 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5456 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy303:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -5465,15 +5501,15 @@ yy305:
 	goto yy302;
 yy306:
 	++YYCURSOR;
-#line 1282 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1336 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Buhid; }
-#line 5471 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5507 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1284 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1338 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Tagbanwa:
 	
-#line 5477 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5513 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -5484,9 +5520,9 @@ Tagbanwa:
 yy308:
 	++YYCURSOR;
 yy309:
-#line 1289 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1343 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tagbanwa; else return Error; }
-#line 5490 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5526 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy310:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -5535,15 +5571,15 @@ yy312:
 	goto yy309;
 yy313:
 	++YYCURSOR;
-#line 1288 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1342 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Tagbanwa; }
-#line 5541 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5577 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1290 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1344 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Khmer:
 	
-#line 5547 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5583 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -5554,9 +5590,9 @@ Khmer:
 yy315:
 	++YYCURSOR;
 yy316:
-#line 1295 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1349 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Khmer; else return Error; }
-#line 5560 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5596 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy317:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -5638,15 +5674,15 @@ yy319:
 	goto yy316;
 yy320:
 	++YYCURSOR;
-#line 1294 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1348 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Khmer; }
-#line 5644 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5680 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1296 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1350 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Mongolian:
 	
-#line 5650 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5686 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -5657,9 +5693,9 @@ Mongolian:
 yy322:
 	++YYCURSOR;
 yy323:
-#line 1301 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1355 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Mongolian; else return Error; }
-#line 5663 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5699 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy324:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -5795,15 +5831,15 @@ yy327:
 	}
 yy328:
 	++YYCURSOR;
-#line 1300 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1354 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Mongolian; }
-#line 5801 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5837 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1302 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1356 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Unified_Canadian_Aboriginal_Syllabics_Extended:
 	
-#line 5807 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5843 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -5814,9 +5850,9 @@ Unified_Canadian_Aboriginal_Syllabics_Extended:
 yy330:
 	++YYCURSOR;
 yy331:
-#line 1307 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1361 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Unified_Canadian_Aboriginal_Syllabics_Extended; else return Error; }
-#line 5820 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5856 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy332:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -5919,15 +5955,15 @@ yy335:
 	}
 yy336:
 	++YYCURSOR;
-#line 1306 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1360 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Unified_Canadian_Aboriginal_Syllabics_Extended; }
-#line 5925 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5961 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1308 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1362 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Limbu:
 	
-#line 5931 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5967 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -5938,9 +5974,9 @@ Limbu:
 yy338:
 	++YYCURSOR;
 yy339:
-#line 1313 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1367 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Limbu; else return Error; }
-#line 5944 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 5980 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy340:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -6043,15 +6079,15 @@ yy343:
 	}
 yy344:
 	++YYCURSOR;
-#line 1312 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1366 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Limbu; }
-#line 6049 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6085 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1314 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1368 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Tai_Le:
 	
-#line 6055 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6091 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -6062,9 +6098,9 @@ Tai_Le:
 yy346:
 	++YYCURSOR;
 yy347:
-#line 1319 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1373 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tai_Le; else return Error; }
-#line 6068 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6104 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy348:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -6129,15 +6165,15 @@ yy350:
 	goto yy347;
 yy351:
 	++YYCURSOR;
-#line 1318 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1372 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Tai_Le; }
-#line 6135 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6171 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1320 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1374 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 New_Tai_Lue:
 	
-#line 6141 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6177 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -6148,9 +6184,9 @@ New_Tai_Lue:
 yy353:
 	++YYCURSOR;
 yy354:
-#line 1325 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1379 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return New_Tai_Lue; else return Error; }
-#line 6154 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6190 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy355:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -6269,15 +6305,15 @@ yy358:
 	}
 yy359:
 	++YYCURSOR;
-#line 1324 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1378 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto New_Tai_Lue; }
-#line 6275 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6311 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1326 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1380 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Khmer_Symbols:
 	
-#line 6281 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6317 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -6288,9 +6324,9 @@ Khmer_Symbols:
 yy361:
 	++YYCURSOR;
 yy362:
-#line 1331 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1385 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Khmer_Symbols; else return Error; }
-#line 6294 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6330 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy363:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -6339,15 +6375,15 @@ yy365:
 	goto yy362;
 yy366:
 	++YYCURSOR;
-#line 1330 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1384 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Khmer_Symbols; }
-#line 6345 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6381 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1332 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1386 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Buginese:
 	
-#line 6351 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6387 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -6358,9 +6394,9 @@ Buginese:
 yy368:
 	++YYCURSOR;
 yy369:
-#line 1337 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1391 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Buginese; else return Error; }
-#line 6364 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6400 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy370:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -6409,15 +6445,15 @@ yy372:
 	goto yy369;
 yy373:
 	++YYCURSOR;
-#line 1336 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1390 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Buginese; }
-#line 6415 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6451 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1338 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1392 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Tai_Tham:
 	
-#line 6421 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6457 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -6428,9 +6464,9 @@ Tai_Tham:
 yy375:
 	++YYCURSOR;
 yy376:
-#line 1343 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1397 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tai_Tham; else return Error; }
-#line 6434 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6470 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy377:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -6603,15 +6639,15 @@ yy381:
 	}
 yy382:
 	++YYCURSOR;
-#line 1342 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1396 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Tai_Tham; }
-#line 6609 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6645 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1344 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1398 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Combining_Diacritical_Marks_Extended:
 	
-#line 6615 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6651 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -6622,9 +6658,9 @@ Combining_Diacritical_Marks_Extended:
 yy384:
 	++YYCURSOR;
 yy385:
-#line 1349 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1403 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Combining_Diacritical_Marks_Extended; else return Error; }
-#line 6628 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6664 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy386:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -6727,15 +6763,15 @@ yy389:
 	}
 yy390:
 	++YYCURSOR;
-#line 1348 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1402 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Combining_Diacritical_Marks_Extended; }
-#line 6733 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6769 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1350 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1404 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Balinese:
 	
-#line 6739 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6775 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -6746,9 +6782,9 @@ Balinese:
 yy392:
 	++YYCURSOR;
 yy393:
-#line 1355 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1409 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Balinese; else return Error; }
-#line 6752 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6788 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy394:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -6830,15 +6866,15 @@ yy396:
 	goto yy393;
 yy397:
 	++YYCURSOR;
-#line 1354 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1408 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Balinese; }
-#line 6836 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6872 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1356 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1410 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Sundanese:
 	
-#line 6842 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6878 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -6849,9 +6885,9 @@ Sundanese:
 yy399:
 	++YYCURSOR;
 yy400:
-#line 1361 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1415 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Sundanese; else return Error; }
-#line 6855 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6891 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy401:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -6932,15 +6968,15 @@ yy403:
 	goto yy400;
 yy404:
 	++YYCURSOR;
-#line 1360 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1414 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Sundanese; }
-#line 6938 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6974 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1362 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1416 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Batak:
 	
-#line 6944 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6980 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -6951,9 +6987,9 @@ Batak:
 yy406:
 	++YYCURSOR;
 yy407:
-#line 1367 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1421 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Batak; else return Error; }
-#line 6957 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 6993 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy408:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -7034,15 +7070,15 @@ yy410:
 	goto yy407;
 yy411:
 	++YYCURSOR;
-#line 1366 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1420 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Batak; }
-#line 7040 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7076 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1368 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1422 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Lepcha:
 	
-#line 7046 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7082 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -7053,9 +7089,9 @@ Lepcha:
 yy413:
 	++YYCURSOR;
 yy414:
-#line 1373 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1427 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Lepcha; else return Error; }
-#line 7059 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7095 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy415:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -7158,15 +7194,15 @@ yy418:
 	}
 yy419:
 	++YYCURSOR;
-#line 1372 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1426 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Lepcha; }
-#line 7164 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7200 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1374 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1428 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Ol_Chiki:
 	
-#line 7170 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7206 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -7177,9 +7213,9 @@ Ol_Chiki:
 yy421:
 	++YYCURSOR;
 yy422:
-#line 1379 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1433 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ol_Chiki; else return Error; }
-#line 7183 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7219 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy423:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -7244,15 +7280,15 @@ yy425:
 	goto yy422;
 yy426:
 	++YYCURSOR;
-#line 1378 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1432 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Ol_Chiki; }
-#line 7250 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7286 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1380 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1434 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Cyrillic_Extended_C:
 	
-#line 7256 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7292 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -7263,9 +7299,9 @@ Cyrillic_Extended_C:
 yy428:
 	++YYCURSOR;
 yy429:
-#line 1385 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1439 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cyrillic_Extended_C; else return Error; }
-#line 7269 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7305 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy430:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -7298,15 +7334,15 @@ yy432:
 	goto yy429;
 yy433:
 	++YYCURSOR;
-#line 1384 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1438 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Cyrillic_Extended_C; }
-#line 7304 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7340 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1386 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1440 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Georgian_Extended:
 	
-#line 7310 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7346 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -7317,9 +7353,9 @@ Georgian_Extended:
 yy435:
 	++YYCURSOR;
 yy436:
-#line 1391 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1445 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Georgian_Extended; else return Error; }
-#line 7323 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7359 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy437:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -7384,15 +7420,15 @@ yy439:
 	goto yy436;
 yy440:
 	++YYCURSOR;
-#line 1390 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1444 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Georgian_Extended; }
-#line 7390 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7426 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1392 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1446 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Sundanese_Supplement:
 	
-#line 7396 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7432 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -7403,9 +7439,9 @@ Sundanese_Supplement:
 yy442:
 	++YYCURSOR;
 yy443:
-#line 1397 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1451 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Sundanese_Supplement; else return Error; }
-#line 7409 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7445 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy444:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -7438,15 +7474,15 @@ yy446:
 	goto yy443;
 yy447:
 	++YYCURSOR;
-#line 1396 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1450 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Sundanese_Supplement; }
-#line 7444 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7480 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1398 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1452 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Vedic_Extensions:
 	
-#line 7450 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7486 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -7457,9 +7493,9 @@ Vedic_Extensions:
 yy449:
 	++YYCURSOR;
 yy450:
-#line 1403 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1457 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Vedic_Extensions; else return Error; }
-#line 7463 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7499 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy451:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -7524,15 +7560,15 @@ yy453:
 	goto yy450;
 yy454:
 	++YYCURSOR;
-#line 1402 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1456 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Vedic_Extensions; }
-#line 7530 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7566 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1404 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1458 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Phonetic_Extensions:
 	
-#line 7536 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7572 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -7543,9 +7579,9 @@ Phonetic_Extensions:
 yy456:
 	++YYCURSOR;
 yy457:
-#line 1409 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1463 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Phonetic_Extensions; else return Error; }
-#line 7549 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7585 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy458:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -7627,15 +7663,15 @@ yy460:
 	goto yy457;
 yy461:
 	++YYCURSOR;
-#line 1408 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1462 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Phonetic_Extensions; }
-#line 7633 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7669 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1410 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1464 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Phonetic_Extensions_Supplement:
 	
-#line 7639 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7675 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -7646,9 +7682,9 @@ Phonetic_Extensions_Supplement:
 yy463:
 	++YYCURSOR;
 yy464:
-#line 1415 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1469 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Phonetic_Extensions_Supplement; else return Error; }
-#line 7652 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7688 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy465:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -7729,15 +7765,15 @@ yy467:
 	goto yy464;
 yy468:
 	++YYCURSOR;
-#line 1414 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1468 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Phonetic_Extensions_Supplement; }
-#line 7735 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7771 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1416 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1470 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Combining_Diacritical_Marks_Supplement:
 	
-#line 7741 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7777 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -7748,9 +7784,9 @@ Combining_Diacritical_Marks_Supplement:
 yy470:
 	++YYCURSOR;
 yy471:
-#line 1421 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1475 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Combining_Diacritical_Marks_Supplement; else return Error; }
-#line 7754 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7790 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy472:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -7831,15 +7867,15 @@ yy474:
 	goto yy471;
 yy475:
 	++YYCURSOR;
-#line 1420 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1474 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Combining_Diacritical_Marks_Supplement; }
-#line 7837 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7873 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1422 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1476 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Latin_Extended_Additional:
 	
-#line 7843 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7879 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -7850,9 +7886,9 @@ Latin_Extended_Additional:
 yy477:
 	++YYCURSOR;
 yy478:
-#line 1427 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1481 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Latin_Extended_Additional; else return Error; }
-#line 7856 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7892 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy479:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -7936,15 +7972,15 @@ yy481:
 	goto yy478;
 yy482:
 	++YYCURSOR;
-#line 1426 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1480 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Latin_Extended_Additional; }
-#line 7942 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7978 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1428 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1482 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Greek_Extended:
 	
-#line 7948 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7984 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -7955,9 +7991,9 @@ Greek_Extended:
 yy484:
 	++YYCURSOR;
 yy485:
-#line 1433 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1487 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Greek_Extended; else return Error; }
-#line 7961 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 7997 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy486:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -8041,15 +8077,15 @@ yy488:
 	goto yy485;
 yy489:
 	++YYCURSOR;
-#line 1432 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1486 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Greek_Extended; }
-#line 8047 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8083 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1434 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1488 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 General_Punctuation:
 	
-#line 8053 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8089 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -8060,9 +8096,9 @@ General_Punctuation:
 yy491:
 	++YYCURSOR;
 yy492:
-#line 1439 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1493 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return General_Punctuation; else return Error; }
-#line 8066 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8102 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy493:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -8197,15 +8233,15 @@ yy496:
 	}
 yy497:
 	++YYCURSOR;
-#line 1438 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1492 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto General_Punctuation; }
-#line 8203 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8239 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1440 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1494 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Superscripts_and_Subscripts:
 	
-#line 8209 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8245 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -8216,9 +8252,9 @@ Superscripts_and_Subscripts:
 yy499:
 	++YYCURSOR;
 yy500:
-#line 1445 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1499 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Superscripts_and_Subscripts; else return Error; }
-#line 8222 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8258 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy501:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -8289,15 +8325,15 @@ yy504:
 	}
 yy505:
 	++YYCURSOR;
-#line 1444 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1498 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Superscripts_and_Subscripts; }
-#line 8295 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8331 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1446 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1500 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Currency_Symbols:
 	
-#line 8301 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8337 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -8308,9 +8344,9 @@ Currency_Symbols:
 yy507:
 	++YYCURSOR;
 yy508:
-#line 1451 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1505 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Currency_Symbols; else return Error; }
-#line 8314 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8350 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy509:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -8381,15 +8417,15 @@ yy512:
 	}
 yy513:
 	++YYCURSOR;
-#line 1450 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1504 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Currency_Symbols; }
-#line 8387 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8423 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1452 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1506 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Combining_Diacritical_Marks_for_Symbols:
 	
-#line 8393 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8429 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -8400,9 +8436,9 @@ Combining_Diacritical_Marks_for_Symbols:
 yy515:
 	++YYCURSOR;
 yy516:
-#line 1457 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1511 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Combining_Diacritical_Marks_for_Symbols; else return Error; }
-#line 8406 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8442 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy517:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -8467,15 +8503,15 @@ yy519:
 	goto yy516;
 yy520:
 	++YYCURSOR;
-#line 1456 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1510 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Combining_Diacritical_Marks_for_Symbols; }
-#line 8473 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8509 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1458 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1512 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Letterlike_Symbols:
 	
-#line 8479 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8515 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -8486,9 +8522,9 @@ Letterlike_Symbols:
 yy522:
 	++YYCURSOR;
 yy523:
-#line 1463 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1517 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Letterlike_Symbols; else return Error; }
-#line 8492 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8528 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy524:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -8591,15 +8627,15 @@ yy527:
 	}
 yy528:
 	++YYCURSOR;
-#line 1462 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1516 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Letterlike_Symbols; }
-#line 8597 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8633 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1464 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1518 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Number_Forms:
 	
-#line 8603 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8639 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -8610,9 +8646,9 @@ Number_Forms:
 yy530:
 	++YYCURSOR;
 yy531:
-#line 1469 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1523 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Number_Forms; else return Error; }
-#line 8616 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8652 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy532:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -8699,15 +8735,15 @@ yy535:
 	}
 yy536:
 	++YYCURSOR;
-#line 1468 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1522 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Number_Forms; }
-#line 8705 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8741 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1470 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1524 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Arrows:
 	
-#line 8711 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8747 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -8718,9 +8754,9 @@ Arrows:
 yy538:
 	++YYCURSOR;
 yy539:
-#line 1475 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1529 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Arrows; else return Error; }
-#line 8724 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8760 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy540:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -8855,15 +8891,15 @@ yy543:
 	}
 yy544:
 	++YYCURSOR;
-#line 1474 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1528 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Arrows; }
-#line 8861 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8897 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1476 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1530 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Mathematical_Operators:
 	
-#line 8867 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8903 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -8874,9 +8910,9 @@ Mathematical_Operators:
 yy546:
 	++YYCURSOR;
 yy547:
-#line 1481 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1535 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Mathematical_Operators; else return Error; }
-#line 8880 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 8916 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy548:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -8960,15 +8996,15 @@ yy550:
 	goto yy547;
 yy551:
 	++YYCURSOR;
-#line 1480 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1534 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Mathematical_Operators; }
-#line 8966 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9002 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1482 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1536 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Miscellaneous_Technical:
 	
-#line 8972 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9008 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -8979,9 +9015,9 @@ Miscellaneous_Technical:
 yy553:
 	++YYCURSOR;
 yy554:
-#line 1487 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1541 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Technical; else return Error; }
-#line 8985 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9021 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy555:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -9065,15 +9101,15 @@ yy557:
 	goto yy554;
 yy558:
 	++YYCURSOR;
-#line 1486 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1540 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Miscellaneous_Technical; }
-#line 9071 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9107 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1488 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1542 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Control_Pictures:
 	
-#line 9077 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9113 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -9084,9 +9120,9 @@ Control_Pictures:
 yy560:
 	++YYCURSOR;
 yy561:
-#line 1493 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1547 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Control_Pictures; else return Error; }
-#line 9090 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9126 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy562:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -9167,15 +9203,15 @@ yy564:
 	goto yy561;
 yy565:
 	++YYCURSOR;
-#line 1492 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1546 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Control_Pictures; }
-#line 9173 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9209 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1494 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1548 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Optical_Character_Recognition:
 	
-#line 9179 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9215 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -9186,9 +9222,9 @@ Optical_Character_Recognition:
 yy567:
 	++YYCURSOR;
 yy568:
-#line 1499 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1553 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Optical_Character_Recognition; else return Error; }
-#line 9192 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9228 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy569:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -9237,15 +9273,15 @@ yy571:
 	goto yy568;
 yy572:
 	++YYCURSOR;
-#line 1498 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1552 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Optical_Character_Recognition; }
-#line 9243 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9279 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1500 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1554 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Enclosed_Alphanumerics:
 	
-#line 9249 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9285 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -9256,9 +9292,9 @@ Enclosed_Alphanumerics:
 yy574:
 	++YYCURSOR;
 yy575:
-#line 1505 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1559 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Enclosed_Alphanumerics; else return Error; }
-#line 9262 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9298 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy576:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -9378,15 +9414,15 @@ yy579:
 	}
 yy580:
 	++YYCURSOR;
-#line 1504 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1558 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Enclosed_Alphanumerics; }
-#line 9384 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9420 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1506 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1560 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Box_Drawing:
 	
-#line 9390 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9426 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -9397,9 +9433,9 @@ Box_Drawing:
 yy582:
 	++YYCURSOR;
 yy583:
-#line 1511 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1565 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Box_Drawing; else return Error; }
-#line 9403 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9439 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy584:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -9481,15 +9517,15 @@ yy586:
 	goto yy583;
 yy587:
 	++YYCURSOR;
-#line 1510 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1564 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Box_Drawing; }
-#line 9487 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9523 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1512 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1566 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Block_Elements:
 	
-#line 9493 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9529 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -9500,9 +9536,9 @@ Block_Elements:
 yy589:
 	++YYCURSOR;
 yy590:
-#line 1517 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1571 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Block_Elements; else return Error; }
-#line 9506 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9542 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy591:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -9551,15 +9587,15 @@ yy593:
 	goto yy590;
 yy594:
 	++YYCURSOR;
-#line 1516 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1570 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Block_Elements; }
-#line 9557 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9593 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1518 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1572 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Geometric_Shapes:
 	
-#line 9563 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9599 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -9570,9 +9606,9 @@ Geometric_Shapes:
 yy596:
 	++YYCURSOR;
 yy597:
-#line 1523 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1577 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Geometric_Shapes; else return Error; }
-#line 9576 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9612 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy598:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -9691,15 +9727,15 @@ yy601:
 	}
 yy602:
 	++YYCURSOR;
-#line 1522 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1576 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Geometric_Shapes; }
-#line 9697 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9733 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1524 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1578 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Miscellaneous_Symbols:
 	
-#line 9703 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9739 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -9710,9 +9746,9 @@ Miscellaneous_Symbols:
 yy604:
 	++YYCURSOR;
 yy605:
-#line 1529 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1583 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Symbols; else return Error; }
-#line 9716 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9752 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy606:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -9796,15 +9832,15 @@ yy608:
 	goto yy605;
 yy609:
 	++YYCURSOR;
-#line 1528 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1582 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Miscellaneous_Symbols; }
-#line 9802 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9838 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1530 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1584 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Dingbats:
 	
-#line 9808 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9844 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -9815,9 +9851,9 @@ Dingbats:
 yy611:
 	++YYCURSOR;
 yy612:
-#line 1535 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1589 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Dingbats; else return Error; }
-#line 9821 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9857 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy613:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -9900,15 +9936,15 @@ yy615:
 	goto yy612;
 yy616:
 	++YYCURSOR;
-#line 1534 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1588 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Dingbats; }
-#line 9906 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9942 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1536 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1590 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Miscellaneous_Mathematical_Symbols_A:
 	
-#line 9912 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9948 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -9919,9 +9955,9 @@ Miscellaneous_Mathematical_Symbols_A:
 yy618:
 	++YYCURSOR;
 yy619:
-#line 1541 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1595 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Mathematical_Symbols_A; else return Error; }
-#line 9925 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 9961 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy620:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -9986,15 +10022,15 @@ yy622:
 	goto yy619;
 yy623:
 	++YYCURSOR;
-#line 1540 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1594 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Miscellaneous_Mathematical_Symbols_A; }
-#line 9992 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10028 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1542 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1596 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Supplemental_Arrows_A:
 	
-#line 9998 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10034 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -10005,9 +10041,9 @@ Supplemental_Arrows_A:
 yy625:
 	++YYCURSOR;
 yy626:
-#line 1547 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1601 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Supplemental_Arrows_A; else return Error; }
-#line 10011 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10047 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy627:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -10040,15 +10076,15 @@ yy629:
 	goto yy626;
 yy630:
 	++YYCURSOR;
-#line 1546 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1600 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Supplemental_Arrows_A; }
-#line 10046 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10082 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1548 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1602 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Braille_Patterns:
 	
-#line 10052 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10088 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -10059,9 +10095,9 @@ Braille_Patterns:
 yy632:
 	++YYCURSOR;
 yy633:
-#line 1553 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1607 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Braille_Patterns; else return Error; }
-#line 10065 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10101 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy634:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -10145,15 +10181,15 @@ yy636:
 	goto yy633;
 yy637:
 	++YYCURSOR;
-#line 1552 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1606 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Braille_Patterns; }
-#line 10151 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10187 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1554 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1608 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Supplemental_Arrows_B:
 	
-#line 10157 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10193 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -10164,9 +10200,9 @@ Supplemental_Arrows_B:
 yy639:
 	++YYCURSOR;
 yy640:
-#line 1559 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1613 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Supplemental_Arrows_B; else return Error; }
-#line 10170 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10206 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy641:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -10248,15 +10284,15 @@ yy643:
 	goto yy640;
 yy644:
 	++YYCURSOR;
-#line 1558 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1612 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Supplemental_Arrows_B; }
-#line 10254 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10290 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1560 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1614 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Miscellaneous_Mathematical_Symbols_B:
 	
-#line 10260 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10296 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -10267,9 +10303,9 @@ Miscellaneous_Mathematical_Symbols_B:
 yy646:
 	++YYCURSOR;
 yy647:
-#line 1565 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1619 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Mathematical_Symbols_B; else return Error; }
-#line 10273 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10309 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy648:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -10351,15 +10387,15 @@ yy650:
 	goto yy647;
 yy651:
 	++YYCURSOR;
-#line 1564 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1618 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Miscellaneous_Mathematical_Symbols_B; }
-#line 10357 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10393 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1566 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1620 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Supplemental_Mathematical_Operators:
 	
-#line 10363 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10399 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -10370,9 +10406,9 @@ Supplemental_Mathematical_Operators:
 yy653:
 	++YYCURSOR;
 yy654:
-#line 1571 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1625 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Supplemental_Mathematical_Operators; else return Error; }
-#line 10376 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10412 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy655:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -10456,15 +10492,15 @@ yy657:
 	goto yy654;
 yy658:
 	++YYCURSOR;
-#line 1570 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1624 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Supplemental_Mathematical_Operators; }
-#line 10462 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10498 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1572 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1626 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Miscellaneous_Symbols_and_Arrows:
 	
-#line 10468 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10504 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -10475,9 +10511,9 @@ Miscellaneous_Symbols_and_Arrows:
 yy660:
 	++YYCURSOR;
 yy661:
-#line 1577 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1631 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Symbols_and_Arrows; else return Error; }
-#line 10481 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10517 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy662:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -10561,15 +10597,15 @@ yy664:
 	goto yy661;
 yy665:
 	++YYCURSOR;
-#line 1576 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1630 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Miscellaneous_Symbols_and_Arrows; }
-#line 10567 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10603 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1578 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1632 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Glagolitic:
 	
-#line 10573 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10609 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -10580,9 +10616,9 @@ Glagolitic:
 yy667:
 	++YYCURSOR;
 yy668:
-#line 1583 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1637 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Glagolitic; else return Error; }
-#line 10586 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10622 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy669:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -10701,15 +10737,15 @@ yy672:
 	}
 yy673:
 	++YYCURSOR;
-#line 1582 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1636 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Glagolitic; }
-#line 10707 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10743 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1584 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1638 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Latin_Extended_C:
 	
-#line 10713 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10749 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -10720,9 +10756,9 @@ Latin_Extended_C:
 yy675:
 	++YYCURSOR;
 yy676:
-#line 1589 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1643 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Latin_Extended_C; else return Error; }
-#line 10726 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10762 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy677:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -10771,15 +10807,15 @@ yy679:
 	goto yy676;
 yy680:
 	++YYCURSOR;
-#line 1588 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1642 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Latin_Extended_C; }
-#line 10777 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10813 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1590 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1644 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Coptic:
 	
-#line 10783 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10819 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -10790,9 +10826,9 @@ Coptic:
 yy682:
 	++YYCURSOR;
 yy683:
-#line 1595 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1649 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Coptic; else return Error; }
-#line 10796 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10832 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy684:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -10874,15 +10910,15 @@ yy686:
 	goto yy683;
 yy687:
 	++YYCURSOR;
-#line 1594 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1648 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Coptic; }
-#line 10880 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10916 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1596 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1650 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Georgian_Supplement:
 	
-#line 10886 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10922 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -10893,9 +10929,9 @@ Georgian_Supplement:
 yy689:
 	++YYCURSOR;
 yy690:
-#line 1601 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1655 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Georgian_Supplement; else return Error; }
-#line 10899 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 10935 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy691:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -10960,15 +10996,15 @@ yy693:
 	goto yy690;
 yy694:
 	++YYCURSOR;
-#line 1600 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1654 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Georgian_Supplement; }
-#line 10966 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11002 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1602 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1656 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Tifinagh:
 	
-#line 10972 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11008 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -10979,9 +11015,9 @@ Tifinagh:
 yy696:
 	++YYCURSOR;
 yy697:
-#line 1607 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1661 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tifinagh; else return Error; }
-#line 10985 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11021 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy698:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -11084,15 +11120,15 @@ yy701:
 	}
 yy702:
 	++YYCURSOR;
-#line 1606 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1660 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Tifinagh; }
-#line 11090 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11126 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1608 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1662 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Ethiopic_Extended:
 	
-#line 11096 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11132 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -11103,9 +11139,9 @@ Ethiopic_Extended:
 yy704:
 	++YYCURSOR;
 yy705:
-#line 1613 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1667 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ethiopic_Extended; else return Error; }
-#line 11109 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11145 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy706:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -11224,15 +11260,15 @@ yy709:
 	}
 yy710:
 	++YYCURSOR;
-#line 1612 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1666 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Ethiopic_Extended; }
-#line 11230 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11266 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1614 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1668 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Cyrillic_Extended_A:
 	
-#line 11236 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11272 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -11243,9 +11279,9 @@ Cyrillic_Extended_A:
 yy712:
 	++YYCURSOR;
 yy713:
-#line 1619 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1673 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cyrillic_Extended_A; else return Error; }
-#line 11249 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11285 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy714:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -11294,15 +11330,15 @@ yy716:
 	goto yy713;
 yy717:
 	++YYCURSOR;
-#line 1618 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1672 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Cyrillic_Extended_A; }
-#line 11300 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11336 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1620 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1674 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Supplemental_Punctuation:
 	
-#line 11306 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11342 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -11313,9 +11349,9 @@ Supplemental_Punctuation:
 yy719:
 	++YYCURSOR;
 yy720:
-#line 1625 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1679 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Supplemental_Punctuation; else return Error; }
-#line 11319 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11355 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy721:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -11397,15 +11433,15 @@ yy723:
 	goto yy720;
 yy724:
 	++YYCURSOR;
-#line 1624 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1678 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Supplemental_Punctuation; }
-#line 11403 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11439 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1626 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1680 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 CJK_Radicals_Supplement:
 	
-#line 11409 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11445 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -11416,9 +11452,9 @@ CJK_Radicals_Supplement:
 yy726:
 	++YYCURSOR;
 yy727:
-#line 1631 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1685 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Radicals_Supplement; else return Error; }
-#line 11422 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11458 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy728:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -11500,15 +11536,15 @@ yy730:
 	goto yy727;
 yy731:
 	++YYCURSOR;
-#line 1630 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1684 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto CJK_Radicals_Supplement; }
-#line 11506 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11542 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1632 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1686 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Kangxi_Radicals:
 	
-#line 11512 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11548 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -11519,9 +11555,9 @@ Kangxi_Radicals:
 yy733:
 	++YYCURSOR;
 yy734:
-#line 1637 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1691 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Kangxi_Radicals; else return Error; }
-#line 11525 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11561 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy735:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -11642,15 +11678,15 @@ yy738:
 	}
 yy739:
 	++YYCURSOR;
-#line 1636 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1690 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Kangxi_Radicals; }
-#line 11648 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11684 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1638 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1692 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Ideographic_Description_Characters:
 	
-#line 11654 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11690 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -11661,9 +11697,9 @@ Ideographic_Description_Characters:
 yy741:
 	++YYCURSOR;
 yy742:
-#line 1643 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1697 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ideographic_Description_Characters; else return Error; }
-#line 11667 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11703 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy743:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -11696,15 +11732,15 @@ yy745:
 	goto yy742;
 yy746:
 	++YYCURSOR;
-#line 1642 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1696 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Ideographic_Description_Characters; }
-#line 11702 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11738 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1644 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1698 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 CJK_Symbols_and_Punctuation:
 	
-#line 11708 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11744 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -11715,9 +11751,9 @@ CJK_Symbols_and_Punctuation:
 yy748:
 	++YYCURSOR;
 yy749:
-#line 1649 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1703 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Symbols_and_Punctuation; else return Error; }
-#line 11721 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11757 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy750:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -11798,15 +11834,15 @@ yy752:
 	goto yy749;
 yy753:
 	++YYCURSOR;
-#line 1648 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1702 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto CJK_Symbols_and_Punctuation; }
-#line 11804 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11840 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1650 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1704 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Hiragana:
 	
-#line 11810 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11846 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -11817,9 +11853,9 @@ Hiragana:
 yy755:
 	++YYCURSOR;
 yy756:
-#line 1655 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1709 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hiragana; else return Error; }
-#line 11823 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11859 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy757:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -11938,15 +11974,15 @@ yy760:
 	}
 yy761:
 	++YYCURSOR;
-#line 1654 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1708 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Hiragana; }
-#line 11944 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11980 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1656 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1710 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Katakana:
 	
-#line 11950 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11986 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -11957,9 +11993,9 @@ Katakana:
 yy763:
 	++YYCURSOR;
 yy764:
-#line 1661 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1715 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Katakana; else return Error; }
-#line 11963 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 11999 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy765:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12078,15 +12114,15 @@ yy768:
 	}
 yy769:
 	++YYCURSOR;
-#line 1660 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1714 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Katakana; }
-#line 12084 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12120 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1662 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1716 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Bopomofo:
 	
-#line 12090 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12126 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -12097,9 +12133,9 @@ Bopomofo:
 yy771:
 	++YYCURSOR;
 yy772:
-#line 1667 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1721 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Bopomofo; else return Error; }
-#line 12103 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12139 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy773:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12164,15 +12200,15 @@ yy775:
 	goto yy772;
 yy776:
 	++YYCURSOR;
-#line 1666 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1720 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Bopomofo; }
-#line 12170 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12206 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1668 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1722 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Hangul_Compatibility_Jamo:
 	
-#line 12176 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12212 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -12183,9 +12219,9 @@ Hangul_Compatibility_Jamo:
 yy778:
 	++YYCURSOR;
 yy779:
-#line 1673 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1727 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hangul_Compatibility_Jamo; else return Error; }
-#line 12189 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12225 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy780:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12310,15 +12346,15 @@ yy784:
 	}
 yy785:
 	++YYCURSOR;
-#line 1672 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1726 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Hangul_Compatibility_Jamo; }
-#line 12316 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12352 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1674 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1728 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Kanbun:
 	
-#line 12322 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12358 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -12329,9 +12365,9 @@ Kanbun:
 yy787:
 	++YYCURSOR;
 yy788:
-#line 1679 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1733 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Kanbun; else return Error; }
-#line 12335 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12371 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy789:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12364,15 +12400,15 @@ yy791:
 	goto yy788;
 yy792:
 	++YYCURSOR;
-#line 1678 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1732 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Kanbun; }
-#line 12370 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12406 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1680 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1734 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Bopomofo_Extended:
 	
-#line 12376 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12412 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -12383,9 +12419,9 @@ Bopomofo_Extended:
 yy794:
 	++YYCURSOR;
 yy795:
-#line 1685 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1739 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Bopomofo_Extended; else return Error; }
-#line 12389 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12425 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy796:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12434,15 +12470,15 @@ yy798:
 	goto yy795;
 yy799:
 	++YYCURSOR;
-#line 1684 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1738 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Bopomofo_Extended; }
-#line 12440 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12476 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1686 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1740 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 CJK_Strokes:
 	
-#line 12446 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12482 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -12453,9 +12489,9 @@ CJK_Strokes:
 yy801:
 	++YYCURSOR;
 yy802:
-#line 1691 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1745 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Strokes; else return Error; }
-#line 12459 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12495 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy803:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12520,15 +12556,15 @@ yy805:
 	goto yy802;
 yy806:
 	++YYCURSOR;
-#line 1690 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1744 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto CJK_Strokes; }
-#line 12526 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12562 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1692 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1746 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Katakana_Phonetic_Extensions:
 	
-#line 12532 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12568 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -12539,9 +12575,9 @@ Katakana_Phonetic_Extensions:
 yy808:
 	++YYCURSOR;
 yy809:
-#line 1697 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1751 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Katakana_Phonetic_Extensions; else return Error; }
-#line 12545 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12581 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy810:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12574,15 +12610,15 @@ yy812:
 	goto yy809;
 yy813:
 	++YYCURSOR;
-#line 1696 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1750 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Katakana_Phonetic_Extensions; }
-#line 12580 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12616 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1698 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1752 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Enclosed_CJK_Letters_and_Months:
 	
-#line 12586 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12622 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -12593,9 +12629,9 @@ Enclosed_CJK_Letters_and_Months:
 yy815:
 	++YYCURSOR;
 yy816:
-#line 1703 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1757 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Enclosed_CJK_Letters_and_Months; else return Error; }
-#line 12599 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12635 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy817:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12679,15 +12715,15 @@ yy819:
 	goto yy816;
 yy820:
 	++YYCURSOR;
-#line 1702 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1756 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Enclosed_CJK_Letters_and_Months; }
-#line 12685 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12721 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1704 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1758 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 CJK_Compatibility:
 	
-#line 12691 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12727 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -12698,9 +12734,9 @@ CJK_Compatibility:
 yy822:
 	++YYCURSOR;
 yy823:
-#line 1709 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1763 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Compatibility; else return Error; }
-#line 12704 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12740 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy824:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12784,15 +12820,15 @@ yy826:
 	goto yy823;
 yy827:
 	++YYCURSOR;
-#line 1708 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1762 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto CJK_Compatibility; }
-#line 12790 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12826 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1710 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1764 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 CJK_Unified_Ideographs_Extension_A:
 	
-#line 12796 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12832 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -12804,9 +12840,9 @@ CJK_Unified_Ideographs_Extension_A:
 yy829:
 	++YYCURSOR;
 yy830:
-#line 1715 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1769 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_A; else return Error; }
-#line 12810 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 12846 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy831:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12994,15 +13030,15 @@ yy834:
 	goto yy830;
 yy835:
 	++YYCURSOR;
-#line 1714 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1768 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto CJK_Unified_Ideographs_Extension_A; }
-#line 13000 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13036 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1716 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1770 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Yijing_Hexagram_Symbols:
 	
-#line 13006 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13042 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -13013,9 +13049,9 @@ Yijing_Hexagram_Symbols:
 yy837:
 	++YYCURSOR;
 yy838:
-#line 1721 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1775 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Yijing_Hexagram_Symbols; else return Error; }
-#line 13019 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13055 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy839:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -13096,15 +13132,15 @@ yy841:
 	goto yy838;
 yy842:
 	++YYCURSOR;
-#line 1720 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1774 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Yijing_Hexagram_Symbols; }
-#line 13102 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13138 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1722 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1776 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 CJK_Unified_Ideographs:
 	
-#line 13108 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13144 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -13120,9 +13156,9 @@ CJK_Unified_Ideographs:
 yy844:
 	++YYCURSOR;
 yy845:
-#line 1727 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1781 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs; else return Error; }
-#line 13126 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13162 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy846:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -13279,15 +13315,15 @@ yy849:
 	goto yy845;
 yy850:
 	++YYCURSOR;
-#line 1726 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1780 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto CJK_Unified_Ideographs; }
-#line 13285 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13321 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1728 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1782 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Yi_Syllables:
 	
-#line 13291 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13327 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -13298,9 +13334,9 @@ Yi_Syllables:
 yy852:
 	++YYCURSOR;
 yy853:
-#line 1733 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1787 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Yi_Syllables; else return Error; }
-#line 13304 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13340 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy854:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -13420,15 +13456,15 @@ yy857:
 	}
 yy858:
 	++YYCURSOR;
-#line 1732 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1786 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Yi_Syllables; }
-#line 13426 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13462 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1734 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1788 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Yi_Radicals:
 	
-#line 13432 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13468 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -13439,9 +13475,9 @@ Yi_Radicals:
 yy860:
 	++YYCURSOR;
 yy861:
-#line 1739 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1793 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Yi_Radicals; else return Error; }
-#line 13445 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13481 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy862:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -13528,15 +13564,15 @@ yy865:
 	}
 yy866:
 	++YYCURSOR;
-#line 1738 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1792 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Yi_Radicals; }
-#line 13534 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13570 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1740 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1794 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Lisu:
 	
-#line 13540 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13576 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -13547,9 +13583,9 @@ Lisu:
 yy868:
 	++YYCURSOR;
 yy869:
-#line 1745 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1799 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Lisu; else return Error; }
-#line 13553 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13589 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy870:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -13614,15 +13650,15 @@ yy872:
 	goto yy869;
 yy873:
 	++YYCURSOR;
-#line 1744 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1798 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Lisu; }
-#line 13620 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13656 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1746 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1800 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Vai:
 	
-#line 13626 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13662 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -13633,9 +13669,9 @@ Vai:
 yy875:
 	++YYCURSOR;
 yy876:
-#line 1751 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1805 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Vai; else return Error; }
-#line 13639 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13675 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy877:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -13720,15 +13756,15 @@ yy879:
 	goto yy876;
 yy880:
 	++YYCURSOR;
-#line 1750 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1804 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Vai; }
-#line 13726 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13762 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1752 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1806 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Cyrillic_Extended_B:
 	
-#line 13732 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13768 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -13739,9 +13775,9 @@ Cyrillic_Extended_B:
 yy882:
 	++YYCURSOR;
 yy883:
-#line 1757 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1811 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cyrillic_Extended_B; else return Error; }
-#line 13745 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13781 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy884:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -13860,15 +13896,15 @@ yy887:
 	}
 yy888:
 	++YYCURSOR;
-#line 1756 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1810 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Cyrillic_Extended_B; }
-#line 13866 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13902 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1758 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1812 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Bamum:
 	
-#line 13872 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13908 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -13879,9 +13915,9 @@ Bamum:
 yy890:
 	++YYCURSOR;
 yy891:
-#line 1763 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1817 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Bamum; else return Error; }
-#line 13885 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 13921 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy892:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -14000,15 +14036,15 @@ yy895:
 	}
 yy896:
 	++YYCURSOR;
-#line 1762 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1816 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Bamum; }
-#line 14006 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14042 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1764 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1818 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Modifier_Tone_Letters:
 	
-#line 14012 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14048 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -14019,9 +14055,9 @@ Modifier_Tone_Letters:
 yy898:
 	++YYCURSOR;
 yy899:
-#line 1769 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1823 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Modifier_Tone_Letters; else return Error; }
-#line 14025 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14061 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy900:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -14070,15 +14106,15 @@ yy902:
 	goto yy899;
 yy903:
 	++YYCURSOR;
-#line 1768 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1822 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Modifier_Tone_Letters; }
-#line 14076 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14112 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1770 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1824 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Latin_Extended_D:
 	
-#line 14082 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14118 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -14089,9 +14125,9 @@ Latin_Extended_D:
 yy905:
 	++YYCURSOR;
 yy906:
-#line 1775 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1829 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Latin_Extended_D; else return Error; }
-#line 14095 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14131 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy907:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -14212,15 +14248,15 @@ yy910:
 	}
 yy911:
 	++YYCURSOR;
-#line 1774 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1828 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Latin_Extended_D; }
-#line 14218 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14254 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1776 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1830 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Syloti_Nagri:
 	
-#line 14224 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14260 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -14231,9 +14267,9 @@ Syloti_Nagri:
 yy913:
 	++YYCURSOR;
 yy914:
-#line 1781 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1835 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Syloti_Nagri; else return Error; }
-#line 14237 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14273 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy915:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -14298,15 +14334,15 @@ yy917:
 	goto yy914;
 yy918:
 	++YYCURSOR;
-#line 1780 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1834 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Syloti_Nagri; }
-#line 14304 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14340 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1782 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1836 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Common_Indic_Number_Forms:
 	
-#line 14310 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14346 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -14317,9 +14353,9 @@ Common_Indic_Number_Forms:
 yy920:
 	++YYCURSOR;
 yy921:
-#line 1787 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1841 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Common_Indic_Number_Forms; else return Error; }
-#line 14323 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14359 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy922:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -14352,15 +14388,15 @@ yy924:
 	goto yy921;
 yy925:
 	++YYCURSOR;
-#line 1786 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1840 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Common_Indic_Number_Forms; }
-#line 14358 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14394 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1788 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1842 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Phags_pa:
 	
-#line 14364 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14400 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -14371,9 +14407,9 @@ Phags_pa:
 yy927:
 	++YYCURSOR;
 yy928:
-#line 1793 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1847 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Phags_pa; else return Error; }
-#line 14377 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14413 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy929:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -14454,15 +14490,15 @@ yy931:
 	goto yy928;
 yy932:
 	++YYCURSOR;
-#line 1792 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1846 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Phags_pa; }
-#line 14460 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14496 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1794 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1848 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Saurashtra:
 	
-#line 14466 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14502 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -14473,9 +14509,9 @@ Saurashtra:
 yy934:
 	++YYCURSOR;
 yy935:
-#line 1799 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1853 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Saurashtra; else return Error; }
-#line 14479 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14515 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy936:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -14594,15 +14630,15 @@ yy939:
 	}
 yy940:
 	++YYCURSOR;
-#line 1798 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1852 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Saurashtra; }
-#line 14600 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14636 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1800 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1854 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Devanagari_Extended:
 	
-#line 14606 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14642 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -14613,9 +14649,9 @@ Devanagari_Extended:
 yy942:
 	++YYCURSOR;
 yy943:
-#line 1805 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1859 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Devanagari_Extended; else return Error; }
-#line 14619 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14655 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy944:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -14664,15 +14700,15 @@ yy946:
 	goto yy943;
 yy947:
 	++YYCURSOR;
-#line 1804 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1858 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Devanagari_Extended; }
-#line 14670 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14706 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1806 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1860 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Kayah_Li:
 	
-#line 14676 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14712 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -14683,9 +14719,9 @@ Kayah_Li:
 yy949:
 	++YYCURSOR;
 yy950:
-#line 1811 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1865 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Kayah_Li; else return Error; }
-#line 14689 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14725 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy951:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -14750,15 +14786,15 @@ yy953:
 	goto yy950;
 yy954:
 	++YYCURSOR;
-#line 1810 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1864 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Kayah_Li; }
-#line 14756 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14792 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1812 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1866 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Rejang:
 	
-#line 14762 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14798 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -14769,9 +14805,9 @@ Rejang:
 yy956:
 	++YYCURSOR;
 yy957:
-#line 1817 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1871 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Rejang; else return Error; }
-#line 14775 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14811 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy958:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -14842,15 +14878,15 @@ yy961:
 	}
 yy962:
 	++YYCURSOR;
-#line 1816 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1870 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Rejang; }
-#line 14848 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14884 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1818 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1872 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Hangul_Jamo_Extended_A:
 	
-#line 14854 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14890 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -14861,9 +14897,9 @@ Hangul_Jamo_Extended_A:
 yy964:
 	++YYCURSOR;
 yy965:
-#line 1823 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1877 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hangul_Jamo_Extended_A; else return Error; }
-#line 14867 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14903 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy966:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -14912,15 +14948,15 @@ yy968:
 	goto yy965;
 yy969:
 	++YYCURSOR;
-#line 1822 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1876 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Hangul_Jamo_Extended_A; }
-#line 14918 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14954 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1824 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1878 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Javanese:
 	
-#line 14924 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14960 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -14931,9 +14967,9 @@ Javanese:
 yy971:
 	++YYCURSOR;
 yy972:
-#line 1829 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1883 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Javanese; else return Error; }
-#line 14937 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 14973 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy973:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -15052,15 +15088,15 @@ yy976:
 	}
 yy977:
 	++YYCURSOR;
-#line 1828 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1882 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Javanese; }
-#line 15058 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15094 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1830 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1884 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Myanmar_Extended_B:
 	
-#line 15064 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15100 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -15071,9 +15107,9 @@ Myanmar_Extended_B:
 yy979:
 	++YYCURSOR;
 yy980:
-#line 1835 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1889 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Myanmar_Extended_B; else return Error; }
-#line 15077 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15113 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy981:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -15122,15 +15158,15 @@ yy983:
 	goto yy980;
 yy984:
 	++YYCURSOR;
-#line 1834 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1888 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Myanmar_Extended_B; }
-#line 15128 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15164 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1836 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1890 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Cham:
 	
-#line 15134 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15170 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -15141,9 +15177,9 @@ Cham:
 yy986:
 	++YYCURSOR;
 yy987:
-#line 1841 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1895 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cham; else return Error; }
-#line 15147 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15183 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy988:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -15262,15 +15298,15 @@ yy991:
 	}
 yy992:
 	++YYCURSOR;
-#line 1840 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1894 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Cham; }
-#line 15268 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15304 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1842 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1896 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Myanmar_Extended_A:
 	
-#line 15274 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15310 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -15281,9 +15317,9 @@ Myanmar_Extended_A:
 yy994:
 	++YYCURSOR;
 yy995:
-#line 1847 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1901 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Myanmar_Extended_A; else return Error; }
-#line 15287 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15323 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy996:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -15332,15 +15368,15 @@ yy998:
 	goto yy995;
 yy999:
 	++YYCURSOR;
-#line 1846 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1900 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Myanmar_Extended_A; }
-#line 15338 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15374 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1848 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1902 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Tai_Viet:
 	
-#line 15344 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15380 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -15351,9 +15387,9 @@ Tai_Viet:
 yy1001:
 	++YYCURSOR;
 yy1002:
-#line 1853 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1907 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tai_Viet; else return Error; }
-#line 15357 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15393 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1003:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -15472,15 +15508,15 @@ yy1006:
 	}
 yy1007:
 	++YYCURSOR;
-#line 1852 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1906 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Tai_Viet; }
-#line 15478 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15514 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1854 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1908 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Meetei_Mayek_Extensions:
 	
-#line 15484 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15520 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -15491,9 +15527,9 @@ Meetei_Mayek_Extensions:
 yy1009:
 	++YYCURSOR;
 yy1010:
-#line 1859 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1913 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Meetei_Mayek_Extensions; else return Error; }
-#line 15497 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15533 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1011:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -15542,15 +15578,15 @@ yy1013:
 	goto yy1010;
 yy1014:
 	++YYCURSOR;
-#line 1858 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1912 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Meetei_Mayek_Extensions; }
-#line 15548 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15584 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1860 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1914 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Ethiopic_Extended_A:
 	
-#line 15554 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15590 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -15561,9 +15597,9 @@ Ethiopic_Extended_A:
 yy1016:
 	++YYCURSOR;
 yy1017:
-#line 1865 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1919 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ethiopic_Extended_A; else return Error; }
-#line 15567 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15603 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1018:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -15628,15 +15664,15 @@ yy1020:
 	goto yy1017;
 yy1021:
 	++YYCURSOR;
-#line 1864 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1918 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Ethiopic_Extended_A; }
-#line 15634 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15670 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1866 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1920 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Latin_Extended_E:
 	
-#line 15640 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15676 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -15647,9 +15683,9 @@ Latin_Extended_E:
 yy1023:
 	++YYCURSOR;
 yy1024:
-#line 1871 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1925 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Latin_Extended_E; else return Error; }
-#line 15653 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15689 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1025:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -15736,15 +15772,15 @@ yy1028:
 	}
 yy1029:
 	++YYCURSOR;
-#line 1870 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1924 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Latin_Extended_E; }
-#line 15742 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15778 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1872 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1926 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Cherokee_Supplement:
 	
-#line 15748 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15784 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -15755,9 +15791,9 @@ Cherokee_Supplement:
 yy1031:
 	++YYCURSOR;
 yy1032:
-#line 1877 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1931 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cherokee_Supplement; else return Error; }
-#line 15761 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15797 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1033:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -15860,15 +15896,15 @@ yy1036:
 	}
 yy1037:
 	++YYCURSOR;
-#line 1876 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1930 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Cherokee_Supplement; }
-#line 15866 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15902 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1878 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1932 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Meetei_Mayek:
 	
-#line 15872 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15908 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -15879,9 +15915,9 @@ Meetei_Mayek:
 yy1039:
 	++YYCURSOR;
 yy1040:
-#line 1883 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1937 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Meetei_Mayek; else return Error; }
-#line 15885 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 15921 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1041:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -15962,15 +15998,15 @@ yy1043:
 	goto yy1040;
 yy1044:
 	++YYCURSOR;
-#line 1882 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1936 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Meetei_Mayek; }
-#line 15968 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16004 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1884 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1938 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Hangul_Syllables:
 	
-#line 15974 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16010 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -15984,9 +16020,9 @@ Hangul_Syllables:
 yy1046:
 	++YYCURSOR;
 yy1047:
-#line 1889 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1943 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hangul_Syllables; else return Error; }
-#line 15990 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16026 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1048:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -16240,15 +16276,15 @@ yy1053:
 	}
 yy1054:
 	++YYCURSOR;
-#line 1888 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1942 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Hangul_Syllables; }
-#line 16246 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16282 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1890 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1944 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Hangul_Jamo_Extended_B:
 	
-#line 16252 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16288 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -16259,9 +16295,9 @@ Hangul_Jamo_Extended_B:
 yy1056:
 	++YYCURSOR;
 yy1057:
-#line 1895 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1949 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hangul_Jamo_Extended_B; else return Error; }
-#line 16265 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16301 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1058:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -16364,15 +16400,15 @@ yy1061:
 	}
 yy1062:
 	++YYCURSOR;
-#line 1894 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1948 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Hangul_Jamo_Extended_B; }
-#line 16370 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16406 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1896 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1950 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 High_Surrogates:
 	
-#line 16376 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16412 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -16383,9 +16419,9 @@ High_Surrogates:
 yy1064:
 	++YYCURSOR;
 yy1065:
-#line 1901 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1955 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return High_Surrogates; else return Error; }
-#line 16389 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16425 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1066:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -16479,15 +16515,15 @@ yy1068:
 	goto yy1065;
 yy1069:
 	++YYCURSOR;
-#line 1900 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1954 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto High_Surrogates; }
-#line 16485 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16521 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1902 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1956 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 High_Private_Use_Surrogates:
 	
-#line 16491 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16527 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -16498,9 +16534,9 @@ High_Private_Use_Surrogates:
 yy1071:
 	++YYCURSOR;
 yy1072:
-#line 1907 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1961 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return High_Private_Use_Surrogates; else return Error; }
-#line 16504 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16540 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1073:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -16582,15 +16618,15 @@ yy1075:
 	goto yy1072;
 yy1076:
 	++YYCURSOR;
-#line 1906 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1960 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto High_Private_Use_Surrogates; }
-#line 16588 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16624 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1908 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1962 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Low_Surrogates:
 	
-#line 16594 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16630 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -16601,9 +16637,9 @@ Low_Surrogates:
 yy1078:
 	++YYCURSOR;
 yy1079:
-#line 1913 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1967 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Low_Surrogates; else return Error; }
-#line 16607 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16643 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1080:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -16699,15 +16735,15 @@ yy1082:
 	goto yy1079;
 yy1083:
 	++YYCURSOR;
-#line 1912 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1966 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Low_Surrogates; }
-#line 16705 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16741 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1914 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1968 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Private_Use_Area:
 	
-#line 16711 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16747 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -16719,9 +16755,9 @@ Private_Use_Area:
 yy1085:
 	++YYCURSOR;
 yy1086:
-#line 1919 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1973 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Private_Use_Area; else return Error; }
-#line 16725 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16761 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1087:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -16906,15 +16942,15 @@ yy1090:
 	goto yy1086;
 yy1091:
 	++YYCURSOR;
-#line 1918 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1972 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Private_Use_Area; }
-#line 16912 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16948 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1920 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1974 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 CJK_Compatibility_Ideographs:
 	
-#line 16918 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16954 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -16925,9 +16961,9 @@ CJK_Compatibility_Ideographs:
 yy1093:
 	++YYCURSOR;
 yy1094:
-#line 1925 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1979 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Compatibility_Ideographs; else return Error; }
-#line 16931 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 16967 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1095:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -17015,15 +17051,15 @@ yy1097:
 	goto yy1094;
 yy1098:
 	++YYCURSOR;
-#line 1924 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1978 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto CJK_Compatibility_Ideographs; }
-#line 17021 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17057 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1926 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1980 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Alphabetic_Presentation_Forms:
 	
-#line 17027 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17063 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -17034,9 +17070,9 @@ Alphabetic_Presentation_Forms:
 yy1100:
 	++YYCURSOR;
 yy1101:
-#line 1931 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1985 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Alphabetic_Presentation_Forms; else return Error; }
-#line 17040 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17076 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1102:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -17139,15 +17175,15 @@ yy1105:
 	}
 yy1106:
 	++YYCURSOR;
-#line 1930 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1984 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Alphabetic_Presentation_Forms; }
-#line 17145 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17181 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1932 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1986 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Arabic_Presentation_Forms_A:
 	
-#line 17151 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17187 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -17158,9 +17194,9 @@ Arabic_Presentation_Forms_A:
 yy1108:
 	++YYCURSOR;
 yy1109:
-#line 1937 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1991 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Arabic_Presentation_Forms_A; else return Error; }
-#line 17164 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17200 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1110:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -17304,15 +17340,15 @@ yy1113:
 	}
 yy1114:
 	++YYCURSOR;
-#line 1936 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1990 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Arabic_Presentation_Forms_A; }
-#line 17310 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17346 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1938 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1992 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Variation_Selectors:
 	
-#line 17316 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17352 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -17323,9 +17359,9 @@ Variation_Selectors:
 yy1116:
 	++YYCURSOR;
 yy1117:
-#line 1943 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1997 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Variation_Selectors; else return Error; }
-#line 17329 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17365 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1118:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -17358,15 +17394,15 @@ yy1120:
 	goto yy1117;
 yy1121:
 	++YYCURSOR;
-#line 1942 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1996 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Variation_Selectors; }
-#line 17364 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17400 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1944 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 1998 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Vertical_Forms:
 	
-#line 17370 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17406 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -17377,9 +17413,9 @@ Vertical_Forms:
 yy1123:
 	++YYCURSOR;
 yy1124:
-#line 1949 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2003 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Vertical_Forms; else return Error; }
-#line 17383 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17419 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1125:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -17412,15 +17448,15 @@ yy1127:
 	goto yy1124;
 yy1128:
 	++YYCURSOR;
-#line 1948 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2002 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Vertical_Forms; }
-#line 17418 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17454 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1950 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2004 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Combining_Half_Marks:
 	
-#line 17424 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17460 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -17431,9 +17467,9 @@ Combining_Half_Marks:
 yy1130:
 	++YYCURSOR;
 yy1131:
-#line 1955 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2009 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Combining_Half_Marks; else return Error; }
-#line 17437 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17473 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1132:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -17466,15 +17502,15 @@ yy1134:
 	goto yy1131;
 yy1135:
 	++YYCURSOR;
-#line 1954 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2008 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Combining_Half_Marks; }
-#line 17472 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17508 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1956 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2010 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 CJK_Compatibility_Forms:
 	
-#line 17478 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17514 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -17485,9 +17521,9 @@ CJK_Compatibility_Forms:
 yy1137:
 	++YYCURSOR;
 yy1138:
-#line 1961 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2015 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Compatibility_Forms; else return Error; }
-#line 17491 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17527 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1139:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -17542,15 +17578,15 @@ yy1142:
 	}
 yy1143:
 	++YYCURSOR;
-#line 1960 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2014 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto CJK_Compatibility_Forms; }
-#line 17548 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17584 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1962 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2016 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Small_Form_Variants:
 	
-#line 17554 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17590 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -17561,9 +17597,9 @@ Small_Form_Variants:
 yy1145:
 	++YYCURSOR;
 yy1146:
-#line 1967 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2021 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Small_Form_Variants; else return Error; }
-#line 17567 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17603 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1147:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -17612,15 +17648,15 @@ yy1149:
 	goto yy1146;
 yy1150:
 	++YYCURSOR;
-#line 1966 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2020 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Small_Form_Variants; }
-#line 17618 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17654 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1968 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2022 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Arabic_Presentation_Forms_B:
 	
-#line 17624 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17660 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -17631,9 +17667,9 @@ Arabic_Presentation_Forms_B:
 yy1152:
 	++YYCURSOR;
 yy1153:
-#line 1973 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2027 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Arabic_Presentation_Forms_B; else return Error; }
-#line 17637 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17673 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1154:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -17737,15 +17773,15 @@ yy1157:
 	}
 yy1158:
 	++YYCURSOR;
-#line 1972 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2026 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Arabic_Presentation_Forms_B; }
-#line 17743 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17779 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1974 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2028 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Halfwidth_and_Fullwidth_Forms:
 	
-#line 17749 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17785 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -17756,9 +17792,9 @@ Halfwidth_and_Fullwidth_Forms:
 yy1160:
 	++YYCURSOR;
 yy1161:
-#line 1979 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2033 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Halfwidth_and_Fullwidth_Forms; else return Error; }
-#line 17762 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17798 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1162:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -17895,15 +17931,15 @@ yy1165:
 	}
 yy1166:
 	++YYCURSOR;
-#line 1978 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2032 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Halfwidth_and_Fullwidth_Forms; }
-#line 17901 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17937 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1980 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2034 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Specials:
 	
-#line 17907 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17943 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -17914,9 +17950,9 @@ Specials:
 yy1168:
 	++YYCURSOR;
 yy1169:
-#line 1985 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2039 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Specials; else return Error; }
-#line 17920 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17956 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1170:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -17949,15 +17985,15 @@ yy1172:
 	goto yy1169;
 yy1173:
 	++YYCURSOR;
-#line 1984 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2038 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Specials; }
-#line 17955 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17991 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1986 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2040 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Linear_B_Syllabary:
 	
-#line 17961 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 17997 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -17968,9 +18004,9 @@ Linear_B_Syllabary:
 yy1175:
 	++YYCURSOR;
 yy1176:
-#line 1991 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2045 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Linear_B_Syllabary; else return Error; }
-#line 17974 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18010 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1177:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -18058,15 +18094,15 @@ yy1180:
 	}
 yy1181:
 	++YYCURSOR;
-#line 1990 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2044 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Linear_B_Syllabary; }
-#line 18064 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18100 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1992 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2046 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Linear_B_Ideograms:
 	
-#line 18070 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18106 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -18077,9 +18113,9 @@ Linear_B_Ideograms:
 yy1183:
 	++YYCURSOR;
 yy1184:
-#line 1997 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2051 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Linear_B_Ideograms; else return Error; }
-#line 18083 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18119 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1185:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -18167,15 +18203,15 @@ yy1188:
 	}
 yy1189:
 	++YYCURSOR;
-#line 1996 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2050 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Linear_B_Ideograms; }
-#line 18173 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18209 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 1998 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2052 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Aegean_Numbers:
 	
-#line 18179 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18215 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -18186,9 +18222,9 @@ Aegean_Numbers:
 yy1191:
 	++YYCURSOR;
 yy1192:
-#line 2003 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2057 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Aegean_Numbers; else return Error; }
-#line 18192 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18228 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1193:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -18275,15 +18311,15 @@ yy1196:
 	}
 yy1197:
 	++YYCURSOR;
-#line 2002 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2056 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Aegean_Numbers; }
-#line 18281 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18317 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2004 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2058 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Ancient_Greek_Numbers:
 	
-#line 18287 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18323 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -18294,9 +18330,9 @@ Ancient_Greek_Numbers:
 yy1199:
 	++YYCURSOR;
 yy1200:
-#line 2009 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2063 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ancient_Greek_Numbers; else return Error; }
-#line 18300 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18336 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1201:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -18405,15 +18441,15 @@ yy1205:
 	}
 yy1206:
 	++YYCURSOR;
-#line 2008 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2062 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Ancient_Greek_Numbers; }
-#line 18411 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18447 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2010 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2064 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Ancient_Symbols:
 	
-#line 18417 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18453 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -18424,9 +18460,9 @@ Ancient_Symbols:
 yy1208:
 	++YYCURSOR;
 yy1209:
-#line 2015 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2069 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ancient_Symbols; else return Error; }
-#line 18430 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18466 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1210:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -18519,15 +18555,15 @@ yy1214:
 	}
 yy1215:
 	++YYCURSOR;
-#line 2014 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2068 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Ancient_Symbols; }
-#line 18525 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18561 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2016 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2070 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Phaistos_Disc:
 	
-#line 18531 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18567 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -18538,9 +18574,9 @@ Phaistos_Disc:
 yy1217:
 	++YYCURSOR;
 yy1218:
-#line 2021 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2075 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Phaistos_Disc; else return Error; }
-#line 18544 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18580 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1219:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -18611,15 +18647,15 @@ yy1222:
 	}
 yy1223:
 	++YYCURSOR;
-#line 2020 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2074 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Phaistos_Disc; }
-#line 18617 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18653 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2022 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2076 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Lycian:
 	
-#line 18623 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18659 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -18630,9 +18666,9 @@ Lycian:
 yy1225:
 	++YYCURSOR;
 yy1226:
-#line 2027 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2081 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Lycian; else return Error; }
-#line 18636 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18672 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1227:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -18687,15 +18723,15 @@ yy1230:
 	}
 yy1231:
 	++YYCURSOR;
-#line 2026 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2080 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Lycian; }
-#line 18693 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18729 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2028 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2082 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Carian:
 	
-#line 18699 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18735 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -18706,9 +18742,9 @@ Carian:
 yy1233:
 	++YYCURSOR;
 yy1234:
-#line 2033 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2087 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Carian; else return Error; }
-#line 18712 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18748 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1235:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -18801,15 +18837,15 @@ yy1239:
 	}
 yy1240:
 	++YYCURSOR;
-#line 2032 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2086 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Carian; }
-#line 18807 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18843 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2034 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2088 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Coptic_Epact_Numbers:
 	
-#line 18813 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18849 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -18820,9 +18856,9 @@ Coptic_Epact_Numbers:
 yy1242:
 	++YYCURSOR;
 yy1243:
-#line 2039 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2093 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Coptic_Epact_Numbers; else return Error; }
-#line 18826 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18862 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1244:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -18877,15 +18913,15 @@ yy1247:
 	}
 yy1248:
 	++YYCURSOR;
-#line 2038 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2092 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Coptic_Epact_Numbers; }
-#line 18883 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18919 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2040 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2094 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Old_Italic:
 	
-#line 18889 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18925 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -18896,9 +18932,9 @@ Old_Italic:
 yy1250:
 	++YYCURSOR;
 yy1251:
-#line 2045 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2099 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Old_Italic; else return Error; }
-#line 18902 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 18938 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1252:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -18969,15 +19005,15 @@ yy1255:
 	}
 yy1256:
 	++YYCURSOR;
-#line 2044 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2098 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Old_Italic; }
-#line 18975 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19011 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2046 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2100 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Gothic:
 	
-#line 18981 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19017 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -18988,9 +19024,9 @@ Gothic:
 yy1258:
 	++YYCURSOR;
 yy1259:
-#line 2051 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2105 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Gothic; else return Error; }
-#line 18994 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19030 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1260:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -19051,15 +19087,15 @@ yy1264:
 	}
 yy1265:
 	++YYCURSOR;
-#line 2050 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2104 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Gothic; }
-#line 19057 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19093 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2052 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2106 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Old_Permic:
 	
-#line 19063 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19099 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -19070,9 +19106,9 @@ Old_Permic:
 yy1267:
 	++YYCURSOR;
 yy1268:
-#line 2057 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2111 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Old_Permic; else return Error; }
-#line 19076 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19112 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1269:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -19143,15 +19179,15 @@ yy1272:
 	}
 yy1273:
 	++YYCURSOR;
-#line 2056 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2110 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Old_Permic; }
-#line 19149 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19185 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2058 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2112 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Ugaritic:
 	
-#line 19155 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19191 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -19162,9 +19198,9 @@ Ugaritic:
 yy1275:
 	++YYCURSOR;
 yy1276:
-#line 2063 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2117 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ugaritic; else return Error; }
-#line 19168 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19204 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1277:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -19219,15 +19255,15 @@ yy1280:
 	}
 yy1281:
 	++YYCURSOR;
-#line 2062 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2116 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Ugaritic; }
-#line 19225 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19261 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2064 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2118 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Old_Persian:
 	
-#line 19231 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19267 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -19238,9 +19274,9 @@ Old_Persian:
 yy1283:
 	++YYCURSOR;
 yy1284:
-#line 2069 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2123 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Old_Persian; else return Error; }
-#line 19244 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19280 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1285:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -19333,15 +19369,15 @@ yy1289:
 	}
 yy1290:
 	++YYCURSOR;
-#line 2068 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2122 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Old_Persian; }
-#line 19339 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19375 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2070 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2124 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Deseret:
 	
-#line 19345 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19381 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -19352,9 +19388,9 @@ Deseret:
 yy1292:
 	++YYCURSOR;
 yy1293:
-#line 2075 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2129 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Deseret; else return Error; }
-#line 19358 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19394 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1294:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -19463,15 +19499,15 @@ yy1298:
 	}
 yy1299:
 	++YYCURSOR;
-#line 2074 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2128 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Deseret; }
-#line 19469 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19505 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2076 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2130 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Shavian:
 	
-#line 19475 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19511 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -19482,9 +19518,9 @@ Shavian:
 yy1301:
 	++YYCURSOR;
 yy1302:
-#line 2081 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2135 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Shavian; else return Error; }
-#line 19488 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19524 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1303:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -19555,15 +19591,15 @@ yy1306:
 	}
 yy1307:
 	++YYCURSOR;
-#line 2080 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2134 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Shavian; }
-#line 19561 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19597 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2082 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2136 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Osmanya:
 	
-#line 19567 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19603 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -19574,9 +19610,9 @@ Osmanya:
 yy1309:
 	++YYCURSOR;
 yy1310:
-#line 2087 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2141 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Osmanya; else return Error; }
-#line 19580 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19616 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1311:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -19647,15 +19683,15 @@ yy1314:
 	}
 yy1315:
 	++YYCURSOR;
-#line 2086 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2140 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Osmanya; }
-#line 19653 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19689 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2088 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2142 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Osage:
 	
-#line 19659 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19695 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -19666,9 +19702,9 @@ Osage:
 yy1317:
 	++YYCURSOR;
 yy1318:
-#line 2093 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2147 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Osage; else return Error; }
-#line 19672 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19708 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1319:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -19777,15 +19813,15 @@ yy1323:
 	}
 yy1324:
 	++YYCURSOR;
-#line 2092 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2146 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Osage; }
-#line 19783 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19819 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2094 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2148 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Elbasan:
 	
-#line 19789 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19825 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -19796,9 +19832,9 @@ Elbasan:
 yy1326:
 	++YYCURSOR;
 yy1327:
-#line 2099 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2153 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Elbasan; else return Error; }
-#line 19802 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19838 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1328:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -19869,15 +19905,15 @@ yy1331:
 	}
 yy1332:
 	++YYCURSOR;
-#line 2098 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2152 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Elbasan; }
-#line 19875 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19911 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2100 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2154 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Caucasian_Albanian:
 	
-#line 19881 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19917 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -19888,9 +19924,9 @@ Caucasian_Albanian:
 yy1334:
 	++YYCURSOR;
 yy1335:
-#line 2105 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2159 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Caucasian_Albanian; else return Error; }
-#line 19894 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 19930 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1336:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -19983,15 +20019,15 @@ yy1340:
 	}
 yy1341:
 	++YYCURSOR;
-#line 2104 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2158 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Caucasian_Albanian; }
-#line 19989 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20025 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2106 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2160 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Vithkuqi:
 	
-#line 19995 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20031 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -20002,9 +20038,9 @@ Vithkuqi:
 yy1343:
 	++YYCURSOR;
 yy1344:
-#line 2111 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2165 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Vithkuqi; else return Error; }
-#line 20008 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20044 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1345:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -20113,15 +20149,15 @@ yy1349:
 	}
 yy1350:
 	++YYCURSOR;
-#line 2110 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2164 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Vithkuqi; }
-#line 20119 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20155 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2112 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2166 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Linear_A:
+Todhri:
 	
-#line 20125 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20161 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -20132,9 +20168,9 @@ Linear_A:
 yy1352:
 	++YYCURSOR;
 yy1353:
-#line 2117 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Linear_A; else return Error; }
-#line 20138 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2171 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Todhri; else return Error; }
+#line 20174 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1354:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -20144,12 +20180,7 @@ yy1354:
 yy1355:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D: goto yy1357;
+		case 0x97: goto yy1357;
 		default: goto yy1356;
 	}
 yy1356:
@@ -20226,15 +20257,15 @@ yy1357:
 	}
 yy1358:
 	++YYCURSOR;
-#line 2116 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Linear_A; }
-#line 20232 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2170 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Todhri; }
+#line 20263 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2118 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2172 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Latin_Extended_F:
+Linear_A:
 	
-#line 20238 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20269 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -20245,9 +20276,9 @@ Latin_Extended_F:
 yy1360:
 	++YYCURSOR;
 yy1361:
-#line 2123 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Latin_Extended_F; else return Error; }
-#line 20251 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2177 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Linear_A; else return Error; }
+#line 20282 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1362:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -20257,7 +20288,12 @@ yy1362:
 yy1363:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9E: goto yy1365;
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D: goto yy1365;
 		default: goto yy1364;
 	}
 yy1364:
@@ -20334,15 +20370,15 @@ yy1365:
 	}
 yy1366:
 	++YYCURSOR;
-#line 2122 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Latin_Extended_F; }
-#line 20340 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2176 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Linear_A; }
+#line 20376 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2124 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2178 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Cypriot_Syllabary:
+Latin_Extended_F:
 	
-#line 20346 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20382 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -20353,9 +20389,9 @@ Cypriot_Syllabary:
 yy1368:
 	++YYCURSOR;
 yy1369:
-#line 2129 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Cypriot_Syllabary; else return Error; }
-#line 20359 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2183 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Latin_Extended_F; else return Error; }
+#line 20395 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1370:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -20365,7 +20401,7 @@ yy1370:
 yy1371:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA0: goto yy1373;
+		case 0x9E: goto yy1373;
 		default: goto yy1372;
 	}
 yy1372:
@@ -20442,15 +20478,15 @@ yy1373:
 	}
 yy1374:
 	++YYCURSOR;
-#line 2128 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Cypriot_Syllabary; }
-#line 20448 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2182 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Latin_Extended_F; }
+#line 20484 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2130 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2184 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Imperial_Aramaic:
+Cypriot_Syllabary:
 	
-#line 20454 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20490 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -20461,9 +20497,9 @@ Imperial_Aramaic:
 yy1376:
 	++YYCURSOR;
 yy1377:
-#line 2135 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Imperial_Aramaic; else return Error; }
-#line 20467 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2189 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Cypriot_Syllabary; else return Error; }
+#line 20503 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1378:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -20473,7 +20509,7 @@ yy1378:
 yy1379:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA1: goto yy1381;
+		case 0xA0: goto yy1381;
 		default: goto yy1380;
 	}
 yy1380:
@@ -20513,20 +20549,52 @@ yy1381:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F: goto yy1382;
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1382;
 		default: goto yy1380;
 	}
 yy1382:
 	++YYCURSOR;
-#line 2134 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Imperial_Aramaic; }
-#line 20524 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2188 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Cypriot_Syllabary; }
+#line 20592 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2136 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2190 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Palmyrene:
+Imperial_Aramaic:
 	
-#line 20530 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20598 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -20537,9 +20605,9 @@ Palmyrene:
 yy1384:
 	++YYCURSOR;
 yy1385:
-#line 2141 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Palmyrene; else return Error; }
-#line 20543 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2195 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Imperial_Aramaic; else return Error; }
+#line 20611 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1386:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -20558,6 +20626,82 @@ yy1388:
 yy1389:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy1390;
+		default: goto yy1388;
+	}
+yy1390:
+	++YYCURSOR;
+#line 2194 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Imperial_Aramaic; }
+#line 20668 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2196 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Palmyrene:
+	
+#line 20674 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1394;
+		default: goto yy1392;
+	}
+yy1392:
+	++YYCURSOR;
+yy1393:
+#line 2201 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Palmyrene; else return Error; }
+#line 20687 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1394:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x90: goto yy1395;
+		default: goto yy1393;
+	}
+yy1395:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA1: goto yy1397;
+		default: goto yy1396;
+	}
+yy1396:
+	YYCURSOR = YYMARKER;
+	goto yy1393;
+yy1397:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -20589,49 +20733,49 @@ yy1389:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1390;
-		default: goto yy1388;
+		case 0xBF: goto yy1398;
+		default: goto yy1396;
 	}
-yy1390:
+yy1398:
 	++YYCURSOR;
-#line 2140 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2200 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Palmyrene; }
-#line 20600 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20744 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2142 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2202 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Nabataean:
 	
-#line 20606 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20750 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1394;
-		default: goto yy1392;
+		case 0xF0: goto yy1402;
+		default: goto yy1400;
 	}
-yy1392:
+yy1400:
 	++YYCURSOR;
-yy1393:
-#line 2147 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+yy1401:
+#line 2207 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Nabataean; else return Error; }
-#line 20619 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1394:
+#line 20763 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1402:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x90: goto yy1395;
-		default: goto yy1393;
+		case 0x90: goto yy1403;
+		default: goto yy1401;
 	}
-yy1395:
+yy1403:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA2: goto yy1397;
-		default: goto yy1396;
+		case 0xA2: goto yy1405;
+		default: goto yy1404;
 	}
-yy1396:
+yy1404:
 	YYCURSOR = YYMARKER;
-	goto yy1393;
-yy1397:
+	goto yy1401;
+yy1405:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -20681,49 +20825,49 @@ yy1397:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy1398;
-		default: goto yy1396;
+		case 0xAF: goto yy1406;
+		default: goto yy1404;
 	}
-yy1398:
+yy1406:
 	++YYCURSOR;
-#line 2146 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2206 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ goto Nabataean; }
-#line 20692 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20836 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2148 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2208 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 Hatran:
 	
-#line 20698 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20842 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1402;
-		default: goto yy1400;
+		case 0xF0: goto yy1410;
+		default: goto yy1408;
 	}
-yy1400:
+yy1408:
 	++YYCURSOR;
-yy1401:
-#line 2153 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+yy1409:
+#line 2213 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hatran; else return Error; }
-#line 20711 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1402:
+#line 20855 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1410:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x90: goto yy1403;
-		default: goto yy1401;
+		case 0x90: goto yy1411;
+		default: goto yy1409;
 	}
-yy1403:
+yy1411:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA3: goto yy1405;
-		default: goto yy1404;
+		case 0xA3: goto yy1413;
+		default: goto yy1412;
 	}
-yy1404:
+yy1412:
 	YYCURSOR = YYMARKER;
-	goto yy1401;
-yy1405:
+	goto yy1409;
+yy1413:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xA0:
@@ -20757,96 +20901,20 @@ yy1405:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1406;
-		default: goto yy1404;
-	}
-yy1406:
-	++YYCURSOR;
-#line 2152 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Hatran; }
-#line 20768 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2154 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Phoenician:
-	
-#line 20774 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1410;
-		default: goto yy1408;
-	}
-yy1408:
-	++YYCURSOR;
-yy1409:
-#line 2159 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Phoenician; else return Error; }
-#line 20787 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1410:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x90: goto yy1411;
-		default: goto yy1409;
-	}
-yy1411:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xA4: goto yy1413;
-		default: goto yy1412;
-	}
-yy1412:
-	YYCURSOR = YYMARKER;
-	goto yy1409;
-yy1413:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy1414;
+		case 0xBF: goto yy1414;
 		default: goto yy1412;
 	}
 yy1414:
 	++YYCURSOR;
-#line 2158 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Phoenician; }
-#line 20844 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2212 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Hatran; }
+#line 20912 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2160 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2214 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Lydian:
+Phoenician:
 	
-#line 20850 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20918 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -20857,9 +20925,9 @@ Lydian:
 yy1416:
 	++YYCURSOR;
 yy1417:
-#line 2165 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Lydian; else return Error; }
-#line 20863 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2219 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Phoenician; else return Error; }
+#line 20931 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1418:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -20878,51 +20946,51 @@ yy1420:
 yy1421:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1422;
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy1422;
 		default: goto yy1420;
 	}
 yy1422:
 	++YYCURSOR;
-#line 2164 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Lydian; }
-#line 20920 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2218 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Phoenician; }
+#line 20988 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2166 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2220 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Meroitic_Hieroglyphs:
+Lydian:
 	
-#line 20926 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 20994 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -20933,9 +21001,9 @@ Meroitic_Hieroglyphs:
 yy1424:
 	++YYCURSOR;
 yy1425:
-#line 2171 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Meroitic_Hieroglyphs; else return Error; }
-#line 20939 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2225 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Lydian; else return Error; }
+#line 21007 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1426:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -20945,7 +21013,7 @@ yy1426:
 yy1427:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA6: goto yy1429;
+		case 0xA4: goto yy1429;
 		default: goto yy1428;
 	}
 yy1428:
@@ -20954,51 +21022,51 @@ yy1428:
 yy1429:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy1430;
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1430;
 		default: goto yy1428;
 	}
 yy1430:
 	++YYCURSOR;
-#line 2170 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Meroitic_Hieroglyphs; }
-#line 20996 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2224 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Lydian; }
+#line 21064 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2172 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2226 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Meroitic_Cursive:
+Sidetic:
 	
-#line 21002 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 21070 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -21009,9 +21077,9 @@ Meroitic_Cursive:
 yy1432:
 	++YYCURSOR;
 yy1433:
-#line 2177 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Meroitic_Cursive; else return Error; }
-#line 21015 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2231 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sidetic; else return Error; }
+#line 21083 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1434:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -21021,8 +21089,7 @@ yy1434:
 yy1435:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA6: goto yy1437;
-		case 0xA7: goto yy1438;
+		case 0xA5: goto yy1437;
 		default: goto yy1436;
 	}
 yy1436:
@@ -21031,150 +21098,80 @@ yy1436:
 yy1437:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1439;
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy1438;
 		default: goto yy1436;
 	}
 yy1438:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1439;
-		default: goto yy1436;
-	}
-yy1439:
 	++YYCURSOR;
-#line 2176 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Meroitic_Cursive; }
-#line 21142 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2230 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Sidetic; }
+#line 21140 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2178 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2232 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Kharoshthi:
+Meroitic_Hieroglyphs:
 	
-#line 21148 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 21146 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1443;
-		default: goto yy1441;
+		case 0xF0: goto yy1442;
+		default: goto yy1440;
 	}
-yy1441:
+yy1440:
 	++YYCURSOR;
+yy1441:
+#line 2237 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Meroitic_Hieroglyphs; else return Error; }
+#line 21159 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1442:
-#line 2183 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Kharoshthi; else return Error; }
-#line 21161 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1443:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x90: goto yy1444;
-		default: goto yy1442;
+		case 0x90: goto yy1443;
+		default: goto yy1441;
+	}
+yy1443:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA6: goto yy1445;
+		default: goto yy1444;
 	}
 yy1444:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xA8: goto yy1446;
-		case 0xA9: goto yy1447;
-		default: goto yy1445;
-	}
-yy1445:
 	YYCURSOR = YYMARKER;
-	goto yy1442;
-yy1446:
+	goto yy1441;
+yy1445:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -21208,118 +21205,50 @@ yy1446:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1448;
-		default: goto yy1445;
+		case 0x9F: goto yy1446;
+		default: goto yy1444;
 	}
-yy1447:
-	yych = *++YYCURSOR;
+yy1446:
+	++YYCURSOR;
+#line 2236 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Meroitic_Hieroglyphs; }
+#line 21216 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2238 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Meroitic_Cursive:
+	
+#line 21222 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy1448;
-		default: goto yy1445;
+		case 0xF0: goto yy1450;
+		default: goto yy1448;
 	}
 yy1448:
 	++YYCURSOR;
-#line 2182 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Kharoshthi; }
-#line 21288 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2184 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Old_South_Arabian:
-	
-#line 21294 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1452;
-		default: goto yy1450;
-	}
+yy1449:
+#line 2243 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Meroitic_Cursive; else return Error; }
+#line 21235 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1450:
-	++YYCURSOR;
-yy1451:
-#line 2189 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Old_South_Arabian; else return Error; }
-#line 21307 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1452:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x90: goto yy1453;
-		default: goto yy1451;
+		case 0x90: goto yy1451;
+		default: goto yy1449;
 	}
-yy1453:
+yy1451:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA9: goto yy1455;
-		default: goto yy1454;
+		case 0xA6: goto yy1453;
+		case 0xA7: goto yy1454;
+		default: goto yy1452;
 	}
-yy1454:
+yy1452:
 	YYCURSOR = YYMARKER;
-	goto yy1451;
-yy1455:
+	goto yy1449;
+yy1453:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xA0:
@@ -21353,48 +21282,187 @@ yy1455:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1456;
-		default: goto yy1454;
+		case 0xBF: goto yy1455;
+		default: goto yy1452;
 	}
-yy1456:
+yy1454:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1455;
+		default: goto yy1452;
+	}
+yy1455:
 	++YYCURSOR;
-#line 2188 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Old_South_Arabian; }
-#line 21364 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2242 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Meroitic_Cursive; }
+#line 21362 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2190 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2244 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Old_North_Arabian:
+Kharoshthi:
 	
-#line 21370 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 21368 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1460;
-		default: goto yy1458;
+		case 0xF0: goto yy1459;
+		default: goto yy1457;
 	}
-yy1458:
+yy1457:
 	++YYCURSOR;
+yy1458:
+#line 2249 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Kharoshthi; else return Error; }
+#line 21381 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1459:
-#line 2195 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Old_North_Arabian; else return Error; }
-#line 21383 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1460:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x90: goto yy1461;
-		default: goto yy1459;
+		case 0x90: goto yy1460;
+		default: goto yy1458;
 	}
-yy1461:
+yy1460:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAA: goto yy1463;
-		default: goto yy1462;
+		case 0xA8: goto yy1462;
+		case 0xA9: goto yy1463;
+		default: goto yy1461;
 	}
-yy1462:
+yy1461:
 	YYCURSOR = YYMARKER;
-	goto yy1459;
+	goto yy1458;
+yy1462:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1464;
+		default: goto yy1461;
+	}
 yy1463:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -21430,19 +21498,19 @@ yy1463:
 		case 0x9D:
 		case 0x9E:
 		case 0x9F: goto yy1464;
-		default: goto yy1462;
+		default: goto yy1461;
 	}
 yy1464:
 	++YYCURSOR;
-#line 2194 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Old_North_Arabian; }
-#line 21440 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2248 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Kharoshthi; }
+#line 21508 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2196 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2250 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Manichaean:
+Old_South_Arabian:
 	
-#line 21446 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 21514 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -21453,9 +21521,9 @@ Manichaean:
 yy1466:
 	++YYCURSOR;
 yy1467:
-#line 2201 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Manichaean; else return Error; }
-#line 21459 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2255 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Old_South_Arabian; else return Error; }
+#line 21527 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1468:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -21465,7 +21533,7 @@ yy1468:
 yy1469:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAB: goto yy1471;
+		case 0xA9: goto yy1471;
 		default: goto yy1470;
 	}
 yy1470:
@@ -21474,38 +21542,6 @@ yy1470:
 yy1471:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -21542,15 +21578,15 @@ yy1471:
 	}
 yy1472:
 	++YYCURSOR;
-#line 2200 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Manichaean; }
-#line 21548 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2254 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Old_South_Arabian; }
+#line 21584 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2202 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2256 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Avestan:
+Old_North_Arabian:
 	
-#line 21554 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 21590 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -21561,9 +21597,9 @@ Avestan:
 yy1474:
 	++YYCURSOR;
 yy1475:
-#line 2207 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Avestan; else return Error; }
-#line 21567 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2261 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Old_North_Arabian; else return Error; }
+#line 21603 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1476:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -21573,7 +21609,7 @@ yy1476:
 yy1477:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAC: goto yy1479;
+		case 0xAA: goto yy1479;
 		default: goto yy1478;
 	}
 yy1478:
@@ -21613,52 +21649,20 @@ yy1479:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1480;
+		case 0x9F: goto yy1480;
 		default: goto yy1478;
 	}
 yy1480:
 	++YYCURSOR;
-#line 2206 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Avestan; }
-#line 21656 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2260 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Old_North_Arabian; }
+#line 21660 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2208 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2262 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Inscriptional_Parthian:
+Manichaean:
 	
-#line 21662 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 21666 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -21669,9 +21673,9 @@ Inscriptional_Parthian:
 yy1482:
 	++YYCURSOR;
 yy1483:
-#line 2213 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Inscriptional_Parthian; else return Error; }
-#line 21675 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2267 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Manichaean; else return Error; }
+#line 21679 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1484:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -21681,7 +21685,7 @@ yy1484:
 yy1485:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAD: goto yy1487;
+		case 0xAB: goto yy1487;
 		default: goto yy1486;
 	}
 yy1486:
@@ -21721,20 +21725,52 @@ yy1487:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F: goto yy1488;
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1488;
 		default: goto yy1486;
 	}
 yy1488:
 	++YYCURSOR;
-#line 2212 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Inscriptional_Parthian; }
-#line 21732 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2266 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Manichaean; }
+#line 21768 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2214 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2268 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Inscriptional_Pahlavi:
+Avestan:
 	
-#line 21738 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 21774 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -21745,9 +21781,9 @@ Inscriptional_Pahlavi:
 yy1490:
 	++YYCURSOR;
 yy1491:
-#line 2219 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Inscriptional_Pahlavi; else return Error; }
-#line 21751 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2273 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Avestan; else return Error; }
+#line 21787 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1492:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -21757,7 +21793,7 @@ yy1492:
 yy1493:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAD: goto yy1495;
+		case 0xAC: goto yy1495;
 		default: goto yy1494;
 	}
 yy1494:
@@ -21766,6 +21802,38 @@ yy1494:
 yy1495:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -21802,15 +21870,15 @@ yy1495:
 	}
 yy1496:
 	++YYCURSOR;
-#line 2218 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Inscriptional_Pahlavi; }
-#line 21808 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2272 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Avestan; }
+#line 21876 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2220 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2274 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Psalter_Pahlavi:
+Inscriptional_Parthian:
 	
-#line 21814 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 21882 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -21821,9 +21889,9 @@ Psalter_Pahlavi:
 yy1498:
 	++YYCURSOR;
 yy1499:
-#line 2225 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Psalter_Pahlavi; else return Error; }
-#line 21827 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2279 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Inscriptional_Parthian; else return Error; }
+#line 21895 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1500:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -21833,7 +21901,7 @@ yy1500:
 yy1501:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAE: goto yy1503;
+		case 0xAD: goto yy1503;
 		default: goto yy1502;
 	}
 yy1502:
@@ -21873,36 +21941,20 @@ yy1503:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy1504;
+		case 0x9F: goto yy1504;
 		default: goto yy1502;
 	}
 yy1504:
 	++YYCURSOR;
-#line 2224 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Psalter_Pahlavi; }
-#line 21900 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2278 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Inscriptional_Parthian; }
+#line 21952 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2226 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2280 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Old_Turkic:
+Inscriptional_Pahlavi:
 	
-#line 21906 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 21958 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -21913,9 +21965,9 @@ Old_Turkic:
 yy1506:
 	++YYCURSOR;
 yy1507:
-#line 2231 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Old_Turkic; else return Error; }
-#line 21919 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2285 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Inscriptional_Pahlavi; else return Error; }
+#line 21971 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1508:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -21925,8 +21977,7 @@ yy1508:
 yy1509:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB0: goto yy1511;
-		case 0xB1: goto yy1512;
+		case 0xAD: goto yy1511;
 		default: goto yy1510;
 	}
 yy1510:
@@ -21935,38 +21986,6 @@ yy1510:
 yy1511:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -21998,71 +22017,49 @@ yy1511:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1513;
+		case 0xBF: goto yy1512;
 		default: goto yy1510;
 	}
 yy1512:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy1513;
-		default: goto yy1510;
-	}
-yy1513:
 	++YYCURSOR;
-#line 2230 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Old_Turkic; }
-#line 22030 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2284 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Inscriptional_Pahlavi; }
+#line 22028 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2232 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2286 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Old_Hungarian:
+Psalter_Pahlavi:
 	
-#line 22036 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 22034 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1517;
-		default: goto yy1515;
+		case 0xF0: goto yy1516;
+		default: goto yy1514;
 	}
-yy1515:
+yy1514:
 	++YYCURSOR;
+yy1515:
+#line 2291 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Psalter_Pahlavi; else return Error; }
+#line 22047 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1516:
-#line 2237 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Old_Hungarian; else return Error; }
-#line 22049 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1517:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x90: goto yy1518;
-		default: goto yy1516;
+		case 0x90: goto yy1517;
+		default: goto yy1515;
 	}
-yy1518:
+yy1517:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB2:
-		case 0xB3: goto yy1520;
-		default: goto yy1519;
+		case 0xAE: goto yy1519;
+		default: goto yy1518;
 	}
-yy1519:
+yy1518:
 	YYCURSOR = YYMARKER;
-	goto yy1516;
-yy1520:
+	goto yy1515;
+yy1519:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -22112,65 +22109,50 @@ yy1520:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1521;
-		default: goto yy1519;
+		case 0xAF: goto yy1520;
+		default: goto yy1518;
 	}
-yy1521:
+yy1520:
 	++YYCURSOR;
-#line 2236 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Old_Hungarian; }
-#line 22139 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2290 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Psalter_Pahlavi; }
+#line 22120 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2238 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2292 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Hanifi_Rohingya:
+Old_Turkic:
 	
-#line 22145 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 22126 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1525;
-		default: goto yy1523;
+		case 0xF0: goto yy1524;
+		default: goto yy1522;
 	}
-yy1523:
+yy1522:
 	++YYCURSOR;
+yy1523:
+#line 2297 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Old_Turkic; else return Error; }
+#line 22139 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1524:
-#line 2243 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Hanifi_Rohingya; else return Error; }
-#line 22158 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1525:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x90: goto yy1526;
-		default: goto yy1524;
+		case 0x90: goto yy1525;
+		default: goto yy1523;
 	}
-yy1526:
+yy1525:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB4: goto yy1528;
-		default: goto yy1527;
+		case 0xB0: goto yy1527;
+		case 0xB1: goto yy1528;
+		default: goto yy1526;
 	}
-yy1527:
+yy1526:
 	YYCURSOR = YYMARKER;
-	goto yy1524;
-yy1528:
+	goto yy1523;
+yy1527:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -22237,19 +22219,40 @@ yy1528:
 		case 0xBD:
 		case 0xBE:
 		case 0xBF: goto yy1529;
-		default: goto yy1527;
+		default: goto yy1526;
+	}
+yy1528:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy1529;
+		default: goto yy1526;
 	}
 yy1529:
 	++YYCURSOR;
-#line 2242 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Hanifi_Rohingya; }
-#line 22247 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2296 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Old_Turkic; }
+#line 22250 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2244 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2298 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Rumi_Numeral_Symbols:
+Old_Hungarian:
 	
-#line 22253 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 22256 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -22260,9 +22263,9 @@ Rumi_Numeral_Symbols:
 yy1531:
 	++YYCURSOR;
 yy1532:
-#line 2249 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Rumi_Numeral_Symbols; else return Error; }
-#line 22266 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2303 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Old_Hungarian; else return Error; }
+#line 22269 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1533:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -22272,7 +22275,8 @@ yy1533:
 yy1534:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB9: goto yy1536;
+		case 0xB2:
+		case 0xB3: goto yy1536;
 		default: goto yy1535;
 	}
 yy1535:
@@ -22281,6 +22285,38 @@ yy1535:
 yy1536:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -22317,15 +22353,15 @@ yy1536:
 	}
 yy1537:
 	++YYCURSOR;
-#line 2248 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Rumi_Numeral_Symbols; }
-#line 22323 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2302 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Old_Hungarian; }
+#line 22359 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2250 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2304 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Yezidi:
+Hanifi_Rohingya:
 	
-#line 22329 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 22365 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -22336,9 +22372,9 @@ Yezidi:
 yy1539:
 	++YYCURSOR;
 yy1540:
-#line 2255 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Yezidi; else return Error; }
-#line 22342 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2309 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Hanifi_Rohingya; else return Error; }
+#line 22378 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1541:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -22348,7 +22384,7 @@ yy1541:
 yy1542:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xBA: goto yy1544;
+		case 0xB4: goto yy1544;
 		default: goto yy1543;
 	}
 yy1543:
@@ -22425,15 +22461,15 @@ yy1544:
 	}
 yy1545:
 	++YYCURSOR;
-#line 2254 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Yezidi; }
-#line 22431 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2308 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Hanifi_Rohingya; }
+#line 22467 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2256 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2310 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Arabic_Extended_C:
+Garay:
 	
-#line 22437 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 22473 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -22444,9 +22480,9 @@ Arabic_Extended_C:
 yy1547:
 	++YYCURSOR;
 yy1548:
-#line 2261 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Arabic_Extended_C; else return Error; }
-#line 22450 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2315 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Garay; else return Error; }
+#line 22486 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1549:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -22456,7 +22492,8 @@ yy1549:
 yy1550:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xBB: goto yy1552;
+		case 0xB5: goto yy1552;
+		case 0xB6: goto yy1553;
 		default: goto yy1551;
 	}
 yy1551:
@@ -22528,49 +22565,10 @@ yy1552:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1553;
+		case 0xBF: goto yy1554;
 		default: goto yy1551;
 	}
 yy1553:
-	++YYCURSOR;
-#line 2260 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Arabic_Extended_C; }
-#line 22539 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2262 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Old_Sogdian:
-	
-#line 22545 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1557;
-		default: goto yy1555;
-	}
-yy1555:
-	++YYCURSOR;
-yy1556:
-#line 2267 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Old_Sogdian; else return Error; }
-#line 22558 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1557:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x90: goto yy1558;
-		default: goto yy1556;
-	}
-yy1558:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBC: goto yy1560;
-		default: goto yy1559;
-	}
-yy1559:
-	YYCURSOR = YYMARKER;
-	goto yy1556;
-yy1560:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -22588,23 +22586,51 @@ yy1560:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
+		case 0x8F: goto yy1554;
+		default: goto yy1551;
+	}
+yy1554:
+	++YYCURSOR;
+#line 2314 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Garay; }
+#line 22597 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2316 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Rumi_Numeral_Symbols:
+	
+#line 22603 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1558;
+		default: goto yy1556;
+	}
+yy1556:
+	++YYCURSOR;
+yy1557:
+#line 2321 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Rumi_Numeral_Symbols; else return Error; }
+#line 22616 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1558:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x90: goto yy1559;
+		default: goto yy1557;
+	}
+yy1559:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB9: goto yy1561;
+		default: goto yy1560;
+	}
+yy1560:
+	YYCURSOR = YYMARKER;
+	goto yy1557;
+yy1561:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -22620,52 +22646,7 @@ yy1560:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy1561;
-		default: goto yy1559;
-	}
-yy1561:
-	++YYCURSOR;
-#line 2266 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Old_Sogdian; }
-#line 22631 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2268 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Sogdian:
-	
-#line 22637 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1565;
-		default: goto yy1563;
-	}
-yy1563:
-	++YYCURSOR;
-yy1564:
-#line 2273 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Sogdian; else return Error; }
-#line 22650 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1565:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x90: goto yy1566;
-		default: goto yy1564;
-	}
-yy1566:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBC: goto yy1568;
-		case 0xBD: goto yy1569;
-		default: goto yy1567;
-	}
-yy1567:
-	YYCURSOR = YYMARKER;
-	goto yy1564;
-yy1568:
-	yych = *++YYCURSOR;
-	switch (yych) {
+		case 0xAF:
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -22681,9 +22662,48 @@ yy1568:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1570;
-		default: goto yy1567;
+		case 0xBF: goto yy1562;
+		default: goto yy1560;
 	}
+yy1562:
+	++YYCURSOR;
+#line 2320 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Rumi_Numeral_Symbols; }
+#line 22673 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2322 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Yezidi:
+	
+#line 22679 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1566;
+		default: goto yy1564;
+	}
+yy1564:
+	++YYCURSOR;
+yy1565:
+#line 2327 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Yezidi; else return Error; }
+#line 22692 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1566:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x90: goto yy1567;
+		default: goto yy1565;
+	}
+yy1567:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBA: goto yy1569;
+		default: goto yy1568;
+	}
+yy1568:
+	YYCURSOR = YYMARKER;
+	goto yy1565;
 yy1569:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -22734,52 +22754,7 @@ yy1569:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy1570;
-		default: goto yy1567;
-	}
-yy1570:
-	++YYCURSOR;
-#line 2272 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Sogdian; }
-#line 22745 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2274 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Old_Uyghur:
-	
-#line 22751 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1574;
-		default: goto yy1572;
-	}
-yy1572:
-	++YYCURSOR;
-yy1573:
-#line 2279 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Old_Uyghur; else return Error; }
-#line 22764 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1574:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x90: goto yy1575;
-		default: goto yy1573;
-	}
-yy1575:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBD: goto yy1577;
-		case 0xBE: goto yy1578;
-		default: goto yy1576;
-	}
-yy1576:
-	YYCURSOR = YYMARKER;
-	goto yy1573;
-yy1577:
-	yych = *++YYCURSOR;
-	switch (yych) {
+		case 0xAF:
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -22795,10 +22770,49 @@ yy1577:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1579;
+		case 0xBF: goto yy1570;
+		default: goto yy1568;
+	}
+yy1570:
+	++YYCURSOR;
+#line 2326 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Yezidi; }
+#line 22781 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2328 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Arabic_Extended_C:
+	
+#line 22787 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1574;
+		default: goto yy1572;
+	}
+yy1572:
+	++YYCURSOR;
+yy1573:
+#line 2333 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Arabic_Extended_C; else return Error; }
+#line 22800 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1574:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x90: goto yy1575;
+		default: goto yy1573;
+	}
+yy1575:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBB: goto yy1577;
 		default: goto yy1576;
 	}
-yy1578:
+yy1576:
+	YYCURSOR = YYMARKER;
+	goto yy1573;
+yy1577:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -22848,52 +22862,7 @@ yy1578:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy1579;
-		default: goto yy1576;
-	}
-yy1579:
-	++YYCURSOR;
-#line 2278 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Old_Uyghur; }
-#line 22859 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2280 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Chorasmian:
-	
-#line 22865 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1583;
-		default: goto yy1581;
-	}
-yy1581:
-	++YYCURSOR;
-yy1582:
-#line 2285 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Chorasmian; else return Error; }
-#line 22878 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1583:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x90: goto yy1584;
-		default: goto yy1582;
-	}
-yy1584:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBE: goto yy1586;
-		case 0xBF: goto yy1587;
-		default: goto yy1585;
-	}
-yy1585:
-	YYCURSOR = YYMARKER;
-	goto yy1582;
-yy1586:
-	yych = *++YYCURSOR;
-	switch (yych) {
+		case 0xAF:
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -22909,10 +22878,49 @@ yy1586:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1588;
-		default: goto yy1585;
+		case 0xBF: goto yy1578;
+		default: goto yy1576;
 	}
-yy1587:
+yy1578:
+	++YYCURSOR;
+#line 2332 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Arabic_Extended_C; }
+#line 22889 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2334 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Old_Sogdian:
+	
+#line 22895 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1582;
+		default: goto yy1580;
+	}
+yy1580:
+	++YYCURSOR;
+yy1581:
+#line 2339 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Old_Sogdian; else return Error; }
+#line 22908 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1582:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x90: goto yy1583;
+		default: goto yy1581;
+	}
+yy1583:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBC: goto yy1585;
+		default: goto yy1584;
+	}
+yy1584:
+	YYCURSOR = YYMARKER;
+	goto yy1581;
+yy1585:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -22946,51 +22954,7 @@ yy1587:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F: goto yy1588;
-		default: goto yy1585;
-	}
-yy1588:
-	++YYCURSOR;
-#line 2284 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Chorasmian; }
-#line 22957 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2286 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Elymaic:
-	
-#line 22963 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1592;
-		default: goto yy1590;
-	}
-yy1590:
-	++YYCURSOR;
-yy1591:
-#line 2291 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Elymaic; else return Error; }
-#line 22976 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1592:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x90: goto yy1593;
-		default: goto yy1591;
-	}
-yy1593:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBF: goto yy1595;
-		default: goto yy1594;
-	}
-yy1594:
-	YYCURSOR = YYMARKER;
-	goto yy1591;
-yy1595:
-	yych = *++YYCURSOR;
-	switch (yych) {
+		case 0x9F:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -23006,7 +22970,52 @@ yy1595:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
+		case 0xAF: goto yy1586;
+		default: goto yy1584;
+	}
+yy1586:
+	++YYCURSOR;
+#line 2338 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Old_Sogdian; }
+#line 22981 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2340 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Sogdian:
+	
+#line 22987 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1590;
+		default: goto yy1588;
+	}
+yy1588:
+	++YYCURSOR;
+yy1589:
+#line 2345 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sogdian; else return Error; }
+#line 23000 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1590:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x90: goto yy1591;
+		default: goto yy1589;
+	}
+yy1591:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBC: goto yy1593;
+		case 0xBD: goto yy1594;
+		default: goto yy1592;
+	}
+yy1592:
+	YYCURSOR = YYMARKER;
+	goto yy1589;
+yy1593:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -23022,49 +23031,123 @@ yy1595:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1596;
-		default: goto yy1594;
+		case 0xBF: goto yy1595;
+		default: goto yy1592;
 	}
-yy1596:
+yy1594:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF: goto yy1595;
+		default: goto yy1592;
+	}
+yy1595:
 	++YYCURSOR;
-#line 2290 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Elymaic; }
-#line 23033 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2344 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Sogdian; }
+#line 23095 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2292 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2346 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Brahmi:
+Old_Uyghur:
 	
-#line 23039 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 23101 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1600;
-		default: goto yy1598;
+		case 0xF0: goto yy1599;
+		default: goto yy1597;
 	}
-yy1598:
+yy1597:
 	++YYCURSOR;
+yy1598:
+#line 2351 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Old_Uyghur; else return Error; }
+#line 23114 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1599:
-#line 2297 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Brahmi; else return Error; }
-#line 23052 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1600:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x91: goto yy1601;
-		default: goto yy1599;
+		case 0x90: goto yy1600;
+		default: goto yy1598;
 	}
-yy1601:
+yy1600:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81: goto yy1603;
-		default: goto yy1602;
+		case 0xBD: goto yy1602;
+		case 0xBE: goto yy1603;
+		default: goto yy1601;
 	}
-yy1602:
+yy1601:
 	YYCURSOR = YYMARKER;
-	goto yy1599;
+	goto yy1598;
+yy1602:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1604;
+		default: goto yy1601;
+	}
 yy1603:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -23115,36 +23198,20 @@ yy1603:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1604;
-		default: goto yy1602;
+		case 0xAF: goto yy1604;
+		default: goto yy1601;
 	}
 yy1604:
 	++YYCURSOR;
-#line 2296 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Brahmi; }
-#line 23142 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2350 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Old_Uyghur; }
+#line 23209 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2298 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2352 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Kaithi:
+Chorasmian:
 	
-#line 23148 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 23215 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -23155,20 +23222,20 @@ Kaithi:
 yy1606:
 	++YYCURSOR;
 yy1607:
-#line 2303 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Kaithi; else return Error; }
-#line 23161 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2357 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Chorasmian; else return Error; }
+#line 23228 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1608:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x91: goto yy1609;
+		case 0x90: goto yy1609;
 		default: goto yy1607;
 	}
 yy1609:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x82: goto yy1611;
-		case 0x83: goto yy1612;
+		case 0xBE: goto yy1611;
+		case 0xBF: goto yy1612;
 		default: goto yy1610;
 	}
 yy1610:
@@ -23177,54 +23244,6 @@ yy1610:
 yy1611:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -23261,51 +23280,7 @@ yy1612:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F: goto yy1613;
-		default: goto yy1610;
-	}
-yy1613:
-	++YYCURSOR;
-#line 2302 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Kaithi; }
-#line 23272 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2304 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Sora_Sompeng:
-	
-#line 23278 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1617;
-		default: goto yy1615;
-	}
-yy1615:
-	++YYCURSOR;
-yy1616:
-#line 2309 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Sora_Sompeng; else return Error; }
-#line 23291 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1617:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1618;
-		default: goto yy1616;
-	}
-yy1618:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x83: goto yy1620;
-		default: goto yy1619;
-	}
-yy1619:
-	YYCURSOR = YYMARKER;
-	goto yy1616;
-yy1620:
-	yych = *++YYCURSOR;
-	switch (yych) {
+		case 0x8F:
 		case 0x90:
 		case 0x91:
 		case 0x92:
@@ -23321,7 +23296,51 @@ yy1620:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F:
+		case 0x9F: goto yy1613;
+		default: goto yy1610;
+	}
+yy1613:
+	++YYCURSOR;
+#line 2356 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Chorasmian; }
+#line 23307 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2358 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Elymaic:
+	
+#line 23313 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1617;
+		default: goto yy1615;
+	}
+yy1615:
+	++YYCURSOR;
+yy1616:
+#line 2363 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Elymaic; else return Error; }
+#line 23326 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1617:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x90: goto yy1618;
+		default: goto yy1616;
+	}
+yy1618:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBF: goto yy1620;
+		default: goto yy1619;
+	}
+yy1619:
+	YYCURSOR = YYMARKER;
+	goto yy1616;
+yy1620:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -23358,15 +23377,15 @@ yy1620:
 	}
 yy1621:
 	++YYCURSOR;
-#line 2308 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Sora_Sompeng; }
-#line 23364 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2362 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Elymaic; }
+#line 23383 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2310 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2364 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Chakma:
+Brahmi:
 	
-#line 23370 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 23389 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -23377,9 +23396,9 @@ Chakma:
 yy1623:
 	++YYCURSOR;
 yy1624:
-#line 2315 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Chakma; else return Error; }
-#line 23383 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2369 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Brahmi; else return Error; }
+#line 23402 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1625:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -23389,8 +23408,8 @@ yy1625:
 yy1626:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x84: goto yy1628;
-		case 0x85: goto yy1629;
+		case 0x80:
+		case 0x81: goto yy1628;
 		default: goto yy1627;
 	}
 yy1627:
@@ -23462,10 +23481,50 @@ yy1628:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1630;
+		case 0xBF: goto yy1629;
 		default: goto yy1627;
 	}
 yy1629:
+	++YYCURSOR;
+#line 2368 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Brahmi; }
+#line 23492 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2370 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Kaithi:
+	
+#line 23498 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1633;
+		default: goto yy1631;
+	}
+yy1631:
+	++YYCURSOR;
+yy1632:
+#line 2375 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Kaithi; else return Error; }
+#line 23511 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1633:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1634;
+		default: goto yy1632;
+	}
+yy1634:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x82: goto yy1636;
+		case 0x83: goto yy1637;
+		default: goto yy1635;
+	}
+yy1635:
+	YYCURSOR = YYMARKER;
+	goto yy1632;
+yy1636:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -23483,51 +23542,7 @@ yy1629:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F: goto yy1630;
-		default: goto yy1627;
-	}
-yy1630:
-	++YYCURSOR;
-#line 2314 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Chakma; }
-#line 23494 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2316 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Mahajani:
-	
-#line 23500 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1634;
-		default: goto yy1632;
-	}
-yy1632:
-	++YYCURSOR;
-yy1633:
-#line 2321 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Mahajani; else return Error; }
-#line 23513 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1634:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1635;
-		default: goto yy1633;
-	}
-yy1635:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x85: goto yy1637;
-		default: goto yy1636;
-	}
-yy1636:
-	YYCURSOR = YYMARKER;
-	goto yy1633;
-yy1637:
-	yych = *++YYCURSOR;
-	switch (yych) {
+		case 0x8F:
 		case 0x90:
 		case 0x91:
 		case 0x92:
@@ -23576,49 +23591,9 @@ yy1637:
 		case 0xBD:
 		case 0xBE:
 		case 0xBF: goto yy1638;
-		default: goto yy1636;
+		default: goto yy1635;
 	}
-yy1638:
-	++YYCURSOR;
-#line 2320 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Mahajani; }
-#line 23586 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2322 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Sharada:
-	
-#line 23592 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1642;
-		default: goto yy1640;
-	}
-yy1640:
-	++YYCURSOR;
-yy1641:
-#line 2327 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Sharada; else return Error; }
-#line 23605 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1642:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1643;
-		default: goto yy1641;
-	}
-yy1643:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x86: goto yy1645;
-		case 0x87: goto yy1646;
-		default: goto yy1644;
-	}
-yy1644:
-	YYCURSOR = YYMARKER;
-	goto yy1641;
-yy1645:
+yy1637:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -23636,7 +23611,51 @@ yy1645:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F:
+		case 0x8F: goto yy1638;
+		default: goto yy1635;
+	}
+yy1638:
+	++YYCURSOR;
+#line 2374 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Kaithi; }
+#line 23622 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2376 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Sora_Sompeng:
+	
+#line 23628 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1642;
+		default: goto yy1640;
+	}
+yy1640:
+	++YYCURSOR;
+yy1641:
+#line 2381 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sora_Sompeng; else return Error; }
+#line 23641 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1642:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1643;
+		default: goto yy1641;
+	}
+yy1643:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x83: goto yy1645;
+		default: goto yy1644;
+	}
+yy1644:
+	YYCURSOR = YYMARKER;
+	goto yy1641;
+yy1645:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0x90:
 		case 0x91:
 		case 0x92:
@@ -23684,10 +23703,50 @@ yy1645:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1647;
+		case 0xBF: goto yy1646;
 		default: goto yy1644;
 	}
 yy1646:
+	++YYCURSOR;
+#line 2380 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Sora_Sompeng; }
+#line 23714 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2382 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Chakma:
+	
+#line 23720 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1650;
+		default: goto yy1648;
+	}
+yy1648:
+	++YYCURSOR;
+yy1649:
+#line 2387 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Chakma; else return Error; }
+#line 23733 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1650:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1651;
+		default: goto yy1649;
+	}
+yy1651:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x84: goto yy1653;
+		case 0x85: goto yy1654;
+		default: goto yy1652;
+	}
+yy1652:
+	YYCURSOR = YYMARKER;
+	goto yy1649;
+yy1653:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -23721,51 +23780,7 @@ yy1646:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F: goto yy1647;
-		default: goto yy1644;
-	}
-yy1647:
-	++YYCURSOR;
-#line 2326 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Sharada; }
-#line 23732 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2328 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Sinhala_Archaic_Numbers:
-	
-#line 23738 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1651;
-		default: goto yy1649;
-	}
-yy1649:
-	++YYCURSOR;
-yy1650:
-#line 2333 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Sinhala_Archaic_Numbers; else return Error; }
-#line 23751 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1651:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1652;
-		default: goto yy1650;
-	}
-yy1652:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x87: goto yy1654;
-		default: goto yy1653;
-	}
-yy1653:
-	YYCURSOR = YYMARKER;
-	goto yy1650;
-yy1654:
-	yych = *++YYCURSOR;
-	switch (yych) {
+		case 0x9F:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -23798,19 +23813,40 @@ yy1654:
 		case 0xBD:
 		case 0xBE:
 		case 0xBF: goto yy1655;
-		default: goto yy1653;
+		default: goto yy1652;
+	}
+yy1654:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy1655;
+		default: goto yy1652;
 	}
 yy1655:
 	++YYCURSOR;
-#line 2332 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Sinhala_Archaic_Numbers; }
-#line 23808 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2386 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Chakma; }
+#line 23844 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2334 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2388 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Khojki:
+Mahajani:
 	
-#line 23814 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 23850 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -23821,9 +23857,9 @@ Khojki:
 yy1657:
 	++YYCURSOR;
 yy1658:
-#line 2339 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Khojki; else return Error; }
-#line 23827 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2393 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Mahajani; else return Error; }
+#line 23863 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1659:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -23833,14 +23869,106 @@ yy1659:
 yy1660:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x88: goto yy1662;
-		case 0x89: goto yy1663;
+		case 0x85: goto yy1662;
 		default: goto yy1661;
 	}
 yy1661:
 	YYCURSOR = YYMARKER;
 	goto yy1658;
 yy1662:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1663;
+		default: goto yy1661;
+	}
+yy1663:
+	++YYCURSOR;
+#line 2392 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Mahajani; }
+#line 23936 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2394 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Sharada:
+	
+#line 23942 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1667;
+		default: goto yy1665;
+	}
+yy1665:
+	++YYCURSOR;
+yy1666:
+#line 2399 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sharada; else return Error; }
+#line 23955 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1667:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1668;
+		default: goto yy1666;
+	}
+yy1668:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x86: goto yy1670;
+		case 0x87: goto yy1671;
+		default: goto yy1669;
+	}
+yy1669:
+	YYCURSOR = YYMARKER;
+	goto yy1666;
+yy1670:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -23906,69 +24034,9 @@ yy1662:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1664;
-		default: goto yy1661;
+		case 0xBF: goto yy1672;
+		default: goto yy1669;
 	}
-yy1663:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy1664;
-		default: goto yy1661;
-	}
-yy1664:
-	++YYCURSOR;
-#line 2338 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Khojki; }
-#line 23938 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2340 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Multani:
-	
-#line 23944 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1668;
-		default: goto yy1666;
-	}
-yy1666:
-	++YYCURSOR;
-yy1667:
-#line 2345 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Multani; else return Error; }
-#line 23957 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1668:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1669;
-		default: goto yy1667;
-	}
-yy1669:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x8A: goto yy1671;
-		default: goto yy1670;
-	}
-yy1670:
-	YYCURSOR = YYMARKER;
-	goto yy1667;
 yy1671:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -24003,36 +24071,20 @@ yy1671:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy1672;
-		default: goto yy1670;
+		case 0x9F: goto yy1672;
+		default: goto yy1669;
 	}
 yy1672:
 	++YYCURSOR;
-#line 2344 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Multani; }
-#line 24030 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2398 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Sharada; }
+#line 24082 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2346 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2400 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Khudawadi:
+Sinhala_Archaic_Numbers:
 	
-#line 24036 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 24088 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -24043,9 +24095,9 @@ Khudawadi:
 yy1674:
 	++YYCURSOR;
 yy1675:
-#line 2351 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Khudawadi; else return Error; }
-#line 24049 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2405 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sinhala_Archaic_Numbers; else return Error; }
+#line 24101 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1676:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -24055,8 +24107,7 @@ yy1676:
 yy1677:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8A: goto yy1679;
-		case 0x8B: goto yy1680;
+		case 0x87: goto yy1679;
 		default: goto yy1678;
 	}
 yy1678:
@@ -24065,59 +24116,6 @@ yy1678:
 yy1679:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1681;
-		default: goto yy1678;
-	}
-yy1680:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -24149,50 +24147,50 @@ yy1680:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1681;
+		case 0xBF: goto yy1680;
 		default: goto yy1678;
 	}
-yy1681:
+yy1680:
 	++YYCURSOR;
-#line 2350 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Khudawadi; }
-#line 24160 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2404 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Sinhala_Archaic_Numbers; }
+#line 24158 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2352 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2406 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Grantha:
+Khojki:
 	
-#line 24166 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 24164 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1685;
-		default: goto yy1683;
+		case 0xF0: goto yy1684;
+		default: goto yy1682;
 	}
-yy1683:
+yy1682:
 	++YYCURSOR;
+yy1683:
+#line 2411 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Khojki; else return Error; }
+#line 24177 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1684:
-#line 2357 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Grantha; else return Error; }
-#line 24179 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1685:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x91: goto yy1686;
-		default: goto yy1684;
+		case 0x91: goto yy1685;
+		default: goto yy1683;
 	}
-yy1686:
+yy1685:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8C:
-		case 0x8D: goto yy1688;
-		default: goto yy1687;
+		case 0x88: goto yy1687;
+		case 0x89: goto yy1688;
+		default: goto yy1686;
 	}
-yy1687:
+yy1686:
 	YYCURSOR = YYMARKER;
-	goto yy1684;
-yy1688:
+	goto yy1683;
+yy1687:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -24259,19 +24257,40 @@ yy1688:
 		case 0xBD:
 		case 0xBE:
 		case 0xBF: goto yy1689;
-		default: goto yy1687;
+		default: goto yy1686;
+	}
+yy1688:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy1689;
+		default: goto yy1686;
 	}
 yy1689:
 	++YYCURSOR;
-#line 2356 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Grantha; }
-#line 24269 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2410 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Khojki; }
+#line 24288 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2358 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2412 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Newa:
+Multani:
 	
-#line 24275 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 24294 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -24282,9 +24301,9 @@ Newa:
 yy1691:
 	++YYCURSOR;
 yy1692:
-#line 2363 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Newa; else return Error; }
-#line 24288 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2417 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Multani; else return Error; }
+#line 24307 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1693:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -24294,8 +24313,7 @@ yy1693:
 yy1694:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x90:
-		case 0x91: goto yy1696;
+		case 0x8A: goto yy1696;
 		default: goto yy1695;
 	}
 yy1695:
@@ -24351,7 +24369,52 @@ yy1696:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
+		case 0xAF: goto yy1697;
+		default: goto yy1695;
+	}
+yy1697:
+	++YYCURSOR;
+#line 2416 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Multani; }
+#line 24380 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2418 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Khudawadi:
+	
+#line 24386 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1701;
+		default: goto yy1699;
+	}
+yy1699:
+	++YYCURSOR;
+yy1700:
+#line 2423 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Khudawadi; else return Error; }
+#line 24399 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1701:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1702;
+		default: goto yy1700;
+	}
+yy1702:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x8A: goto yy1704;
+		case 0x8B: goto yy1705;
+		default: goto yy1703;
+	}
+yy1703:
+	YYCURSOR = YYMARKER;
+	goto yy1700;
+yy1704:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -24367,50 +24430,10 @@ yy1696:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1697;
-		default: goto yy1695;
-	}
-yy1697:
-	++YYCURSOR;
-#line 2362 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Newa; }
-#line 24378 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2364 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Tirhuta:
-	
-#line 24384 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1701;
-		default: goto yy1699;
-	}
-yy1699:
-	++YYCURSOR;
-yy1700:
-#line 2369 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tirhuta; else return Error; }
-#line 24397 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1701:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1702;
-		default: goto yy1700;
-	}
-yy1702:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x92: goto yy1704;
-		case 0x93: goto yy1705;
+		case 0xBF: goto yy1706;
 		default: goto yy1703;
 	}
-yy1703:
-	YYCURSOR = YYMARKER;
-	goto yy1700;
-yy1704:
+yy1705:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -24479,54 +24502,17 @@ yy1704:
 		case 0xBF: goto yy1706;
 		default: goto yy1703;
 	}
-yy1705:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy1706;
-		default: goto yy1703;
-	}
 yy1706:
 	++YYCURSOR;
-#line 2368 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Tirhuta; }
-#line 24524 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2422 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Khudawadi; }
+#line 24510 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2370 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2424 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Siddham:
+Grantha:
 	
-#line 24530 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 24516 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -24537,9 +24523,9 @@ Siddham:
 yy1708:
 	++YYCURSOR;
 yy1709:
-#line 2375 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Siddham; else return Error; }
-#line 24543 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2429 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Grantha; else return Error; }
+#line 24529 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1710:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -24549,8 +24535,8 @@ yy1710:
 yy1711:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x96:
-		case 0x97: goto yy1713;
+		case 0x8C:
+		case 0x8D: goto yy1713;
 		default: goto yy1712;
 	}
 yy1712:
@@ -24627,15 +24613,15 @@ yy1713:
 	}
 yy1714:
 	++YYCURSOR;
-#line 2374 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Siddham; }
-#line 24633 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2428 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Grantha; }
+#line 24619 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2376 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2430 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Modi:
+Tulu_Tigalari:
 	
-#line 24639 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 24625 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -24646,9 +24632,9 @@ Modi:
 yy1716:
 	++YYCURSOR;
 yy1717:
-#line 2381 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Modi; else return Error; }
-#line 24652 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2435 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tulu_Tigalari; else return Error; }
+#line 24638 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1718:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -24658,8 +24644,8 @@ yy1718:
 yy1719:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x98: goto yy1721;
-		case 0x99: goto yy1722;
+		case 0x8E:
+		case 0x8F: goto yy1721;
 		default: goto yy1720;
 	}
 yy1720:
@@ -24731,10 +24717,50 @@ yy1721:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1723;
+		case 0xBF: goto yy1722;
 		default: goto yy1720;
 	}
 yy1722:
+	++YYCURSOR;
+#line 2434 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Tulu_Tigalari; }
+#line 24728 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2436 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Newa:
+	
+#line 24734 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1726;
+		default: goto yy1724;
+	}
+yy1724:
+	++YYCURSOR;
+yy1725:
+#line 2441 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Newa; else return Error; }
+#line 24747 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1726:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1727;
+		default: goto yy1725;
+	}
+yy1727:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x90:
+		case 0x91: goto yy1729;
+		default: goto yy1728;
+	}
+yy1728:
+	YYCURSOR = YYMARKER;
+	goto yy1725;
+yy1729:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -24768,51 +24794,7 @@ yy1722:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F: goto yy1723;
-		default: goto yy1720;
-	}
-yy1723:
-	++YYCURSOR;
-#line 2380 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Modi; }
-#line 24779 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2382 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Mongolian_Supplement:
-	
-#line 24785 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1727;
-		default: goto yy1725;
-	}
-yy1725:
-	++YYCURSOR;
-yy1726:
-#line 2387 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Mongolian_Supplement; else return Error; }
-#line 24798 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1727:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1728;
-		default: goto yy1726;
-	}
-yy1728:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x99: goto yy1730;
-		default: goto yy1729;
-	}
-yy1729:
-	YYCURSOR = YYMARKER;
-	goto yy1726;
-yy1730:
-	yych = *++YYCURSOR;
-	switch (yych) {
+		case 0x9F:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -24844,49 +24826,118 @@ yy1730:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1731;
-		default: goto yy1729;
+		case 0xBF: goto yy1730;
+		default: goto yy1728;
 	}
-yy1731:
+yy1730:
 	++YYCURSOR;
-#line 2386 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Mongolian_Supplement; }
-#line 24855 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2440 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Newa; }
+#line 24837 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2388 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2442 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Takri:
+Tirhuta:
 	
-#line 24861 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 24843 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1735;
-		default: goto yy1733;
+		case 0xF0: goto yy1734;
+		default: goto yy1732;
 	}
-yy1733:
+yy1732:
 	++YYCURSOR;
+yy1733:
+#line 2447 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tirhuta; else return Error; }
+#line 24856 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1734:
-#line 2393 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Takri; else return Error; }
-#line 24874 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1735:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x91: goto yy1736;
-		default: goto yy1734;
+		case 0x91: goto yy1735;
+		default: goto yy1733;
 	}
-yy1736:
+yy1735:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9A: goto yy1738;
-		case 0x9B: goto yy1739;
-		default: goto yy1737;
+		case 0x92: goto yy1737;
+		case 0x93: goto yy1738;
+		default: goto yy1736;
 	}
-yy1737:
+yy1736:
 	YYCURSOR = YYMARKER;
-	goto yy1734;
+	goto yy1733;
+yy1737:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1739;
+		default: goto yy1736;
+	}
 yy1738:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -24921,103 +24972,50 @@ yy1738:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1740;
-		default: goto yy1737;
+		case 0x9F: goto yy1739;
+		default: goto yy1736;
 	}
 yy1739:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy1740;
-		default: goto yy1737;
-	}
-yy1740:
 	++YYCURSOR;
-#line 2392 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Takri; }
-#line 24985 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2446 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Tirhuta; }
+#line 24983 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2394 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2448 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Ahom:
+Siddham:
 	
-#line 24991 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 24989 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1744;
-		default: goto yy1742;
+		case 0xF0: goto yy1743;
+		default: goto yy1741;
 	}
-yy1742:
+yy1741:
 	++YYCURSOR;
+yy1742:
+#line 2453 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Siddham; else return Error; }
+#line 25002 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1743:
-#line 2399 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Ahom; else return Error; }
-#line 25004 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1744:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x91: goto yy1745;
-		default: goto yy1743;
+		case 0x91: goto yy1744;
+		default: goto yy1742;
 	}
-yy1745:
+yy1744:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9C: goto yy1747;
-		case 0x9D: goto yy1748;
-		default: goto yy1746;
+		case 0x96:
+		case 0x97: goto yy1746;
+		default: goto yy1745;
 	}
-yy1746:
+yy1745:
 	YYCURSOR = YYMARKER;
-	goto yy1743;
-yy1747:
+	goto yy1742;
+yy1746:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -25083,73 +25081,52 @@ yy1747:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1749;
-		default: goto yy1746;
+		case 0xBF: goto yy1747;
+		default: goto yy1745;
 	}
-yy1748:
-	yych = *++YYCURSOR;
+yy1747:
+	++YYCURSOR;
+#line 2452 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Siddham; }
+#line 25092 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2454 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Modi:
+	
+#line 25098 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy1749;
-		default: goto yy1746;
+		case 0xF0: goto yy1751;
+		default: goto yy1749;
 	}
 yy1749:
 	++YYCURSOR;
-#line 2398 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Ahom; }
-#line 25115 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2400 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Dogra:
-	
-#line 25121 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1753;
-		default: goto yy1751;
-	}
+yy1750:
+#line 2459 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Modi; else return Error; }
+#line 25111 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1751:
-	++YYCURSOR;
-yy1752:
-#line 2405 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Dogra; else return Error; }
-#line 25134 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1753:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x91: goto yy1754;
-		default: goto yy1752;
+		case 0x91: goto yy1752;
+		default: goto yy1750;
 	}
+yy1752:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x98: goto yy1754;
+		case 0x99: goto yy1755;
+		default: goto yy1753;
+	}
+yy1753:
+	YYCURSOR = YYMARKER;
+	goto yy1750;
 yy1754:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA0: goto yy1756;
-		case 0xA1: goto yy1757;
-		default: goto yy1755;
-	}
-yy1755:
-	YYCURSOR = YYMARKER;
-	goto yy1752;
-yy1756:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -25213,10 +25190,10 @@ yy1756:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1758;
-		default: goto yy1755;
+		case 0xBF: goto yy1756;
+		default: goto yy1753;
 	}
-yy1757:
+yy1755:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -25234,50 +25211,65 @@ yy1757:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F: goto yy1758;
-		default: goto yy1755;
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy1756;
+		default: goto yy1753;
+	}
+yy1756:
+	++YYCURSOR;
+#line 2458 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Modi; }
+#line 25238 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2460 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Mongolian_Supplement:
+	
+#line 25244 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1760;
+		default: goto yy1758;
 	}
 yy1758:
 	++YYCURSOR;
-#line 2404 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Dogra; }
-#line 25245 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2406 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Warang_Citi:
-	
-#line 25251 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1762;
-		default: goto yy1760;
-	}
+yy1759:
+#line 2465 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Mongolian_Supplement; else return Error; }
+#line 25257 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1760:
-	++YYCURSOR;
-yy1761:
-#line 2411 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Warang_Citi; else return Error; }
-#line 25264 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1762:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x91: goto yy1763;
-		default: goto yy1761;
+		case 0x91: goto yy1761;
+		default: goto yy1759;
 	}
-yy1763:
+yy1761:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA2: goto yy1765;
-		case 0xA3: goto yy1766;
-		default: goto yy1764;
+		case 0x99: goto yy1763;
+		default: goto yy1762;
 	}
-yy1764:
+yy1762:
 	YYCURSOR = YYMARKER;
-	goto yy1761;
-yy1765:
+	goto yy1759;
+yy1763:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xA0:
@@ -25311,10 +25303,50 @@ yy1765:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1767;
-		default: goto yy1764;
+		case 0xBF: goto yy1764;
+		default: goto yy1762;
+	}
+yy1764:
+	++YYCURSOR;
+#line 2464 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Mongolian_Supplement; }
+#line 25314 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2466 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Takri:
+	
+#line 25320 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1768;
+		default: goto yy1766;
 	}
 yy1766:
+	++YYCURSOR;
+yy1767:
+#line 2471 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Takri; else return Error; }
+#line 25333 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1768:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1769;
+		default: goto yy1767;
+	}
+yy1769:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x9A: goto yy1771;
+		case 0x9B: goto yy1772;
+		default: goto yy1770;
+	}
+yy1770:
+	YYCURSOR = YYMARKER;
+	goto yy1767;
+yy1771:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -25380,52 +25412,12 @@ yy1766:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1767;
-		default: goto yy1764;
-	}
-yy1767:
-	++YYCURSOR;
-#line 2410 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Warang_Citi; }
-#line 25391 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2412 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Dives_Akuru:
-	
-#line 25397 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1771;
-		default: goto yy1769;
-	}
-yy1769:
-	++YYCURSOR;
-yy1770:
-#line 2417 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Dives_Akuru; else return Error; }
-#line 25410 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1771:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1772;
+		case 0xBF: goto yy1773;
 		default: goto yy1770;
 	}
 yy1772:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA4: goto yy1774;
-		case 0xA5: goto yy1775;
-		default: goto yy1773;
-	}
-yy1773:
-	YYCURSOR = YYMARKER;
-	goto yy1770;
-yy1774:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -25441,7 +25433,51 @@ yy1774:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F:
+		case 0x8F: goto yy1773;
+		default: goto yy1770;
+	}
+yy1773:
+	++YYCURSOR;
+#line 2470 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Takri; }
+#line 25444 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2472 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Myanmar_Extended_C:
+	
+#line 25450 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1777;
+		default: goto yy1775;
+	}
+yy1775:
+	++YYCURSOR;
+yy1776:
+#line 2477 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Myanmar_Extended_C; else return Error; }
+#line 25463 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1777:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1778;
+		default: goto yy1776;
+	}
+yy1778:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x9B: goto yy1780;
+		default: goto yy1779;
+	}
+yy1779:
+	YYCURSOR = YYMARKER;
+	goto yy1776;
+yy1780:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0x90:
 		case 0x91:
 		case 0x92:
@@ -25489,233 +25525,50 @@ yy1774:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1776;
-		default: goto yy1773;
-	}
-yy1775:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy1776;
-		default: goto yy1773;
-	}
-yy1776:
-	++YYCURSOR;
-#line 2416 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Dives_Akuru; }
-#line 25537 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2418 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Nandinagari:
-	
-#line 25543 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1780;
-		default: goto yy1778;
-	}
-yy1778:
-	++YYCURSOR;
-yy1779:
-#line 2423 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Nandinagari; else return Error; }
-#line 25556 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1780:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1781;
+		case 0xBF: goto yy1781;
 		default: goto yy1779;
 	}
 yy1781:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xA6: goto yy1783;
-		case 0xA7: goto yy1784;
-		default: goto yy1782;
-	}
-yy1782:
-	YYCURSOR = YYMARKER;
-	goto yy1779;
-yy1783:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1785;
-		default: goto yy1782;
-	}
-yy1784:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1785;
-		default: goto yy1782;
-	}
-yy1785:
 	++YYCURSOR;
-#line 2422 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Nandinagari; }
-#line 25683 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2476 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Myanmar_Extended_C; }
+#line 25536 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2424 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2478 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Zanabazar_Square:
+Ahom:
 	
-#line 25689 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 25542 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1789;
+		case 0xF0: goto yy1785;
+		default: goto yy1783;
+	}
+yy1783:
+	++YYCURSOR;
+yy1784:
+#line 2483 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Ahom; else return Error; }
+#line 25555 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1785:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1786;
+		default: goto yy1784;
+	}
+yy1786:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x9C: goto yy1788;
+		case 0x9D: goto yy1789;
 		default: goto yy1787;
 	}
 yy1787:
-	++YYCURSOR;
-yy1788:
-#line 2429 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Zanabazar_Square; else return Error; }
-#line 25702 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1789:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1790;
-		default: goto yy1788;
-	}
-yy1790:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xA8: goto yy1792;
-		case 0xA9: goto yy1793;
-		default: goto yy1791;
-	}
-yy1791:
 	YYCURSOR = YYMARKER;
-	goto yy1788;
-yy1792:
+	goto yy1784;
+yy1788:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -25781,10 +25634,10 @@ yy1792:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1794;
-		default: goto yy1791;
+		case 0xBF: goto yy1790;
+		default: goto yy1787;
 	}
-yy1793:
+yy1789:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -25802,103 +25655,50 @@ yy1793:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F: goto yy1794;
-		default: goto yy1791;
+		case 0x8F: goto yy1790;
+		default: goto yy1787;
 	}
-yy1794:
+yy1790:
 	++YYCURSOR;
-#line 2428 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Zanabazar_Square; }
-#line 25813 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2482 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Ahom; }
+#line 25666 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2430 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2484 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Soyombo:
+Dogra:
 	
-#line 25819 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 25672 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1798;
+		case 0xF0: goto yy1794;
+		default: goto yy1792;
+	}
+yy1792:
+	++YYCURSOR;
+yy1793:
+#line 2489 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Dogra; else return Error; }
+#line 25685 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1794:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1795;
+		default: goto yy1793;
+	}
+yy1795:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA0: goto yy1797;
+		case 0xA1: goto yy1798;
 		default: goto yy1796;
 	}
 yy1796:
-	++YYCURSOR;
-yy1797:
-#line 2435 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Soyombo; else return Error; }
-#line 25832 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1798:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1799;
-		default: goto yy1797;
-	}
-yy1799:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xA9: goto yy1801;
-		case 0xAA: goto yy1802;
-		default: goto yy1800;
-	}
-yy1800:
 	YYCURSOR = YYMARKER;
-	goto yy1797;
-yy1801:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1803;
-		default: goto yy1800;
-	}
-yy1802:
+	goto yy1793;
+yy1797:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -25948,51 +25748,7 @@ yy1802:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy1803;
-		default: goto yy1800;
-	}
-yy1803:
-	++YYCURSOR;
-#line 2434 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Soyombo; }
-#line 25959 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2436 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Unified_Canadian_Aboriginal_Syllabics_Extended_A:
-	
-#line 25965 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1807;
-		default: goto yy1805;
-	}
-yy1805:
-	++YYCURSOR;
-yy1806:
-#line 2441 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Unified_Canadian_Aboriginal_Syllabics_Extended_A; else return Error; }
-#line 25978 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1807:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1808;
-		default: goto yy1806;
-	}
-yy1808:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xAA: goto yy1810;
-		default: goto yy1809;
-	}
-yy1809:
-	YYCURSOR = YYMARKER;
-	goto yy1806;
-yy1810:
-	yych = *++YYCURSOR;
-	switch (yych) {
+		case 0xAF:
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -26008,1249 +25764,1463 @@ yy1810:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1811;
-		default: goto yy1809;
+		case 0xBF: goto yy1799;
+		default: goto yy1796;
 	}
-yy1811:
+yy1798:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy1799;
+		default: goto yy1796;
+	}
+yy1799:
 	++YYCURSOR;
-#line 2440 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Unified_Canadian_Aboriginal_Syllabics_Extended_A; }
-#line 26019 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2488 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Dogra; }
+#line 25796 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2442 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2490 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Pau_Cin_Hau:
+Warang_Citi:
 	
-#line 26025 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 25802 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1815;
-		default: goto yy1813;
+		case 0xF0: goto yy1803;
+		default: goto yy1801;
 	}
-yy1813:
+yy1801:
 	++YYCURSOR;
-yy1814:
-#line 2447 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Pau_Cin_Hau; else return Error; }
-#line 26038 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1815:
+yy1802:
+#line 2495 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Warang_Citi; else return Error; }
+#line 25815 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1803:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x91: goto yy1816;
+		case 0x91: goto yy1804;
+		default: goto yy1802;
+	}
+yy1804:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA2: goto yy1806;
+		case 0xA3: goto yy1807;
+		default: goto yy1805;
+	}
+yy1805:
+	YYCURSOR = YYMARKER;
+	goto yy1802;
+yy1806:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1808;
+		default: goto yy1805;
+	}
+yy1807:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1808;
+		default: goto yy1805;
+	}
+yy1808:
+	++YYCURSOR;
+#line 2494 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Warang_Citi; }
+#line 25942 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2496 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Dives_Akuru:
+	
+#line 25948 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1812;
+		default: goto yy1810;
+	}
+yy1810:
+	++YYCURSOR;
+yy1811:
+#line 2501 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Dives_Akuru; else return Error; }
+#line 25961 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1812:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1813;
+		default: goto yy1811;
+	}
+yy1813:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA4: goto yy1815;
+		case 0xA5: goto yy1816;
+		default: goto yy1814;
+	}
+yy1814:
+	YYCURSOR = YYMARKER;
+	goto yy1811;
+yy1815:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1817;
 		default: goto yy1814;
 	}
 yy1816:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAB: goto yy1818;
-		default: goto yy1817;
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy1817;
+		default: goto yy1814;
 	}
 yy1817:
-	YYCURSOR = YYMARKER;
-	goto yy1814;
-yy1818:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1819;
-		default: goto yy1817;
-	}
-yy1819:
-	++YYCURSOR;
-#line 2446 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Pau_Cin_Hau; }
-#line 26127 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2448 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Devanagari_Extended_A:
-	
-#line 26133 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1823;
-		default: goto yy1821;
-	}
-yy1821:
-	++YYCURSOR;
-yy1822:
-#line 2453 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Devanagari_Extended_A; else return Error; }
-#line 26146 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1823:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1824;
-		default: goto yy1822;
-	}
-yy1824:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xAC: goto yy1826;
-		case 0xAD: goto yy1827;
-		default: goto yy1825;
-	}
-yy1825:
-	YYCURSOR = YYMARKER;
-	goto yy1822;
-yy1826:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1828;
-		default: goto yy1825;
-	}
-yy1827:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy1828;
-		default: goto yy1825;
-	}
-yy1828:
-	++YYCURSOR;
-#line 2452 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Devanagari_Extended_A; }
-#line 26273 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2454 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Bhaiksuki:
-	
-#line 26279 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1832;
-		default: goto yy1830;
-	}
-yy1830:
-	++YYCURSOR;
-yy1831:
-#line 2459 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Bhaiksuki; else return Error; }
-#line 26292 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1832:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1833;
-		default: goto yy1831;
-	}
-yy1833:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xB0: goto yy1835;
-		case 0xB1: goto yy1836;
-		default: goto yy1834;
-	}
-yy1834:
-	YYCURSOR = YYMARKER;
-	goto yy1831;
-yy1835:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1837;
-		default: goto yy1834;
-	}
-yy1836:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy1837;
-		default: goto yy1834;
-	}
-yy1837:
-	++YYCURSOR;
-#line 2458 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Bhaiksuki; }
-#line 26435 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2460 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Marchen:
-	
-#line 26441 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1841;
-		default: goto yy1839;
-	}
-yy1839:
-	++YYCURSOR;
-yy1840:
-#line 2465 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Marchen; else return Error; }
-#line 26454 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1841:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1842;
-		default: goto yy1840;
-	}
-yy1842:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xB1: goto yy1844;
-		case 0xB2: goto yy1845;
-		default: goto yy1843;
-	}
-yy1843:
-	YYCURSOR = YYMARKER;
-	goto yy1840;
-yy1844:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1846;
-		default: goto yy1843;
-	}
-yy1845:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1846;
-		default: goto yy1843;
-	}
-yy1846:
-	++YYCURSOR;
-#line 2464 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Marchen; }
-#line 26565 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2466 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Masaram_Gondi:
-	
-#line 26571 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1850;
-		default: goto yy1848;
-	}
-yy1848:
-	++YYCURSOR;
-yy1849:
-#line 2471 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Masaram_Gondi; else return Error; }
-#line 26584 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1850:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1851;
-		default: goto yy1849;
-	}
-yy1851:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xB4: goto yy1853;
-		case 0xB5: goto yy1854;
-		default: goto yy1852;
-	}
-yy1852:
-	YYCURSOR = YYMARKER;
-	goto yy1849;
-yy1853:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1855;
-		default: goto yy1852;
-	}
-yy1854:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy1855;
-		default: goto yy1852;
-	}
-yy1855:
-	++YYCURSOR;
-#line 2470 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Masaram_Gondi; }
-#line 26711 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2472 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Gunjala_Gondi:
-	
-#line 26717 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1859;
-		default: goto yy1857;
-	}
-yy1857:
-	++YYCURSOR;
-yy1858:
-#line 2477 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Gunjala_Gondi; else return Error; }
-#line 26730 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1859:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1860;
-		default: goto yy1858;
-	}
-yy1860:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xB5: goto yy1862;
-		case 0xB6: goto yy1863;
-		default: goto yy1861;
-	}
-yy1861:
-	YYCURSOR = YYMARKER;
-	goto yy1858;
-yy1862:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1864;
-		default: goto yy1861;
-	}
-yy1863:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy1864;
-		default: goto yy1861;
-	}
-yy1864:
-	++YYCURSOR;
-#line 2476 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Gunjala_Gondi; }
-#line 26841 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2478 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Makasar:
-	
-#line 26847 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1868;
-		default: goto yy1866;
-	}
-yy1866:
-	++YYCURSOR;
-yy1867:
-#line 2483 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Makasar; else return Error; }
-#line 26860 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1868:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1869;
-		default: goto yy1867;
-	}
-yy1869:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBB: goto yy1871;
-		default: goto yy1870;
-	}
-yy1870:
-	YYCURSOR = YYMARKER;
-	goto yy1867;
-yy1871:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1872;
-		default: goto yy1870;
-	}
-yy1872:
-	++YYCURSOR;
-#line 2482 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Makasar; }
-#line 26917 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2484 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Kawi:
-	
-#line 26923 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1876;
-		default: goto yy1874;
-	}
-yy1874:
-	++YYCURSOR;
-yy1875:
-#line 2489 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Kawi; else return Error; }
-#line 26936 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1876:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1877;
-		default: goto yy1875;
-	}
-yy1877:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBC: goto yy1879;
-		case 0xBD: goto yy1880;
-		default: goto yy1878;
-	}
-yy1878:
-	YYCURSOR = YYMARKER;
-	goto yy1875;
-yy1879:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1881;
-		default: goto yy1878;
-	}
-yy1880:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy1881;
-		default: goto yy1878;
-	}
-yy1881:
-	++YYCURSOR;
-#line 2488 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Kawi; }
-#line 27063 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2490 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Lisu_Supplement:
-	
-#line 27069 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1885;
-		default: goto yy1883;
-	}
-yy1883:
-	++YYCURSOR;
-yy1884:
-#line 2495 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Lisu_Supplement; else return Error; }
-#line 27082 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1885:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1886;
-		default: goto yy1884;
-	}
-yy1886:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBE: goto yy1888;
-		default: goto yy1887;
-	}
-yy1887:
-	YYCURSOR = YYMARKER;
-	goto yy1884;
-yy1888:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1889;
-		default: goto yy1887;
-	}
-yy1889:
-	++YYCURSOR;
-#line 2494 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Lisu_Supplement; }
-#line 27123 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2496 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Tamil_Supplement:
-	
-#line 27129 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1893;
-		default: goto yy1891;
-	}
-yy1891:
-	++YYCURSOR;
-yy1892:
-#line 2501 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tamil_Supplement; else return Error; }
-#line 27142 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1893:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x91: goto yy1894;
-		default: goto yy1892;
-	}
-yy1894:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBF: goto yy1896;
-		default: goto yy1895;
-	}
-yy1895:
-	YYCURSOR = YYMARKER;
-	goto yy1892;
-yy1896:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1897;
-		default: goto yy1895;
-	}
-yy1897:
 	++YYCURSOR;
 #line 2500 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Tamil_Supplement; }
-#line 27231 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+	{ goto Dives_Akuru; }
+#line 26088 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
 #line 2502 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Cuneiform:
+Nandinagari:
 	
-#line 27237 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 26094 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1901;
-		default: goto yy1899;
+		case 0xF0: goto yy1821;
+		default: goto yy1819;
 	}
-yy1899:
+yy1819:
 	++YYCURSOR;
-yy1900:
+yy1820:
 #line 2507 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Cuneiform; else return Error; }
-#line 27250 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1901:
+	{ if (YYCURSOR - 1 == limit) return Nandinagari; else return Error; }
+#line 26107 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1821:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x92: goto yy1902;
+		case 0x91: goto yy1822;
+		default: goto yy1820;
+	}
+yy1822:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA6: goto yy1824;
+		case 0xA7: goto yy1825;
+		default: goto yy1823;
+	}
+yy1823:
+	YYCURSOR = YYMARKER;
+	goto yy1820;
+yy1824:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1826;
+		default: goto yy1823;
+	}
+yy1825:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1826;
+		default: goto yy1823;
+	}
+yy1826:
+	++YYCURSOR;
+#line 2506 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Nandinagari; }
+#line 26234 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2508 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Zanabazar_Square:
+	
+#line 26240 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1830;
+		default: goto yy1828;
+	}
+yy1828:
+	++YYCURSOR;
+yy1829:
+#line 2513 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Zanabazar_Square; else return Error; }
+#line 26253 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1830:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1831;
+		default: goto yy1829;
+	}
+yy1831:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA8: goto yy1833;
+		case 0xA9: goto yy1834;
+		default: goto yy1832;
+	}
+yy1832:
+	YYCURSOR = YYMARKER;
+	goto yy1829;
+yy1833:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1835;
+		default: goto yy1832;
+	}
+yy1834:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy1835;
+		default: goto yy1832;
+	}
+yy1835:
+	++YYCURSOR;
+#line 2512 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Zanabazar_Square; }
+#line 26364 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2514 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Soyombo:
+	
+#line 26370 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1839;
+		default: goto yy1837;
+	}
+yy1837:
+	++YYCURSOR;
+yy1838:
+#line 2519 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Soyombo; else return Error; }
+#line 26383 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1839:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1840;
+		default: goto yy1838;
+	}
+yy1840:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA9: goto yy1842;
+		case 0xAA: goto yy1843;
+		default: goto yy1841;
+	}
+yy1841:
+	YYCURSOR = YYMARKER;
+	goto yy1838;
+yy1842:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1844;
+		default: goto yy1841;
+	}
+yy1843:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF: goto yy1844;
+		default: goto yy1841;
+	}
+yy1844:
+	++YYCURSOR;
+#line 2518 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Soyombo; }
+#line 26510 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2520 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Unified_Canadian_Aboriginal_Syllabics_Extended_A:
+	
+#line 26516 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1848;
+		default: goto yy1846;
+	}
+yy1846:
+	++YYCURSOR;
+yy1847:
+#line 2525 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Unified_Canadian_Aboriginal_Syllabics_Extended_A; else return Error; }
+#line 26529 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1848:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1849;
+		default: goto yy1847;
+	}
+yy1849:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xAA: goto yy1851;
+		default: goto yy1850;
+	}
+yy1850:
+	YYCURSOR = YYMARKER;
+	goto yy1847;
+yy1851:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1852;
+		default: goto yy1850;
+	}
+yy1852:
+	++YYCURSOR;
+#line 2524 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Unified_Canadian_Aboriginal_Syllabics_Extended_A; }
+#line 26570 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2526 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Pau_Cin_Hau:
+	
+#line 26576 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1856;
+		default: goto yy1854;
+	}
+yy1854:
+	++YYCURSOR;
+yy1855:
+#line 2531 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Pau_Cin_Hau; else return Error; }
+#line 26589 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1856:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1857;
+		default: goto yy1855;
+	}
+yy1857:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xAB: goto yy1859;
+		default: goto yy1858;
+	}
+yy1858:
+	YYCURSOR = YYMARKER;
+	goto yy1855;
+yy1859:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1860;
+		default: goto yy1858;
+	}
+yy1860:
+	++YYCURSOR;
+#line 2530 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Pau_Cin_Hau; }
+#line 26678 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2532 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Devanagari_Extended_A:
+	
+#line 26684 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1864;
+		default: goto yy1862;
+	}
+yy1862:
+	++YYCURSOR;
+yy1863:
+#line 2537 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Devanagari_Extended_A; else return Error; }
+#line 26697 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1864:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1865;
+		default: goto yy1863;
+	}
+yy1865:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xAC: goto yy1867;
+		case 0xAD: goto yy1868;
+		default: goto yy1866;
+	}
+yy1866:
+	YYCURSOR = YYMARKER;
+	goto yy1863;
+yy1867:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1869;
+		default: goto yy1866;
+	}
+yy1868:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy1869;
+		default: goto yy1866;
+	}
+yy1869:
+	++YYCURSOR;
+#line 2536 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Devanagari_Extended_A; }
+#line 26824 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2538 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Sharada_Supplement:
+	
+#line 26830 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1873;
+		default: goto yy1871;
+	}
+yy1871:
+	++YYCURSOR;
+yy1872:
+#line 2543 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sharada_Supplement; else return Error; }
+#line 26843 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1873:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1874;
+		default: goto yy1872;
+	}
+yy1874:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xAD: goto yy1876;
+		default: goto yy1875;
+	}
+yy1875:
+	YYCURSOR = YYMARKER;
+	goto yy1872;
+yy1876:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1877;
+		default: goto yy1875;
+	}
+yy1877:
+	++YYCURSOR;
+#line 2542 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Sharada_Supplement; }
+#line 26900 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2544 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Sunuwar:
+	
+#line 26906 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1881;
+		default: goto yy1879;
+	}
+yy1879:
+	++YYCURSOR;
+yy1880:
+#line 2549 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sunuwar; else return Error; }
+#line 26919 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1881:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1882;
+		default: goto yy1880;
+	}
+yy1882:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xAF: goto yy1884;
+		default: goto yy1883;
+	}
+yy1883:
+	YYCURSOR = YYMARKER;
+	goto yy1880;
+yy1884:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1885;
+		default: goto yy1883;
+	}
+yy1885:
+	++YYCURSOR;
+#line 2548 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Sunuwar; }
+#line 27008 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2550 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Bhaiksuki:
+	
+#line 27014 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1889;
+		default: goto yy1887;
+	}
+yy1887:
+	++YYCURSOR;
+yy1888:
+#line 2555 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Bhaiksuki; else return Error; }
+#line 27027 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1889:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1890;
+		default: goto yy1888;
+	}
+yy1890:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB0: goto yy1892;
+		case 0xB1: goto yy1893;
+		default: goto yy1891;
+	}
+yy1891:
+	YYCURSOR = YYMARKER;
+	goto yy1888;
+yy1892:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1894;
+		default: goto yy1891;
+	}
+yy1893:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF: goto yy1894;
+		default: goto yy1891;
+	}
+yy1894:
+	++YYCURSOR;
+#line 2554 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Bhaiksuki; }
+#line 27170 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2556 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Marchen:
+	
+#line 27176 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1898;
+		default: goto yy1896;
+	}
+yy1896:
+	++YYCURSOR;
+yy1897:
+#line 2561 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Marchen; else return Error; }
+#line 27189 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1898:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1899;
+		default: goto yy1897;
+	}
+yy1899:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB1: goto yy1901;
+		case 0xB2: goto yy1902;
+		default: goto yy1900;
+	}
+yy1900:
+	YYCURSOR = YYMARKER;
+	goto yy1897;
+yy1901:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1903;
 		default: goto yy1900;
 	}
 yy1902:
@@ -27271,30 +27241,6 @@ yy1902:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F: goto yy1904;
-		default: goto yy1903;
-	}
-yy1903:
-	YYCURSOR = YYMARKER;
-	goto yy1900;
-yy1904:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
 		case 0x8F:
 		case 0x90:
 		case 0x91:
@@ -27343,50 +27289,50 @@ yy1904:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1905;
-		default: goto yy1903;
+		case 0xBF: goto yy1903;
+		default: goto yy1900;
+	}
+yy1903:
+	++YYCURSOR;
+#line 2560 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Marchen; }
+#line 27300 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2562 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Masaram_Gondi:
+	
+#line 27306 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1907;
+		default: goto yy1905;
 	}
 yy1905:
 	++YYCURSOR;
-#line 2506 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Cuneiform; }
-#line 27354 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2508 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Cuneiform_Numbers_and_Punctuation:
-	
-#line 27360 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1909;
-		default: goto yy1907;
-	}
+yy1906:
+#line 2567 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Masaram_Gondi; else return Error; }
+#line 27319 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1907:
-	++YYCURSOR;
-yy1908:
-#line 2513 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Cuneiform_Numbers_and_Punctuation; else return Error; }
-#line 27373 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1909:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x92: goto yy1910;
-		default: goto yy1908;
+		case 0x91: goto yy1908;
+		default: goto yy1906;
 	}
-yy1910:
+yy1908:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x90:
-		case 0x91: goto yy1912;
-		default: goto yy1911;
+		case 0xB4: goto yy1910;
+		case 0xB5: goto yy1911;
+		default: goto yy1909;
 	}
-yy1911:
+yy1909:
 	YYCURSOR = YYMARKER;
-	goto yy1908;
-yy1912:
+	goto yy1906;
+yy1910:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -27452,51 +27398,123 @@ yy1912:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1913;
-		default: goto yy1911;
+		case 0xBF: goto yy1912;
+		default: goto yy1909;
 	}
-yy1913:
+yy1911:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy1912;
+		default: goto yy1909;
+	}
+yy1912:
 	++YYCURSOR;
-#line 2512 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Cuneiform_Numbers_and_Punctuation; }
-#line 27463 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2566 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Masaram_Gondi; }
+#line 27446 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2514 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2568 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Early_Dynastic_Cuneiform:
+Gunjala_Gondi:
 	
-#line 27469 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 27452 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1917;
-		default: goto yy1915;
+		case 0xF0: goto yy1916;
+		default: goto yy1914;
 	}
-yy1915:
+yy1914:
 	++YYCURSOR;
+yy1915:
+#line 2573 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Gunjala_Gondi; else return Error; }
+#line 27465 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1916:
-#line 2519 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Early_Dynastic_Cuneiform; else return Error; }
-#line 27482 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1917:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x92: goto yy1918;
-		default: goto yy1916;
+		case 0x91: goto yy1917;
+		default: goto yy1915;
 	}
-yy1918:
+yy1917:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x92:
-		case 0x93:
-		case 0x94: goto yy1920;
-		case 0x95: goto yy1921;
-		default: goto yy1919;
+		case 0xB5: goto yy1919;
+		case 0xB6: goto yy1920;
+		default: goto yy1918;
 	}
-yy1919:
+yy1918:
 	YYCURSOR = YYMARKER;
-	goto yy1916;
+	goto yy1915;
+yy1919:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1921;
+		default: goto yy1918;
+	}
 yy1920:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -27547,7 +27565,52 @@ yy1920:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
+		case 0xAF: goto yy1921;
+		default: goto yy1918;
+	}
+yy1921:
+	++YYCURSOR;
+#line 2572 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Gunjala_Gondi; }
+#line 27576 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2574 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Tolong_Siki:
+	
+#line 27582 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1925;
+		default: goto yy1923;
+	}
+yy1923:
+	++YYCURSOR;
+yy1924:
+#line 2579 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tolong_Siki; else return Error; }
+#line 27595 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1925:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x91: goto yy1926;
+		default: goto yy1924;
+	}
+yy1926:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB6: goto yy1928;
+		case 0xB7: goto yy1929;
+		default: goto yy1927;
+	}
+yy1927:
+	YYCURSOR = YYMARKER;
+	goto yy1924;
+yy1928:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -27563,126 +27626,12 @@ yy1920:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1922;
-		default: goto yy1919;
-	}
-yy1921:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy1922;
-		default: goto yy1919;
-	}
-yy1922:
-	++YYCURSOR;
-#line 2518 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Early_Dynastic_Cuneiform; }
-#line 27595 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2520 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Cypro_Minoan:
-	
-#line 27601 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1926;
-		default: goto yy1924;
-	}
-yy1924:
-	++YYCURSOR;
-yy1925:
-#line 2525 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Cypro_Minoan; else return Error; }
-#line 27614 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1926:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x92: goto yy1927;
-		default: goto yy1925;
-	}
-yy1927:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBE: goto yy1929;
 		case 0xBF: goto yy1930;
-		default: goto yy1928;
+		default: goto yy1927;
 	}
-yy1928:
-	YYCURSOR = YYMARKER;
-	goto yy1925;
 yy1929:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1931;
-		default: goto yy1928;
-	}
-yy1930:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -27730,115 +27679,51 @@ yy1930:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1931;
-		default: goto yy1928;
+		case 0xAF: goto yy1930;
+		default: goto yy1927;
 	}
-yy1931:
+yy1930:
 	++YYCURSOR;
-#line 2524 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Cypro_Minoan; }
-#line 27757 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2578 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Tolong_Siki; }
+#line 27690 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2526 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2580 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Egyptian_Hieroglyphs:
+Makasar:
 	
-#line 27763 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 27696 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1935;
-		default: goto yy1933;
+		case 0xF0: goto yy1934;
+		default: goto yy1932;
 	}
-yy1933:
+yy1932:
 	++YYCURSOR;
+yy1933:
+#line 2585 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Makasar; else return Error; }
+#line 27709 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1934:
-#line 2531 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Egyptian_Hieroglyphs; else return Error; }
-#line 27776 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1935:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x93: goto yy1936;
-		default: goto yy1934;
+		case 0x91: goto yy1935;
+		default: goto yy1933;
+	}
+yy1935:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBB: goto yy1937;
+		default: goto yy1936;
 	}
 yy1936:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy1938;
-		case 0x90: goto yy1939;
-		default: goto yy1937;
-	}
-yy1937:
 	YYCURSOR = YYMARKER;
-	goto yy1934;
-yy1938:
+	goto yy1933;
+yy1937:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -27870,105 +27755,100 @@ yy1938:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1940;
-		default: goto yy1937;
+		case 0xBF: goto yy1938;
+		default: goto yy1936;
 	}
-yy1939:
-	yych = *++YYCURSOR;
+yy1938:
+	++YYCURSOR;
+#line 2584 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Makasar; }
+#line 27766 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2586 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Kawi:
+	
+#line 27772 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy1940;
-		default: goto yy1937;
+		case 0xF0: goto yy1942;
+		default: goto yy1940;
 	}
 yy1940:
 	++YYCURSOR;
-#line 2530 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Egyptian_Hieroglyphs; }
-#line 27934 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2532 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Egyptian_Hieroglyph_Format_Controls:
-	
-#line 27940 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1944;
-		default: goto yy1942;
-	}
+yy1941:
+#line 2591 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Kawi; else return Error; }
+#line 27785 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1942:
-	++YYCURSOR;
-yy1943:
-#line 2537 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Egyptian_Hieroglyph_Format_Controls; else return Error; }
-#line 27953 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1944:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x93: goto yy1945;
-		default: goto yy1943;
+		case 0x91: goto yy1943;
+		default: goto yy1941;
 	}
+yy1943:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBC: goto yy1945;
+		case 0xBD: goto yy1946;
+		default: goto yy1944;
+	}
+yy1944:
+	YYCURSOR = YYMARKER;
+	goto yy1941;
 yy1945:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x90: goto yy1947;
-		case 0x91: goto yy1948;
-		default: goto yy1946;
-	}
-yy1946:
-	YYCURSOR = YYMARKER;
-	goto yy1943;
-yy1947:
-	yych = *++YYCURSOR;
-	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -27984,10 +27864,10 @@ yy1947:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1949;
-		default: goto yy1946;
+		case 0xBF: goto yy1947;
+		default: goto yy1944;
 	}
-yy1948:
+yy1946:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -28021,108 +27901,51 @@ yy1948:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F: goto yy1949;
-		default: goto yy1946;
+		case 0x9F: goto yy1947;
+		default: goto yy1944;
+	}
+yy1947:
+	++YYCURSOR;
+#line 2590 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Kawi; }
+#line 27912 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2592 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Lisu_Supplement:
+	
+#line 27918 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1951;
+		default: goto yy1949;
 	}
 yy1949:
 	++YYCURSOR;
-#line 2536 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Egyptian_Hieroglyph_Format_Controls; }
-#line 28032 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2538 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Anatolian_Hieroglyphs:
-	
-#line 28038 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1953;
-		default: goto yy1951;
-	}
+yy1950:
+#line 2597 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Lisu_Supplement; else return Error; }
+#line 27931 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1951:
-	++YYCURSOR;
-yy1952:
-#line 2543 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Anatolian_Hieroglyphs; else return Error; }
-#line 28051 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1953:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x94: goto yy1954;
-		default: goto yy1952;
+		case 0x91: goto yy1952;
+		default: goto yy1950;
 	}
+yy1952:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBE: goto yy1954;
+		default: goto yy1953;
+	}
+yy1953:
+	YYCURSOR = YYMARKER;
+	goto yy1950;
 yy1954:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99: goto yy1956;
-		default: goto yy1955;
-	}
-yy1955:
-	YYCURSOR = YYMARKER;
-	goto yy1952;
-yy1956:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -28138,59 +27961,51 @@ yy1956:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1957;
-		default: goto yy1955;
+		case 0xBF: goto yy1955;
+		default: goto yy1953;
+	}
+yy1955:
+	++YYCURSOR;
+#line 2596 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Lisu_Supplement; }
+#line 27972 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2598 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Tamil_Supplement:
+	
+#line 27978 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1959;
+		default: goto yy1957;
 	}
 yy1957:
 	++YYCURSOR;
-#line 2542 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Anatolian_Hieroglyphs; }
-#line 28149 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2544 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Bamum_Supplement:
-	
-#line 28155 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1961;
-		default: goto yy1959;
-	}
+yy1958:
+#line 2603 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tamil_Supplement; else return Error; }
+#line 27991 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1959:
-	++YYCURSOR;
-yy1960:
-#line 2549 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Bamum_Supplement; else return Error; }
-#line 28168 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1961:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x96: goto yy1962;
-		default: goto yy1960;
+		case 0x91: goto yy1960;
+		default: goto yy1958;
 	}
+yy1960:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBF: goto yy1962;
+		default: goto yy1961;
+	}
+yy1961:
+	YYCURSOR = YYMARKER;
+	goto yy1958;
 yy1962:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8: goto yy1964;
-		default: goto yy1963;
-	}
-yy1963:
-	YYCURSOR = YYMARKER;
-	goto yy1960;
-yy1964:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -28254,51 +28069,66 @@ yy1964:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1965;
-		default: goto yy1963;
+		case 0xBF: goto yy1963;
+		default: goto yy1961;
+	}
+yy1963:
+	++YYCURSOR;
+#line 2602 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Tamil_Supplement; }
+#line 28080 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2604 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Cuneiform:
+	
+#line 28086 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1967;
+		default: goto yy1965;
 	}
 yy1965:
 	++YYCURSOR;
-#line 2548 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Bamum_Supplement; }
-#line 28265 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2550 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Mro:
-	
-#line 28271 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1969;
-		default: goto yy1967;
-	}
+yy1966:
+#line 2609 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Cuneiform; else return Error; }
+#line 28099 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1967:
-	++YYCURSOR;
-yy1968:
-#line 2555 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Mro; else return Error; }
-#line 28284 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1969:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x96: goto yy1970;
-		default: goto yy1968;
+		case 0x92: goto yy1968;
+		default: goto yy1966;
 	}
+yy1968:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy1970;
+		default: goto yy1969;
+	}
+yy1969:
+	YYCURSOR = YYMARKER;
+	goto yy1966;
 yy1970:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA9: goto yy1972;
-		default: goto yy1971;
-	}
-yy1971:
-	YYCURSOR = YYMARKER;
-	goto yy1968;
-yy1972:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -28346,72 +28176,66 @@ yy1972:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy1973;
-		default: goto yy1971;
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1971;
+		default: goto yy1969;
+	}
+yy1971:
+	++YYCURSOR;
+#line 2608 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Cuneiform; }
+#line 28203 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2610 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Cuneiform_Numbers_and_Punctuation:
+	
+#line 28209 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1975;
+		default: goto yy1973;
 	}
 yy1973:
 	++YYCURSOR;
-#line 2554 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Mro; }
-#line 28357 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2556 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Tangsa:
-	
-#line 28363 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1977;
-		default: goto yy1975;
-	}
+yy1974:
+#line 2615 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Cuneiform_Numbers_and_Punctuation; else return Error; }
+#line 28222 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy1975:
-	++YYCURSOR;
-yy1976:
-#line 2561 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tangsa; else return Error; }
-#line 28376 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1977:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x96: goto yy1978;
-		default: goto yy1976;
+		case 0x92: goto yy1976;
+		default: goto yy1974;
 	}
-yy1978:
+yy1976:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA9: goto yy1980;
-		case 0xAA: goto yy1981;
-		case 0xAB: goto yy1982;
-		default: goto yy1979;
+		case 0x90:
+		case 0x91: goto yy1978;
+		default: goto yy1977;
 	}
-yy1979:
+yy1977:
 	YYCURSOR = YYMARKER;
-	goto yy1976;
-yy1980:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy1983;
-		default: goto yy1979;
-	}
-yy1981:
+	goto yy1974;
+yy1978:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -28477,10 +28301,52 @@ yy1981:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1983;
-		default: goto yy1979;
+		case 0xBF: goto yy1979;
+		default: goto yy1977;
 	}
+yy1979:
+	++YYCURSOR;
+#line 2614 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Cuneiform_Numbers_and_Punctuation; }
+#line 28312 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2616 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Early_Dynastic_Cuneiform:
+	
+#line 28318 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy1983;
+		default: goto yy1981;
+	}
+yy1981:
+	++YYCURSOR;
 yy1982:
+#line 2621 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Early_Dynastic_Cuneiform; else return Error; }
+#line 28331 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1983:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x92: goto yy1984;
+		default: goto yy1982;
+	}
+yy1984:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x92:
+		case 0x93:
+		case 0x94: goto yy1986;
+		case 0x95: goto yy1987;
+		default: goto yy1985;
+	}
+yy1985:
+	YYCURSOR = YYMARKER;
+	goto yy1982;
+yy1986:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -28498,49 +28364,119 @@ yy1982:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F: goto yy1983;
-		default: goto yy1979;
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1988;
+		default: goto yy1985;
 	}
-yy1983:
+yy1987:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy1988;
+		default: goto yy1985;
+	}
+yy1988:
 	++YYCURSOR;
-#line 2560 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Tangsa; }
-#line 28509 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2620 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Early_Dynastic_Cuneiform; }
+#line 28444 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2562 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2622 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Bassa_Vah:
+Cypro_Minoan:
 	
-#line 28515 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 28450 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy1987;
-		default: goto yy1985;
+		case 0xF0: goto yy1992;
+		default: goto yy1990;
 	}
-yy1985:
+yy1990:
 	++YYCURSOR;
-yy1986:
-#line 2567 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Bassa_Vah; else return Error; }
-#line 28528 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1987:
+yy1991:
+#line 2627 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Cypro_Minoan; else return Error; }
+#line 28463 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy1992:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x96: goto yy1988;
-		default: goto yy1986;
+		case 0x92: goto yy1993;
+		default: goto yy1991;
 	}
-yy1988:
+yy1993:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAB: goto yy1990;
-		default: goto yy1989;
+		case 0xBE: goto yy1995;
+		case 0xBF: goto yy1996;
+		default: goto yy1994;
 	}
-yy1989:
+yy1994:
 	YYCURSOR = YYMARKER;
-	goto yy1986;
-yy1990:
+	goto yy1991;
+yy1995:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x90:
@@ -28590,51 +28526,134 @@ yy1990:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy1991;
-		default: goto yy1989;
-	}
-yy1991:
-	++YYCURSOR;
-#line 2566 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Bassa_Vah; }
-#line 28601 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2568 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Pahawh_Hmong:
-	
-#line 28607 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy1995;
-		default: goto yy1993;
-	}
-yy1993:
-	++YYCURSOR;
-yy1994:
-#line 2573 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Pahawh_Hmong; else return Error; }
-#line 28620 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy1995:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x96: goto yy1996;
+		case 0xBF: goto yy1997;
 		default: goto yy1994;
 	}
 yy1996:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
 		case 0xAC:
-		case 0xAD: goto yy1998;
-		case 0xAE: goto yy1999;
-		default: goto yy1997;
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy1997;
+		default: goto yy1994;
 	}
 yy1997:
+	++YYCURSOR;
+#line 2626 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Cypro_Minoan; }
+#line 28606 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2628 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Egyptian_Hieroglyphs:
+	
+#line 28612 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2001;
+		default: goto yy1999;
+	}
+yy1999:
+	++YYCURSOR;
+yy2000:
+#line 2633 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Egyptian_Hieroglyphs; else return Error; }
+#line 28625 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2001:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x93: goto yy2002;
+		default: goto yy2000;
+	}
+yy2002:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy2004;
+		case 0x90: goto yy2005;
+		default: goto yy2003;
+	}
+yy2003:
 	YYCURSOR = YYMARKER;
-	goto yy1994;
-yy1998:
+	goto yy2000;
+yy2004:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -28700,73 +28719,12 @@ yy1998:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2000;
-		default: goto yy1997;
-	}
-yy1999:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy2000;
-		default: goto yy1997;
-	}
-yy2000:
-	++YYCURSOR;
-#line 2572 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Pahawh_Hmong; }
-#line 28732 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2574 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Medefaidrin:
-	
-#line 28738 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2004;
-		default: goto yy2002;
-	}
-yy2002:
-	++YYCURSOR;
-yy2003:
-#line 2579 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Medefaidrin; else return Error; }
-#line 28751 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2004:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x96: goto yy2005;
+		case 0xBF: goto yy2006;
 		default: goto yy2003;
 	}
 yy2005:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB9: goto yy2007;
-		case 0xBA: goto yy2008;
-		default: goto yy2006;
-	}
-yy2006:
-	YYCURSOR = YYMARKER;
-	goto yy2003;
-yy2007:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -28814,7 +28772,52 @@ yy2007:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
+		case 0xAF: goto yy2006;
+		default: goto yy2003;
+	}
+yy2006:
+	++YYCURSOR;
+#line 2632 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Egyptian_Hieroglyphs; }
+#line 28783 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2634 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Egyptian_Hieroglyph_Format_Controls:
+	
+#line 28789 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2010;
+		default: goto yy2008;
+	}
+yy2008:
+	++YYCURSOR;
+yy2009:
+#line 2639 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Egyptian_Hieroglyph_Format_Controls; else return Error; }
+#line 28802 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2010:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x93: goto yy2011;
+		default: goto yy2009;
+	}
+yy2011:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x90: goto yy2013;
+		case 0x91: goto yy2014;
+		default: goto yy2012;
+	}
+yy2012:
+	YYCURSOR = YYMARKER;
+	goto yy2009;
+yy2013:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -28830,90 +28833,12 @@ yy2007:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2009;
-		default: goto yy2006;
-	}
-yy2008:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy2009;
-		default: goto yy2006;
-	}
-yy2009:
-	++YYCURSOR;
-#line 2578 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Medefaidrin; }
-#line 28878 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2580 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Miao:
-	
-#line 28884 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2013;
-		default: goto yy2011;
-	}
-yy2011:
-	++YYCURSOR;
-yy2012:
-#line 2585 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Miao; else return Error; }
-#line 28897 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2013:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x96: goto yy2014;
+		case 0xBF: goto yy2015;
 		default: goto yy2012;
 	}
 yy2014:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xBC:
-		case 0xBD: goto yy2016;
-		case 0xBE: goto yy2017;
-		default: goto yy2015;
-	}
-yy2015:
-	YYCURSOR = YYMARKER;
-	goto yy2012;
-yy2016:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -28932,6 +28857,57 @@ yy2016:
 		case 0x8F:
 		case 0x90:
 		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy2015;
+		default: goto yy2012;
+	}
+yy2015:
+	++YYCURSOR;
+#line 2638 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Egyptian_Hieroglyph_Format_Controls; }
+#line 28881 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2640 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Egyptian_Hieroglyphs_Extended_A:
+	
+#line 28887 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2019;
+		default: goto yy2017;
+	}
+yy2017:
+	++YYCURSOR;
+yy2018:
+#line 2645 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Egyptian_Hieroglyphs_Extended_A; else return Error; }
+#line 28900 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2019:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x93: goto yy2020;
+		case 0x94: goto yy2022;
+		default: goto yy2018;
+	}
+yy2020:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x91: goto yy2023;
 		case 0x92:
 		case 0x93:
 		case 0x94:
@@ -28977,10 +28953,13 @@ yy2016:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2018;
-		default: goto yy2015;
+		case 0xBF: goto yy2024;
+		default: goto yy2021;
 	}
-yy2017:
+yy2021:
+	YYCURSOR = YYMARKER;
+	goto yy2018;
+yy2022:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -28998,67 +28977,12 @@ yy2017:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy2018;
-		default: goto yy2015;
-	}
-yy2018:
-	++YYCURSOR;
-#line 2584 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Miao; }
-#line 29025 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2586 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Ideographic_Symbols_and_Punctuation:
-	
-#line 29031 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2022;
-		default: goto yy2020;
-	}
-yy2020:
-	++YYCURSOR;
-yy2021:
-#line 2591 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Ideographic_Symbols_and_Punctuation; else return Error; }
-#line 29044 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2022:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x96: goto yy2023;
+		case 0x8F: goto yy2024;
 		default: goto yy2021;
 	}
 yy2023:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xBF: goto yy2025;
-		default: goto yy2024;
-	}
-yy2024:
-	YYCURSOR = YYMARKER;
-	goto yy2021;
-yy2025:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -29090,150 +29014,127 @@ yy2025:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2026;
-		default: goto yy2024;
+		case 0xBF: goto yy2025;
+		default: goto yy2021;
 	}
-yy2026:
+yy2024:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2025;
+		default: goto yy2021;
+	}
+yy2025:
 	++YYCURSOR;
-#line 2590 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Ideographic_Symbols_and_Punctuation; }
-#line 29101 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2644 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Egyptian_Hieroglyphs_Extended_A; }
+#line 29094 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2592 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2646 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Tangut:
+Anatolian_Hieroglyphs:
 	
-#line 29107 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 29100 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2030;
-		default: goto yy2028;
+		case 0xF0: goto yy2029;
+		default: goto yy2027;
 	}
-yy2028:
+yy2027:
 	++YYCURSOR;
+yy2028:
+#line 2651 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Anatolian_Hieroglyphs; else return Error; }
+#line 29113 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2029:
-#line 2597 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tangut; else return Error; }
-#line 29120 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2030:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x97: goto yy2031;
-		case 0x98: goto yy2033;
-		default: goto yy2029;
+		case 0x94: goto yy2030;
+		default: goto yy2028;
+	}
+yy2030:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99: goto yy2032;
+		default: goto yy2031;
 	}
 yy2031:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2034;
-		default: goto yy2032;
-	}
-yy2032:
 	YYCURSOR = YYMARKER;
-	goto yy2029;
-yy2033:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy2034;
-		default: goto yy2032;
-	}
-yy2034:
+	goto yy2028;
+yy2032:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -29299,62 +29200,51 @@ yy2034:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2035;
-		default: goto yy2032;
+		case 0xBF: goto yy2033;
+		default: goto yy2031;
+	}
+yy2033:
+	++YYCURSOR;
+#line 2650 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Anatolian_Hieroglyphs; }
+#line 29211 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2652 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Gurung_Khema:
+	
+#line 29217 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2037;
+		default: goto yy2035;
 	}
 yy2035:
 	++YYCURSOR;
-#line 2596 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Tangut; }
-#line 29310 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2598 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Tangut_Components:
-	
-#line 29316 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2039;
-		default: goto yy2037;
-	}
+yy2036:
+#line 2657 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Gurung_Khema; else return Error; }
+#line 29230 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2037:
-	++YYCURSOR;
-yy2038:
-#line 2603 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tangut_Components; else return Error; }
-#line 29329 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2039:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x98: goto yy2040;
-		default: goto yy2038;
+		case 0x96: goto yy2038;
+		default: goto yy2036;
 	}
+yy2038:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x84: goto yy2040;
+		default: goto yy2039;
+	}
+yy2039:
+	YYCURSOR = YYMARKER;
+	goto yy2036;
 yy2040:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB: goto yy2042;
-		default: goto yy2041;
-	}
-yy2041:
-	YYCURSOR = YYMARKER;
-	goto yy2038;
-yy2042:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -29418,58 +29308,59 @@ yy2042:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2043;
-		default: goto yy2041;
+		case 0xBF: goto yy2041;
+		default: goto yy2039;
+	}
+yy2041:
+	++YYCURSOR;
+#line 2656 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Gurung_Khema; }
+#line 29319 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2658 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Bamum_Supplement:
+	
+#line 29325 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2045;
+		default: goto yy2043;
 	}
 yy2043:
 	++YYCURSOR;
-#line 2602 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Tangut_Components; }
-#line 29429 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2604 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Khitan_Small_Script:
-	
-#line 29435 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2047;
-		default: goto yy2045;
-	}
+yy2044:
+#line 2663 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Bamum_Supplement; else return Error; }
+#line 29338 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2045:
-	++YYCURSOR;
-yy2046:
-#line 2609 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Khitan_Small_Script; else return Error; }
-#line 29448 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2047:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x98: goto yy2048;
-		default: goto yy2046;
+		case 0x96: goto yy2046;
+		default: goto yy2044;
 	}
+yy2046:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8: goto yy2048;
+		default: goto yy2047;
+	}
+yy2047:
+	YYCURSOR = YYMARKER;
+	goto yy2044;
 yy2048:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3: goto yy2050;
-		default: goto yy2049;
-	}
-yy2049:
-	YYCURSOR = YYMARKER;
-	goto yy2046;
-yy2050:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -29533,50 +29424,49 @@ yy2050:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2051;
-		default: goto yy2049;
+		case 0xBF: goto yy2049;
+		default: goto yy2047;
+	}
+yy2049:
+	++YYCURSOR;
+#line 2662 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Bamum_Supplement; }
+#line 29435 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2664 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Mro:
+	
+#line 29441 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2053;
+		default: goto yy2051;
 	}
 yy2051:
 	++YYCURSOR;
-#line 2608 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Khitan_Small_Script; }
-#line 29544 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2610 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Tangut_Supplement:
-	
-#line 29550 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2055;
-		default: goto yy2053;
-	}
+yy2052:
+#line 2669 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Mro; else return Error; }
+#line 29454 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2053:
-	++YYCURSOR;
-yy2054:
-#line 2615 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tangut_Supplement; else return Error; }
-#line 29563 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2055:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x98: goto yy2056;
-		default: goto yy2054;
+		case 0x96: goto yy2054;
+		default: goto yy2052;
 	}
-yy2056:
+yy2054:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB4:
-		case 0xB5: goto yy2058;
-		default: goto yy2057;
+		case 0xA9: goto yy2056;
+		default: goto yy2055;
 	}
-yy2057:
+yy2055:
 	YYCURSOR = YYMARKER;
-	goto yy2054;
-yy2058:
+	goto yy2052;
+yy2056:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -29626,65 +29516,51 @@ yy2058:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2059;
-		default: goto yy2057;
+		case 0xAF: goto yy2057;
+		default: goto yy2055;
 	}
-yy2059:
+yy2057:
 	++YYCURSOR;
-#line 2614 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Tangut_Supplement; }
-#line 29653 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2668 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Mro; }
+#line 29527 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2616 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2670 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Kana_Extended_B:
+Tangsa:
 	
-#line 29659 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 29533 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2063;
-		default: goto yy2061;
+		case 0xF0: goto yy2061;
+		default: goto yy2059;
 	}
-yy2061:
+yy2059:
 	++YYCURSOR;
-yy2062:
-#line 2621 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Kana_Extended_B; else return Error; }
-#line 29672 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2063:
+yy2060:
+#line 2675 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tangsa; else return Error; }
+#line 29546 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2061:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9A: goto yy2064;
-		default: goto yy2062;
+		case 0x96: goto yy2062;
+		default: goto yy2060;
 	}
-yy2064:
+yy2062:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xBF: goto yy2066;
-		default: goto yy2065;
+		case 0xA9: goto yy2064;
+		case 0xAA: goto yy2065;
+		case 0xAB: goto yy2066;
+		default: goto yy2063;
 	}
-yy2065:
+yy2063:
 	YYCURSOR = YYMARKER;
-	goto yy2062;
-yy2066:
+	goto yy2060;
+yy2064:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xB0:
@@ -29703,51 +29579,9 @@ yy2066:
 		case 0xBD:
 		case 0xBE:
 		case 0xBF: goto yy2067;
-		default: goto yy2065;
+		default: goto yy2063;
 	}
-yy2067:
-	++YYCURSOR;
-#line 2620 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Kana_Extended_B; }
-#line 29713 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2622 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Kana_Supplement:
-	
-#line 29719 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2071;
-		default: goto yy2069;
-	}
-yy2069:
-	++YYCURSOR;
-yy2070:
-#line 2627 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Kana_Supplement; else return Error; }
-#line 29732 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2071:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9B: goto yy2072;
-		default: goto yy2070;
-	}
-yy2072:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83: goto yy2074;
-		default: goto yy2073;
-	}
-yy2073:
-	YYCURSOR = YYMARKER;
-	goto yy2070;
-yy2074:
+yy2065:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -29766,6 +29600,119 @@ yy2074:
 		case 0x8D:
 		case 0x8E:
 		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2067;
+		default: goto yy2063;
+	}
+yy2066:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy2067;
+		default: goto yy2063;
+	}
+yy2067:
+	++YYCURSOR;
+#line 2674 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Tangsa; }
+#line 29679 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2676 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Bassa_Vah:
+	
+#line 29685 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2071;
+		default: goto yy2069;
+	}
+yy2069:
+	++YYCURSOR;
+yy2070:
+#line 2681 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Bassa_Vah; else return Error; }
+#line 29698 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2071:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x96: goto yy2072;
+		default: goto yy2070;
+	}
+yy2072:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xAB: goto yy2074;
+		default: goto yy2073;
+	}
+yy2073:
+	YYCURSOR = YYMARKER;
+	goto yy2070;
+yy2074:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0x90:
 		case 0x91:
 		case 0x92:
@@ -29818,15 +29765,15 @@ yy2074:
 	}
 yy2075:
 	++YYCURSOR;
-#line 2626 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Kana_Supplement; }
-#line 29824 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2680 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Bassa_Vah; }
+#line 29771 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2628 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2682 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Kana_Extended_A:
+Pahawh_Hmong:
 	
-#line 29830 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 29777 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -29837,19 +29784,21 @@ Kana_Extended_A:
 yy2077:
 	++YYCURSOR;
 yy2078:
-#line 2633 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Kana_Extended_A; else return Error; }
-#line 29843 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2687 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Pahawh_Hmong; else return Error; }
+#line 29790 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2079:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9B: goto yy2080;
+		case 0x96: goto yy2080;
 		default: goto yy2078;
 	}
 yy2080:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x84: goto yy2082;
+		case 0xAC:
+		case 0xAD: goto yy2082;
+		case 0xAE: goto yy2083;
 		default: goto yy2081;
 	}
 yy2081:
@@ -29905,52 +29854,7 @@ yy2082:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy2083;
-		default: goto yy2081;
-	}
-yy2083:
-	++YYCURSOR;
-#line 2632 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Kana_Extended_A; }
-#line 29916 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2634 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Small_Kana_Extension:
-	
-#line 29922 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2087;
-		default: goto yy2085;
-	}
-yy2085:
-	++YYCURSOR;
-yy2086:
-#line 2639 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Small_Kana_Extension; else return Error; }
-#line 29935 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2087:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9B: goto yy2088;
-		default: goto yy2086;
-	}
-yy2088:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x84: goto yy2090;
-		case 0x85: goto yy2091;
-		default: goto yy2089;
-	}
-yy2089:
-	YYCURSOR = YYMARKER;
-	goto yy2086;
-yy2090:
-	yych = *++YYCURSOR;
-	switch (yych) {
+		case 0xAF:
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -29966,9 +29870,69 @@ yy2090:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2092;
-		default: goto yy2089;
+		case 0xBF: goto yy2084;
+		default: goto yy2081;
 	}
+yy2083:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy2084;
+		default: goto yy2081;
+	}
+yy2084:
+	++YYCURSOR;
+#line 2686 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Pahawh_Hmong; }
+#line 29902 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2688 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Kirat_Rai:
+	
+#line 29908 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2088;
+		default: goto yy2086;
+	}
+yy2086:
+	++YYCURSOR;
+yy2087:
+#line 2693 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Kirat_Rai; else return Error; }
+#line 29921 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2088:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x96: goto yy2089;
+		default: goto yy2087;
+	}
+yy2089:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB5: goto yy2091;
+		default: goto yy2090;
+	}
+yy2090:
+	YYCURSOR = YYMARKER;
+	goto yy2087;
 yy2091:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -30019,57 +29983,7 @@ yy2091:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy2092;
-		default: goto yy2089;
-	}
-yy2092:
-	++YYCURSOR;
-#line 2638 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Small_Kana_Extension; }
-#line 30030 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2640 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Nushu:
-	
-#line 30036 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2096;
-		default: goto yy2094;
-	}
-yy2094:
-	++YYCURSOR;
-yy2095:
-#line 2645 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Nushu; else return Error; }
-#line 30049 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2096:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9B: goto yy2097;
-		default: goto yy2095;
-	}
-yy2097:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x85: goto yy2099;
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B: goto yy2100;
-		default: goto yy2098;
-	}
-yy2098:
-	YYCURSOR = YYMARKER;
-	goto yy2095;
-yy2099:
-	yych = *++YYCURSOR;
-	switch (yych) {
+		case 0xAF:
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -30085,10 +29999,50 @@ yy2099:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2101;
+		case 0xBF: goto yy2092;
+		default: goto yy2090;
+	}
+yy2092:
+	++YYCURSOR;
+#line 2692 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Kirat_Rai; }
+#line 30010 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2694 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Medefaidrin:
+	
+#line 30016 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2096;
+		default: goto yy2094;
+	}
+yy2094:
+	++YYCURSOR;
+yy2095:
+#line 2699 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Medefaidrin; else return Error; }
+#line 30029 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2096:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x96: goto yy2097;
+		default: goto yy2095;
+	}
+yy2097:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB9: goto yy2099;
+		case 0xBA: goto yy2100;
 		default: goto yy2098;
 	}
-yy2100:
+yy2098:
+	YYCURSOR = YYMARKER;
+	goto yy2095;
+yy2099:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -30157,48 +30111,7 @@ yy2100:
 		case 0xBF: goto yy2101;
 		default: goto yy2098;
 	}
-yy2101:
-	++YYCURSOR;
-#line 2644 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Nushu; }
-#line 30165 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2646 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Duployan:
-	
-#line 30171 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2105;
-		default: goto yy2103;
-	}
-yy2103:
-	++YYCURSOR;
-yy2104:
-#line 2651 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Duployan; else return Error; }
-#line 30184 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2105:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9B: goto yy2106;
-		default: goto yy2104;
-	}
-yy2106:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xB0:
-		case 0xB1: goto yy2108;
-		case 0xB2: goto yy2109;
-		default: goto yy2107;
-	}
-yy2107:
-	YYCURSOR = YYMARKER;
-	goto yy2104;
-yy2108:
+yy2100:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -30232,7 +30145,52 @@ yy2108:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F:
+		case 0x9F: goto yy2101;
+		default: goto yy2098;
+	}
+yy2101:
+	++YYCURSOR;
+#line 2698 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Medefaidrin; }
+#line 30156 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2700 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Beria_Erfe:
+	
+#line 30162 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2105;
+		default: goto yy2103;
+	}
+yy2103:
+	++YYCURSOR;
+yy2104:
+#line 2705 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Beria_Erfe; else return Error; }
+#line 30175 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2105:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x96: goto yy2106;
+		default: goto yy2104;
+	}
+yy2106:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBA: goto yy2108;
+		case 0xBB: goto yy2109;
+		default: goto yy2107;
+	}
+yy2107:
+	YYCURSOR = YYMARKER;
+	goto yy2104;
+yy2108:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -30306,15 +30264,15 @@ yy2109:
 	}
 yy2110:
 	++YYCURSOR;
-#line 2650 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Duployan; }
-#line 30312 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2704 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Beria_Erfe; }
+#line 30270 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2652 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2706 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Shorthand_Format_Controls:
+Miao:
 	
-#line 30318 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 30276 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -30325,88 +30283,27 @@ Shorthand_Format_Controls:
 yy2112:
 	++YYCURSOR;
 yy2113:
-#line 2657 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Shorthand_Format_Controls; else return Error; }
-#line 30331 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2711 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Miao; else return Error; }
+#line 30289 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2114:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9B: goto yy2115;
+		case 0x96: goto yy2115;
 		default: goto yy2113;
 	}
 yy2115:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB2: goto yy2117;
+		case 0xBC:
+		case 0xBD: goto yy2117;
+		case 0xBE: goto yy2118;
 		default: goto yy2116;
 	}
 yy2116:
 	YYCURSOR = YYMARKER;
 	goto yy2113;
 yy2117:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy2118;
-		default: goto yy2116;
-	}
-yy2118:
-	++YYCURSOR;
-#line 2656 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Shorthand_Format_Controls; }
-#line 30372 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2658 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Znamenny_Musical_Notation:
-	
-#line 30378 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2122;
-		default: goto yy2120;
-	}
-yy2120:
-	++YYCURSOR;
-yy2121:
-#line 2663 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Znamenny_Musical_Notation; else return Error; }
-#line 30391 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2122:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9C: goto yy2123;
-		default: goto yy2121;
-	}
-yy2123:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBC:
-		case 0xBD:
-		case 0xBE: goto yy2125;
-		case 0xBF: goto yy2126;
-		default: goto yy2124;
-	}
-yy2124:
-	YYCURSOR = YYMARKER;
-	goto yy2121;
-yy2125:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -30472,10 +30369,10 @@ yy2125:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2127;
-		default: goto yy2124;
+		case 0xBF: goto yy2119;
+		default: goto yy2116;
 	}
-yy2126:
+yy2118:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -30493,20 +30390,112 @@ yy2126:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F: goto yy2127;
-		default: goto yy2124;
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy2119;
+		default: goto yy2116;
+	}
+yy2119:
+	++YYCURSOR;
+#line 2710 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Miao; }
+#line 30417 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2712 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Ideographic_Symbols_and_Punctuation:
+	
+#line 30423 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2123;
+		default: goto yy2121;
+	}
+yy2121:
+	++YYCURSOR;
+yy2122:
+#line 2717 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Ideographic_Symbols_and_Punctuation; else return Error; }
+#line 30436 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2123:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x96: goto yy2124;
+		default: goto yy2122;
+	}
+yy2124:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBF: goto yy2126;
+		default: goto yy2125;
+	}
+yy2125:
+	YYCURSOR = YYMARKER;
+	goto yy2122;
+yy2126:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2127;
+		default: goto yy2125;
 	}
 yy2127:
 	++YYCURSOR;
-#line 2662 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Znamenny_Musical_Notation; }
-#line 30504 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2716 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Ideographic_Symbols_and_Punctuation; }
+#line 30493 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2664 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2718 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Byzantine_Musical_Symbols:
+Tangut:
 	
-#line 30510 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 30499 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -30517,28 +30506,17 @@ Byzantine_Musical_Symbols:
 yy2129:
 	++YYCURSOR;
 yy2130:
-#line 2669 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Byzantine_Musical_Symbols; else return Error; }
-#line 30523 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2723 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tangut; else return Error; }
+#line 30512 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2131:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9D: goto yy2132;
+		case 0x97: goto yy2132;
+		case 0x98: goto yy2134;
 		default: goto yy2130;
 	}
 yy2132:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83: goto yy2134;
-		default: goto yy2133;
-	}
-yy2133:
-	YYCURSOR = YYMARKER;
-	goto yy2130;
-yy2134:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -30607,49 +30585,47 @@ yy2134:
 		case 0xBF: goto yy2135;
 		default: goto yy2133;
 	}
-yy2135:
-	++YYCURSOR;
-#line 2668 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Byzantine_Musical_Symbols; }
-#line 30615 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2670 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Musical_Symbols:
-	
-#line 30621 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2139;
-		default: goto yy2137;
-	}
-yy2137:
-	++YYCURSOR;
-yy2138:
-#line 2675 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Musical_Symbols; else return Error; }
-#line 30634 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2139:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9D: goto yy2140;
-		default: goto yy2138;
-	}
-yy2140:
+yy2133:
+	YYCURSOR = YYMARKER;
+	goto yy2130;
+yy2134:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
 		case 0x84:
 		case 0x85:
 		case 0x86:
-		case 0x87: goto yy2142;
-		default: goto yy2141;
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy2135;
+		default: goto yy2133;
 	}
-yy2141:
-	YYCURSOR = YYMARKER;
-	goto yy2138;
-yy2142:
+yy2135:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -30715,50 +30691,175 @@ yy2142:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2143;
-		default: goto yy2141;
+		case 0xBF: goto yy2136;
+		default: goto yy2133;
 	}
-yy2143:
+yy2136:
 	++YYCURSOR;
-#line 2674 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Musical_Symbols; }
-#line 30726 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2722 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Tangut; }
+#line 30702 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2676 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2724 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Ancient_Greek_Musical_Notation:
+Tangut_Components:
 	
-#line 30732 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 30708 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2147;
-		default: goto yy2145;
+		case 0xF0: goto yy2140;
+		default: goto yy2138;
 	}
-yy2145:
+yy2138:
 	++YYCURSOR;
-yy2146:
-#line 2681 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Ancient_Greek_Musical_Notation; else return Error; }
-#line 30745 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2147:
+yy2139:
+#line 2729 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tangut_Components; else return Error; }
+#line 30721 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2140:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9D: goto yy2148;
-		default: goto yy2146;
+		case 0x98: goto yy2141;
+		default: goto yy2139;
 	}
-yy2148:
+yy2141:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x88: goto yy2150;
-		case 0x89: goto yy2151;
-		default: goto yy2149;
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB: goto yy2143;
+		default: goto yy2142;
+	}
+yy2142:
+	YYCURSOR = YYMARKER;
+	goto yy2139;
+yy2143:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2144;
+		default: goto yy2142;
+	}
+yy2144:
+	++YYCURSOR;
+#line 2728 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Tangut_Components; }
+#line 30821 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2730 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Khitan_Small_Script:
+	
+#line 30827 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2148;
+		default: goto yy2146;
+	}
+yy2146:
+	++YYCURSOR;
+yy2147:
+#line 2735 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Khitan_Small_Script; else return Error; }
+#line 30840 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2148:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x98: goto yy2149;
+		default: goto yy2147;
 	}
 yy2149:
-	YYCURSOR = YYMARKER;
-	goto yy2146;
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3: goto yy2151;
+		default: goto yy2150;
+	}
 yy2150:
+	YYCURSOR = YYMARKER;
+	goto yy2147;
+yy2151:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -30825,40 +30926,19 @@ yy2150:
 		case 0xBD:
 		case 0xBE:
 		case 0xBF: goto yy2152;
-		default: goto yy2149;
-	}
-yy2151:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy2152;
-		default: goto yy2149;
+		default: goto yy2150;
 	}
 yy2152:
 	++YYCURSOR;
-#line 2680 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Ancient_Greek_Musical_Notation; }
-#line 30856 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2734 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Khitan_Small_Script; }
+#line 30936 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2682 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2736 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Kaktovik_Numerals:
+Tangut_Supplement:
 	
-#line 30862 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 30942 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -30869,19 +30949,20 @@ Kaktovik_Numerals:
 yy2154:
 	++YYCURSOR;
 yy2155:
-#line 2687 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Kaktovik_Numerals; else return Error; }
-#line 30875 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2741 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tangut_Supplement; else return Error; }
+#line 30955 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2156:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9D: goto yy2157;
+		case 0x98: goto yy2157;
 		default: goto yy2155;
 	}
 yy2157:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8B: goto yy2159;
+		case 0xB4:
+		case 0xB5: goto yy2159;
 		default: goto yy2158;
 	}
 yy2158:
@@ -30921,20 +31002,52 @@ yy2159:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F: goto yy2160;
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2160;
 		default: goto yy2158;
 	}
 yy2160:
 	++YYCURSOR;
-#line 2686 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Kaktovik_Numerals; }
-#line 30932 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2740 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Tangut_Supplement; }
+#line 31045 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2688 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2742 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Mayan_Numerals:
+Tangut_Components_Supplement:
 	
-#line 30938 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 31051 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -30945,19 +31058,20 @@ Mayan_Numerals:
 yy2162:
 	++YYCURSOR;
 yy2163:
-#line 2693 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Mayan_Numerals; else return Error; }
-#line 30951 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2747 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tangut_Components_Supplement; else return Error; }
+#line 31064 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2164:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9D: goto yy2165;
+		case 0x98: goto yy2165;
 		default: goto yy2163;
 	}
 yy2165:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8B: goto yy2167;
+		case 0xB6:
+		case 0xB7: goto yy2167;
 		default: goto yy2166;
 	}
 yy2166:
@@ -30966,6 +31080,38 @@ yy2166:
 yy2167:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -31002,15 +31148,15 @@ yy2167:
 	}
 yy2168:
 	++YYCURSOR;
-#line 2692 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Mayan_Numerals; }
-#line 31008 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2746 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Tangut_Components_Supplement; }
+#line 31154 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2694 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2748 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Tai_Xuan_Jing_Symbols:
+Kana_Extended_B:
 	
-#line 31014 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 31160 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -31021,20 +31167,19 @@ Tai_Xuan_Jing_Symbols:
 yy2170:
 	++YYCURSOR;
 yy2171:
-#line 2699 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tai_Xuan_Jing_Symbols; else return Error; }
-#line 31027 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2753 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Kana_Extended_B; else return Error; }
+#line 31173 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2172:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9D: goto yy2173;
+		case 0x9A: goto yy2173;
 		default: goto yy2171;
 	}
 yy2173:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8C: goto yy2175;
-		case 0x8D: goto yy2176;
+		case 0xBF: goto yy2175;
 		default: goto yy2174;
 	}
 yy2174:
@@ -31043,54 +31188,6 @@ yy2174:
 yy2175:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -31106,177 +31203,52 @@ yy2175:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2177;
+		case 0xBF: goto yy2176;
 		default: goto yy2174;
 	}
 yy2176:
+	++YYCURSOR;
+#line 2752 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Kana_Extended_B; }
+#line 31214 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2754 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Kana_Supplement:
+	
+#line 31220 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2180;
+		default: goto yy2178;
+	}
+yy2178:
+	++YYCURSOR;
+yy2179:
+#line 2759 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Kana_Supplement; else return Error; }
+#line 31233 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2180:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9B: goto yy2181;
+		default: goto yy2179;
+	}
+yy2181:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy2177;
-		default: goto yy2174;
-	}
-yy2177:
-	++YYCURSOR;
-#line 2698 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Tai_Xuan_Jing_Symbols; }
-#line 31154 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2700 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Counting_Rod_Numerals:
-	
-#line 31160 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2181;
-		default: goto yy2179;
-	}
-yy2179:
-	++YYCURSOR;
-yy2180:
-#line 2705 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Counting_Rod_Numerals; else return Error; }
-#line 31173 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2181:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9D: goto yy2182;
-		default: goto yy2180;
+		case 0x83: goto yy2183;
+		default: goto yy2182;
 	}
 yy2182:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x8D: goto yy2184;
-		default: goto yy2183;
-	}
+	YYCURSOR = YYMARKER;
+	goto yy2179;
 yy2183:
-	YYCURSOR = YYMARKER;
-	goto yy2180;
-yy2184:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2185;
-		default: goto yy2183;
-	}
-yy2185:
-	++YYCURSOR;
-#line 2704 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Counting_Rod_Numerals; }
-#line 31230 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2706 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Mathematical_Alphanumeric_Symbols:
-	
-#line 31236 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2189;
-		default: goto yy2187;
-	}
-yy2187:
-	++YYCURSOR;
-yy2188:
-#line 2711 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Mathematical_Alphanumeric_Symbols; else return Error; }
-#line 31249 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2189:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9D: goto yy2190;
-		default: goto yy2188;
-	}
-yy2190:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy2192;
-		default: goto yy2191;
-	}
-yy2191:
-	YYCURSOR = YYMARKER;
-	goto yy2188;
-yy2192:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -31342,42 +31314,83 @@ yy2192:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2193;
-		default: goto yy2191;
+		case 0xBF: goto yy2184;
+		default: goto yy2182;
 	}
-yy2193:
+yy2184:
 	++YYCURSOR;
-#line 2710 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Mathematical_Alphanumeric_Symbols; }
-#line 31353 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2758 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Kana_Supplement; }
+#line 31325 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2712 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2760 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Sutton_SignWriting:
+Kana_Extended_A:
 	
-#line 31359 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 31331 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2197;
-		default: goto yy2195;
+		case 0xF0: goto yy2188;
+		default: goto yy2186;
 	}
-yy2195:
+yy2186:
 	++YYCURSOR;
-yy2196:
-#line 2717 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Sutton_SignWriting; else return Error; }
-#line 31372 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2197:
+yy2187:
+#line 2765 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Kana_Extended_A; else return Error; }
+#line 31344 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2188:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9D: goto yy2198;
-		default: goto yy2196;
+		case 0x9B: goto yy2189;
+		default: goto yy2187;
 	}
-yy2198:
+yy2189:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x84: goto yy2191;
+		default: goto yy2190;
+	}
+yy2190:
+	YYCURSOR = YYMARKER;
+	goto yy2187;
+yy2191:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -31387,13 +31400,76 @@ yy2198:
 		case 0xA6:
 		case 0xA7:
 		case 0xA8:
-		case 0xA9: goto yy2200;
-		case 0xAA: goto yy2201;
-		default: goto yy2199;
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF: goto yy2192;
+		default: goto yy2190;
 	}
-yy2199:
+yy2192:
+	++YYCURSOR;
+#line 2764 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Kana_Extended_A; }
+#line 31417 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2766 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Small_Kana_Extension:
+	
+#line 31423 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2196;
+		default: goto yy2194;
+	}
+yy2194:
+	++YYCURSOR;
+yy2195:
+#line 2771 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Small_Kana_Extension; else return Error; }
+#line 31436 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2196:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9B: goto yy2197;
+		default: goto yy2195;
+	}
+yy2197:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x84: goto yy2199;
+		case 0x85: goto yy2200;
+		default: goto yy2198;
+	}
+yy2198:
 	YYCURSOR = YYMARKER;
-	goto yy2196;
+	goto yy2195;
+yy2199:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2201;
+		default: goto yy2198;
+	}
 yy2200:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -31444,7 +31520,57 @@ yy2200:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
+		case 0xAF: goto yy2201;
+		default: goto yy2198;
+	}
+yy2201:
+	++YYCURSOR;
+#line 2770 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Small_Kana_Extension; }
+#line 31531 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2772 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Nushu:
+	
+#line 31537 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2205;
+		default: goto yy2203;
+	}
+yy2203:
+	++YYCURSOR;
+yy2204:
+#line 2777 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Nushu; else return Error; }
+#line 31550 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2205:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9B: goto yy2206;
+		default: goto yy2204;
+	}
+yy2206:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x85: goto yy2208;
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B: goto yy2209;
+		default: goto yy2207;
+	}
+yy2207:
+	YYCURSOR = YYMARKER;
+	goto yy2204;
+yy2208:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -31460,104 +31586,9 @@ yy2200:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2202;
-		default: goto yy2199;
+		case 0xBF: goto yy2210;
+		default: goto yy2207;
 	}
-yy2201:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy2202;
-		default: goto yy2199;
-	}
-yy2202:
-	++YYCURSOR;
-#line 2716 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Sutton_SignWriting; }
-#line 31524 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2718 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Latin_Extended_G:
-	
-#line 31530 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2206;
-		default: goto yy2204;
-	}
-yy2204:
-	++YYCURSOR;
-yy2205:
-#line 2723 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Latin_Extended_G; else return Error; }
-#line 31543 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2206:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9D: goto yy2207;
-		default: goto yy2205;
-	}
-yy2207:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2209;
-		default: goto yy2208;
-	}
-yy2208:
-	YYCURSOR = YYMARKER;
-	goto yy2205;
 yy2209:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -31625,19 +31656,19 @@ yy2209:
 		case 0xBD:
 		case 0xBE:
 		case 0xBF: goto yy2210;
-		default: goto yy2208;
+		default: goto yy2207;
 	}
 yy2210:
 	++YYCURSOR;
-#line 2722 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Latin_Extended_G; }
-#line 31635 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2776 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Nushu; }
+#line 31666 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2724 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2778 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Glagolitic_Supplement:
+Duployan:
 	
-#line 31641 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 31672 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -31648,19 +31679,21 @@ Glagolitic_Supplement:
 yy2212:
 	++YYCURSOR;
 yy2213:
-#line 2729 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Glagolitic_Supplement; else return Error; }
-#line 31654 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2783 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Duployan; else return Error; }
+#line 31685 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2214:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9E: goto yy2215;
+		case 0x9B: goto yy2215;
 		default: goto yy2213;
 	}
 yy2215:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80: goto yy2217;
+		case 0xB0:
+		case 0xB1: goto yy2217;
+		case 0xB2: goto yy2218;
 		default: goto yy2216;
 	}
 yy2216:
@@ -31716,106 +31749,104 @@ yy2217:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy2218;
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2219;
 		default: goto yy2216;
 	}
 yy2218:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy2219;
+		default: goto yy2216;
+	}
+yy2219:
 	++YYCURSOR;
-#line 2728 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Glagolitic_Supplement; }
-#line 31727 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2782 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Duployan; }
+#line 31813 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2730 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2784 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Cyrillic_Extended_D:
+Shorthand_Format_Controls:
 	
-#line 31733 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 31819 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2222;
-		default: goto yy2220;
-	}
-yy2220:
-	++YYCURSOR;
-yy2221:
-#line 2735 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Cyrillic_Extended_D; else return Error; }
-#line 31746 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2222:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9E: goto yy2223;
+		case 0xF0: goto yy2223;
 		default: goto yy2221;
 	}
+yy2221:
+	++YYCURSOR;
+yy2222:
+#line 2789 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Shorthand_Format_Controls; else return Error; }
+#line 31832 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2223:
-	yych = *++YYCURSOR;
+	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x80: goto yy2225;
-		case 0x81: goto yy2226;
-		case 0x82: goto yy2227;
-		default: goto yy2224;
+		case 0x9B: goto yy2224;
+		default: goto yy2222;
 	}
 yy2224:
-	YYCURSOR = YYMARKER;
-	goto yy2221;
-yy2225:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2228;
-		default: goto yy2224;
+		case 0xB2: goto yy2226;
+		default: goto yy2225;
 	}
+yy2225:
+	YYCURSOR = YYMARKER;
+	goto yy2222;
 yy2226:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -31831,87 +31862,59 @@ yy2226:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2228;
-		default: goto yy2224;
+		case 0xAF: goto yy2227;
+		default: goto yy2225;
 	}
 yy2227:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy2228;
-		default: goto yy2224;
-	}
-yy2228:
 	++YYCURSOR;
-#line 2734 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Cyrillic_Extended_D; }
-#line 31879 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2788 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Shorthand_Format_Controls; }
+#line 31873 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2736 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2790 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Nyiakeng_Puachue_Hmong:
+Symbols_for_Legacy_Computing_Supplement:
 	
-#line 31885 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 31879 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2232;
-		default: goto yy2230;
+		case 0xF0: goto yy2231;
+		default: goto yy2229;
 	}
-yy2230:
+yy2229:
 	++YYCURSOR;
+yy2230:
+#line 2795 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Symbols_for_Legacy_Computing_Supplement; else return Error; }
+#line 31892 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2231:
-#line 2741 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Nyiakeng_Puachue_Hmong; else return Error; }
-#line 31898 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2232:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9E: goto yy2233;
-		default: goto yy2231;
+		case 0x9C: goto yy2232;
+		default: goto yy2230;
 	}
-yy2233:
+yy2232:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x84: goto yy2235;
-		case 0x85: goto yy2236;
-		default: goto yy2234;
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA: goto yy2234;
+		default: goto yy2233;
 	}
-yy2234:
+yy2233:
 	YYCURSOR = YYMARKER;
-	goto yy2231;
-yy2235:
+	goto yy2230;
+yy2234:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -31977,162 +31980,49 @@ yy2235:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2237;
-		default: goto yy2234;
+		case 0xBF: goto yy2235;
+		default: goto yy2233;
 	}
-yy2236:
-	yych = *++YYCURSOR;
+yy2235:
+	++YYCURSOR;
+#line 2794 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Symbols_for_Legacy_Computing_Supplement; }
+#line 31991 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2796 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Miscellaneous_Symbols_Supplement:
+	
+#line 31997 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy2237;
-		default: goto yy2234;
+		case 0xF0: goto yy2239;
+		default: goto yy2237;
 	}
 yy2237:
 	++YYCURSOR;
-#line 2740 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Nyiakeng_Puachue_Hmong; }
-#line 32009 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2742 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Toto:
-	
-#line 32015 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2241;
-		default: goto yy2239;
-	}
+yy2238:
+#line 2801 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Symbols_Supplement; else return Error; }
+#line 32010 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2239:
-	++YYCURSOR;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9C: goto yy2240;
+		default: goto yy2238;
+	}
 yy2240:
-#line 2747 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Toto; else return Error; }
-#line 32028 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBB: goto yy2242;
+		default: goto yy2241;
+	}
 yy2241:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9E: goto yy2242;
-		default: goto yy2240;
-	}
+	YYCURSOR = YYMARKER;
+	goto yy2238;
 yy2242:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x8A: goto yy2244;
-		default: goto yy2243;
-	}
-yy2243:
-	YYCURSOR = YYMARKER;
-	goto yy2240;
-yy2244:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2245;
-		default: goto yy2243;
-	}
-yy2245:
-	++YYCURSOR;
-#line 2746 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Toto; }
-#line 32101 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2748 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Wancho:
-	
-#line 32107 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2249;
-		default: goto yy2247;
-	}
-yy2247:
-	++YYCURSOR;
-yy2248:
-#line 2753 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Wancho; else return Error; }
-#line 32120 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2249:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9E: goto yy2250;
-		default: goto yy2248;
-	}
-yy2250:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x8B: goto yy2252;
-		default: goto yy2251;
-	}
-yy2251:
-	YYCURSOR = YYMARKER;
-	goto yy2248;
-yy2252:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -32198,51 +32088,70 @@ yy2252:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2253;
-		default: goto yy2251;
+		case 0xBF: goto yy2243;
+		default: goto yy2241;
 	}
-yy2253:
+yy2243:
 	++YYCURSOR;
-#line 2752 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Wancho; }
-#line 32209 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2800 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Miscellaneous_Symbols_Supplement; }
+#line 32099 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2754 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2802 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Nag_Mundari:
+Znamenny_Musical_Notation:
 	
-#line 32215 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 32105 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2257;
-		default: goto yy2255;
+		case 0xF0: goto yy2247;
+		default: goto yy2245;
 	}
-yy2255:
+yy2245:
 	++YYCURSOR;
-yy2256:
-#line 2759 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Nag_Mundari; else return Error; }
-#line 32228 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2257:
+yy2246:
+#line 2807 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Znamenny_Musical_Notation; else return Error; }
+#line 32118 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2247:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9E: goto yy2258;
-		default: goto yy2256;
+		case 0x9C: goto yy2248;
+		default: goto yy2246;
 	}
-yy2258:
+yy2248:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x93: goto yy2260;
-		default: goto yy2259;
+		case 0xBC:
+		case 0xBD:
+		case 0xBE: goto yy2250;
+		case 0xBF: goto yy2251;
+		default: goto yy2249;
 	}
-yy2259:
+yy2249:
 	YYCURSOR = YYMARKER;
-	goto yy2256;
-yy2260:
+	goto yy2246;
+yy2250:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
 		case 0x90:
 		case 0x91:
 		case 0x92:
@@ -32290,51 +32199,107 @@ yy2260:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2261;
-		default: goto yy2259;
+		case 0xBF: goto yy2252;
+		default: goto yy2249;
 	}
-yy2261:
+yy2251:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy2252;
+		default: goto yy2249;
+	}
+yy2252:
 	++YYCURSOR;
-#line 2758 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Nag_Mundari; }
-#line 32301 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2806 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Znamenny_Musical_Notation; }
+#line 32231 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2760 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2808 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Ethiopic_Extended_B:
+Byzantine_Musical_Symbols:
 	
-#line 32307 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 32237 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2265;
-		default: goto yy2263;
+		case 0xF0: goto yy2256;
+		default: goto yy2254;
 	}
-yy2263:
+yy2254:
 	++YYCURSOR;
-yy2264:
-#line 2765 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Ethiopic_Extended_B; else return Error; }
-#line 32320 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2265:
+yy2255:
+#line 2813 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Byzantine_Musical_Symbols; else return Error; }
+#line 32250 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2256:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9E: goto yy2266;
-		default: goto yy2264;
+		case 0x9D: goto yy2257;
+		default: goto yy2255;
 	}
-yy2266:
+yy2257:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9F: goto yy2268;
-		default: goto yy2267;
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83: goto yy2259;
+		default: goto yy2258;
 	}
-yy2267:
+yy2258:
 	YYCURSOR = YYMARKER;
-	goto yy2264;
-yy2268:
+	goto yy2255;
+yy2259:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -32366,51 +32331,229 @@ yy2268:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2269;
-		default: goto yy2267;
+		case 0xBF: goto yy2260;
+		default: goto yy2258;
 	}
-yy2269:
+yy2260:
 	++YYCURSOR;
-#line 2764 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Ethiopic_Extended_B; }
-#line 32377 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2812 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Byzantine_Musical_Symbols; }
+#line 32342 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2766 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2814 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Mende_Kikakui:
+Musical_Symbols:
 	
-#line 32383 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 32348 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2273;
-		default: goto yy2271;
+		case 0xF0: goto yy2264;
+		default: goto yy2262;
 	}
-yy2271:
+yy2262:
 	++YYCURSOR;
-yy2272:
-#line 2771 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Mende_Kikakui; else return Error; }
-#line 32396 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2273:
+yy2263:
+#line 2819 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Musical_Symbols; else return Error; }
+#line 32361 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2264:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9E: goto yy2274;
-		default: goto yy2272;
+		case 0x9D: goto yy2265;
+		default: goto yy2263;
 	}
-yy2274:
+yy2265:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87: goto yy2267;
+		default: goto yy2266;
+	}
+yy2266:
+	YYCURSOR = YYMARKER;
+	goto yy2263;
+yy2267:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
 		case 0xA0:
 		case 0xA1:
-		case 0xA2: goto yy2276;
-		case 0xA3: goto yy2277;
-		default: goto yy2275;
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2268;
+		default: goto yy2266;
 	}
-yy2275:
+yy2268:
+	++YYCURSOR;
+#line 2818 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Musical_Symbols; }
+#line 32453 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2820 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Ancient_Greek_Musical_Notation:
+	
+#line 32459 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2272;
+		default: goto yy2270;
+	}
+yy2270:
+	++YYCURSOR;
+yy2271:
+#line 2825 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Ancient_Greek_Musical_Notation; else return Error; }
+#line 32472 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2272:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9D: goto yy2273;
+		default: goto yy2271;
+	}
+yy2273:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x88: goto yy2275;
+		case 0x89: goto yy2276;
+		default: goto yy2274;
+	}
+yy2274:
 	YYCURSOR = YYMARKER;
-	goto yy2272;
+	goto yy2271;
+yy2275:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2277;
+		default: goto yy2274;
+	}
 yy2276:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -32429,135 +32572,49 @@ yy2276:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2278;
-		default: goto yy2275;
+		case 0x8F: goto yy2277;
+		default: goto yy2274;
 	}
 yy2277:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy2278;
-		default: goto yy2275;
-	}
-yy2278:
 	++YYCURSOR;
-#line 2770 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Mende_Kikakui; }
-#line 32525 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2824 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Ancient_Greek_Musical_Notation; }
+#line 32583 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2772 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2826 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Adlam:
+Kaktovik_Numerals:
 	
-#line 32531 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 32589 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2282;
-		default: goto yy2280;
+		case 0xF0: goto yy2281;
+		default: goto yy2279;
 	}
-yy2280:
+yy2279:
 	++YYCURSOR;
+yy2280:
+#line 2831 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Kaktovik_Numerals; else return Error; }
+#line 32602 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2281:
-#line 2777 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Adlam; else return Error; }
-#line 32544 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2282:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9E: goto yy2283;
-		default: goto yy2281;
+		case 0x9D: goto yy2282;
+		default: goto yy2280;
+	}
+yy2282:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x8B: goto yy2284;
+		default: goto yy2283;
 	}
 yy2283:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xA4: goto yy2285;
-		case 0xA5: goto yy2286;
-		default: goto yy2284;
-	}
-yy2284:
 	YYCURSOR = YYMARKER;
-	goto yy2281;
-yy2285:
+	goto yy2280;
+yy2284:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -32591,121 +32648,67 @@ yy2285:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2287;
-		default: goto yy2284;
+		case 0x9F: goto yy2285;
+		default: goto yy2283;
 	}
-yy2286:
-	yych = *++YYCURSOR;
+yy2285:
+	++YYCURSOR;
+#line 2830 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Kaktovik_Numerals; }
+#line 32659 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2832 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Mayan_Numerals:
+	
+#line 32665 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy2287;
-		default: goto yy2284;
+		case 0xF0: goto yy2289;
+		default: goto yy2287;
 	}
 yy2287:
 	++YYCURSOR;
-#line 2776 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Adlam; }
-#line 32671 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2778 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Indic_Siyaq_Numbers:
-	
-#line 32677 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2291;
-		default: goto yy2289;
-	}
+yy2288:
+#line 2837 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Mayan_Numerals; else return Error; }
+#line 32678 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2289:
-	++YYCURSOR;
-yy2290:
-#line 2783 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Indic_Siyaq_Numbers; else return Error; }
-#line 32690 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2291:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9E: goto yy2292;
-		default: goto yy2290;
+		case 0x9D: goto yy2290;
+		default: goto yy2288;
 	}
+yy2290:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x8B: goto yy2292;
+		default: goto yy2291;
+	}
+yy2291:
+	YYCURSOR = YYMARKER;
+	goto yy2288;
 yy2292:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB1: goto yy2294;
-		case 0xB2: goto yy2295;
-		default: goto yy2293;
-	}
-yy2293:
-	YYCURSOR = YYMARKER;
-	goto yy2290;
-yy2294:
-	yych = *++YYCURSOR;
-	switch (yych) {
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -32721,10 +32724,50 @@ yy2294:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2296;
-		default: goto yy2293;
+		case 0xBF: goto yy2293;
+		default: goto yy2291;
+	}
+yy2293:
+	++YYCURSOR;
+#line 2836 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Mayan_Numerals; }
+#line 32735 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2838 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Tai_Xuan_Jing_Symbols:
+	
+#line 32741 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2297;
+		default: goto yy2295;
 	}
 yy2295:
+	++YYCURSOR;
+yy2296:
+#line 2843 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tai_Xuan_Jing_Symbols; else return Error; }
+#line 32754 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2297:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9D: goto yy2298;
+		default: goto yy2296;
+	}
+yy2298:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x8C: goto yy2300;
+		case 0x8D: goto yy2301;
+		default: goto yy2299;
+	}
+yy2299:
+	YYCURSOR = YYMARKER;
+	goto yy2296;
+yy2300:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -32790,52 +32833,12 @@ yy2295:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2296;
-		default: goto yy2293;
-	}
-yy2296:
-	++YYCURSOR;
-#line 2782 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Indic_Siyaq_Numbers; }
-#line 32801 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2784 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Ottoman_Siyaq_Numbers:
-	
-#line 32807 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2300;
-		default: goto yy2298;
-	}
-yy2298:
-	++YYCURSOR;
-yy2299:
-#line 2789 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Ottoman_Siyaq_Numbers; else return Error; }
-#line 32820 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2300:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9E: goto yy2301;
+		case 0xBF: goto yy2302;
 		default: goto yy2299;
 	}
 yy2301:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB4: goto yy2303;
-		case 0xB5: goto yy2304;
-		default: goto yy2302;
-	}
-yy2302:
-	YYCURSOR = YYMARKER;
-	goto yy2299;
-yy2303:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -32867,7 +32870,51 @@ yy2303:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F:
+		case 0x9F: goto yy2302;
+		default: goto yy2299;
+	}
+yy2302:
+	++YYCURSOR;
+#line 2842 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Tai_Xuan_Jing_Symbols; }
+#line 32881 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2844 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Counting_Rod_Numerals:
+	
+#line 32887 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2306;
+		default: goto yy2304;
+	}
+yy2304:
+	++YYCURSOR;
+yy2305:
+#line 2849 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Counting_Rod_Numerals; else return Error; }
+#line 32900 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2306:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9D: goto yy2307;
+		default: goto yy2305;
+	}
+yy2307:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x8D: goto yy2309;
+		default: goto yy2308;
+	}
+yy2308:
+	YYCURSOR = YYMARKER;
+	goto yy2305;
+yy2309:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -32899,73 +32946,64 @@ yy2303:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2305;
-		default: goto yy2302;
-	}
-yy2304:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy2305;
-		default: goto yy2302;
-	}
-yy2305:
-	++YYCURSOR;
-#line 2788 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Ottoman_Siyaq_Numbers; }
-#line 32931 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2790 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Arabic_Mathematical_Alphabetic_Symbols:
-	
-#line 32937 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2309;
-		default: goto yy2307;
-	}
-yy2307:
-	++YYCURSOR;
-yy2308:
-#line 2795 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Arabic_Mathematical_Alphabetic_Symbols; else return Error; }
-#line 32950 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2309:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9E: goto yy2310;
+		case 0xBF: goto yy2310;
 		default: goto yy2308;
 	}
 yy2310:
+	++YYCURSOR;
+#line 2848 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Counting_Rod_Numerals; }
+#line 32957 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2850 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Mathematical_Alphanumeric_Symbols:
+	
+#line 32963 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2314;
+		default: goto yy2312;
+	}
+yy2312:
+	++YYCURSOR;
+yy2313:
+#line 2855 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Mathematical_Alphanumeric_Symbols; else return Error; }
+#line 32976 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2314:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9D: goto yy2315;
+		default: goto yy2313;
+	}
+yy2315:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB: goto yy2312;
-		default: goto yy2311;
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy2317;
+		default: goto yy2316;
 	}
-yy2311:
+yy2316:
 	YYCURSOR = YYMARKER;
-	goto yy2308;
-yy2312:
+	goto yy2313;
+yy2317:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -33031,49 +33069,59 @@ yy2312:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2313;
-		default: goto yy2311;
+		case 0xBF: goto yy2318;
+		default: goto yy2316;
 	}
-yy2313:
+yy2318:
 	++YYCURSOR;
-#line 2794 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Arabic_Mathematical_Alphabetic_Symbols; }
-#line 33042 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2854 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Mathematical_Alphanumeric_Symbols; }
+#line 33080 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2796 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2856 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Mahjong_Tiles:
+Sutton_SignWriting:
 	
-#line 33048 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 33086 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2317;
-		default: goto yy2315;
+		case 0xF0: goto yy2322;
+		default: goto yy2320;
 	}
-yy2315:
+yy2320:
 	++YYCURSOR;
-yy2316:
-#line 2801 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Mahjong_Tiles; else return Error; }
-#line 33061 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2317:
+yy2321:
+#line 2861 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sutton_SignWriting; else return Error; }
+#line 33099 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2322:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9F: goto yy2318;
-		default: goto yy2316;
+		case 0x9D: goto yy2323;
+		default: goto yy2321;
 	}
-yy2318:
+yy2323:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80: goto yy2320;
-		default: goto yy2319;
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9: goto yy2325;
+		case 0xAA: goto yy2326;
+		default: goto yy2324;
 	}
-yy2319:
+yy2324:
 	YYCURSOR = YYMARKER;
-	goto yy2316;
-yy2320:
+	goto yy2321;
+yy2325:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -33123,74 +33171,28 @@ yy2320:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy2321;
-		default: goto yy2319;
-	}
-yy2321:
-	++YYCURSOR;
-#line 2800 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Mahjong_Tiles; }
-#line 33134 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2802 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Domino_Tiles:
-	
-#line 33140 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2325;
-		default: goto yy2323;
-	}
-yy2323:
-	++YYCURSOR;
-yy2324:
-#line 2807 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Domino_Tiles; else return Error; }
-#line 33153 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2325:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9F: goto yy2326;
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2327;
 		default: goto yy2324;
 	}
 yy2326:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80: goto yy2328;
-		case 0x81: goto yy2329;
-		case 0x82: goto yy2330;
-		default: goto yy2327;
-	}
-yy2327:
-	YYCURSOR = YYMARKER;
-	goto yy2324;
-yy2328:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2331;
-		default: goto yy2327;
-	}
-yy2329:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -33238,140 +33240,160 @@ yy2329:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2331;
-		default: goto yy2327;
+		case 0xAF: goto yy2327;
+		default: goto yy2324;
 	}
-yy2330:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy2331;
-		default: goto yy2327;
-	}
-yy2331:
+yy2327:
 	++YYCURSOR;
-#line 2806 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Domino_Tiles; }
-#line 33302 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2860 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Sutton_SignWriting; }
+#line 33251 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2808 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2862 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Playing_Cards:
+Latin_Extended_G:
 	
-#line 33308 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 33257 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2335;
+		case 0xF0: goto yy2331;
+		default: goto yy2329;
+	}
+yy2329:
+	++YYCURSOR;
+yy2330:
+#line 2867 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Latin_Extended_G; else return Error; }
+#line 33270 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2331:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9D: goto yy2332;
+		default: goto yy2330;
+	}
+yy2332:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2334;
 		default: goto yy2333;
 	}
 yy2333:
-	++YYCURSOR;
+	YYCURSOR = YYMARKER;
+	goto yy2330;
 yy2334:
-#line 2813 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Playing_Cards; else return Error; }
-#line 33321 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2335:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9F: goto yy2336;
-		default: goto yy2334;
-	}
-yy2336:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x82: goto yy2338;
-		case 0x83: goto yy2339;
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2335;
+		default: goto yy2333;
+	}
+yy2335:
+	++YYCURSOR;
+#line 2866 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Latin_Extended_G; }
+#line 33362 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2868 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Glagolitic_Supplement:
+	
+#line 33368 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2339;
 		default: goto yy2337;
 	}
 yy2337:
-	YYCURSOR = YYMARKER;
-	goto yy2334;
+	++YYCURSOR;
 yy2338:
+#line 2873 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Glagolitic_Supplement; else return Error; }
+#line 33381 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2339:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9E: goto yy2340;
+		default: goto yy2338;
+	}
+yy2340:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2340;
-		default: goto yy2337;
+		case 0x80: goto yy2342;
+		default: goto yy2341;
 	}
-yy2339:
+yy2341:
+	YYCURSOR = YYMARKER;
+	goto yy2338;
+yy2342:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -33421,179 +33443,72 @@ yy2339:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2340;
-		default: goto yy2337;
+		case 0xAF: goto yy2343;
+		default: goto yy2341;
 	}
-yy2340:
+yy2343:
 	++YYCURSOR;
-#line 2812 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Playing_Cards; }
-#line 33448 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2814 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Enclosed_Alphanumeric_Supplement:
-	
+#line 2872 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Glagolitic_Supplement; }
 #line 33454 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2874 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Cyrillic_Extended_D:
+	
+#line 33460 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2344;
-		default: goto yy2342;
-	}
-yy2342:
-	++YYCURSOR;
-yy2343:
-#line 2819 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Enclosed_Alphanumeric_Supplement; else return Error; }
-#line 33467 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2344:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9F: goto yy2345;
-		default: goto yy2343;
+		case 0xF0: goto yy2347;
+		default: goto yy2345;
 	}
 yy2345:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87: goto yy2347;
-		default: goto yy2346;
-	}
+	++YYCURSOR;
 yy2346:
-	YYCURSOR = YYMARKER;
-	goto yy2343;
+#line 2879 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Cyrillic_Extended_D; else return Error; }
+#line 33473 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2347:
-	yych = *++YYCURSOR;
+	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2348;
+		case 0x9E: goto yy2348;
 		default: goto yy2346;
 	}
 yy2348:
-	++YYCURSOR;
-#line 2818 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Enclosed_Alphanumeric_Supplement; }
-#line 33559 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2820 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Enclosed_Ideographic_Supplement:
-	
-#line 33565 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2352;
-		default: goto yy2350;
-	}
-yy2350:
-	++YYCURSOR;
-yy2351:
-#line 2825 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Enclosed_Ideographic_Supplement; else return Error; }
-#line 33578 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2352:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9F: goto yy2353;
-		default: goto yy2351;
-	}
-yy2353:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B: goto yy2355;
-		default: goto yy2354;
+		case 0x80: goto yy2350;
+		case 0x81: goto yy2351;
+		case 0x82: goto yy2352;
+		default: goto yy2349;
 	}
-yy2354:
+yy2349:
 	YYCURSOR = YYMARKER;
-	goto yy2351;
-yy2355:
+	goto yy2346;
+yy2350:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2353;
+		default: goto yy2349;
+	}
+yy2351:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -33659,62 +33574,142 @@ yy2355:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2356;
-		default: goto yy2354;
+		case 0xBF: goto yy2353;
+		default: goto yy2349;
 	}
-yy2356:
+yy2352:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy2353;
+		default: goto yy2349;
+	}
+yy2353:
 	++YYCURSOR;
-#line 2824 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Enclosed_Ideographic_Supplement; }
-#line 33670 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2878 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Cyrillic_Extended_D; }
+#line 33606 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2826 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2880 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Miscellaneous_Symbols_and_Pictographs:
+Nyiakeng_Puachue_Hmong:
 	
-#line 33676 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 33612 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2360;
-		default: goto yy2358;
+		case 0xF0: goto yy2357;
+		default: goto yy2355;
 	}
-yy2358:
+yy2355:
 	++YYCURSOR;
-yy2359:
-#line 2831 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Symbols_and_Pictographs; else return Error; }
-#line 33689 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2360:
+yy2356:
+#line 2885 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Nyiakeng_Puachue_Hmong; else return Error; }
+#line 33625 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2357:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9F: goto yy2361;
+		case 0x9E: goto yy2358;
+		default: goto yy2356;
+	}
+yy2358:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x84: goto yy2360;
+		case 0x85: goto yy2361;
+		default: goto yy2359;
+	}
+yy2359:
+	YYCURSOR = YYMARKER;
+	goto yy2356;
+yy2360:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2362;
 		default: goto yy2359;
 	}
 yy2361:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97: goto yy2363;
-		default: goto yy2362;
-	}
-yy2362:
-	YYCURSOR = YYMARKER;
-	goto yy2359;
-yy2363:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -33730,98 +33725,141 @@ yy2363:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2364;
-		default: goto yy2362;
+		case 0x8F: goto yy2362;
+		default: goto yy2359;
+	}
+yy2362:
+	++YYCURSOR;
+#line 2884 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Nyiakeng_Puachue_Hmong; }
+#line 33736 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2886 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Toto:
+	
+#line 33742 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2366;
+		default: goto yy2364;
 	}
 yy2364:
 	++YYCURSOR;
-#line 2830 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Miscellaneous_Symbols_and_Pictographs; }
-#line 33789 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2832 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Emoticons:
-	
-#line 33795 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2368;
-		default: goto yy2366;
-	}
+yy2365:
+#line 2891 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Toto; else return Error; }
+#line 33755 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2366:
-	++YYCURSOR;
-yy2367:
-#line 2837 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Emoticons; else return Error; }
-#line 33808 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2368:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9F: goto yy2369;
-		default: goto yy2367;
+		case 0x9E: goto yy2367;
+		default: goto yy2365;
 	}
+yy2367:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x8A: goto yy2369;
+		default: goto yy2368;
+	}
+yy2368:
+	YYCURSOR = YYMARKER;
+	goto yy2365;
 yy2369:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x98: goto yy2371;
-		case 0x99: goto yy2372;
-		default: goto yy2370;
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2370;
+		default: goto yy2368;
 	}
 yy2370:
+	++YYCURSOR;
+#line 2890 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Toto; }
+#line 33828 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2892 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Wancho:
+	
+#line 33834 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2374;
+		default: goto yy2372;
+	}
+yy2372:
+	++YYCURSOR;
+yy2373:
+#line 2897 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Wancho; else return Error; }
+#line 33847 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2374:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9E: goto yy2375;
+		default: goto yy2373;
+	}
+yy2375:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x8B: goto yy2377;
+		default: goto yy2376;
+	}
+yy2376:
 	YYCURSOR = YYMARKER;
-	goto yy2367;
-yy2371:
+	goto yy2373;
+yy2377:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -33887,181 +33925,51 @@ yy2371:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2373;
-		default: goto yy2370;
-	}
-yy2372:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy2373;
-		default: goto yy2370;
-	}
-yy2373:
-	++YYCURSOR;
-#line 2836 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Emoticons; }
-#line 33919 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2838 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Ornamental_Dingbats:
-	
-#line 33925 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2377;
-		default: goto yy2375;
-	}
-yy2375:
-	++YYCURSOR;
-yy2376:
-#line 2843 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Ornamental_Dingbats; else return Error; }
-#line 33938 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2377:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9F: goto yy2378;
+		case 0xBF: goto yy2378;
 		default: goto yy2376;
 	}
 yy2378:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x99: goto yy2380;
-		default: goto yy2379;
-	}
-yy2379:
-	YYCURSOR = YYMARKER;
-	goto yy2376;
-yy2380:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2381;
-		default: goto yy2379;
-	}
-yy2381:
 	++YYCURSOR;
-#line 2842 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Ornamental_Dingbats; }
-#line 34011 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2896 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Wancho; }
+#line 33936 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2844 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2898 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Transport_and_Map_Symbols:
+Nag_Mundari:
 	
-#line 34017 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 33942 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2385;
-		default: goto yy2383;
+		case 0xF0: goto yy2382;
+		default: goto yy2380;
 	}
-yy2383:
+yy2380:
 	++YYCURSOR;
-yy2384:
-#line 2849 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Transport_and_Map_Symbols; else return Error; }
-#line 34030 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2385:
+yy2381:
+#line 2903 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Nag_Mundari; else return Error; }
+#line 33955 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2382:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9F: goto yy2386;
+		case 0x9E: goto yy2383;
+		default: goto yy2381;
+	}
+yy2383:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x93: goto yy2385;
 		default: goto yy2384;
 	}
-yy2386:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x9A:
-		case 0x9B: goto yy2388;
-		default: goto yy2387;
-	}
-yy2387:
+yy2384:
 	YYCURSOR = YYMARKER;
-	goto yy2384;
-yy2388:
+	goto yy2381;
+yy2385:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
 		case 0x90:
 		case 0x91:
 		case 0x92:
@@ -34109,50 +34017,141 @@ yy2388:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2389;
-		default: goto yy2387;
+		case 0xBF: goto yy2386;
+		default: goto yy2384;
 	}
-yy2389:
+yy2386:
 	++YYCURSOR;
-#line 2848 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Transport_and_Map_Symbols; }
+#line 2902 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Nag_Mundari; }
+#line 34028 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2904 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Ol_Onal:
+	
+#line 34034 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2390;
+		default: goto yy2388;
+	}
+yy2388:
+	++YYCURSOR;
+yy2389:
+#line 2909 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Ol_Onal; else return Error; }
+#line 34047 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2390:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9E: goto yy2391;
+		default: goto yy2389;
+	}
+yy2391:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x97: goto yy2393;
+		default: goto yy2392;
+	}
+yy2392:
+	YYCURSOR = YYMARKER;
+	goto yy2389;
+yy2393:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2394;
+		default: goto yy2392;
+	}
+yy2394:
+	++YYCURSOR;
+#line 2908 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Ol_Onal; }
 #line 34120 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2850 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2910 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Alchemical_Symbols:
+Tai_Yo:
 	
 #line 34126 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2393;
-		default: goto yy2391;
+		case 0xF0: goto yy2398;
+		default: goto yy2396;
 	}
-yy2391:
+yy2396:
 	++YYCURSOR;
-yy2392:
-#line 2855 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Alchemical_Symbols; else return Error; }
+yy2397:
+#line 2915 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tai_Yo; else return Error; }
 #line 34139 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2393:
+yy2398:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9F: goto yy2394;
-		default: goto yy2392;
+		case 0x9E: goto yy2399;
+		default: goto yy2397;
 	}
-yy2394:
+yy2399:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9C:
-		case 0x9D: goto yy2396;
-		default: goto yy2395;
+		case 0x9B: goto yy2401;
+		default: goto yy2400;
 	}
-yy2395:
+yy2400:
 	YYCURSOR = YYMARKER;
-	goto yy2392;
-yy2396:
+	goto yy2397;
+yy2401:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -34218,84 +34217,51 @@ yy2396:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2397;
-		default: goto yy2395;
-	}
-yy2397:
-	++YYCURSOR;
-#line 2854 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Alchemical_Symbols; }
-#line 34229 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2856 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Geometric_Shapes_Extended:
-	
-#line 34235 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2401;
-		default: goto yy2399;
-	}
-yy2399:
-	++YYCURSOR;
-yy2400:
-#line 2861 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Geometric_Shapes_Extended; else return Error; }
-#line 34248 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2401:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9F: goto yy2402;
+		case 0xBF: goto yy2402;
 		default: goto yy2400;
 	}
 yy2402:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
+#line 2914 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Tai_Yo; }
+#line 34228 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2916 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Ethiopic_Extended_B:
+	
+#line 34234 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
 	switch (yych) {
-		case 0x9E:
-		case 0x9F: goto yy2404;
-		default: goto yy2403;
+		case 0xF0: goto yy2406;
+		default: goto yy2404;
 	}
-yy2403:
-	YYCURSOR = YYMARKER;
-	goto yy2400;
 yy2404:
+	++YYCURSOR;
+yy2405:
+#line 2921 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Ethiopic_Extended_B; else return Error; }
+#line 34247 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2406:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9E: goto yy2407;
+		default: goto yy2405;
+	}
+yy2407:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
+		case 0x9F: goto yy2409;
+		default: goto yy2408;
+	}
+yy2408:
+	YYCURSOR = YYMARKER;
+	goto yy2405;
+yy2409:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -34327,52 +34293,52 @@ yy2404:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2405;
-		default: goto yy2403;
-	}
-yy2405:
-	++YYCURSOR;
-#line 2860 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Geometric_Shapes_Extended; }
-#line 34338 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2862 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Supplemental_Arrows_C:
-	
-#line 34344 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2409;
-		default: goto yy2407;
-	}
-yy2407:
-	++YYCURSOR;
-yy2408:
-#line 2867 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Supplemental_Arrows_C; else return Error; }
-#line 34357 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2409:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9F: goto yy2410;
+		case 0xBF: goto yy2410;
 		default: goto yy2408;
 	}
 yy2410:
+	++YYCURSOR;
+#line 2920 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Ethiopic_Extended_B; }
+#line 34304 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2922 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Mende_Kikakui:
+	
+#line 34310 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2414;
+		default: goto yy2412;
+	}
+yy2412:
+	++YYCURSOR;
+yy2413:
+#line 2927 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Mende_Kikakui; else return Error; }
+#line 34323 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2414:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9E: goto yy2415;
+		default: goto yy2413;
+	}
+yy2415:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xA0:
 		case 0xA1:
-		case 0xA2:
-		case 0xA3: goto yy2412;
-		default: goto yy2411;
+		case 0xA2: goto yy2417;
+		case 0xA3: goto yy2418;
+		default: goto yy2416;
 	}
-yy2411:
+yy2416:
 	YYCURSOR = YYMARKER;
-	goto yy2408;
-yy2412:
+	goto yy2413;
+yy2417:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -34438,54 +34404,12 @@ yy2412:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2413;
-		default: goto yy2411;
-	}
-yy2413:
-	++YYCURSOR;
-#line 2866 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Supplemental_Arrows_C; }
-#line 34449 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2868 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Supplemental_Symbols_and_Pictographs:
-	
-#line 34455 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2417;
-		default: goto yy2415;
-	}
-yy2415:
-	++YYCURSOR;
-yy2416:
-#line 2873 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Supplemental_Symbols_and_Pictographs; else return Error; }
-#line 34468 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2417:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0x9F: goto yy2418;
+		case 0xBF: goto yy2419;
 		default: goto yy2416;
 	}
 yy2418:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7: goto yy2420;
-		default: goto yy2419;
-	}
-yy2419:
-	YYCURSOR = YYMARKER;
-	goto yy2416;
-yy2420:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -34517,84 +34441,52 @@ yy2420:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2421;
-		default: goto yy2419;
+		case 0x9F: goto yy2419;
+		default: goto yy2416;
+	}
+yy2419:
+	++YYCURSOR;
+#line 2926 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Mende_Kikakui; }
+#line 34452 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2928 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Adlam:
+	
+#line 34458 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2423;
+		default: goto yy2421;
 	}
 yy2421:
 	++YYCURSOR;
-#line 2872 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Supplemental_Symbols_and_Pictographs; }
-#line 34560 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2874 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Chess_Symbols:
-	
-#line 34566 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2425;
-		default: goto yy2423;
-	}
+yy2422:
+#line 2933 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Adlam; else return Error; }
+#line 34471 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2423:
-	++YYCURSOR;
-yy2424:
-#line 2879 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Chess_Symbols; else return Error; }
-#line 34579 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2425:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9F: goto yy2426;
-		default: goto yy2424;
+		case 0x9E: goto yy2424;
+		default: goto yy2422;
 	}
+yy2424:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA4: goto yy2426;
+		case 0xA5: goto yy2427;
+		default: goto yy2425;
+	}
+yy2425:
+	YYCURSOR = YYMARKER;
+	goto yy2422;
 yy2426:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA8: goto yy2428;
-		case 0xA9: goto yy2429;
-		default: goto yy2427;
-	}
-yy2427:
-	YYCURSOR = YYMARKER;
-	goto yy2424;
-yy2428:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -34658,10 +34550,10 @@ yy2428:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2430;
-		default: goto yy2427;
+		case 0xBF: goto yy2428;
+		default: goto yy2425;
 	}
-yy2429:
+yy2427:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -34695,69 +34587,52 @@ yy2429:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy2430;
-		default: goto yy2427;
+		case 0x9F: goto yy2428;
+		default: goto yy2425;
+	}
+yy2428:
+	++YYCURSOR;
+#line 2932 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Adlam; }
+#line 34598 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2934 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Indic_Siyaq_Numbers:
+	
+#line 34604 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2432;
+		default: goto yy2430;
 	}
 yy2430:
 	++YYCURSOR;
-#line 2878 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Chess_Symbols; }
-#line 34722 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2880 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Symbols_and_Pictographs_Extended_A:
-	
-#line 34728 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2434;
-		default: goto yy2432;
-	}
+yy2431:
+#line 2939 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Indic_Siyaq_Numbers; else return Error; }
+#line 34617 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2432:
-	++YYCURSOR;
-yy2433:
-#line 2885 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Symbols_and_Pictographs_Extended_A; else return Error; }
-#line 34741 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2434:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9F: goto yy2435;
-		default: goto yy2433;
+		case 0x9E: goto yy2433;
+		default: goto yy2431;
 	}
+yy2433:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB1: goto yy2435;
+		case 0xB2: goto yy2436;
+		default: goto yy2434;
+	}
+yy2434:
+	YYCURSOR = YYMARKER;
+	goto yy2431;
 yy2435:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA9: goto yy2437;
-		case 0xAA:
-		case 0xAB: goto yy2438;
-		default: goto yy2436;
-	}
-yy2436:
-	YYCURSOR = YYMARKER;
-	goto yy2433;
-yy2437:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0xB0:
 		case 0xB1:
 		case 0xB2:
@@ -34773,10 +34648,10 @@ yy2437:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2439;
-		default: goto yy2436;
+		case 0xBF: goto yy2437;
+		default: goto yy2434;
 	}
-yy2438:
+yy2436:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -34842,52 +34717,119 @@ yy2438:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2439;
-		default: goto yy2436;
+		case 0xBF: goto yy2437;
+		default: goto yy2434;
+	}
+yy2437:
+	++YYCURSOR;
+#line 2938 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Indic_Siyaq_Numbers; }
+#line 34728 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2940 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Ottoman_Siyaq_Numbers:
+	
+#line 34734 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2441;
+		default: goto yy2439;
 	}
 yy2439:
 	++YYCURSOR;
-#line 2884 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Symbols_and_Pictographs_Extended_A; }
-#line 34853 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2886 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-Symbols_for_Legacy_Computing:
-	
-#line 34859 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2443;
-		default: goto yy2441;
-	}
+yy2440:
+#line 2945 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Ottoman_Siyaq_Numbers; else return Error; }
+#line 34747 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2441:
-	++YYCURSOR;
-yy2442:
-#line 2891 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Symbols_for_Legacy_Computing; else return Error; }
-#line 34872 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2443:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9F: goto yy2444;
-		default: goto yy2442;
+		case 0x9E: goto yy2442;
+		default: goto yy2440;
 	}
+yy2442:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB4: goto yy2444;
+		case 0xB5: goto yy2445;
+		default: goto yy2443;
+	}
+yy2443:
+	YYCURSOR = YYMARKER;
+	goto yy2440;
 yy2444:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy2446;
-		default: goto yy2445;
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2446;
+		default: goto yy2443;
 	}
 yy2445:
-	YYCURSOR = YYMARKER;
-	goto yy2442;
-yy2446:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -34905,203 +34847,52 @@ yy2446:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2447;
-		default: goto yy2445;
+		case 0x8F: goto yy2446;
+		default: goto yy2443;
 	}
-yy2447:
+yy2446:
 	++YYCURSOR;
-#line 2890 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Symbols_for_Legacy_Computing; }
-#line 34964 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2944 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Ottoman_Siyaq_Numbers; }
+#line 34858 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2892 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2946 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-CJK_Unified_Ideographs_Extension_B:
+Arabic_Mathematical_Alphabetic_Symbols:
 	
-#line 34970 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 34864 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2451;
+		case 0xF0: goto yy2450;
+		default: goto yy2448;
+	}
+yy2448:
+	++YYCURSOR;
+yy2449:
+#line 2951 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Arabic_Mathematical_Alphabetic_Symbols; else return Error; }
+#line 34877 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2450:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9E: goto yy2451;
 		default: goto yy2449;
 	}
-yy2449:
-	++YYCURSOR;
-yy2450:
-#line 2897 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_B; else return Error; }
-#line 34983 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2451:
-	yych = *(YYMARKER = ++YYCURSOR);
+	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9: goto yy2452;
-		case 0xAA: goto yy2454;
-		default: goto yy2450;
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB: goto yy2453;
+		default: goto yy2452;
 	}
 yy2452:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2455;
-		default: goto yy2453;
-	}
-yy2453:
 	YYCURSOR = YYMARKER;
-	goto yy2450;
-yy2454:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A: goto yy2455;
-		case 0x9B: goto yy2456;
-		default: goto yy2453;
-	}
-yy2455:
+	goto yy2449;
+yy2453:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -35167,269 +34958,235 @@ yy2455:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2457;
-		default: goto yy2453;
+		case 0xBF: goto yy2454;
+		default: goto yy2452;
 	}
-yy2456:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy2457;
-		default: goto yy2453;
-	}
-yy2457:
+yy2454:
 	++YYCURSOR;
-#line 2896 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_B; }
-#line 35215 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2950 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Arabic_Mathematical_Alphabetic_Symbols; }
+#line 34969 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2898 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2952 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-CJK_Unified_Ideographs_Extension_C:
+Mahjong_Tiles:
 	
-#line 35221 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 34975 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2461;
-		default: goto yy2459;
+		case 0xF0: goto yy2458;
+		default: goto yy2456;
 	}
-yy2459:
+yy2456:
 	++YYCURSOR;
-yy2460:
-#line 2903 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_C; else return Error; }
-#line 35234 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2461:
+yy2457:
+#line 2957 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Mahjong_Tiles; else return Error; }
+#line 34988 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2458:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xAA: goto yy2462;
-		case 0xAB: goto yy2464;
+		case 0x9F: goto yy2459;
+		default: goto yy2457;
+	}
+yy2459:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80: goto yy2461;
+		default: goto yy2460;
+	}
+yy2460:
+	YYCURSOR = YYMARKER;
+	goto yy2457;
+yy2461:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF: goto yy2462;
 		default: goto yy2460;
 	}
 yy2462:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2465;
-		default: goto yy2463;
-	}
-yy2463:
-	YYCURSOR = YYMARKER;
-	goto yy2460;
-yy2464:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C: goto yy2465;
-		default: goto yy2463;
-	}
-yy2465:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2466;
-		default: goto yy2463;
-	}
-yy2466:
 	++YYCURSOR;
-#line 2902 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_C; }
-#line 35393 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2956 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Mahjong_Tiles; }
+#line 35061 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2904 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2958 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-CJK_Unified_Ideographs_Extension_D:
+Domino_Tiles:
 	
-#line 35399 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 35067 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2470;
+		case 0xF0: goto yy2466;
+		default: goto yy2464;
+	}
+yy2464:
+	++YYCURSOR;
+yy2465:
+#line 2963 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Domino_Tiles; else return Error; }
+#line 35080 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2466:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9F: goto yy2467;
+		default: goto yy2465;
+	}
+yy2467:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80: goto yy2469;
+		case 0x81: goto yy2470;
+		case 0x82: goto yy2471;
 		default: goto yy2468;
 	}
 yy2468:
-	++YYCURSOR;
+	YYCURSOR = YYMARKER;
+	goto yy2465;
 yy2469:
-#line 2909 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_D; else return Error; }
-#line 35412 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2470:
-	yych = *(YYMARKER = ++YYCURSOR);
+	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xAB: goto yy2471;
-		default: goto yy2469;
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2472;
+		default: goto yy2468;
+	}
+yy2470:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2472;
+		default: goto yy2468;
 	}
 yy2471:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy2473;
-		case 0xA0: goto yy2474;
-		default: goto yy2472;
-	}
-yy2472:
-	YYCURSOR = YYMARKER;
-	goto yy2469;
-yy2473:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -35461,7 +35218,52 @@ yy2473:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F:
+		case 0x9F: goto yy2472;
+		default: goto yy2468;
+	}
+yy2472:
+	++YYCURSOR;
+#line 2962 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Domino_Tiles; }
+#line 35229 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2964 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Playing_Cards:
+	
+#line 35235 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2476;
+		default: goto yy2474;
+	}
+yy2474:
+	++YYCURSOR;
+yy2475:
+#line 2969 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Playing_Cards; else return Error; }
+#line 35248 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2476:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9F: goto yy2477;
+		default: goto yy2475;
+	}
+yy2477:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x82: goto yy2479;
+		case 0x83: goto yy2480;
+		default: goto yy2478;
+	}
+yy2478:
+	YYCURSOR = YYMARKER;
+	goto yy2475;
+yy2479:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0xA0:
 		case 0xA1:
 		case 0xA2:
@@ -35493,81 +35295,45 @@ yy2473:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2475;
-		default: goto yy2472;
-	}
-yy2474:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy2475;
-		default: goto yy2472;
-	}
-yy2475:
-	++YYCURSOR;
-#line 2908 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_D; }
-#line 35541 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2910 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-CJK_Unified_Ideographs_Extension_E:
-	
-#line 35547 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2479;
-		default: goto yy2477;
-	}
-yy2477:
-	++YYCURSOR;
-yy2478:
-#line 2915 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_E; else return Error; }
-#line 35560 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2479:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0xAB: goto yy2480;
-		case 0xAC: goto yy2482;
+		case 0xBF: goto yy2481;
 		default: goto yy2478;
 	}
 yy2480:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA0: goto yy2483;
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
 		case 0xA1:
 		case 0xA2:
 		case 0xA3:
@@ -35598,282 +35364,52 @@ yy2480:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2484;
-		default: goto yy2481;
+		case 0xBF: goto yy2481;
+		default: goto yy2478;
 	}
 yy2481:
-	YYCURSOR = YYMARKER;
-	goto yy2478;
-yy2482:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9: goto yy2484;
-		case 0xBA: goto yy2485;
-		default: goto yy2481;
-	}
-yy2483:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2486;
-		default: goto yy2481;
-	}
-yy2484:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2486;
-		default: goto yy2481;
-	}
-yy2485:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy2486;
-		default: goto yy2481;
-	}
-yy2486:
 	++YYCURSOR;
-#line 2914 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_E; }
-#line 35835 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2968 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Playing_Cards; }
+#line 35375 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2916 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 2970 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-CJK_Unified_Ideographs_Extension_F:
+Enclosed_Alphanumeric_Supplement:
 	
-#line 35841 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 35381 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2490;
-		default: goto yy2488;
+		case 0xF0: goto yy2485;
+		default: goto yy2483;
 	}
-yy2488:
+yy2483:
 	++YYCURSOR;
-yy2489:
-#line 2921 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_F; else return Error; }
-#line 35854 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2490:
+yy2484:
+#line 2975 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Enclosed_Alphanumeric_Supplement; else return Error; }
+#line 35394 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2485:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xAC: goto yy2491;
-		case 0xAD: goto yy2493;
-		case 0xAE: goto yy2494;
-		default: goto yy2489;
+		case 0x9F: goto yy2486;
+		default: goto yy2484;
 	}
-yy2491:
+yy2486:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xBA: goto yy2495;
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2496;
-		default: goto yy2492;
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87: goto yy2488;
+		default: goto yy2487;
 	}
-yy2492:
+yy2487:
 	YYCURSOR = YYMARKER;
-	goto yy2489;
-yy2493:
+	goto yy2484;
+yy2488:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -35939,83 +35475,51 @@ yy2493:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2496;
+		case 0xBF: goto yy2489;
+		default: goto yy2487;
+	}
+yy2489:
+	++YYCURSOR;
+#line 2974 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Enclosed_Alphanumeric_Supplement; }
+#line 35486 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2976 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Enclosed_Ideographic_Supplement:
+	
+#line 35492 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2493;
+		default: goto yy2491;
+	}
+yy2491:
+	++YYCURSOR;
+yy2492:
+#line 2981 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Enclosed_Ideographic_Supplement; else return Error; }
+#line 35505 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2493:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9F: goto yy2494;
 		default: goto yy2492;
 	}
 yy2494:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
 		case 0x88:
 		case 0x89:
 		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE: goto yy2496;
-		case 0xAF: goto yy2497;
-		default: goto yy2492;
+		case 0x8B: goto yy2496;
+		default: goto yy2495;
 	}
 yy2495:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2498;
-		default: goto yy2492;
-	}
+	YYCURSOR = YYMARKER;
+	goto yy2492;
 yy2496:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -36082,24 +35586,42 @@ yy2496:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2498;
-		default: goto yy2492;
+		case 0xBF: goto yy2497;
+		default: goto yy2495;
 	}
 yy2497:
+	++YYCURSOR;
+#line 2980 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Enclosed_Ideographic_Supplement; }
+#line 35597 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2982 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Miscellaneous_Symbols_and_Pictographs:
+	
+#line 35603 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2501;
+		default: goto yy2499;
+	}
+yy2499:
+	++YYCURSOR;
+yy2500:
+#line 2987 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Symbols_and_Pictographs; else return Error; }
+#line 35616 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2501:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9F: goto yy2502;
+		default: goto yy2500;
+	}
+yy2502:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
@@ -36111,104 +35633,13 @@ yy2497:
 		case 0x94:
 		case 0x95:
 		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy2498;
-		default: goto yy2492;
-	}
-yy2498:
-	++YYCURSOR;
-#line 2920 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_F; }
-#line 36146 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2922 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-CJK_Unified_Ideographs_Extension_I:
-	
-#line 36152 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2502;
-		default: goto yy2500;
-	}
-yy2500:
-	++YYCURSOR;
-yy2501:
-#line 2927 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_I; else return Error; }
-#line 36165 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2502:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0xAE: goto yy2503;
-		default: goto yy2501;
+		case 0x97: goto yy2504;
+		default: goto yy2503;
 	}
 yy2503:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xAF: goto yy2505;
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8: goto yy2506;
-		case 0xB9: goto yy2507;
-		default: goto yy2504;
-	}
-yy2504:
 	YYCURSOR = YYMARKER;
-	goto yy2501;
-yy2505:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2508;
-		default: goto yy2504;
-	}
-yy2506:
+	goto yy2500;
+yy2504:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -36274,10 +35705,50 @@ yy2506:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2508;
-		default: goto yy2504;
+		case 0xBF: goto yy2505;
+		default: goto yy2503;
+	}
+yy2505:
+	++YYCURSOR;
+#line 2986 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Miscellaneous_Symbols_and_Pictographs; }
+#line 35716 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2988 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Emoticons:
+	
+#line 35722 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2509;
+		default: goto yy2507;
 	}
 yy2507:
+	++YYCURSOR;
+yy2508:
+#line 2993 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Emoticons; else return Error; }
+#line 35735 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2509:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9F: goto yy2510;
+		default: goto yy2508;
+	}
+yy2510:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x98: goto yy2512;
+		case 0x99: goto yy2513;
+		default: goto yy2511;
+	}
+yy2511:
+	YYCURSOR = YYMARKER;
+	goto yy2508;
+yy2512:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -36311,59 +35782,44 @@ yy2507:
 		case 0x9C:
 		case 0x9D:
 		case 0x9E:
-		case 0x9F: goto yy2508;
-		default: goto yy2504;
-	}
-yy2508:
-	++YYCURSOR;
-#line 2926 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_I; }
-#line 36322 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2928 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-CJK_Compatibility_Ideographs_Supplement:
-	
-#line 36328 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2512;
-		default: goto yy2510;
-	}
-yy2510:
-	++YYCURSOR;
-yy2511:
-#line 2933 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Compatibility_Ideographs_Supplement; else return Error; }
-#line 36341 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2512:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0xAF: goto yy2513;
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2514;
 		default: goto yy2511;
 	}
 yy2513:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7: goto yy2515;
-		case 0xA8: goto yy2516;
-		default: goto yy2514;
-	}
-yy2514:
-	YYCURSOR = YYMARKER;
-	goto yy2511;
-yy2515:
-	yych = *++YYCURSOR;
-	switch (yych) {
 		case 0x80:
 		case 0x81:
 		case 0x82:
@@ -36379,7 +35835,51 @@ yy2515:
 		case 0x8C:
 		case 0x8D:
 		case 0x8E:
-		case 0x8F:
+		case 0x8F: goto yy2514;
+		default: goto yy2511;
+	}
+yy2514:
+	++YYCURSOR;
+#line 2992 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Emoticons; }
+#line 35846 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 2994 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Ornamental_Dingbats:
+	
+#line 35852 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2518;
+		default: goto yy2516;
+	}
+yy2516:
+	++YYCURSOR;
+yy2517:
+#line 2999 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Ornamental_Dingbats; else return Error; }
+#line 35865 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2518:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9F: goto yy2519;
+		default: goto yy2517;
+	}
+yy2519:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x99: goto yy2521;
+		default: goto yy2520;
+	}
+yy2520:
+	YYCURSOR = YYMARKER;
+	goto yy2517;
+yy2521:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0x90:
 		case 0x91:
 		case 0x92:
@@ -36427,293 +35927,66 @@ yy2515:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2517;
-		default: goto yy2514;
-	}
-yy2516:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F: goto yy2517;
-		default: goto yy2514;
-	}
-yy2517:
-	++YYCURSOR;
-#line 2932 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto CJK_Compatibility_Ideographs_Supplement; }
-#line 36475 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-}
-#line 2934 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-
-CJK_Unified_Ideographs_Extension_G:
-	
-#line 36481 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	switch (yych) {
-		case 0xF0: goto yy2521;
-		default: goto yy2519;
-	}
-yy2519:
-	++YYCURSOR;
-yy2520:
-#line 2939 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_G; else return Error; }
-#line 36494 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2521:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-		case 0xB0: goto yy2522;
-		case 0xB1: goto yy2524;
+		case 0xBF: goto yy2522;
 		default: goto yy2520;
 	}
 yy2522:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2525;
-		default: goto yy2523;
-	}
-yy2523:
-	YYCURSOR = YYMARKER;
-	goto yy2520;
-yy2524:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C: goto yy2525;
-		case 0x8D: goto yy2526;
-		default: goto yy2523;
-	}
-yy2525:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2527;
-		default: goto yy2523;
-	}
-yy2526:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy2527;
-		default: goto yy2523;
-	}
-yy2527:
 	++YYCURSOR;
-#line 2938 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_G; }
-#line 36687 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 2998 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Ornamental_Dingbats; }
+#line 35938 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2940 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 3000 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-CJK_Unified_Ideographs_Extension_H:
+Transport_and_Map_Symbols:
 	
-#line 36693 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 35944 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF0: goto yy2531;
-		default: goto yy2529;
+		case 0xF0: goto yy2526;
+		default: goto yy2524;
 	}
-yy2529:
+yy2524:
 	++YYCURSOR;
-yy2530:
-#line 2945 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_H; else return Error; }
-#line 36706 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2531:
+yy2525:
+#line 3005 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Transport_and_Map_Symbols; else return Error; }
+#line 35957 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2526:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xB1: goto yy2532;
-		case 0xB2: goto yy2534;
-		default: goto yy2530;
+		case 0x9F: goto yy2527;
+		default: goto yy2525;
 	}
-yy2532:
+yy2527:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8D: goto yy2535;
+		case 0x9A:
+		case 0x9B: goto yy2529;
+		default: goto yy2528;
+	}
+yy2528:
+	YYCURSOR = YYMARKER;
+	goto yy2525;
+yy2529:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
 		case 0x8E:
 		case 0x8F:
 		case 0x90:
@@ -36763,154 +36036,49 @@ yy2532:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2536;
-		default: goto yy2533;
+		case 0xBF: goto yy2530;
+		default: goto yy2528;
 	}
-yy2533:
-	YYCURSOR = YYMARKER;
-	goto yy2530;
-yy2534:
-	yych = *++YYCURSOR;
+yy2530:
+	++YYCURSOR;
+#line 3004 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Transport_and_Map_Symbols; }
+#line 36047 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3006 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Alchemical_Symbols:
+	
+#line 36053 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D: goto yy2536;
-		case 0x8E: goto yy2537;
+		case 0xF0: goto yy2534;
+		default: goto yy2532;
+	}
+yy2532:
+	++YYCURSOR;
+yy2533:
+#line 3011 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Alchemical_Symbols; else return Error; }
+#line 36066 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2534:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9F: goto yy2535;
 		default: goto yy2533;
 	}
 yy2535:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
 		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2538;
-		default: goto yy2533;
+		case 0x9D: goto yy2537;
+		default: goto yy2536;
 	}
 yy2536:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2538;
-		default: goto yy2533;
-	}
+	YYCURSOR = YYMARKER;
+	goto yy2533;
 yy2537:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -36961,44 +36129,60 @@ yy2537:
 		case 0xAC:
 		case 0xAD:
 		case 0xAE:
-		case 0xAF: goto yy2538;
-		default: goto yy2533;
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2538;
+		default: goto yy2536;
 	}
 yy2538:
 	++YYCURSOR;
-#line 2944 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_H; }
-#line 36972 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3010 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Alchemical_Symbols; }
+#line 36156 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2946 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 3012 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Tags:
+Geometric_Shapes_Extended:
 	
-#line 36978 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 36162 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF3: goto yy2542;
+		case 0xF0: goto yy2542;
 		default: goto yy2540;
 	}
 yy2540:
 	++YYCURSOR;
 yy2541:
-#line 2951 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tags; else return Error; }
-#line 36991 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3017 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Geometric_Shapes_Extended; else return Error; }
+#line 36175 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2542:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xA0: goto yy2543;
+		case 0x9F: goto yy2543;
 		default: goto yy2541;
 	}
 yy2543:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81: goto yy2545;
+		case 0x9E:
+		case 0x9F: goto yy2545;
 		default: goto yy2544;
 	}
 yy2544:
@@ -37075,41 +36259,41 @@ yy2545:
 	}
 yy2546:
 	++YYCURSOR;
-#line 2950 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Tags; }
-#line 37081 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3016 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Geometric_Shapes_Extended; }
+#line 36265 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2952 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 3018 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Variation_Selectors_Supplement:
+Supplemental_Arrows_C:
 	
-#line 37087 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 36271 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF3: goto yy2550;
+		case 0xF0: goto yy2550;
 		default: goto yy2548;
 	}
 yy2548:
 	++YYCURSOR;
 yy2549:
-#line 2957 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Variation_Selectors_Supplement; else return Error; }
-#line 37100 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3023 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Supplemental_Arrows_C; else return Error; }
+#line 36284 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2550:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xA0: goto yy2551;
+		case 0x9F: goto yy2551;
 		default: goto yy2549;
 	}
 yy2551:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x84:
-		case 0x85:
-		case 0x86: goto yy2553;
-		case 0x87: goto yy2554;
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3: goto yy2553;
 		default: goto yy2552;
 	}
 yy2552:
@@ -37181,108 +36365,52 @@ yy2553:
 		case 0xBC:
 		case 0xBD:
 		case 0xBE:
-		case 0xBF: goto yy2555;
+		case 0xBF: goto yy2554;
 		default: goto yy2552;
 	}
 yy2554:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF: goto yy2555;
-		default: goto yy2552;
-	}
-yy2555:
 	++YYCURSOR;
-#line 2956 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Variation_Selectors_Supplement; }
-#line 37245 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3022 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Supplemental_Arrows_C; }
+#line 36376 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2958 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 3024 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Supplementary_Private_Use_Area_A:
+Supplemental_Symbols_and_Pictographs:
 	
-#line 37251 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 36382 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF3: goto yy2559;
-		default: goto yy2557;
+		case 0xF0: goto yy2558;
+		default: goto yy2556;
 	}
-yy2557:
+yy2556:
 	++YYCURSOR;
+yy2557:
+#line 3029 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Supplemental_Symbols_and_Pictographs; else return Error; }
+#line 36395 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2558:
-#line 2963 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Supplementary_Private_Use_Area_A; else return Error; }
-#line 37264 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2559:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2560;
-		default: goto yy2558;
+		case 0x9F: goto yy2559;
+		default: goto yy2557;
+	}
+yy2559:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7: goto yy2561;
+		default: goto yy2560;
 	}
 yy2560:
+	YYCURSOR = YYMARKER;
+	goto yy2557;
+yy2561:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -37349,198 +36477,49 @@ yy2560:
 		case 0xBD:
 		case 0xBE:
 		case 0xBF: goto yy2562;
-		default: goto yy2561;
+		default: goto yy2560;
 	}
-yy2561:
-	YYCURSOR = YYMARKER;
-	goto yy2558;
 yy2562:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2563;
-		default: goto yy2561;
-	}
-yy2563:
 	++YYCURSOR;
-#line 2962 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Supplementary_Private_Use_Area_A; }
-#line 37431 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3028 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Supplemental_Symbols_and_Pictographs; }
+#line 36487 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2964 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 3030 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
-Supplementary_Private_Use_Area_B:
+Chess_Symbols:
 	
-#line 37437 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 36493 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 0xF4: goto yy2567;
-		default: goto yy2565;
+		case 0xF0: goto yy2566;
+		default: goto yy2564;
 	}
-yy2565:
+yy2564:
 	++YYCURSOR;
+yy2565:
+#line 3035 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Chess_Symbols; else return Error; }
+#line 36506 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 yy2566:
-#line 2969 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Supplementary_Private_Use_Area_B; else return Error; }
-#line 37450 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
-yy2567:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F: goto yy2568;
-		default: goto yy2566;
+		case 0x9F: goto yy2567;
+		default: goto yy2565;
 	}
-yy2568:
+yy2567:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80:
-		case 0x81:
-		case 0x82:
-		case 0x83:
-		case 0x84:
-		case 0x85:
-		case 0x86:
-		case 0x87:
-		case 0x88:
-		case 0x89:
-		case 0x8A:
-		case 0x8B:
-		case 0x8C:
-		case 0x8D:
-		case 0x8E:
-		case 0x8F:
-		case 0x90:
-		case 0x91:
-		case 0x92:
-		case 0x93:
-		case 0x94:
-		case 0x95:
-		case 0x96:
-		case 0x97:
-		case 0x98:
-		case 0x99:
-		case 0x9A:
-		case 0x9B:
-		case 0x9C:
-		case 0x9D:
-		case 0x9E:
-		case 0x9F:
-		case 0xA0:
-		case 0xA1:
-		case 0xA2:
-		case 0xA3:
-		case 0xA4:
-		case 0xA5:
-		case 0xA6:
-		case 0xA7:
-		case 0xA8:
-		case 0xA9:
-		case 0xAA:
-		case 0xAB:
-		case 0xAC:
-		case 0xAD:
-		case 0xAE:
-		case 0xAF:
-		case 0xB0:
-		case 0xB1:
-		case 0xB2:
-		case 0xB3:
-		case 0xB4:
-		case 0xB5:
-		case 0xB6:
-		case 0xB7:
-		case 0xB8:
-		case 0xB9:
-		case 0xBA:
-		case 0xBB:
-		case 0xBC:
-		case 0xBD:
-		case 0xBE:
-		case 0xBF: goto yy2570;
-		default: goto yy2569;
+		case 0xA8: goto yy2569;
+		case 0xA9: goto yy2570;
+		default: goto yy2568;
 	}
-yy2569:
+yy2568:
 	YYCURSOR = YYMARKER;
-	goto yy2566;
-yy2570:
+	goto yy2565;
+yy2569:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -37607,15 +36586,3165 @@ yy2570:
 		case 0xBD:
 		case 0xBE:
 		case 0xBF: goto yy2571;
-		default: goto yy2569;
+		default: goto yy2568;
+	}
+yy2570:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF: goto yy2571;
+		default: goto yy2568;
 	}
 yy2571:
 	++YYCURSOR;
-#line 2968 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
-	{ goto Supplementary_Private_Use_Area_B; }
-#line 37617 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+#line 3034 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Chess_Symbols; }
+#line 36649 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
 }
-#line 2970 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+#line 3036 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Symbols_and_Pictographs_Extended_A:
+	
+#line 36655 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2575;
+		default: goto yy2573;
+	}
+yy2573:
+	++YYCURSOR;
+yy2574:
+#line 3041 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Symbols_and_Pictographs_Extended_A; else return Error; }
+#line 36668 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2575:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9F: goto yy2576;
+		default: goto yy2574;
+	}
+yy2576:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA9: goto yy2578;
+		case 0xAA:
+		case 0xAB: goto yy2579;
+		default: goto yy2577;
+	}
+yy2577:
+	YYCURSOR = YYMARKER;
+	goto yy2574;
+yy2578:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2580;
+		default: goto yy2577;
+	}
+yy2579:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2580;
+		default: goto yy2577;
+	}
+yy2580:
+	++YYCURSOR;
+#line 3040 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Symbols_and_Pictographs_Extended_A; }
+#line 36780 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3042 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Symbols_for_Legacy_Computing:
+	
+#line 36786 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2584;
+		default: goto yy2582;
+	}
+yy2582:
+	++YYCURSOR;
+yy2583:
+#line 3047 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Symbols_for_Legacy_Computing; else return Error; }
+#line 36799 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2584:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9F: goto yy2585;
+		default: goto yy2583;
+	}
+yy2585:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF: goto yy2587;
+		default: goto yy2586;
+	}
+yy2586:
+	YYCURSOR = YYMARKER;
+	goto yy2583;
+yy2587:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2588;
+		default: goto yy2586;
+	}
+yy2588:
+	++YYCURSOR;
+#line 3046 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Symbols_for_Legacy_Computing; }
+#line 36891 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3048 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_B:
+	
+#line 36897 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2592;
+		default: goto yy2590;
+	}
+yy2590:
+	++YYCURSOR;
+yy2591:
+#line 3053 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_B; else return Error; }
+#line 36910 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2592:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9: goto yy2593;
+		case 0xAA: goto yy2595;
+		default: goto yy2591;
+	}
+yy2593:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2596;
+		default: goto yy2594;
+	}
+yy2594:
+	YYCURSOR = YYMARKER;
+	goto yy2591;
+yy2595:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A: goto yy2596;
+		case 0x9B: goto yy2597;
+		default: goto yy2594;
+	}
+yy2596:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2598;
+		default: goto yy2594;
+	}
+yy2597:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy2598;
+		default: goto yy2594;
+	}
+yy2598:
+	++YYCURSOR;
+#line 3052 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_B; }
+#line 37142 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3054 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_C:
+	
+#line 37148 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2602;
+		default: goto yy2600;
+	}
+yy2600:
+	++YYCURSOR;
+yy2601:
+#line 3059 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_C; else return Error; }
+#line 37161 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2602:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xAA: goto yy2603;
+		case 0xAB: goto yy2605;
+		default: goto yy2601;
+	}
+yy2603:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2606;
+		default: goto yy2604;
+	}
+yy2604:
+	YYCURSOR = YYMARKER;
+	goto yy2601;
+yy2605:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C: goto yy2606;
+		default: goto yy2604;
+	}
+yy2606:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2607;
+		default: goto yy2604;
+	}
+yy2607:
+	++YYCURSOR;
+#line 3058 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_C; }
+#line 37320 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3060 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_D:
+	
+#line 37326 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2611;
+		default: goto yy2609;
+	}
+yy2609:
+	++YYCURSOR;
+yy2610:
+#line 3065 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_D; else return Error; }
+#line 37339 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2611:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xAB: goto yy2612;
+		default: goto yy2610;
+	}
+yy2612:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy2614;
+		case 0xA0: goto yy2615;
+		default: goto yy2613;
+	}
+yy2613:
+	YYCURSOR = YYMARKER;
+	goto yy2610;
+yy2614:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2616;
+		default: goto yy2613;
+	}
+yy2615:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy2616;
+		default: goto yy2613;
+	}
+yy2616:
+	++YYCURSOR;
+#line 3064 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_D; }
+#line 37468 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3066 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_E:
+	
+#line 37474 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2620;
+		default: goto yy2618;
+	}
+yy2618:
+	++YYCURSOR;
+yy2619:
+#line 3071 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_E; else return Error; }
+#line 37487 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2620:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xAB: goto yy2621;
+		case 0xAC: goto yy2623;
+		default: goto yy2619;
+	}
+yy2621:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA0: goto yy2624;
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2625;
+		default: goto yy2622;
+	}
+yy2622:
+	YYCURSOR = YYMARKER;
+	goto yy2619;
+yy2623:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9: goto yy2625;
+		case 0xBA: goto yy2626;
+		default: goto yy2622;
+	}
+yy2624:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2627;
+		default: goto yy2622;
+	}
+yy2625:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2627;
+		default: goto yy2622;
+	}
+yy2626:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF: goto yy2627;
+		default: goto yy2622;
+	}
+yy2627:
+	++YYCURSOR;
+#line 3070 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_E; }
+#line 37762 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3072 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_F:
+	
+#line 37768 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2631;
+		default: goto yy2629;
+	}
+yy2629:
+	++YYCURSOR;
+yy2630:
+#line 3077 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_F; else return Error; }
+#line 37781 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2631:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xAC: goto yy2632;
+		case 0xAD: goto yy2634;
+		case 0xAE: goto yy2635;
+		default: goto yy2630;
+	}
+yy2632:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBA: goto yy2636;
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2637;
+		default: goto yy2633;
+	}
+yy2633:
+	YYCURSOR = YYMARKER;
+	goto yy2630;
+yy2634:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2637;
+		default: goto yy2633;
+	}
+yy2635:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE: goto yy2637;
+		case 0xAF: goto yy2638;
+		default: goto yy2633;
+	}
+yy2636:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2639;
+		default: goto yy2633;
+	}
+yy2637:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2639;
+		default: goto yy2633;
+	}
+yy2638:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF: goto yy2639;
+		default: goto yy2633;
+	}
+yy2639:
+	++YYCURSOR;
+#line 3076 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_F; }
+#line 38073 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3078 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_I:
+	
+#line 38079 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2643;
+		default: goto yy2641;
+	}
+yy2641:
+	++YYCURSOR;
+yy2642:
+#line 3083 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_I; else return Error; }
+#line 38092 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2643:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xAE: goto yy2644;
+		default: goto yy2642;
+	}
+yy2644:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xAF: goto yy2646;
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8: goto yy2647;
+		case 0xB9: goto yy2648;
+		default: goto yy2645;
+	}
+yy2645:
+	YYCURSOR = YYMARKER;
+	goto yy2642;
+yy2646:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2649;
+		default: goto yy2645;
+	}
+yy2647:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2649;
+		default: goto yy2645;
+	}
+yy2648:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy2649;
+		default: goto yy2645;
+	}
+yy2649:
+	++YYCURSOR;
+#line 3082 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_I; }
+#line 38249 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3084 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+CJK_Compatibility_Ideographs_Supplement:
+	
+#line 38255 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2653;
+		default: goto yy2651;
+	}
+yy2651:
+	++YYCURSOR;
+yy2652:
+#line 3089 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Compatibility_Ideographs_Supplement; else return Error; }
+#line 38268 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2653:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xAF: goto yy2654;
+		default: goto yy2652;
+	}
+yy2654:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7: goto yy2656;
+		case 0xA8: goto yy2657;
+		default: goto yy2655;
+	}
+yy2655:
+	YYCURSOR = YYMARKER;
+	goto yy2652;
+yy2656:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2658;
+		default: goto yy2655;
+	}
+yy2657:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F: goto yy2658;
+		default: goto yy2655;
+	}
+yy2658:
+	++YYCURSOR;
+#line 3088 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto CJK_Compatibility_Ideographs_Supplement; }
+#line 38402 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3090 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_G:
+	
+#line 38408 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2662;
+		default: goto yy2660;
+	}
+yy2660:
+	++YYCURSOR;
+yy2661:
+#line 3095 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_G; else return Error; }
+#line 38421 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2662:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xB0: goto yy2663;
+		case 0xB1: goto yy2665;
+		default: goto yy2661;
+	}
+yy2663:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2666;
+		default: goto yy2664;
+	}
+yy2664:
+	YYCURSOR = YYMARKER;
+	goto yy2661;
+yy2665:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C: goto yy2666;
+		case 0x8D: goto yy2667;
+		default: goto yy2664;
+	}
+yy2666:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2668;
+		default: goto yy2664;
+	}
+yy2667:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy2668;
+		default: goto yy2664;
+	}
+yy2668:
+	++YYCURSOR;
+#line 3094 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_G; }
+#line 38614 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3096 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_H:
+	
+#line 38620 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2672;
+		default: goto yy2670;
+	}
+yy2670:
+	++YYCURSOR;
+yy2671:
+#line 3101 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_H; else return Error; }
+#line 38633 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2672:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xB1: goto yy2673;
+		case 0xB2: goto yy2675;
+		default: goto yy2671;
+	}
+yy2673:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x8D: goto yy2676;
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2677;
+		default: goto yy2674;
+	}
+yy2674:
+	YYCURSOR = YYMARKER;
+	goto yy2671;
+yy2675:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D: goto yy2677;
+		case 0x8E: goto yy2678;
+		default: goto yy2674;
+	}
+yy2676:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2679;
+		default: goto yy2674;
+	}
+yy2677:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2679;
+		default: goto yy2674;
+	}
+yy2678:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF: goto yy2679;
+		default: goto yy2674;
+	}
+yy2679:
+	++YYCURSOR;
+#line 3100 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_H; }
+#line 38899 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3102 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_J:
+	
+#line 38905 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF0: goto yy2683;
+		default: goto yy2681;
+	}
+yy2681:
+	++YYCURSOR;
+yy2682:
+#line 3107 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_J; else return Error; }
+#line 38918 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2683:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xB2: goto yy2684;
+		case 0xB3: goto yy2686;
+		default: goto yy2682;
+	}
+yy2684:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x8E: goto yy2687;
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2688;
+		default: goto yy2685;
+	}
+yy2685:
+	YYCURSOR = YYMARKER;
+	goto yy2682;
+yy2686:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91: goto yy2688;
+		default: goto yy2685;
+	}
+yy2687:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2689;
+		default: goto yy2685;
+	}
+yy2688:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2689;
+		default: goto yy2685;
+	}
+yy2689:
+	++YYCURSOR;
+#line 3106 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_J; }
+#line 39101 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3108 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Tags:
+	
+#line 39107 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF3: goto yy2693;
+		default: goto yy2691;
+	}
+yy2691:
+	++YYCURSOR;
+yy2692:
+#line 3113 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tags; else return Error; }
+#line 39120 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2693:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xA0: goto yy2694;
+		default: goto yy2692;
+	}
+yy2694:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81: goto yy2696;
+		default: goto yy2695;
+	}
+yy2695:
+	YYCURSOR = YYMARKER;
+	goto yy2692;
+yy2696:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2697;
+		default: goto yy2695;
+	}
+yy2697:
+	++YYCURSOR;
+#line 3112 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Tags; }
+#line 39210 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3114 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Variation_Selectors_Supplement:
+	
+#line 39216 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF3: goto yy2701;
+		default: goto yy2699;
+	}
+yy2699:
+	++YYCURSOR;
+yy2700:
+#line 3119 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Variation_Selectors_Supplement; else return Error; }
+#line 39229 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2701:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xA0: goto yy2702;
+		default: goto yy2700;
+	}
+yy2702:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x84:
+		case 0x85:
+		case 0x86: goto yy2704;
+		case 0x87: goto yy2705;
+		default: goto yy2703;
+	}
+yy2703:
+	YYCURSOR = YYMARKER;
+	goto yy2700;
+yy2704:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2706;
+		default: goto yy2703;
+	}
+yy2705:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF: goto yy2706;
+		default: goto yy2703;
+	}
+yy2706:
+	++YYCURSOR;
+#line 3118 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Variation_Selectors_Supplement; }
+#line 39374 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3120 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Supplementary_Private_Use_Area_A:
+	
+#line 39380 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF3: goto yy2710;
+		default: goto yy2708;
+	}
+yy2708:
+	++YYCURSOR;
+yy2709:
+#line 3125 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Supplementary_Private_Use_Area_A; else return Error; }
+#line 39393 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2710:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2711;
+		default: goto yy2709;
+	}
+yy2711:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2713;
+		default: goto yy2712;
+	}
+yy2712:
+	YYCURSOR = YYMARKER;
+	goto yy2709;
+yy2713:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2714;
+		default: goto yy2712;
+	}
+yy2714:
+	++YYCURSOR;
+#line 3124 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Supplementary_Private_Use_Area_A; }
+#line 39560 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3126 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+
+Supplementary_Private_Use_Area_B:
+	
+#line 39566 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 0xF4: goto yy2718;
+		default: goto yy2716;
+	}
+yy2716:
+	++YYCURSOR;
+yy2717:
+#line 3131 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Supplementary_Private_Use_Area_B; else return Error; }
+#line 39579 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+yy2718:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F: goto yy2719;
+		default: goto yy2717;
+	}
+yy2719:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2721;
+		default: goto yy2720;
+	}
+yy2720:
+	YYCURSOR = YYMARKER;
+	goto yy2717;
+yy2721:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x80:
+		case 0x81:
+		case 0x82:
+		case 0x83:
+		case 0x84:
+		case 0x85:
+		case 0x86:
+		case 0x87:
+		case 0x88:
+		case 0x89:
+		case 0x8A:
+		case 0x8B:
+		case 0x8C:
+		case 0x8D:
+		case 0x8E:
+		case 0x8F:
+		case 0x90:
+		case 0x91:
+		case 0x92:
+		case 0x93:
+		case 0x94:
+		case 0x95:
+		case 0x96:
+		case 0x97:
+		case 0x98:
+		case 0x99:
+		case 0x9A:
+		case 0x9B:
+		case 0x9C:
+		case 0x9D:
+		case 0x9E:
+		case 0x9F:
+		case 0xA0:
+		case 0xA1:
+		case 0xA2:
+		case 0xA3:
+		case 0xA4:
+		case 0xA5:
+		case 0xA6:
+		case 0xA7:
+		case 0xA8:
+		case 0xA9:
+		case 0xAA:
+		case 0xAB:
+		case 0xAC:
+		case 0xAD:
+		case 0xAE:
+		case 0xAF:
+		case 0xB0:
+		case 0xB1:
+		case 0xB2:
+		case 0xB3:
+		case 0xB4:
+		case 0xB5:
+		case 0xB6:
+		case 0xB7:
+		case 0xB8:
+		case 0xB9:
+		case 0xBA:
+		case 0xBB:
+		case 0xBC:
+		case 0xBD:
+		case 0xBE:
+		case 0xBF: goto yy2722;
+		default: goto yy2720;
+	}
+yy2722:
+	++YYCURSOR;
+#line 3130 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
+	{ goto Supplementary_Private_Use_Area_B; }
+#line 39746 "encodings/unicode_blocks_8_encoding_policy_ignore.c"
+}
+#line 3132 "encodings/unicode_blocks_8_encoding_policy_ignore.re"
 
 }
 
@@ -37804,6 +39933,7 @@ static const uint32_t chars_Osage[] = {0x104b0,0x104ff};
 static const uint32_t chars_Elbasan[] = {0x10500,0x1052f};
 static const uint32_t chars_Caucasian_Albanian[] = {0x10530,0x1056f};
 static const uint32_t chars_Vithkuqi[] = {0x10570,0x105bf};
+static const uint32_t chars_Todhri[] = {0x105c0,0x105ff};
 static const uint32_t chars_Linear_A[] = {0x10600,0x1077f};
 static const uint32_t chars_Latin_Extended_F[] = {0x10780,0x107bf};
 static const uint32_t chars_Cypriot_Syllabary[] = {0x10800,0x1083f};
@@ -37813,6 +39943,7 @@ static const uint32_t chars_Nabataean[] = {0x10880,0x108af};
 static const uint32_t chars_Hatran[] = {0x108e0,0x108ff};
 static const uint32_t chars_Phoenician[] = {0x10900,0x1091f};
 static const uint32_t chars_Lydian[] = {0x10920,0x1093f};
+static const uint32_t chars_Sidetic[] = {0x10940,0x1095f};
 static const uint32_t chars_Meroitic_Hieroglyphs[] = {0x10980,0x1099f};
 static const uint32_t chars_Meroitic_Cursive[] = {0x109a0,0x109ff};
 static const uint32_t chars_Kharoshthi[] = {0x10a00,0x10a5f};
@@ -37826,6 +39957,7 @@ static const uint32_t chars_Psalter_Pahlavi[] = {0x10b80,0x10baf};
 static const uint32_t chars_Old_Turkic[] = {0x10c00,0x10c4f};
 static const uint32_t chars_Old_Hungarian[] = {0x10c80,0x10cff};
 static const uint32_t chars_Hanifi_Rohingya[] = {0x10d00,0x10d3f};
+static const uint32_t chars_Garay[] = {0x10d40,0x10d8f};
 static const uint32_t chars_Rumi_Numeral_Symbols[] = {0x10e60,0x10e7f};
 static const uint32_t chars_Yezidi[] = {0x10e80,0x10ebf};
 static const uint32_t chars_Arabic_Extended_C[] = {0x10ec0,0x10eff};
@@ -37845,12 +39977,14 @@ static const uint32_t chars_Khojki[] = {0x11200,0x1124f};
 static const uint32_t chars_Multani[] = {0x11280,0x112af};
 static const uint32_t chars_Khudawadi[] = {0x112b0,0x112ff};
 static const uint32_t chars_Grantha[] = {0x11300,0x1137f};
+static const uint32_t chars_Tulu_Tigalari[] = {0x11380,0x113ff};
 static const uint32_t chars_Newa[] = {0x11400,0x1147f};
 static const uint32_t chars_Tirhuta[] = {0x11480,0x114df};
 static const uint32_t chars_Siddham[] = {0x11580,0x115ff};
 static const uint32_t chars_Modi[] = {0x11600,0x1165f};
 static const uint32_t chars_Mongolian_Supplement[] = {0x11660,0x1167f};
 static const uint32_t chars_Takri[] = {0x11680,0x116cf};
+static const uint32_t chars_Myanmar_Extended_C[] = {0x116d0,0x116ff};
 static const uint32_t chars_Ahom[] = {0x11700,0x1174f};
 static const uint32_t chars_Dogra[] = {0x11800,0x1184f};
 static const uint32_t chars_Warang_Citi[] = {0x118a0,0x118ff};
@@ -37861,10 +39995,13 @@ static const uint32_t chars_Soyombo[] = {0x11a50,0x11aaf};
 static const uint32_t chars_Unified_Canadian_Aboriginal_Syllabics_Extended_A[] = {0x11ab0,0x11abf};
 static const uint32_t chars_Pau_Cin_Hau[] = {0x11ac0,0x11aff};
 static const uint32_t chars_Devanagari_Extended_A[] = {0x11b00,0x11b5f};
+static const uint32_t chars_Sharada_Supplement[] = {0x11b60,0x11b7f};
+static const uint32_t chars_Sunuwar[] = {0x11bc0,0x11bff};
 static const uint32_t chars_Bhaiksuki[] = {0x11c00,0x11c6f};
 static const uint32_t chars_Marchen[] = {0x11c70,0x11cbf};
 static const uint32_t chars_Masaram_Gondi[] = {0x11d00,0x11d5f};
 static const uint32_t chars_Gunjala_Gondi[] = {0x11d60,0x11daf};
+static const uint32_t chars_Tolong_Siki[] = {0x11db0,0x11def};
 static const uint32_t chars_Makasar[] = {0x11ee0,0x11eff};
 static const uint32_t chars_Kawi[] = {0x11f00,0x11f5f};
 static const uint32_t chars_Lisu_Supplement[] = {0x11fb0,0x11fbf};
@@ -37875,19 +40012,24 @@ static const uint32_t chars_Early_Dynastic_Cuneiform[] = {0x12480,0x1254f};
 static const uint32_t chars_Cypro_Minoan[] = {0x12f90,0x12fff};
 static const uint32_t chars_Egyptian_Hieroglyphs[] = {0x13000,0x1342f};
 static const uint32_t chars_Egyptian_Hieroglyph_Format_Controls[] = {0x13430,0x1345f};
+static const uint32_t chars_Egyptian_Hieroglyphs_Extended_A[] = {0x13460,0x143ff};
 static const uint32_t chars_Anatolian_Hieroglyphs[] = {0x14400,0x1467f};
+static const uint32_t chars_Gurung_Khema[] = {0x16100,0x1613f};
 static const uint32_t chars_Bamum_Supplement[] = {0x16800,0x16a3f};
 static const uint32_t chars_Mro[] = {0x16a40,0x16a6f};
 static const uint32_t chars_Tangsa[] = {0x16a70,0x16acf};
 static const uint32_t chars_Bassa_Vah[] = {0x16ad0,0x16aff};
 static const uint32_t chars_Pahawh_Hmong[] = {0x16b00,0x16b8f};
+static const uint32_t chars_Kirat_Rai[] = {0x16d40,0x16d7f};
 static const uint32_t chars_Medefaidrin[] = {0x16e40,0x16e9f};
+static const uint32_t chars_Beria_Erfe[] = {0x16ea0,0x16edf};
 static const uint32_t chars_Miao[] = {0x16f00,0x16f9f};
 static const uint32_t chars_Ideographic_Symbols_and_Punctuation[] = {0x16fe0,0x16fff};
 static const uint32_t chars_Tangut[] = {0x17000,0x187ff};
 static const uint32_t chars_Tangut_Components[] = {0x18800,0x18aff};
 static const uint32_t chars_Khitan_Small_Script[] = {0x18b00,0x18cff};
 static const uint32_t chars_Tangut_Supplement[] = {0x18d00,0x18d7f};
+static const uint32_t chars_Tangut_Components_Supplement[] = {0x18d80,0x18dff};
 static const uint32_t chars_Kana_Extended_B[] = {0x1aff0,0x1afff};
 static const uint32_t chars_Kana_Supplement[] = {0x1b000,0x1b0ff};
 static const uint32_t chars_Kana_Extended_A[] = {0x1b100,0x1b12f};
@@ -37895,6 +40037,8 @@ static const uint32_t chars_Small_Kana_Extension[] = {0x1b130,0x1b16f};
 static const uint32_t chars_Nushu[] = {0x1b170,0x1b2ff};
 static const uint32_t chars_Duployan[] = {0x1bc00,0x1bc9f};
 static const uint32_t chars_Shorthand_Format_Controls[] = {0x1bca0,0x1bcaf};
+static const uint32_t chars_Symbols_for_Legacy_Computing_Supplement[] = {0x1cc00,0x1cebf};
+static const uint32_t chars_Miscellaneous_Symbols_Supplement[] = {0x1cec0,0x1ceff};
 static const uint32_t chars_Znamenny_Musical_Notation[] = {0x1cf00,0x1cfcf};
 static const uint32_t chars_Byzantine_Musical_Symbols[] = {0x1d000,0x1d0ff};
 static const uint32_t chars_Musical_Symbols[] = {0x1d100,0x1d1ff};
@@ -37912,6 +40056,8 @@ static const uint32_t chars_Nyiakeng_Puachue_Hmong[] = {0x1e100,0x1e14f};
 static const uint32_t chars_Toto[] = {0x1e290,0x1e2bf};
 static const uint32_t chars_Wancho[] = {0x1e2c0,0x1e2ff};
 static const uint32_t chars_Nag_Mundari[] = {0x1e4d0,0x1e4ff};
+static const uint32_t chars_Ol_Onal[] = {0x1e5d0,0x1e5ff};
+static const uint32_t chars_Tai_Yo[] = {0x1e6c0,0x1e6ff};
 static const uint32_t chars_Ethiopic_Extended_B[] = {0x1e7e0,0x1e7ff};
 static const uint32_t chars_Mende_Kikakui[] = {0x1e800,0x1e8df};
 static const uint32_t chars_Adlam[] = {0x1e900,0x1e95f};
@@ -37943,6 +40089,7 @@ static const uint32_t chars_CJK_Unified_Ideographs_Extension_I[] = {0x2ebf0,0x2e
 static const uint32_t chars_CJK_Compatibility_Ideographs_Supplement[] = {0x2f800,0x2fa1f};
 static const uint32_t chars_CJK_Unified_Ideographs_Extension_G[] = {0x30000,0x3134f};
 static const uint32_t chars_CJK_Unified_Ideographs_Extension_H[] = {0x31350,0x323af};
+static const uint32_t chars_CJK_Unified_Ideographs_Extension_J[] = {0x323b0,0x3347f};
 static const uint32_t chars_Tags[] = {0xe0000,0xe007f};
 static const uint32_t chars_Variation_Selectors_Supplement[] = {0xe0100,0xe01ef};
 static const uint32_t chars_Supplementary_Private_Use_Area_A[] = {0xf0000,0xfffff};
@@ -39066,6 +41213,12 @@ int main() {
 		printf("test 'Vithkuqi' failed\n");
 	delete[] buffer_Vithkuqi;
 
+	YYCTYPE *buffer_Todhri = new YYCTYPE[390];
+	uint32_t buffer_Todhri_len = encode_utf8(chars_Todhri[0], chars_Todhri[1], buffer_Todhri) - 6;
+	if (scan(buffer_Todhri, buffer_Todhri + buffer_Todhri_len, Todhri) != Todhri)
+		printf("test 'Todhri' failed\n");
+	delete[] buffer_Todhri;
+
 	YYCTYPE *buffer_Linear_A = new YYCTYPE[2310];
 	uint32_t buffer_Linear_A_len = encode_utf8(chars_Linear_A[0], chars_Linear_A[1], buffer_Linear_A) - 6;
 	if (scan(buffer_Linear_A, buffer_Linear_A + buffer_Linear_A_len, Linear_A) != Linear_A)
@@ -39119,6 +41272,12 @@ int main() {
 	if (scan(buffer_Lydian, buffer_Lydian + buffer_Lydian_len, Lydian) != Lydian)
 		printf("test 'Lydian' failed\n");
 	delete[] buffer_Lydian;
+
+	YYCTYPE *buffer_Sidetic = new YYCTYPE[198];
+	uint32_t buffer_Sidetic_len = encode_utf8(chars_Sidetic[0], chars_Sidetic[1], buffer_Sidetic) - 6;
+	if (scan(buffer_Sidetic, buffer_Sidetic + buffer_Sidetic_len, Sidetic) != Sidetic)
+		printf("test 'Sidetic' failed\n");
+	delete[] buffer_Sidetic;
 
 	YYCTYPE *buffer_Meroitic_Hieroglyphs = new YYCTYPE[198];
 	uint32_t buffer_Meroitic_Hieroglyphs_len = encode_utf8(chars_Meroitic_Hieroglyphs[0], chars_Meroitic_Hieroglyphs[1], buffer_Meroitic_Hieroglyphs) - 6;
@@ -39197,6 +41356,12 @@ int main() {
 	if (scan(buffer_Hanifi_Rohingya, buffer_Hanifi_Rohingya + buffer_Hanifi_Rohingya_len, Hanifi_Rohingya) != Hanifi_Rohingya)
 		printf("test 'Hanifi_Rohingya' failed\n");
 	delete[] buffer_Hanifi_Rohingya;
+
+	YYCTYPE *buffer_Garay = new YYCTYPE[486];
+	uint32_t buffer_Garay_len = encode_utf8(chars_Garay[0], chars_Garay[1], buffer_Garay) - 6;
+	if (scan(buffer_Garay, buffer_Garay + buffer_Garay_len, Garay) != Garay)
+		printf("test 'Garay' failed\n");
+	delete[] buffer_Garay;
 
 	YYCTYPE *buffer_Rumi_Numeral_Symbols = new YYCTYPE[198];
 	uint32_t buffer_Rumi_Numeral_Symbols_len = encode_utf8(chars_Rumi_Numeral_Symbols[0], chars_Rumi_Numeral_Symbols[1], buffer_Rumi_Numeral_Symbols) - 6;
@@ -39312,6 +41477,12 @@ int main() {
 		printf("test 'Grantha' failed\n");
 	delete[] buffer_Grantha;
 
+	YYCTYPE *buffer_Tulu_Tigalari = new YYCTYPE[774];
+	uint32_t buffer_Tulu_Tigalari_len = encode_utf8(chars_Tulu_Tigalari[0], chars_Tulu_Tigalari[1], buffer_Tulu_Tigalari) - 6;
+	if (scan(buffer_Tulu_Tigalari, buffer_Tulu_Tigalari + buffer_Tulu_Tigalari_len, Tulu_Tigalari) != Tulu_Tigalari)
+		printf("test 'Tulu_Tigalari' failed\n");
+	delete[] buffer_Tulu_Tigalari;
+
 	YYCTYPE *buffer_Newa = new YYCTYPE[774];
 	uint32_t buffer_Newa_len = encode_utf8(chars_Newa[0], chars_Newa[1], buffer_Newa) - 6;
 	if (scan(buffer_Newa, buffer_Newa + buffer_Newa_len, Newa) != Newa)
@@ -39347,6 +41518,12 @@ int main() {
 	if (scan(buffer_Takri, buffer_Takri + buffer_Takri_len, Takri) != Takri)
 		printf("test 'Takri' failed\n");
 	delete[] buffer_Takri;
+
+	YYCTYPE *buffer_Myanmar_Extended_C = new YYCTYPE[294];
+	uint32_t buffer_Myanmar_Extended_C_len = encode_utf8(chars_Myanmar_Extended_C[0], chars_Myanmar_Extended_C[1], buffer_Myanmar_Extended_C) - 6;
+	if (scan(buffer_Myanmar_Extended_C, buffer_Myanmar_Extended_C + buffer_Myanmar_Extended_C_len, Myanmar_Extended_C) != Myanmar_Extended_C)
+		printf("test 'Myanmar_Extended_C' failed\n");
+	delete[] buffer_Myanmar_Extended_C;
 
 	YYCTYPE *buffer_Ahom = new YYCTYPE[486];
 	uint32_t buffer_Ahom_len = encode_utf8(chars_Ahom[0], chars_Ahom[1], buffer_Ahom) - 6;
@@ -39408,6 +41585,18 @@ int main() {
 		printf("test 'Devanagari_Extended_A' failed\n");
 	delete[] buffer_Devanagari_Extended_A;
 
+	YYCTYPE *buffer_Sharada_Supplement = new YYCTYPE[198];
+	uint32_t buffer_Sharada_Supplement_len = encode_utf8(chars_Sharada_Supplement[0], chars_Sharada_Supplement[1], buffer_Sharada_Supplement) - 6;
+	if (scan(buffer_Sharada_Supplement, buffer_Sharada_Supplement + buffer_Sharada_Supplement_len, Sharada_Supplement) != Sharada_Supplement)
+		printf("test 'Sharada_Supplement' failed\n");
+	delete[] buffer_Sharada_Supplement;
+
+	YYCTYPE *buffer_Sunuwar = new YYCTYPE[390];
+	uint32_t buffer_Sunuwar_len = encode_utf8(chars_Sunuwar[0], chars_Sunuwar[1], buffer_Sunuwar) - 6;
+	if (scan(buffer_Sunuwar, buffer_Sunuwar + buffer_Sunuwar_len, Sunuwar) != Sunuwar)
+		printf("test 'Sunuwar' failed\n");
+	delete[] buffer_Sunuwar;
+
 	YYCTYPE *buffer_Bhaiksuki = new YYCTYPE[678];
 	uint32_t buffer_Bhaiksuki_len = encode_utf8(chars_Bhaiksuki[0], chars_Bhaiksuki[1], buffer_Bhaiksuki) - 6;
 	if (scan(buffer_Bhaiksuki, buffer_Bhaiksuki + buffer_Bhaiksuki_len, Bhaiksuki) != Bhaiksuki)
@@ -39431,6 +41620,12 @@ int main() {
 	if (scan(buffer_Gunjala_Gondi, buffer_Gunjala_Gondi + buffer_Gunjala_Gondi_len, Gunjala_Gondi) != Gunjala_Gondi)
 		printf("test 'Gunjala_Gondi' failed\n");
 	delete[] buffer_Gunjala_Gondi;
+
+	YYCTYPE *buffer_Tolong_Siki = new YYCTYPE[390];
+	uint32_t buffer_Tolong_Siki_len = encode_utf8(chars_Tolong_Siki[0], chars_Tolong_Siki[1], buffer_Tolong_Siki) - 6;
+	if (scan(buffer_Tolong_Siki, buffer_Tolong_Siki + buffer_Tolong_Siki_len, Tolong_Siki) != Tolong_Siki)
+		printf("test 'Tolong_Siki' failed\n");
+	delete[] buffer_Tolong_Siki;
 
 	YYCTYPE *buffer_Makasar = new YYCTYPE[198];
 	uint32_t buffer_Makasar_len = encode_utf8(chars_Makasar[0], chars_Makasar[1], buffer_Makasar) - 6;
@@ -39492,11 +41687,23 @@ int main() {
 		printf("test 'Egyptian_Hieroglyph_Format_Controls' failed\n");
 	delete[] buffer_Egyptian_Hieroglyph_Format_Controls;
 
+	YYCTYPE *buffer_Egyptian_Hieroglyphs_Extended_A = new YYCTYPE[24006];
+	uint32_t buffer_Egyptian_Hieroglyphs_Extended_A_len = encode_utf8(chars_Egyptian_Hieroglyphs_Extended_A[0], chars_Egyptian_Hieroglyphs_Extended_A[1], buffer_Egyptian_Hieroglyphs_Extended_A) - 6;
+	if (scan(buffer_Egyptian_Hieroglyphs_Extended_A, buffer_Egyptian_Hieroglyphs_Extended_A + buffer_Egyptian_Hieroglyphs_Extended_A_len, Egyptian_Hieroglyphs_Extended_A) != Egyptian_Hieroglyphs_Extended_A)
+		printf("test 'Egyptian_Hieroglyphs_Extended_A' failed\n");
+	delete[] buffer_Egyptian_Hieroglyphs_Extended_A;
+
 	YYCTYPE *buffer_Anatolian_Hieroglyphs = new YYCTYPE[3846];
 	uint32_t buffer_Anatolian_Hieroglyphs_len = encode_utf8(chars_Anatolian_Hieroglyphs[0], chars_Anatolian_Hieroglyphs[1], buffer_Anatolian_Hieroglyphs) - 6;
 	if (scan(buffer_Anatolian_Hieroglyphs, buffer_Anatolian_Hieroglyphs + buffer_Anatolian_Hieroglyphs_len, Anatolian_Hieroglyphs) != Anatolian_Hieroglyphs)
 		printf("test 'Anatolian_Hieroglyphs' failed\n");
 	delete[] buffer_Anatolian_Hieroglyphs;
+
+	YYCTYPE *buffer_Gurung_Khema = new YYCTYPE[390];
+	uint32_t buffer_Gurung_Khema_len = encode_utf8(chars_Gurung_Khema[0], chars_Gurung_Khema[1], buffer_Gurung_Khema) - 6;
+	if (scan(buffer_Gurung_Khema, buffer_Gurung_Khema + buffer_Gurung_Khema_len, Gurung_Khema) != Gurung_Khema)
+		printf("test 'Gurung_Khema' failed\n");
+	delete[] buffer_Gurung_Khema;
 
 	YYCTYPE *buffer_Bamum_Supplement = new YYCTYPE[3462];
 	uint32_t buffer_Bamum_Supplement_len = encode_utf8(chars_Bamum_Supplement[0], chars_Bamum_Supplement[1], buffer_Bamum_Supplement) - 6;
@@ -39528,11 +41735,23 @@ int main() {
 		printf("test 'Pahawh_Hmong' failed\n");
 	delete[] buffer_Pahawh_Hmong;
 
+	YYCTYPE *buffer_Kirat_Rai = new YYCTYPE[390];
+	uint32_t buffer_Kirat_Rai_len = encode_utf8(chars_Kirat_Rai[0], chars_Kirat_Rai[1], buffer_Kirat_Rai) - 6;
+	if (scan(buffer_Kirat_Rai, buffer_Kirat_Rai + buffer_Kirat_Rai_len, Kirat_Rai) != Kirat_Rai)
+		printf("test 'Kirat_Rai' failed\n");
+	delete[] buffer_Kirat_Rai;
+
 	YYCTYPE *buffer_Medefaidrin = new YYCTYPE[582];
 	uint32_t buffer_Medefaidrin_len = encode_utf8(chars_Medefaidrin[0], chars_Medefaidrin[1], buffer_Medefaidrin) - 6;
 	if (scan(buffer_Medefaidrin, buffer_Medefaidrin + buffer_Medefaidrin_len, Medefaidrin) != Medefaidrin)
 		printf("test 'Medefaidrin' failed\n");
 	delete[] buffer_Medefaidrin;
+
+	YYCTYPE *buffer_Beria_Erfe = new YYCTYPE[390];
+	uint32_t buffer_Beria_Erfe_len = encode_utf8(chars_Beria_Erfe[0], chars_Beria_Erfe[1], buffer_Beria_Erfe) - 6;
+	if (scan(buffer_Beria_Erfe, buffer_Beria_Erfe + buffer_Beria_Erfe_len, Beria_Erfe) != Beria_Erfe)
+		printf("test 'Beria_Erfe' failed\n");
+	delete[] buffer_Beria_Erfe;
 
 	YYCTYPE *buffer_Miao = new YYCTYPE[966];
 	uint32_t buffer_Miao_len = encode_utf8(chars_Miao[0], chars_Miao[1], buffer_Miao) - 6;
@@ -39569,6 +41788,12 @@ int main() {
 	if (scan(buffer_Tangut_Supplement, buffer_Tangut_Supplement + buffer_Tangut_Supplement_len, Tangut_Supplement) != Tangut_Supplement)
 		printf("test 'Tangut_Supplement' failed\n");
 	delete[] buffer_Tangut_Supplement;
+
+	YYCTYPE *buffer_Tangut_Components_Supplement = new YYCTYPE[774];
+	uint32_t buffer_Tangut_Components_Supplement_len = encode_utf8(chars_Tangut_Components_Supplement[0], chars_Tangut_Components_Supplement[1], buffer_Tangut_Components_Supplement) - 6;
+	if (scan(buffer_Tangut_Components_Supplement, buffer_Tangut_Components_Supplement + buffer_Tangut_Components_Supplement_len, Tangut_Components_Supplement) != Tangut_Components_Supplement)
+		printf("test 'Tangut_Components_Supplement' failed\n");
+	delete[] buffer_Tangut_Components_Supplement;
 
 	YYCTYPE *buffer_Kana_Extended_B = new YYCTYPE[102];
 	uint32_t buffer_Kana_Extended_B_len = encode_utf8(chars_Kana_Extended_B[0], chars_Kana_Extended_B[1], buffer_Kana_Extended_B) - 6;
@@ -39611,6 +41836,18 @@ int main() {
 	if (scan(buffer_Shorthand_Format_Controls, buffer_Shorthand_Format_Controls + buffer_Shorthand_Format_Controls_len, Shorthand_Format_Controls) != Shorthand_Format_Controls)
 		printf("test 'Shorthand_Format_Controls' failed\n");
 	delete[] buffer_Shorthand_Format_Controls;
+
+	YYCTYPE *buffer_Symbols_for_Legacy_Computing_Supplement = new YYCTYPE[4230];
+	uint32_t buffer_Symbols_for_Legacy_Computing_Supplement_len = encode_utf8(chars_Symbols_for_Legacy_Computing_Supplement[0], chars_Symbols_for_Legacy_Computing_Supplement[1], buffer_Symbols_for_Legacy_Computing_Supplement) - 6;
+	if (scan(buffer_Symbols_for_Legacy_Computing_Supplement, buffer_Symbols_for_Legacy_Computing_Supplement + buffer_Symbols_for_Legacy_Computing_Supplement_len, Symbols_for_Legacy_Computing_Supplement) != Symbols_for_Legacy_Computing_Supplement)
+		printf("test 'Symbols_for_Legacy_Computing_Supplement' failed\n");
+	delete[] buffer_Symbols_for_Legacy_Computing_Supplement;
+
+	YYCTYPE *buffer_Miscellaneous_Symbols_Supplement = new YYCTYPE[390];
+	uint32_t buffer_Miscellaneous_Symbols_Supplement_len = encode_utf8(chars_Miscellaneous_Symbols_Supplement[0], chars_Miscellaneous_Symbols_Supplement[1], buffer_Miscellaneous_Symbols_Supplement) - 6;
+	if (scan(buffer_Miscellaneous_Symbols_Supplement, buffer_Miscellaneous_Symbols_Supplement + buffer_Miscellaneous_Symbols_Supplement_len, Miscellaneous_Symbols_Supplement) != Miscellaneous_Symbols_Supplement)
+		printf("test 'Miscellaneous_Symbols_Supplement' failed\n");
+	delete[] buffer_Miscellaneous_Symbols_Supplement;
 
 	YYCTYPE *buffer_Znamenny_Musical_Notation = new YYCTYPE[1254];
 	uint32_t buffer_Znamenny_Musical_Notation_len = encode_utf8(chars_Znamenny_Musical_Notation[0], chars_Znamenny_Musical_Notation[1], buffer_Znamenny_Musical_Notation) - 6;
@@ -39713,6 +41950,18 @@ int main() {
 	if (scan(buffer_Nag_Mundari, buffer_Nag_Mundari + buffer_Nag_Mundari_len, Nag_Mundari) != Nag_Mundari)
 		printf("test 'Nag_Mundari' failed\n");
 	delete[] buffer_Nag_Mundari;
+
+	YYCTYPE *buffer_Ol_Onal = new YYCTYPE[294];
+	uint32_t buffer_Ol_Onal_len = encode_utf8(chars_Ol_Onal[0], chars_Ol_Onal[1], buffer_Ol_Onal) - 6;
+	if (scan(buffer_Ol_Onal, buffer_Ol_Onal + buffer_Ol_Onal_len, Ol_Onal) != Ol_Onal)
+		printf("test 'Ol_Onal' failed\n");
+	delete[] buffer_Ol_Onal;
+
+	YYCTYPE *buffer_Tai_Yo = new YYCTYPE[390];
+	uint32_t buffer_Tai_Yo_len = encode_utf8(chars_Tai_Yo[0], chars_Tai_Yo[1], buffer_Tai_Yo) - 6;
+	if (scan(buffer_Tai_Yo, buffer_Tai_Yo + buffer_Tai_Yo_len, Tai_Yo) != Tai_Yo)
+		printf("test 'Tai_Yo' failed\n");
+	delete[] buffer_Tai_Yo;
 
 	YYCTYPE *buffer_Ethiopic_Extended_B = new YYCTYPE[198];
 	uint32_t buffer_Ethiopic_Extended_B_len = encode_utf8(chars_Ethiopic_Extended_B[0], chars_Ethiopic_Extended_B[1], buffer_Ethiopic_Extended_B) - 6;
@@ -39899,6 +42148,12 @@ int main() {
 	if (scan(buffer_CJK_Unified_Ideographs_Extension_H, buffer_CJK_Unified_Ideographs_Extension_H + buffer_CJK_Unified_Ideographs_Extension_H_len, CJK_Unified_Ideographs_Extension_H) != CJK_Unified_Ideographs_Extension_H)
 		printf("test 'CJK_Unified_Ideographs_Extension_H' failed\n");
 	delete[] buffer_CJK_Unified_Ideographs_Extension_H;
+
+	YYCTYPE *buffer_CJK_Unified_Ideographs_Extension_J = new YYCTYPE[25830];
+	uint32_t buffer_CJK_Unified_Ideographs_Extension_J_len = encode_utf8(chars_CJK_Unified_Ideographs_Extension_J[0], chars_CJK_Unified_Ideographs_Extension_J[1], buffer_CJK_Unified_Ideographs_Extension_J) - 6;
+	if (scan(buffer_CJK_Unified_Ideographs_Extension_J, buffer_CJK_Unified_Ideographs_Extension_J + buffer_CJK_Unified_Ideographs_Extension_J_len, CJK_Unified_Ideographs_Extension_J) != CJK_Unified_Ideographs_Extension_J)
+		printf("test 'CJK_Unified_Ideographs_Extension_J' failed\n");
+	delete[] buffer_CJK_Unified_Ideographs_Extension_J;
 
 	YYCTYPE *buffer_Tags = new YYCTYPE[774];
 	uint32_t buffer_Tags_len = encode_utf8(chars_Tags[0], chars_Tags[1], buffer_Tags) - 6;

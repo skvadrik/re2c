@@ -6,11 +6,10 @@ INPUT := UnicodeData.txt Blocks.txt
 $(GEN): $(INPUT) generate
 	./generate
 
-# TODO: replace with the latest data: https://unicode.org/Public/UCD/latest/ucd/...
 UnicodeData.txt:
-	wget https://unicode.org/Public/15.1.0/ucd/UnicodeData.txt
+	wget https://unicode.org/Public/UCD/latest/ucd/UnicodeData.txt
 Blocks.txt:
-	wget https://unicode.org/Public/15.1.0/ucd/Blocks.txt
+	wget https://unicode.org/Public/UCD/latest/ucd/Blocks.txt
 
 generate: generate.cc
 	c++ generate.cc -o generate -O2 -g -Wall -Wextra

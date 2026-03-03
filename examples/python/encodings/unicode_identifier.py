@@ -1431,7 +1431,7 @@ def lex(yyinput):
                         yycursor += 1
                         yystate = 197
                         continue
-                    case 0x97|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAD|0xB0:
+                    case 0x97|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAD|0xB0|0xB2:
                         yycursor += 1
                         yystate = 59
                         continue
@@ -1479,7 +1479,7 @@ def lex(yyinput):
                         yycursor += 1
                         yystate = 208
                         continue
-                    case 0xB2:
+                    case 0xB3:
                         yycursor += 1
                         yystate = 209
                         continue
@@ -2587,7 +2587,7 @@ def lex(yyinput):
                         yycursor += 1
                         yystate = 284
                         continue
-                    case 0x97|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAD|0xB0:
+                    case 0x97|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAD|0xB0|0xB2:
                         yycursor += 1
                         yystate = 59
                         continue
@@ -2643,7 +2643,7 @@ def lex(yyinput):
                         yycursor += 1
                         yystate = 208
                         continue
-                    case 0xB2:
+                    case 0xB3:
                         yycursor += 1
                         yystate = 209
                         continue
@@ -2728,7 +2728,7 @@ def lex(yyinput):
                     yystate = 35
                     continue
                 else:
-                    if yych <= 0x8E:
+                    if yych <= 0x8F:
                         yycursor += 1
                         yystate = 3
                         continue
@@ -3149,7 +3149,7 @@ def lex(yyinput):
                         continue
             case 82:
                 yych = yyinput[yycursor]
-                if yych <= 0x9C:
+                if yych <= 0x9B:
                     if yych <= 0x97:
                         yystate = 35
                         continue
@@ -3218,7 +3218,7 @@ def lex(yyinput):
             case 84:
                 yych = yyinput[yycursor]
                 if yych <= 0x9F:
-                    if yych <= 0x9C:
+                    if yych <= 0x9B:
                         yystate = 35
                         continue
                     if yych <= 0x9E:
@@ -4154,7 +4154,7 @@ def lex(yyinput):
                     if yych <= 0x7F:
                         yystate = 35
                         continue
-                    if yych <= 0x88:
+                    if yych <= 0x8A:
                         yycursor += 1
                         yystate = 3
                         continue
@@ -4792,42 +4792,22 @@ def lex(yyinput):
                 continue
             case 161:
                 yych = yyinput[yycursor]
-                if yych <= 0x92:
-                    if yych <= 0x8A:
-                        if yych <= 0x7F:
-                            yystate = 35
-                            continue
-                        yycursor += 1
-                        yystate = 3
-                        continue
-                    else:
-                        if yych <= 0x8F:
-                            yystate = 35
-                            continue
-                        if yych <= 0x91:
-                            yycursor += 1
-                            yystate = 3
-                            continue
-                        yystate = 35
-                        continue
-                else:
-                    if yych <= 0x99:
-                        if yych == 0x94:
-                            yystate = 35
-                            continue
-                        yycursor += 1
-                        yystate = 3
-                        continue
-                    else:
-                        if yych <= 0xB1:
-                            yystate = 35
-                            continue
-                        if yych <= 0xBF:
-                            yycursor += 1
-                            yystate = 3
-                            continue
-                        yystate = 35
-                        continue
+                if yych <= 0x7F:
+                    yystate = 35
+                    continue
+                if yych <= 0x9C:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xB0:
+                    yystate = 35
+                    continue
+                if yych <= 0xBF:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
             case 162:
                 yych = yyinput[yycursor]
                 if yych <= 0x85:
@@ -5529,6 +5509,10 @@ def lex(yyinput):
                         yycursor += 1
                         yystate = 304
                         continue
+                    case 0x97:
+                        yycursor += 1
+                        yystate = 112
+                        continue
                     case 0x9C:
                         yycursor += 1
                         yystate = 273
@@ -5560,6 +5544,10 @@ def lex(yyinput):
                     case 0xA4:
                         yycursor += 1
                         yystate = 310
+                        continue
+                    case 0xA5:
+                        yycursor += 1
+                        yystate = 179
                         continue
                     case 0xA6:
                         yycursor += 1
@@ -5605,25 +5593,37 @@ def lex(yyinput):
                         yycursor += 1
                         yystate = 128
                         continue
-                    case 0xBA:
+                    case 0xB5:
                         yycursor += 1
                         yystate = 319
                         continue
-                    case 0xBC:
+                    case 0xB6:
                         yycursor += 1
                         yystate = 320
                         continue
-                    case 0xBD:
+                    case 0xBA:
                         yycursor += 1
                         yystate = 321
                         continue
-                    case 0xBE:
+                    case 0xBB:
                         yycursor += 1
                         yystate = 322
                         continue
-                    case 0xBF:
+                    case 0xBC:
                         yycursor += 1
                         yystate = 323
+                        continue
+                    case 0xBD:
+                        yycursor += 1
+                        yystate = 324
+                        continue
+                    case 0xBE:
+                        yycursor += 1
+                        yystate = 325
+                        continue
+                    case 0xBF:
+                        yycursor += 1
+                        yystate = 326
                         continue
                     case _:
                         yystate = 35
@@ -5633,39 +5633,39 @@ def lex(yyinput):
                 match yych:
                     case 0x80:
                         yycursor += 1
-                        yystate = 324
+                        yystate = 327
                         continue
                     case 0x81:
                         yycursor += 1
-                        yystate = 325
+                        yystate = 328
                         continue
                     case 0x82:
                         yycursor += 1
-                        yystate = 326
+                        yystate = 329
                         continue
                     case 0x83:
                         yycursor += 1
-                        yystate = 327
+                        yystate = 330
                         continue
                     case 0x84:
                         yycursor += 1
-                        yystate = 328
+                        yystate = 331
                         continue
                     case 0x85:
                         yycursor += 1
-                        yystate = 329
+                        yystate = 332
                         continue
                     case 0x86:
                         yycursor += 1
-                        yystate = 330
+                        yystate = 333
                         continue
                     case 0x87:
                         yycursor += 1
-                        yystate = 331
+                        yystate = 334
                         continue
                     case 0x88:
                         yycursor += 1
-                        yystate = 332
+                        yystate = 335
                         continue
                     case 0x89:
                         yycursor += 1
@@ -5673,7 +5673,7 @@ def lex(yyinput):
                         continue
                     case 0x8A:
                         yycursor += 1
-                        yystate = 333
+                        yystate = 336
                         continue
                     case 0x8B:
                         yycursor += 1
@@ -5685,7 +5685,15 @@ def lex(yyinput):
                         continue
                     case 0x8D:
                         yycursor += 1
-                        yystate = 334
+                        yystate = 337
+                        continue
+                    case 0x8E:
+                        yycursor += 1
+                        yystate = 338
+                        continue
+                    case 0x8F:
+                        yycursor += 1
+                        yystate = 339
                         continue
                     case 0x90:
                         yycursor += 1
@@ -5693,7 +5701,7 @@ def lex(yyinput):
                         continue
                     case 0x91:
                         yycursor += 1
-                        yystate = 335
+                        yystate = 340
                         continue
                     case 0x92|0x98:
                         yycursor += 1
@@ -5701,23 +5709,23 @@ def lex(yyinput):
                         continue
                     case 0x93:
                         yycursor += 1
-                        yystate = 336
+                        yystate = 341
                         continue
                     case 0x96:
                         yycursor += 1
-                        yystate = 337
+                        yystate = 342
                         continue
                     case 0x97:
                         yycursor += 1
-                        yystate = 338
+                        yystate = 343
                         continue
                     case 0x99:
                         yycursor += 1
-                        yystate = 339
+                        yystate = 344
                         continue
                     case 0x9A:
                         yycursor += 1
-                        yystate = 340
+                        yystate = 345
                         continue
                     case 0x9C:
                         yycursor += 1
@@ -5729,7 +5737,7 @@ def lex(yyinput):
                         continue
                     case 0xA0:
                         yycursor += 1
-                        yystate = 341
+                        yystate = 346
                         continue
                     case 0xA2:
                         yycursor += 1
@@ -5737,75 +5745,83 @@ def lex(yyinput):
                         continue
                     case 0xA3:
                         yycursor += 1
-                        yystate = 342
+                        yystate = 347
                         continue
                     case 0xA4:
                         yycursor += 1
-                        yystate = 343
+                        yystate = 348
                         continue
                     case 0xA5:
                         yycursor += 1
-                        yystate = 344
+                        yystate = 349
                         continue
                     case 0xA6:
                         yycursor += 1
-                        yystate = 345
+                        yystate = 350
                         continue
                     case 0xA7:
                         yycursor += 1
-                        yystate = 346
+                        yystate = 351
                         continue
                     case 0xA8:
                         yycursor += 1
-                        yystate = 347
+                        yystate = 352
                         continue
                     case 0xA9:
                         yycursor += 1
-                        yystate = 348
+                        yystate = 353
                         continue
                     case 0xAA:
                         yycursor += 1
-                        yystate = 349
+                        yystate = 354
                         continue
                     case 0xAB:
                         yycursor += 1
                         yystate = 115
                         continue
-                    case 0xB0:
-                        yycursor += 1
-                        yystate = 350
-                        continue
-                    case 0xB1:
-                        yycursor += 1
-                        yystate = 351
-                        continue
-                    case 0xB2:
-                        yycursor += 1
-                        yystate = 352
-                        continue
-                    case 0xB4:
-                        yycursor += 1
-                        yystate = 353
-                        continue
-                    case 0xB5:
-                        yycursor += 1
-                        yystate = 354
-                        continue
-                    case 0xB6:
+                    case 0xAF:
                         yycursor += 1
                         yystate = 355
                         continue
-                    case 0xBB:
+                    case 0xB0:
                         yycursor += 1
                         yystate = 356
                         continue
-                    case 0xBC:
+                    case 0xB1:
                         yycursor += 1
                         yystate = 357
                         continue
-                    case 0xBE:
+                    case 0xB2:
                         yycursor += 1
                         yystate = 358
+                        continue
+                    case 0xB4:
+                        yycursor += 1
+                        yystate = 359
+                        continue
+                    case 0xB5:
+                        yycursor += 1
+                        yystate = 360
+                        continue
+                    case 0xB6:
+                        yycursor += 1
+                        yystate = 361
+                        continue
+                    case 0xB7:
+                        yycursor += 1
+                        yystate = 362
+                        continue
+                    case 0xBB:
+                        yycursor += 1
+                        yystate = 363
+                        continue
+                    case 0xBC:
+                        yycursor += 1
+                        yystate = 364
+                        continue
+                    case 0xBE:
+                        yycursor += 1
+                        yystate = 365
                         continue
                     case _:
                         yystate = 35
@@ -5833,7 +5849,7 @@ def lex(yyinput):
                             yystate = 37
                             continue
                         yycursor += 1
-                        yystate = 337
+                        yystate = 342
                         continue
                 else:
                     if yych <= 0xBD:
@@ -5843,7 +5859,7 @@ def lex(yyinput):
                             continue
                         if yych <= 0x95:
                             yycursor += 1
-                            yystate = 359
+                            yystate = 366
                             continue
                         yystate = 35
                         continue
@@ -5854,47 +5870,65 @@ def lex(yyinput):
                             continue
                         if yych <= 0xBF:
                             yycursor += 1
-                            yystate = 360
+                            yystate = 367
                             continue
                         yystate = 35
                         continue
             case 195:
                 yych = yyinput[yycursor]
-                if yych <= 0x7F:
-                    yystate = 35
-                    continue
-                if yych <= 0x8F:
-                    yycursor += 1
-                    yystate = 37
-                    continue
                 if yych <= 0x90:
+                    if yych <= 0x7F:
+                        yystate = 35
+                        continue
+                    if yych <= 0x8F:
+                        yycursor += 1
+                        yystate = 37
+                        continue
                     yycursor += 1
                     yystate = 158
                     continue
-                if yych <= 0x91:
-                    yycursor += 1
-                    yystate = 361
+                else:
+                    if yych <= 0x91:
+                        yycursor += 1
+                        yystate = 368
+                        continue
+                    if yych <= 0xBF:
+                        yycursor += 1
+                        yystate = 37
+                        continue
+                    yystate = 35
                     continue
-                yystate = 35
-                continue
             case 196:
                 yych = yyinput[yycursor]
                 if yych <= 0x8F:
+                    if yych <= 0x7F:
+                        yystate = 35
+                        continue
+                    if yych <= 0x8E:
+                        yycursor += 1
+                        yystate = 37
+                        continue
+                    yycursor += 1
+                    yystate = 293
+                    continue
+                else:
+                    if yych <= 0x98:
+                        yycursor += 1
+                        yystate = 37
+                        continue
+                    if yych <= 0x99:
+                        yycursor += 1
+                        yystate = 88
+                        continue
                     yystate = 35
                     continue
-                if yych <= 0x98:
-                    yycursor += 1
-                    yystate = 37
-                    continue
-                if yych <= 0x99:
-                    yycursor += 1
-                    yystate = 88
-                    continue
-                yystate = 35
-                continue
             case 197:
                 yych = yyinput[yycursor]
                 match yych:
+                    case 0x84:
+                        yycursor += 1
+                        yystate = 369
+                        continue
                     case 0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xB9|0xBC:
                         yycursor += 1
                         yystate = 37
@@ -5905,7 +5939,7 @@ def lex(yyinput):
                         continue
                     case 0xA9:
                         yycursor += 1
-                        yystate = 362
+                        yystate = 370
                         continue
                     case 0xAA:
                         yycursor += 1
@@ -5913,7 +5947,7 @@ def lex(yyinput):
                         continue
                     case 0xAB:
                         yycursor += 1
-                        yystate = 363
+                        yystate = 371
                         continue
                     case 0xAC:
                         yycursor += 1
@@ -5921,52 +5955,67 @@ def lex(yyinput):
                         continue
                     case 0xAD:
                         yycursor += 1
-                        yystate = 364
+                        yystate = 372
                         continue
                     case 0xAE:
                         yycursor += 1
-                        yystate = 352
+                        yystate = 358
+                        continue
+                    case 0xB5:
+                        yycursor += 1
+                        yystate = 373
+                        continue
+                    case 0xBA:
+                        yycursor += 1
+                        yystate = 374
+                        continue
+                    case 0xBB:
+                        yycursor += 1
+                        yystate = 375
                         continue
                     case 0xBD:
                         yycursor += 1
-                        yystate = 365
+                        yystate = 376
                         continue
                     case 0xBE:
                         yycursor += 1
-                        yystate = 366
+                        yystate = 377
                         continue
                     case 0xBF:
                         yycursor += 1
-                        yystate = 367
+                        yystate = 378
                         continue
                     case _:
                         yystate = 35
                         continue
             case 198:
                 yych = yyinput[yycursor]
-                if yych <= 0x9F:
+                if yych <= 0xB4:
                     if yych <= 0x7F:
                         yystate = 35
                         continue
-                    if yych <= 0x9E:
-                        yycursor += 1
-                        yystate = 37
-                        continue
-                    yycursor += 1
-                    yystate = 256
-                    continue
-                else:
                     if yych <= 0xB2:
                         yycursor += 1
                         yystate = 37
                         continue
                     if yych <= 0xB3:
                         yycursor += 1
-                        yystate = 368
+                        yystate = 379
                         continue
-                    if yych <= 0xB4:
+                    yycursor += 1
+                    yystate = 118
+                    continue
+                else:
+                    if yych <= 0xB5:
+                        yystate = 35
+                        continue
+                    if yych <= 0xB6:
                         yycursor += 1
-                        yystate = 140
+                        yystate = 37
+                        continue
+                    if yych <= 0xB7:
+                        yycursor += 1
+                        yystate = 318
                         continue
                     yystate = 35
                     continue
@@ -5974,7 +6023,7 @@ def lex(yyinput):
                 yych = yyinput[yycursor]
                 if yych == 0xBF:
                     yycursor += 1
-                    yystate = 369
+                    yystate = 380
                     continue
                 yystate = 35
                 continue
@@ -5991,11 +6040,11 @@ def lex(yyinput):
                     else:
                         if yych <= 0x84:
                             yycursor += 1
-                            yystate = 370
+                            yystate = 381
                             continue
                         if yych <= 0x85:
                             yycursor += 1
-                            yystate = 371
+                            yystate = 382
                             continue
                         yycursor += 1
                         yystate = 37
@@ -6004,7 +6053,7 @@ def lex(yyinput):
                     if yych <= 0xB0:
                         if yych <= 0x8B:
                             yycursor += 1
-                            yystate = 372
+                            yystate = 383
                             continue
                         if yych <= 0xAF:
                             yystate = 35
@@ -6015,11 +6064,11 @@ def lex(yyinput):
                     else:
                         if yych <= 0xB1:
                             yycursor += 1
-                            yystate = 373
+                            yystate = 384
                             continue
                         if yych <= 0xB2:
                             yycursor += 1
-                            yystate = 374
+                            yystate = 385
                             continue
                         yystate = 35
                         continue
@@ -6032,51 +6081,51 @@ def lex(yyinput):
                         continue
                     case 0x91:
                         yycursor += 1
-                        yystate = 375
+                        yystate = 386
                         continue
                     case 0x92:
                         yycursor += 1
-                        yystate = 376
+                        yystate = 387
                         continue
                     case 0x93:
                         yycursor += 1
-                        yystate = 377
+                        yystate = 388
                         continue
                     case 0x94:
                         yycursor += 1
-                        yystate = 378
+                        yystate = 389
                         continue
                     case 0x95:
                         yycursor += 1
-                        yystate = 379
+                        yystate = 390
                         continue
                     case 0x9A:
                         yycursor += 1
-                        yystate = 380
+                        yystate = 391
                         continue
                     case 0x9B:
                         yycursor += 1
-                        yystate = 381
+                        yystate = 392
                         continue
                     case 0x9C:
                         yycursor += 1
-                        yystate = 382
+                        yystate = 393
                         continue
                     case 0x9D:
                         yycursor += 1
-                        yystate = 383
+                        yystate = 394
                         continue
                     case 0x9E:
                         yycursor += 1
-                        yystate = 384
+                        yystate = 395
                         continue
                     case 0x9F:
                         yycursor += 1
-                        yystate = 385
+                        yystate = 396
                         continue
                     case 0xBC:
                         yycursor += 1
-                        yystate = 386
+                        yystate = 397
                         continue
                     case _:
                         yystate = 35
@@ -6094,27 +6143,35 @@ def lex(yyinput):
                         continue
                     case 0x84:
                         yycursor += 1
-                        yystate = 387
+                        yystate = 398
                         continue
                     case 0x85:
                         yycursor += 1
-                        yystate = 388
+                        yystate = 399
                         continue
                     case 0x8A:
                         yycursor += 1
-                        yystate = 363
+                        yystate = 371
                         continue
                     case 0x8B:
                         yycursor += 1
-                        yystate = 341
+                        yystate = 346
                         continue
                     case 0x93:
                         yycursor += 1
-                        yystate = 389
+                        yystate = 400
+                        continue
+                    case 0x97:
+                        yycursor += 1
+                        yystate = 401
+                        continue
+                    case 0x9B:
+                        yycursor += 1
+                        yystate = 402
                         continue
                     case 0x9F:
                         yycursor += 1
-                        yystate = 390
+                        yystate = 403
                         continue
                     case 0xA0|0xA1|0xA2|0xA4:
                         yycursor += 1
@@ -6122,23 +6179,23 @@ def lex(yyinput):
                         continue
                     case 0xA3:
                         yycursor += 1
-                        yystate = 391
+                        yystate = 404
                         continue
                     case 0xA5:
                         yycursor += 1
-                        yystate = 392
+                        yystate = 405
                         continue
                     case 0xB8:
                         yycursor += 1
-                        yystate = 393
+                        yystate = 406
                         continue
                     case 0xB9:
                         yycursor += 1
-                        yystate = 394
+                        yystate = 407
                         continue
                     case 0xBA:
                         yycursor += 1
-                        yystate = 395
+                        yystate = 408
                         continue
                     case _:
                         yystate = 35
@@ -6150,7 +6207,7 @@ def lex(yyinput):
                     continue
                 if yych == 0x9B:
                     yycursor += 1
-                    yystate = 396
+                    yystate = 409
                     continue
                 if yych <= 0xBF:
                     yycursor += 1
@@ -6160,28 +6217,19 @@ def lex(yyinput):
                 continue
             case 204:
                 yych = yyinput[yycursor]
-                if yych <= 0x9C:
-                    if yych <= 0x7F:
-                        yystate = 35
-                        continue
-                    if yych <= 0x9B:
-                        yycursor += 1
-                        yystate = 37
-                        continue
-                    yycursor += 1
-                    yystate = 397
-                    continue
-                else:
-                    if yych == 0xA0:
-                        yycursor += 1
-                        yystate = 157
-                        continue
-                    if yych <= 0xBF:
-                        yycursor += 1
-                        yystate = 37
-                        continue
+                if yych <= 0x7F:
                     yystate = 35
                     continue
+                if yych == 0xA0:
+                    yycursor += 1
+                    yystate = 157
+                    continue
+                if yych <= 0xBF:
+                    yycursor += 1
+                    yystate = 37
+                    continue
+                yystate = 35
+                continue
             case 205:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
@@ -6189,7 +6237,7 @@ def lex(yyinput):
                     continue
                 if yych == 0xBA:
                     yycursor += 1
-                    yystate = 398
+                    yystate = 178
                     continue
                 if yych <= 0xBF:
                     yycursor += 1
@@ -6208,7 +6256,7 @@ def lex(yyinput):
                         yystate = 37
                         continue
                     yycursor += 1
-                    yystate = 399
+                    yystate = 410
                     continue
                 else:
                     if yych <= 0xB8:
@@ -6217,7 +6265,7 @@ def lex(yyinput):
                         continue
                     if yych <= 0xB9:
                         yycursor += 1
-                        yystate = 400
+                        yystate = 369
                         continue
                     yystate = 35
                     continue
@@ -6232,7 +6280,7 @@ def lex(yyinput):
                     continue
                 if yych <= 0xA8:
                     yycursor += 1
-                    yystate = 400
+                    yystate = 369
                     continue
                 yystate = 35
                 continue
@@ -6243,7 +6291,7 @@ def lex(yyinput):
                     continue
                 if yych == 0x8D:
                     yycursor += 1
-                    yystate = 401
+                    yystate = 411
                     continue
                 if yych <= 0xBF:
                     yycursor += 1
@@ -6256,13 +6304,13 @@ def lex(yyinput):
                 if yych <= 0x7F:
                     yystate = 35
                     continue
-                if yych <= 0x8D:
+                if yych <= 0x90:
                     yycursor += 1
                     yystate = 37
                     continue
-                if yych <= 0x8E:
+                if yych <= 0x91:
                     yycursor += 1
-                    yystate = 158
+                    yystate = 412
                     continue
                 yystate = 35
                 continue
@@ -6316,11 +6364,11 @@ def lex(yyinput):
                     yystate = 35
                     continue
                 else:
-                    if yych <= 0x8E:
+                    if yych <= 0x8F:
                         yycursor += 1
                         yystate = 3
                         continue
-                    if yych <= 0x97:
+                    if yych <= 0x96:
                         yystate = 35
                         continue
                     if yych <= 0xBF:
@@ -6960,11 +7008,7 @@ def lex(yyinput):
                         if yych <= 0x97:
                             yystate = 35
                             continue
-                        if yych <= 0x9A:
-                            yycursor += 1
-                            yystate = 3
-                            continue
-                        if yych <= 0x9C:
+                        if yych == 0x9B:
                             yystate = 35
                             continue
                         yycursor += 1
@@ -7065,7 +7109,7 @@ def lex(yyinput):
                         continue
                 else:
                     if yych <= 0xA3:
-                        if yych <= 0x9C:
+                        if yych <= 0x9B:
                             yystate = 35
                             continue
                         if yych == 0x9F:
@@ -7772,7 +7816,14 @@ def lex(yyinput):
                 if yych <= 0x7F:
                     yystate = 35
                     continue
-                if yych <= 0x8E:
+                if yych <= 0x9D:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 35
+                    continue
+                if yych <= 0xAB:
                     yycursor += 1
                     yystate = 3
                     continue
@@ -8444,7 +8495,7 @@ def lex(yyinput):
                         continue
                     case 0x87:
                         yycursor += 1
-                        yystate = 402
+                        yystate = 413
                         continue
                     case 0x8A:
                         yycursor += 1
@@ -8452,7 +8503,7 @@ def lex(yyinput):
                         continue
                     case 0x8B:
                         yycursor += 1
-                        yystate = 403
+                        yystate = 414
                         continue
                     case 0x8C:
                         yycursor += 1
@@ -8460,7 +8511,7 @@ def lex(yyinput):
                         continue
                     case 0x8D:
                         yycursor += 1
-                        yystate = 404
+                        yystate = 415
                         continue
                     case 0x8E:
                         yycursor += 1
@@ -8472,7 +8523,7 @@ def lex(yyinput):
                         continue
                     case 0x92:
                         yycursor += 1
-                        yystate = 405
+                        yystate = 416
                         continue
                     case 0x93:
                         yycursor += 1
@@ -8489,6 +8540,10 @@ def lex(yyinput):
                     case 0x96:
                         yycursor += 1
                         yystate = 304
+                        continue
+                    case 0x97:
+                        yycursor += 1
+                        yystate = 112
                         continue
                     case 0x9C:
                         yycursor += 1
@@ -8522,13 +8577,17 @@ def lex(yyinput):
                         yycursor += 1
                         yystate = 310
                         continue
+                    case 0xA5:
+                        yycursor += 1
+                        yystate = 179
+                        continue
                     case 0xA6:
                         yycursor += 1
                         yystate = 311
                         continue
                     case 0xA8:
                         yycursor += 1
-                        yystate = 406
+                        yystate = 417
                         continue
                     case 0xA9:
                         yycursor += 1
@@ -8540,7 +8599,7 @@ def lex(yyinput):
                         continue
                     case 0xAB:
                         yycursor += 1
-                        yystate = 407
+                        yystate = 418
                         continue
                     case 0xAC:
                         yycursor += 1
@@ -8564,31 +8623,39 @@ def lex(yyinput):
                         continue
                     case 0xB4:
                         yycursor += 1
-                        yystate = 408
+                        yystate = 419
                         continue
-                    case 0xBA:
+                    case 0xB5:
                         yycursor += 1
-                        yystate = 409
+                        yystate = 420
                         continue
-                    case 0xBB:
-                        yycursor += 1
-                        yystate = 410
-                        continue
-                    case 0xBC:
+                    case 0xB6:
                         yycursor += 1
                         yystate = 320
                         continue
+                    case 0xBA:
+                        yycursor += 1
+                        yystate = 421
+                        continue
+                    case 0xBB:
+                        yycursor += 1
+                        yystate = 422
+                        continue
+                    case 0xBC:
+                        yycursor += 1
+                        yystate = 323
+                        continue
                     case 0xBD:
                         yycursor += 1
-                        yystate = 411
+                        yystate = 423
                         continue
                     case 0xBE:
                         yycursor += 1
-                        yystate = 321
+                        yystate = 324
                         continue
                     case 0xBF:
                         yycursor += 1
-                        yystate = 323
+                        yystate = 326
                         continue
                     case _:
                         yystate = 35
@@ -8602,7 +8669,7 @@ def lex(yyinput):
                         continue
                     case 0x81:
                         yycursor += 1
-                        yystate = 412
+                        yystate = 424
                         continue
                     case 0x82|0xA0:
                         yycursor += 1
@@ -8610,63 +8677,71 @@ def lex(yyinput):
                         continue
                     case 0x83:
                         yycursor += 1
-                        yystate = 413
+                        yystate = 425
                         continue
                     case 0x84:
                         yycursor += 1
-                        yystate = 414
+                        yystate = 426
                         continue
                     case 0x85:
                         yycursor += 1
-                        yystate = 415
+                        yystate = 427
                         continue
                     case 0x87:
                         yycursor += 1
-                        yystate = 416
+                        yystate = 428
                         continue
                     case 0x88:
                         yycursor += 1
-                        yystate = 417
+                        yystate = 429
                         continue
                     case 0x89:
                         yycursor += 1
-                        yystate = 418
+                        yystate = 430
                         continue
                     case 0x8A:
                         yycursor += 1
-                        yystate = 333
+                        yystate = 336
                         continue
                     case 0x8B:
                         yycursor += 1
-                        yystate = 419
+                        yystate = 431
                         continue
                     case 0x8C:
                         yycursor += 1
-                        yystate = 420
+                        yystate = 432
                         continue
                     case 0x8D:
                         yycursor += 1
-                        yystate = 421
+                        yystate = 433
+                        continue
+                    case 0x8E:
+                        yycursor += 1
+                        yystate = 434
+                        continue
+                    case 0x8F:
+                        yycursor += 1
+                        yystate = 435
                         continue
                     case 0x91:
                         yycursor += 1
-                        yystate = 422
+                        yystate = 436
                         continue
                     case 0x93:
                         yycursor += 1
-                        yystate = 423
+                        yystate = 437
                         continue
                     case 0x96:
                         yycursor += 1
-                        yystate = 424
+                        yystate = 438
                         continue
                     case 0x97:
                         yycursor += 1
-                        yystate = 425
+                        yystate = 439
                         continue
                     case 0x99:
                         yycursor += 1
-                        yystate = 426
+                        yystate = 440
                         continue
                     case 0x9A|0xAB:
                         yycursor += 1
@@ -8674,11 +8749,11 @@ def lex(yyinput):
                         continue
                     case 0x9B:
                         yycursor += 1
-                        yystate = 68
+                        yystate = 441
                         continue
                     case 0x9C:
                         yycursor += 1
-                        yystate = 427
+                        yystate = 442
                         continue
                     case 0x9D:
                         yycursor += 1
@@ -8690,23 +8765,23 @@ def lex(yyinput):
                         continue
                     case 0xA3:
                         yycursor += 1
-                        yystate = 428
+                        yystate = 443
                         continue
                     case 0xA4:
                         yycursor += 1
-                        yystate = 429
+                        yystate = 444
                         continue
                     case 0xA5:
                         yycursor += 1
-                        yystate = 430
+                        yystate = 445
                         continue
                     case 0xA6:
                         yycursor += 1
-                        yystate = 345
+                        yystate = 350
                         continue
                     case 0xA7:
                         yycursor += 1
-                        yystate = 431
+                        yystate = 446
                         continue
                     case 0xA8:
                         yycursor += 1
@@ -8714,77 +8789,98 @@ def lex(yyinput):
                         continue
                     case 0xA9:
                         yycursor += 1
-                        yystate = 432
+                        yystate = 447
                         continue
                     case 0xAA:
                         yycursor += 1
-                        yystate = 433
+                        yystate = 448
+                        continue
+                    case 0xAD:
+                        yycursor += 1
+                        yystate = 449
+                        continue
+                    case 0xAF:
+                        yycursor += 1
+                        yystate = 450
                         continue
                     case 0xB0:
                         yycursor += 1
-                        yystate = 434
+                        yystate = 451
                         continue
                     case 0xB1:
                         yycursor += 1
-                        yystate = 435
+                        yystate = 452
                         continue
                     case 0xB2:
                         yycursor += 1
-                        yystate = 436
+                        yystate = 453
                         continue
                     case 0xB4:
                         yycursor += 1
-                        yystate = 437
+                        yystate = 454
                         continue
                     case 0xB5:
                         yycursor += 1
-                        yystate = 438
+                        yystate = 455
                         continue
                     case 0xB6:
                         yycursor += 1
-                        yystate = 439
+                        yystate = 456
+                        continue
+                    case 0xB7:
+                        yycursor += 1
+                        yystate = 457
                         continue
                     case 0xBB:
                         yycursor += 1
-                        yystate = 440
+                        yystate = 458
                         continue
                     case 0xBC:
                         yycursor += 1
-                        yystate = 441
+                        yystate = 459
                         continue
                     case 0xBD:
                         yycursor += 1
-                        yystate = 442
+                        yystate = 460
                         continue
                     case 0xBE:
                         yycursor += 1
-                        yystate = 358
+                        yystate = 365
                         continue
                     case _:
                         yystate = 35
                         continue
             case 283:
                 yych = yyinput[yycursor]
-                if yych <= 0x7F:
-                    yystate = 35
-                    continue
-                if yych <= 0x8F:
-                    yycursor += 1
-                    yystate = 37
-                    continue
                 if yych <= 0x90:
+                    if yych <= 0x7F:
+                        yystate = 35
+                        continue
+                    if yych <= 0x8F:
+                        yycursor += 1
+                        yystate = 37
+                        continue
                     yycursor += 1
                     yystate = 158
                     continue
-                if yych <= 0x91:
-                    yycursor += 1
-                    yystate = 368
+                else:
+                    if yych <= 0x91:
+                        yycursor += 1
+                        yystate = 461
+                        continue
+                    if yych <= 0xBF:
+                        yycursor += 1
+                        yystate = 37
+                        continue
+                    yystate = 35
                     continue
-                yystate = 35
-                continue
             case 284:
                 yych = yyinput[yycursor]
                 match yych:
+                    case 0x84:
+                        yycursor += 1
+                        yystate = 412
+                        continue
                     case 0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xB9|0xBC:
                         yycursor += 1
                         yystate = 37
@@ -8795,7 +8891,7 @@ def lex(yyinput):
                         continue
                     case 0xA9:
                         yycursor += 1
-                        yystate = 443
+                        yystate = 462
                         continue
                     case 0xAA:
                         yycursor += 1
@@ -8803,7 +8899,7 @@ def lex(yyinput):
                         continue
                     case 0xAB:
                         yycursor += 1
-                        yystate = 444
+                        yystate = 463
                         continue
                     case 0xAC:
                         yycursor += 1
@@ -8811,23 +8907,35 @@ def lex(yyinput):
                         continue
                     case 0xAD:
                         yycursor += 1
-                        yystate = 445
+                        yystate = 464
                         continue
                     case 0xAE:
                         yycursor += 1
-                        yystate = 352
+                        yystate = 358
+                        continue
+                    case 0xB5:
+                        yycursor += 1
+                        yystate = 465
+                        continue
+                    case 0xBA:
+                        yycursor += 1
+                        yystate = 374
+                        continue
+                    case 0xBB:
+                        yycursor += 1
+                        yystate = 375
                         continue
                     case 0xBD:
                         yycursor += 1
-                        yystate = 446
+                        yystate = 466
                         continue
                     case 0xBE:
                         yycursor += 1
-                        yystate = 447
+                        yystate = 467
                         continue
                     case 0xBF:
                         yycursor += 1
-                        yystate = 448
+                        yystate = 468
                         continue
                     case _:
                         yystate = 35
@@ -8845,11 +8953,11 @@ def lex(yyinput):
                     else:
                         if yych <= 0x84:
                             yycursor += 1
-                            yystate = 370
+                            yystate = 381
                             continue
                         if yych <= 0x85:
                             yycursor += 1
-                            yystate = 371
+                            yystate = 382
                             continue
                         yycursor += 1
                         yystate = 37
@@ -8858,7 +8966,7 @@ def lex(yyinput):
                     if yych <= 0xB0:
                         if yych <= 0x8B:
                             yycursor += 1
-                            yystate = 372
+                            yystate = 383
                             continue
                         if yych <= 0xAF:
                             yystate = 35
@@ -8869,43 +8977,48 @@ def lex(yyinput):
                     else:
                         if yych <= 0xB1:
                             yycursor += 1
-                            yystate = 373
+                            yystate = 384
                             continue
                         if yych <= 0xB2:
                             yycursor += 1
-                            yystate = 449
+                            yystate = 469
                             continue
                         yystate = 35
                         continue
             case 286:
                 yych = yyinput[yycursor]
                 if yych <= 0xBB:
+                    if yych == 0xB3:
+                        yycursor += 1
+                        yystate = 470
+                        continue
                     yystate = 35
                     continue
-                if yych <= 0xBC:
-                    yycursor += 1
-                    yystate = 178
+                else:
+                    if yych <= 0xBC:
+                        yycursor += 1
+                        yystate = 178
+                        continue
+                    if yych <= 0xBD:
+                        yycursor += 1
+                        yystate = 88
+                        continue
+                    yystate = 35
                     continue
-                if yych <= 0xBD:
-                    yycursor += 1
-                    yystate = 88
-                    continue
-                yystate = 35
-                continue
             case 287:
                 yych = yyinput[yycursor]
                 match yych:
                     case 0x85:
                         yycursor += 1
-                        yystate = 450
+                        yystate = 471
                         continue
                     case 0x86:
                         yycursor += 1
-                        yystate = 451
+                        yystate = 472
                         continue
                     case 0x89:
                         yycursor += 1
-                        yystate = 452
+                        yystate = 473
                         continue
                     case 0x90|0x96|0x97|0x98|0x99:
                         yycursor += 1
@@ -8913,63 +9026,63 @@ def lex(yyinput):
                         continue
                     case 0x91:
                         yycursor += 1
-                        yystate = 375
+                        yystate = 386
                         continue
                     case 0x92:
                         yycursor += 1
-                        yystate = 376
+                        yystate = 387
                         continue
                     case 0x93:
                         yycursor += 1
-                        yystate = 377
+                        yystate = 388
                         continue
                     case 0x94:
                         yycursor += 1
-                        yystate = 378
+                        yystate = 389
                         continue
                     case 0x95:
                         yycursor += 1
-                        yystate = 379
+                        yystate = 390
                         continue
                     case 0x9A:
                         yycursor += 1
-                        yystate = 380
+                        yystate = 391
                         continue
                     case 0x9B:
                         yycursor += 1
-                        yystate = 381
+                        yystate = 392
                         continue
                     case 0x9C:
                         yycursor += 1
-                        yystate = 382
+                        yystate = 393
                         continue
                     case 0x9D:
                         yycursor += 1
-                        yystate = 383
+                        yystate = 394
                         continue
                     case 0x9E:
                         yycursor += 1
-                        yystate = 384
+                        yystate = 395
                         continue
                     case 0x9F:
                         yycursor += 1
-                        yystate = 453
+                        yystate = 474
                         continue
                     case 0xA8:
                         yycursor += 1
-                        yystate = 454
+                        yystate = 475
                         continue
                     case 0xA9:
                         yycursor += 1
-                        yystate = 455
+                        yystate = 476
                         continue
                     case 0xAA:
                         yycursor += 1
-                        yystate = 456
+                        yystate = 477
                         continue
                     case 0xBC:
                         yycursor += 1
-                        yystate = 386
+                        yystate = 397
                         continue
                     case _:
                         yystate = 35
@@ -8979,7 +9092,7 @@ def lex(yyinput):
                 match yych:
                     case 0x80:
                         yycursor += 1
-                        yystate = 457
+                        yystate = 478
                         continue
                     case 0x81:
                         yycursor += 1
@@ -8987,31 +9100,39 @@ def lex(yyinput):
                         continue
                     case 0x82:
                         yycursor += 1
-                        yystate = 458
+                        yystate = 479
                         continue
                     case 0x84:
                         yycursor += 1
-                        yystate = 459
+                        yystate = 480
                         continue
                     case 0x85:
                         yycursor += 1
-                        yystate = 460
+                        yystate = 481
                         continue
                     case 0x8A:
                         yycursor += 1
-                        yystate = 461
+                        yystate = 482
                         continue
                     case 0x8B:
                         yycursor += 1
-                        yystate = 397
+                        yystate = 412
                         continue
                     case 0x93:
                         yycursor += 1
-                        yystate = 462
+                        yystate = 483
+                        continue
+                    case 0x97:
+                        yycursor += 1
+                        yystate = 484
+                        continue
+                    case 0x9B:
+                        yycursor += 1
+                        yystate = 485
                         continue
                     case 0x9F:
                         yycursor += 1
-                        yystate = 390
+                        yystate = 403
                         continue
                     case 0xA0|0xA1|0xA2|0xA4:
                         yycursor += 1
@@ -9019,23 +9140,23 @@ def lex(yyinput):
                         continue
                     case 0xA3:
                         yycursor += 1
-                        yystate = 463
+                        yystate = 486
                         continue
                     case 0xA5:
                         yycursor += 1
-                        yystate = 464
+                        yystate = 487
                         continue
                     case 0xB8:
                         yycursor += 1
-                        yystate = 393
+                        yystate = 406
                         continue
                     case 0xB9:
                         yycursor += 1
-                        yystate = 394
+                        yystate = 407
                         continue
                     case 0xBA:
                         yycursor += 1
-                        yystate = 395
+                        yystate = 408
                         continue
                     case _:
                         yystate = 35
@@ -9044,7 +9165,7 @@ def lex(yyinput):
                 yych = yyinput[yycursor]
                 if yych == 0xAF:
                     yycursor += 1
-                    yystate = 465
+                    yystate = 470
                     continue
                 yystate = 35
                 continue
@@ -9604,6 +9725,35 @@ def lex(yyinput):
                 continue
             case 319:
                 yych = yyinput[yycursor]
+                if yych <= 0x89:
+                    yystate = 35
+                    continue
+                if yych <= 0xA5:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAE:
+                    yystate = 35
+                    continue
+                if yych <= 0xBF:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 320:
+                yych = yyinput[yycursor]
+                if yych <= 0x7F:
+                    yystate = 35
+                    continue
+                if yych <= 0x85:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 321:
+                yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
                     continue
@@ -9620,7 +9770,18 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 320:
+            case 322:
+                yych = yyinput[yycursor]
+                if yych <= 0x81:
+                    yystate = 35
+                    continue
+                if yych <= 0x87:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 323:
                 yych = yyinput[yycursor]
                 if yych <= 0xA6:
                     if yych <= 0x7F:
@@ -9646,7 +9807,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 321:
+            case 324:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -9664,7 +9825,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 322:
+            case 325:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -9682,7 +9843,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 323:
+            case 326:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -9700,7 +9861,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 324:
+            case 327:
                 yych = yyinput[yycursor]
                 if yych <= 0x82:
                     yystate = 35
@@ -9711,7 +9872,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 325:
+            case 328:
                 yych = yyinput[yycursor]
                 if yych <= 0xB0:
                     yystate = 35
@@ -9726,7 +9887,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 326:
+            case 329:
                 yych = yyinput[yycursor]
                 if yych <= 0x82:
                     yystate = 35
@@ -9737,7 +9898,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 327:
+            case 330:
                 yych = yyinput[yycursor]
                 if yych <= 0x8F:
                     yystate = 35
@@ -9748,7 +9909,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 328:
+            case 331:
                 yych = yyinput[yycursor]
                 if yych <= 0x82:
                     yystate = 35
@@ -9759,7 +9920,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 329:
+            case 332:
                 yych = yyinput[yycursor]
                 if yych <= 0x87:
                     if yych == 0x84:
@@ -9787,7 +9948,7 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 330:
+            case 333:
                 yych = yyinput[yycursor]
                 if yych <= 0x82:
                     yystate = 35
@@ -9798,7 +9959,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 331:
+            case 334:
                 yych = yyinput[yycursor]
                 if yych <= 0x99:
                     if yych <= 0x80:
@@ -9820,7 +9981,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 332:
+            case 335:
                 yych = yyinput[yycursor]
                 if yych <= 0x92:
                     if yych <= 0x7F:
@@ -9843,7 +10004,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 333:
+            case 336:
                 yych = yyinput[yycursor]
                 if yych <= 0x8D:
                     if yych <= 0x87:
@@ -9888,7 +10049,7 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 334:
+            case 337:
                 yych = yyinput[yycursor]
                 if yych == 0x90:
                     yycursor += 1
@@ -9903,7 +10064,51 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 335:
+            case 338:
+                yych = yyinput[yycursor]
+                if yych <= 0x8D:
+                    if yych <= 0x89:
+                        if yych <= 0x7F:
+                            yystate = 35
+                            continue
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0x8B:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        yystate = 35
+                        continue
+                else:
+                    if yych <= 0xB5:
+                        if yych == 0x8F:
+                            yystate = 35
+                            continue
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0xB7:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        yystate = 35
+                        continue
+            case 339:
+                yych = yyinput[yycursor]
+                if yych == 0x91:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                if yych == 0x93:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 340:
                 yych = yyinput[yycursor]
                 if yych <= 0x86:
                     yystate = 35
@@ -9921,7 +10126,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 336:
+            case 341:
                 yych = yyinput[yycursor]
                 if yych <= 0x83:
                     yystate = 35
@@ -9935,7 +10140,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 337:
+            case 342:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -9946,7 +10151,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 338:
+            case 343:
                 yych = yyinput[yycursor]
                 if yych <= 0x97:
                     yystate = 35
@@ -9957,7 +10162,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 339:
+            case 344:
                 yych = yyinput[yycursor]
                 if yych == 0x84:
                     yycursor += 1
@@ -9965,7 +10170,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 340:
+            case 345:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -9980,7 +10185,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 341:
+            case 346:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -9991,7 +10196,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 342:
+            case 347:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10006,7 +10211,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 343:
+            case 348:
                 yych = yyinput[yycursor]
                 if yych <= 0x93:
                     if yych <= 0x88:
@@ -10052,7 +10257,7 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 344:
+            case 349:
                 yych = yyinput[yycursor]
                 if yych == 0x81:
                     yycursor += 1
@@ -10060,7 +10265,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 345:
+            case 350:
                 yych = yyinput[yycursor]
                 if yych <= 0x9F:
                     yystate = 35
@@ -10078,7 +10283,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 346:
+            case 351:
                 yych = yyinput[yycursor]
                 if yych <= 0xA0:
                     if yych <= 0x7F:
@@ -10100,7 +10305,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 347:
+            case 352:
                 yych = yyinput[yycursor]
                 if yych <= 0x8A:
                     if yych == 0x80:
@@ -10120,7 +10325,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 348:
+            case 353:
                 yych = yyinput[yycursor]
                 if yych == 0x90:
                     yycursor += 1
@@ -10135,7 +10340,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 349:
+            case 354:
                 yych = yyinput[yycursor]
                 if yych <= 0x9C:
                     if yych <= 0x7F:
@@ -10161,7 +10366,18 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 350:
+            case 355:
+                yych = yyinput[yycursor]
+                if yych <= 0x7F:
+                    yystate = 35
+                    continue
+                if yych <= 0xA0:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 356:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10175,7 +10391,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 351:
+            case 357:
                 yych = yyinput[yycursor]
                 if yych == 0x80:
                     yycursor += 1
@@ -10190,7 +10406,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 352:
+            case 358:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10201,7 +10417,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 353:
+            case 359:
                 yych = yyinput[yycursor]
                 if yych <= 0x87:
                     if yych <= 0x7F:
@@ -10223,7 +10439,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 354:
+            case 360:
                 yych = yyinput[yycursor]
                 if yych <= 0xA5:
                     if yych == 0x86:
@@ -10254,22 +10470,44 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 355:
+            case 361:
+                yych = yyinput[yycursor]
+                if yych <= 0x97:
+                    if yych <= 0x7F:
+                        yystate = 35
+                        continue
+                    if yych <= 0x89:
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                    yystate = 35
+                    continue
+                else:
+                    if yych <= 0x98:
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xAF:
+                        yystate = 35
+                        continue
+                    if yych <= 0xBF:
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                    yystate = 35
+                    continue
+            case 362:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
                     continue
-                if yych <= 0x89:
-                    yycursor += 1
-                    yystate = 3
-                    continue
-                if yych == 0x98:
+                if yych <= 0x9B:
                     yycursor += 1
                     yystate = 3
                     continue
                 yystate = 35
                 continue
-            case 356:
+            case 363:
                 yych = yyinput[yycursor]
                 if yych <= 0x9F:
                     yystate = 35
@@ -10280,7 +10518,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 357:
+            case 364:
                 yych = yyinput[yycursor]
                 if yych <= 0x83:
                     if yych == 0x82:
@@ -10299,7 +10537,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 358:
+            case 365:
                 yych = yyinput[yycursor]
                 if yych == 0xB0:
                     yycursor += 1
@@ -10307,7 +10545,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 359:
+            case 366:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10318,7 +10556,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 360:
+            case 367:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10329,7 +10567,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 361:
+            case 368:
                 yych = yyinput[yycursor]
                 if yych <= 0x80:
                     yystate = 35
@@ -10338,9 +10576,27 @@ def lex(yyinput):
                     yycursor += 1
                     yystate = 3
                     continue
+                if yych <= 0x9F:
+                    yystate = 35
+                    continue
+                if yych <= 0xBF:
+                    yycursor += 1
+                    yystate = 3
+                    continue
                 yystate = 35
                 continue
-            case 362:
+            case 369:
+                yych = yyinput[yycursor]
+                if yych <= 0x7F:
+                    yystate = 35
+                    continue
+                if yych <= 0x9D:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 370:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10358,7 +10614,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 363:
+            case 371:
                 yych = yyinput[yycursor]
                 if yych <= 0x8F:
                     yystate = 35
@@ -10369,7 +10625,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 364:
+            case 372:
                 yych = yyinput[yycursor]
                 if yych <= 0xA2:
                     if yych <= 0x7F:
@@ -10395,7 +10651,47 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 365:
+            case 373:
+                yych = yyinput[yycursor]
+                if yych <= 0x7F:
+                    yystate = 35
+                    continue
+                if yych <= 0xAC:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 374:
+                yych = yyinput[yycursor]
+                if yych <= 0x9F:
+                    yystate = 35
+                    continue
+                if yych <= 0xB8:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xBA:
+                    yystate = 35
+                    continue
+                if yych <= 0xBF:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 375:
+                yych = yyinput[yycursor]
+                if yych <= 0x7F:
+                    yystate = 35
+                    continue
+                if yych <= 0x93:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 376:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10410,7 +10706,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 366:
+            case 377:
                 yych = yyinput[yycursor]
                 if yych <= 0x92:
                     yystate = 35
@@ -10421,21 +10717,33 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 367:
+            case 378:
                 yych = yyinput[yycursor]
-                if yych <= 0x9F:
+                if yych <= 0xA2:
+                    if yych <= 0x9F:
+                        yystate = 35
+                        continue
+                    if yych <= 0xA1:
+                        yycursor += 1
+                        yystate = 3
+                        continue
                     yystate = 35
                     continue
-                if yych == 0xA2:
+                else:
+                    if yych <= 0xA3:
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xB1:
+                        yystate = 35
+                        continue
+                    if yych <= 0xB6:
+                        yycursor += 1
+                        yystate = 3
+                        continue
                     yystate = 35
                     continue
-                if yych <= 0xA3:
-                    yycursor += 1
-                    yystate = 3
-                    continue
-                yystate = 35
-                continue
-            case 368:
+            case 379:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10444,9 +10752,13 @@ def lex(yyinput):
                     yycursor += 1
                     yystate = 3
                     continue
+                if yych == 0xBF:
+                    yycursor += 1
+                    yystate = 3
+                    continue
                 yystate = 35
                 continue
-            case 369:
+            case 380:
                 yych = yyinput[yycursor]
                 if yych <= 0xB4:
                     if yych <= 0xAF:
@@ -10468,7 +10780,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 370:
+            case 381:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10483,7 +10795,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 371:
+            case 382:
                 yych = yyinput[yycursor]
                 if yych <= 0x95:
                     if yych <= 0x8F:
@@ -10517,7 +10829,7 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 372:
+            case 383:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10528,7 +10840,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 373:
+            case 384:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10546,7 +10858,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 374:
+            case 385:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10564,7 +10876,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 375:
+            case 386:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10578,7 +10890,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 376:
+            case 387:
                 yych = yyinput[yycursor]
                 if yych <= 0xA6:
                     if yych <= 0x9F:
@@ -10631,7 +10943,7 @@ def lex(yyinput):
                                 continue
                             yystate = 35
                             continue
-            case 377:
+            case 388:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10645,7 +10957,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 378:
+            case 389:
                 yych = yyinput[yycursor]
                 if yych <= 0x94:
                     if yych <= 0x86:
@@ -10690,7 +11002,7 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 379:
+            case 390:
                 yych = yyinput[yycursor]
                 if yych <= 0x86:
                     if yych <= 0x7F:
@@ -10720,7 +11032,7 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 380:
+            case 391:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10738,7 +11050,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 381:
+            case 392:
                 yych = yyinput[yycursor]
                 if yych <= 0x9A:
                     if yych == 0x80:
@@ -10769,7 +11081,7 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 382:
+            case 393:
                 yych = yyinput[yycursor]
                 if yych <= 0x95:
                     if yych <= 0x7F:
@@ -10791,7 +11103,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 383:
+            case 394:
                 yych = yyinput[yycursor]
                 if yych <= 0x8F:
                     if yych <= 0x7F:
@@ -10813,7 +11125,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 384:
+            case 395:
                 yych = yyinput[yycursor]
                 if yych <= 0x89:
                     if yych <= 0x7F:
@@ -10835,7 +11147,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 385:
+            case 396:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10849,7 +11161,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 386:
+            case 397:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10867,7 +11179,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 387:
+            case 398:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10885,7 +11197,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 388:
+            case 399:
                 yych = yyinput[yycursor]
                 if yych == 0x8E:
                     yycursor += 1
@@ -10893,7 +11205,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 389:
+            case 400:
                 yych = yyinput[yycursor]
                 if yych <= 0x8F:
                     yystate = 35
@@ -10904,7 +11216,67 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 390:
+            case 401:
+                yych = yyinput[yycursor]
+                if yych <= 0x8F:
+                    yystate = 35
+                    continue
+                if yych <= 0xAD:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                if yych == 0xB0:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 402:
+                yych = yyinput[yycursor]
+                if yych <= 0xA5:
+                    if yych <= 0x9F:
+                        if yych <= 0x7F:
+                            yystate = 35
+                            continue
+                        if yych <= 0x9E:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        yystate = 35
+                        continue
+                    else:
+                        if yych == 0xA3:
+                            yystate = 35
+                            continue
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                else:
+                    if yych <= 0xAF:
+                        if yych <= 0xA6:
+                            yystate = 35
+                            continue
+                        if yych <= 0xAD:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        yystate = 35
+                        continue
+                    else:
+                        if yych <= 0xB4:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xBD:
+                            yystate = 35
+                            continue
+                        if yych <= 0xBF:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        yystate = 35
+                        continue
+            case 403:
                 yych = yyinput[yycursor]
                 if yych <= 0xAB:
                     if yych <= 0x9F:
@@ -10934,7 +11306,7 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 391:
+            case 404:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10945,7 +11317,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 392:
+            case 405:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -10960,7 +11332,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 393:
+            case 406:
                 yych = yyinput[yycursor]
                 if yych <= 0xA6:
                     if yych <= 0x9F:
@@ -11019,7 +11391,7 @@ def lex(yyinput):
                                 continue
                             yystate = 35
                             continue
-            case 394:
+            case 407:
                 yych = yyinput[yycursor]
                 match yych:
                     case 0x82|0x87|0x89|0x8B|0x8D|0x8E|0x8F|0x91|0x92|0x94|0x97|0x99|0x9B|0x9D|0x9F|0xA1|0xA2|0xA4|0xA7|0xA8|0xA9|0xAA|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB4|0xB5|0xB6|0xB7|0xB9|0xBA|0xBB|0xBC|0xBE:
@@ -11029,7 +11401,7 @@ def lex(yyinput):
                     case _:
                         yystate = 35
                         continue
-            case 395:
+            case 408:
                 yych = yyinput[yycursor]
                 if yych <= 0xA0:
                     if yych <= 0x89:
@@ -11067,7 +11439,7 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 396:
+            case 409:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -11078,36 +11450,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 397:
-                yych = yyinput[yycursor]
-                if yych <= 0x7F:
-                    yystate = 35
-                    continue
-                if yych <= 0xB9:
-                    yycursor += 1
-                    yystate = 3
-                    continue
-                yystate = 35
-                continue
-            case 398:
-                yych = yyinput[yycursor]
-                if yych <= 0x7F:
-                    yystate = 35
-                    continue
-                if yych <= 0xA1:
-                    yycursor += 1
-                    yystate = 3
-                    continue
-                if yych <= 0xAF:
-                    yystate = 35
-                    continue
-                if yych <= 0xBF:
-                    yycursor += 1
-                    yystate = 3
-                    continue
-                yystate = 35
-                continue
-            case 399:
+            case 410:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -11125,18 +11468,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 400:
-                yych = yyinput[yycursor]
-                if yych <= 0x7F:
-                    yystate = 35
-                    continue
-                if yych <= 0x9D:
-                    yycursor += 1
-                    yystate = 3
-                    continue
-                yystate = 35
-                continue
-            case 401:
+            case 411:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -11154,7 +11486,18 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 402:
+            case 412:
+                yych = yyinput[yycursor]
+                if yych <= 0x7F:
+                    yystate = 35
+                    continue
+                if yych <= 0xB9:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 413:
                 yych = yyinput[yycursor]
                 if yych == 0xBD:
                     yycursor += 1
@@ -11162,7 +11505,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 403:
+            case 414:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -11177,7 +11520,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 404:
+            case 415:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -11195,7 +11538,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 405:
+            case 416:
                 yych = yyinput[yycursor]
                 if yych <= 0x9F:
                     if yych <= 0x7F:
@@ -11221,7 +11564,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 406:
+            case 417:
                 yych = yyinput[yycursor]
                 if yych <= 0x94:
                     if yych <= 0x84:
@@ -11270,7 +11613,7 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 407:
+            case 418:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -11284,7 +11627,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 408:
+            case 419:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -11302,7 +11645,29 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 409:
+            case 420:
+                yych = yyinput[yycursor]
+                if yych <= 0xA8:
+                    if yych <= 0x7F:
+                        yystate = 35
+                        continue
+                    if yych <= 0xA5:
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                    yystate = 35
+                    continue
+                else:
+                    if yych == 0xAE:
+                        yystate = 35
+                        continue
+                    if yych <= 0xBF:
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                    yystate = 35
+                    continue
+            case 421:
                 yych = yyinput[yycursor]
                 if yych <= 0xAA:
                     if yych <= 0x7F:
@@ -11328,9 +11693,16 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 410:
+            case 422:
                 yych = yyinput[yycursor]
-                if yych <= 0xBC:
+                if yych <= 0x81:
+                    yystate = 35
+                    continue
+                if yych <= 0x87:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xB9:
                     yystate = 35
                     continue
                 if yych <= 0xBF:
@@ -11339,7 +11711,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 411:
+            case 423:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -11357,7 +11729,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 412:
+            case 424:
                 yych = yyinput[yycursor]
                 if yych <= 0xA5:
                     if yych <= 0x7F:
@@ -11380,7 +11752,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 413:
+            case 425:
                 yych = yyinput[yycursor]
                 if yych <= 0x8F:
                     if yych == 0x82:
@@ -11403,7 +11775,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 414:
+            case 426:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -11417,7 +11789,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 415:
+            case 427:
                 yych = yyinput[yycursor]
                 if yych <= 0x8F:
                     if yych <= 0x83:
@@ -11440,7 +11812,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 416:
+            case 428:
                 yych = yyinput[yycursor]
                 if yych <= 0x8C:
                     if yych <= 0x7F:
@@ -11471,7 +11843,7 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 417:
+            case 429:
                 yych = yyinput[yycursor]
                 if yych <= 0x92:
                     if yych <= 0x7F:
@@ -11497,7 +11869,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 418:
+            case 430:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -11508,7 +11880,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 419:
+            case 431:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -11526,7 +11898,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 420:
+            case 432:
                 yych = yyinput[yycursor]
                 if yych <= 0xA8:
                     if yych <= 0x8C:
@@ -11582,7 +11954,7 @@ def lex(yyinput):
                                 continue
                             yystate = 35
                             continue
-            case 421:
+            case 433:
                 yych = yyinput[yycursor]
                 if yych <= 0x90:
                     if yych <= 0x88:
@@ -11643,7 +12015,88 @@ def lex(yyinput):
                                 continue
                             yystate = 35
                             continue
-            case 422:
+            case 434:
+                yych = yyinput[yycursor]
+                if yych <= 0x8D:
+                    if yych <= 0x89:
+                        if yych <= 0x7F:
+                            yystate = 35
+                            continue
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0x8B:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        yystate = 35
+                        continue
+                else:
+                    if yych <= 0xB5:
+                        if yych == 0x8F:
+                            yystate = 35
+                            continue
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB6:
+                            yystate = 35
+                            continue
+                        if yych <= 0xBF:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        yystate = 35
+                        continue
+            case 435:
+                yych = yyinput[yycursor]
+                if yych <= 0x85:
+                    if yych <= 0x81:
+                        if yych == 0x80:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        yystate = 35
+                        continue
+                    else:
+                        if yych <= 0x82:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x84:
+                            yystate = 35
+                            continue
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                else:
+                    if yych <= 0x8B:
+                        if yych <= 0x86:
+                            yystate = 35
+                            continue
+                        if yych <= 0x8A:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        yystate = 35
+                        continue
+                    else:
+                        if yych <= 0x93:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xA0:
+                            yystate = 35
+                            continue
+                        if yych <= 0xA2:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        yystate = 35
+                        continue
+            case 436:
                 yych = yyinput[yycursor]
                 if yych <= 0x8F:
                     if yych <= 0x7F:
@@ -11669,7 +12122,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 423:
+            case 437:
                 yych = yyinput[yycursor]
                 if yych <= 0x86:
                     if yych <= 0x7F:
@@ -11695,7 +12148,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 424:
+            case 438:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -11713,7 +12166,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 425:
+            case 439:
                 yych = yyinput[yycursor]
                 if yych == 0x80:
                     yycursor += 1
@@ -11728,7 +12181,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 426:
+            case 440:
                 yych = yyinput[yycursor]
                 if yych <= 0x83:
                     if yych == 0x80:
@@ -11751,7 +12204,25 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 427:
+            case 441:
+                yych = yyinput[yycursor]
+                if yych <= 0x7F:
+                    yystate = 35
+                    continue
+                if yych <= 0x89:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8F:
+                    yystate = 35
+                    continue
+                if yych <= 0xA3:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 442:
                 yych = yyinput[yycursor]
                 if yych <= 0x9C:
                     if yych <= 0x7F:
@@ -11777,7 +12248,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 428:
+            case 443:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -11792,7 +12263,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 429:
+            case 444:
                 yych = yyinput[yycursor]
                 if yych <= 0x94:
                     if yych <= 0x88:
@@ -11844,7 +12315,7 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 430:
+            case 445:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -11862,7 +12333,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 431:
+            case 446:
                 yych = yyinput[yycursor]
                 if yych <= 0x99:
                     if yych <= 0x7F:
@@ -11884,7 +12355,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 432:
+            case 447:
                 yych = yyinput[yycursor]
                 if yych == 0x87:
                     yycursor += 1
@@ -11899,7 +12370,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 433:
+            case 448:
                 yych = yyinput[yycursor]
                 if yych <= 0x9C:
                     if yych <= 0x7F:
@@ -11925,7 +12396,36 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 434:
+            case 449:
+                yych = yyinput[yycursor]
+                if yych <= 0x9F:
+                    yystate = 35
+                    continue
+                if yych <= 0xA7:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 450:
+                yych = yyinput[yycursor]
+                if yych <= 0x7F:
+                    yystate = 35
+                    continue
+                if yych <= 0xA0:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 35
+                    continue
+                if yych <= 0xB9:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 451:
                 yych = yyinput[yycursor]
                 if yych <= 0x89:
                     if yych <= 0x7F:
@@ -11947,7 +12447,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 435:
+            case 452:
                 yych = yyinput[yycursor]
                 if yych <= 0x8F:
                     if yych == 0x80:
@@ -11970,7 +12470,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 436:
+            case 453:
                 yych = yyinput[yycursor]
                 if yych <= 0x91:
                     if yych <= 0x7F:
@@ -11992,7 +12492,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 437:
+            case 454:
                 yych = yyinput[yycursor]
                 if yych <= 0xB6:
                     if yych <= 0x87:
@@ -12030,7 +12530,7 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 438:
+            case 455:
                 yych = yyinput[yycursor]
                 if yych <= 0x9F:
                     if yych <= 0x87:
@@ -12068,37 +12568,67 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 439:
+            case 456:
                 yych = yyinput[yycursor]
-                if yych <= 0x91:
-                    if yych <= 0x7F:
-                        yystate = 35
-                        continue
-                    if yych == 0x8F:
-                        yystate = 35
-                        continue
-                    yycursor += 1
-                    yystate = 3
-                    continue
-                else:
-                    if yych <= 0x98:
-                        if yych <= 0x92:
+                if yych <= 0x92:
+                    if yych <= 0x8E:
+                        if yych <= 0x7F:
                             yystate = 35
                             continue
                         yycursor += 1
                         yystate = 3
                         continue
                     else:
-                        if yych <= 0x9F:
+                        if yych <= 0x8F:
                             yystate = 35
                             continue
-                        if yych <= 0xA9:
+                        if yych <= 0x91:
                             yycursor += 1
                             yystate = 3
                             continue
                         yystate = 35
                         continue
-            case 440:
+                else:
+                    if yych <= 0xA9:
+                        if yych <= 0x98:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x9F:
+                            yystate = 35
+                            continue
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xAF:
+                            yystate = 35
+                            continue
+                        if yych <= 0xBF:
+                            yycursor += 1
+                            yystate = 3
+                            continue
+                        yystate = 35
+                        continue
+            case 457:
+                yych = yyinput[yycursor]
+                if yych <= 0x7F:
+                    yystate = 35
+                    continue
+                if yych <= 0x9B:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 35
+                    continue
+                if yych <= 0xA9:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 458:
                 yych = yyinput[yycursor]
                 if yych <= 0x9F:
                     yystate = 35
@@ -12109,7 +12639,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 441:
+            case 459:
                 yych = yyinput[yycursor]
                 if yych <= 0x91:
                     if yych <= 0x7F:
@@ -12135,7 +12665,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 442:
+            case 460:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -12147,13 +12677,31 @@ def lex(yyinput):
                 if yych <= 0x8F:
                     yystate = 35
                     continue
-                if yych <= 0x99:
+                if yych <= 0x9A:
                     yycursor += 1
                     yystate = 3
                     continue
                 yystate = 35
                 continue
-            case 443:
+            case 461:
+                yych = yyinput[yycursor]
+                if yych <= 0x7F:
+                    yystate = 35
+                    continue
+                if yych <= 0x95:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 35
+                    continue
+                if yych <= 0xBF:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 462:
                 yych = yyinput[yycursor]
                 if yych <= 0x9F:
                     if yych <= 0x7F:
@@ -12179,7 +12727,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 444:
+            case 463:
                 yych = yyinput[yycursor]
                 if yych <= 0x8F:
                     if yych <= 0x7F:
@@ -12205,7 +12753,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 445:
+            case 464:
                 yych = yyinput[yycursor]
                 if yych <= 0x99:
                     if yych <= 0x7F:
@@ -12239,7 +12787,25 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 446:
+            case 465:
+                yych = yyinput[yycursor]
+                if yych <= 0x7F:
+                    yystate = 35
+                    continue
+                if yych <= 0xAC:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 35
+                    continue
+                if yych <= 0xB9:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 466:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -12257,7 +12823,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 447:
+            case 467:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -12275,7 +12841,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 448:
+            case 468:
                 yych = yyinput[yycursor]
                 if yych <= 0xA2:
                     if yych <= 0x9F:
@@ -12295,13 +12861,13 @@ def lex(yyinput):
                     if yych <= 0xAF:
                         yystate = 35
                         continue
-                    if yych <= 0xB1:
+                    if yych <= 0xB6:
                         yycursor += 1
                         yystate = 3
                         continue
                     yystate = 35
                     continue
-            case 449:
+            case 469:
                 yych = yyinput[yycursor]
                 if yych <= 0x8F:
                     if yych <= 0x7F:
@@ -12327,7 +12893,18 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 450:
+            case 470:
+                yych = yyinput[yycursor]
+                if yych <= 0xAF:
+                    yystate = 35
+                    continue
+                if yych <= 0xB9:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 471:
                 yych = yyinput[yycursor]
                 if yych <= 0xAC:
                     if yych <= 0xA4:
@@ -12353,7 +12930,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 451:
+            case 472:
                 yych = yyinput[yycursor]
                 if yych <= 0x84:
                     if yych <= 0x7F:
@@ -12379,7 +12956,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 452:
+            case 473:
                 yych = yyinput[yycursor]
                 if yych <= 0x81:
                     yystate = 35
@@ -12390,7 +12967,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 453:
+            case 474:
                 yych = yyinput[yycursor]
                 if yych <= 0x83:
                     if yych <= 0x7F:
@@ -12416,7 +12993,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 454:
+            case 475:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -12434,7 +13011,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 455:
+            case 476:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -12449,7 +13026,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 456:
+            case 477:
                 yych = yyinput[yycursor]
                 if yych <= 0x9A:
                     if yych == 0x84:
@@ -12468,7 +13045,7 @@ def lex(yyinput):
                         continue
                     yystate = 35
                     continue
-            case 457:
+            case 478:
                 yych = yyinput[yycursor]
                 if yych <= 0xA1:
                     if yych <= 0x87:
@@ -12517,7 +13094,7 @@ def lex(yyinput):
                             continue
                         yystate = 35
                         continue
-            case 458:
+            case 479:
                 yych = yyinput[yycursor]
                 if yych == 0x8F:
                     yycursor += 1
@@ -12525,7 +13102,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 459:
+            case 480:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -12543,7 +13120,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 460:
+            case 481:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -12558,7 +13135,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 461:
+            case 482:
                 yych = yyinput[yycursor]
                 if yych <= 0x8F:
                     yystate = 35
@@ -12569,7 +13146,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 462:
+            case 483:
                 yych = yyinput[yycursor]
                 if yych <= 0x8F:
                     yystate = 35
@@ -12580,7 +13157,44 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 463:
+            case 484:
+                yych = yyinput[yycursor]
+                if yych <= 0x8F:
+                    yystate = 35
+                    continue
+                if yych <= 0xBA:
+                    yycursor += 1
+                    yystate = 3
+                    continue
+                yystate = 35
+                continue
+            case 485:
+                yych = yyinput[yycursor]
+                if yych <= 0x9F:
+                    if yych <= 0x7F:
+                        yystate = 35
+                        continue
+                    if yych <= 0x9E:
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                    yystate = 35
+                    continue
+                else:
+                    if yych <= 0xB5:
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xBD:
+                        yystate = 35
+                        continue
+                    if yych <= 0xBF:
+                        yycursor += 1
+                        yystate = 3
+                        continue
+                    yystate = 35
+                    continue
+            case 486:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -12598,7 +13212,7 @@ def lex(yyinput):
                     continue
                 yystate = 35
                 continue
-            case 464:
+            case 487:
                 yych = yyinput[yycursor]
                 if yych <= 0x7F:
                     yystate = 35
@@ -12611,17 +13225,6 @@ def lex(yyinput):
                     yystate = 35
                     continue
                 if yych <= 0x99:
-                    yycursor += 1
-                    yystate = 3
-                    continue
-                yystate = 35
-                continue
-            case 465:
-                yych = yyinput[yycursor]
-                if yych <= 0xAF:
-                    yystate = 35
-                    continue
-                if yych <= 0xB9:
                     yycursor += 1
                     yystate = 3
                     continue

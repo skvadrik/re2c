@@ -192,6 +192,7 @@ enum Block {
 	Elbasan,
 	Caucasian_Albanian,
 	Vithkuqi,
+	Todhri,
 	Linear_A,
 	Latin_Extended_F,
 	Cypriot_Syllabary,
@@ -201,6 +202,7 @@ enum Block {
 	Hatran,
 	Phoenician,
 	Lydian,
+	Sidetic,
 	Meroitic_Hieroglyphs,
 	Meroitic_Cursive,
 	Kharoshthi,
@@ -214,6 +216,7 @@ enum Block {
 	Old_Turkic,
 	Old_Hungarian,
 	Hanifi_Rohingya,
+	Garay,
 	Rumi_Numeral_Symbols,
 	Yezidi,
 	Arabic_Extended_C,
@@ -233,12 +236,14 @@ enum Block {
 	Multani,
 	Khudawadi,
 	Grantha,
+	Tulu_Tigalari,
 	Newa,
 	Tirhuta,
 	Siddham,
 	Modi,
 	Mongolian_Supplement,
 	Takri,
+	Myanmar_Extended_C,
 	Ahom,
 	Dogra,
 	Warang_Citi,
@@ -249,10 +254,13 @@ enum Block {
 	Unified_Canadian_Aboriginal_Syllabics_Extended_A,
 	Pau_Cin_Hau,
 	Devanagari_Extended_A,
+	Sharada_Supplement,
+	Sunuwar,
 	Bhaiksuki,
 	Marchen,
 	Masaram_Gondi,
 	Gunjala_Gondi,
+	Tolong_Siki,
 	Makasar,
 	Kawi,
 	Lisu_Supplement,
@@ -263,19 +271,24 @@ enum Block {
 	Cypro_Minoan,
 	Egyptian_Hieroglyphs,
 	Egyptian_Hieroglyph_Format_Controls,
+	Egyptian_Hieroglyphs_Extended_A,
 	Anatolian_Hieroglyphs,
+	Gurung_Khema,
 	Bamum_Supplement,
 	Mro,
 	Tangsa,
 	Bassa_Vah,
 	Pahawh_Hmong,
+	Kirat_Rai,
 	Medefaidrin,
+	Beria_Erfe,
 	Miao,
 	Ideographic_Symbols_and_Punctuation,
 	Tangut,
 	Tangut_Components,
 	Khitan_Small_Script,
 	Tangut_Supplement,
+	Tangut_Components_Supplement,
 	Kana_Extended_B,
 	Kana_Supplement,
 	Kana_Extended_A,
@@ -283,6 +296,8 @@ enum Block {
 	Nushu,
 	Duployan,
 	Shorthand_Format_Controls,
+	Symbols_for_Legacy_Computing_Supplement,
+	Miscellaneous_Symbols_Supplement,
 	Znamenny_Musical_Notation,
 	Byzantine_Musical_Symbols,
 	Musical_Symbols,
@@ -300,6 +315,8 @@ enum Block {
 	Toto,
 	Wancho,
 	Nag_Mundari,
+	Ol_Onal,
+	Tai_Yo,
 	Ethiopic_Extended_B,
 	Mende_Kikakui,
 	Adlam,
@@ -331,6 +348,7 @@ enum Block {
 	CJK_Compatibility_Ideographs_Supplement,
 	CJK_Unified_Ideographs_Extension_G,
 	CJK_Unified_Ideographs_Extension_H,
+	CJK_Unified_Ideographs_Extension_J,
 	Tags,
 	Variation_Selectors_Supplement,
 	Supplementary_Private_Use_Area_A,
@@ -527,6 +545,7 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Elbasan: goto Elbasan;
 		case Caucasian_Albanian: goto Caucasian_Albanian;
 		case Vithkuqi: goto Vithkuqi;
+		case Todhri: goto Todhri;
 		case Linear_A: goto Linear_A;
 		case Latin_Extended_F: goto Latin_Extended_F;
 		case Cypriot_Syllabary: goto Cypriot_Syllabary;
@@ -536,6 +555,7 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Hatran: goto Hatran;
 		case Phoenician: goto Phoenician;
 		case Lydian: goto Lydian;
+		case Sidetic: goto Sidetic;
 		case Meroitic_Hieroglyphs: goto Meroitic_Hieroglyphs;
 		case Meroitic_Cursive: goto Meroitic_Cursive;
 		case Kharoshthi: goto Kharoshthi;
@@ -549,6 +569,7 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Old_Turkic: goto Old_Turkic;
 		case Old_Hungarian: goto Old_Hungarian;
 		case Hanifi_Rohingya: goto Hanifi_Rohingya;
+		case Garay: goto Garay;
 		case Rumi_Numeral_Symbols: goto Rumi_Numeral_Symbols;
 		case Yezidi: goto Yezidi;
 		case Arabic_Extended_C: goto Arabic_Extended_C;
@@ -568,12 +589,14 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Multani: goto Multani;
 		case Khudawadi: goto Khudawadi;
 		case Grantha: goto Grantha;
+		case Tulu_Tigalari: goto Tulu_Tigalari;
 		case Newa: goto Newa;
 		case Tirhuta: goto Tirhuta;
 		case Siddham: goto Siddham;
 		case Modi: goto Modi;
 		case Mongolian_Supplement: goto Mongolian_Supplement;
 		case Takri: goto Takri;
+		case Myanmar_Extended_C: goto Myanmar_Extended_C;
 		case Ahom: goto Ahom;
 		case Dogra: goto Dogra;
 		case Warang_Citi: goto Warang_Citi;
@@ -584,10 +607,13 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Unified_Canadian_Aboriginal_Syllabics_Extended_A: goto Unified_Canadian_Aboriginal_Syllabics_Extended_A;
 		case Pau_Cin_Hau: goto Pau_Cin_Hau;
 		case Devanagari_Extended_A: goto Devanagari_Extended_A;
+		case Sharada_Supplement: goto Sharada_Supplement;
+		case Sunuwar: goto Sunuwar;
 		case Bhaiksuki: goto Bhaiksuki;
 		case Marchen: goto Marchen;
 		case Masaram_Gondi: goto Masaram_Gondi;
 		case Gunjala_Gondi: goto Gunjala_Gondi;
+		case Tolong_Siki: goto Tolong_Siki;
 		case Makasar: goto Makasar;
 		case Kawi: goto Kawi;
 		case Lisu_Supplement: goto Lisu_Supplement;
@@ -598,19 +624,24 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Cypro_Minoan: goto Cypro_Minoan;
 		case Egyptian_Hieroglyphs: goto Egyptian_Hieroglyphs;
 		case Egyptian_Hieroglyph_Format_Controls: goto Egyptian_Hieroglyph_Format_Controls;
+		case Egyptian_Hieroglyphs_Extended_A: goto Egyptian_Hieroglyphs_Extended_A;
 		case Anatolian_Hieroglyphs: goto Anatolian_Hieroglyphs;
+		case Gurung_Khema: goto Gurung_Khema;
 		case Bamum_Supplement: goto Bamum_Supplement;
 		case Mro: goto Mro;
 		case Tangsa: goto Tangsa;
 		case Bassa_Vah: goto Bassa_Vah;
 		case Pahawh_Hmong: goto Pahawh_Hmong;
+		case Kirat_Rai: goto Kirat_Rai;
 		case Medefaidrin: goto Medefaidrin;
+		case Beria_Erfe: goto Beria_Erfe;
 		case Miao: goto Miao;
 		case Ideographic_Symbols_and_Punctuation: goto Ideographic_Symbols_and_Punctuation;
 		case Tangut: goto Tangut;
 		case Tangut_Components: goto Tangut_Components;
 		case Khitan_Small_Script: goto Khitan_Small_Script;
 		case Tangut_Supplement: goto Tangut_Supplement;
+		case Tangut_Components_Supplement: goto Tangut_Components_Supplement;
 		case Kana_Extended_B: goto Kana_Extended_B;
 		case Kana_Supplement: goto Kana_Supplement;
 		case Kana_Extended_A: goto Kana_Extended_A;
@@ -618,6 +649,8 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Nushu: goto Nushu;
 		case Duployan: goto Duployan;
 		case Shorthand_Format_Controls: goto Shorthand_Format_Controls;
+		case Symbols_for_Legacy_Computing_Supplement: goto Symbols_for_Legacy_Computing_Supplement;
+		case Miscellaneous_Symbols_Supplement: goto Miscellaneous_Symbols_Supplement;
 		case Znamenny_Musical_Notation: goto Znamenny_Musical_Notation;
 		case Byzantine_Musical_Symbols: goto Byzantine_Musical_Symbols;
 		case Musical_Symbols: goto Musical_Symbols;
@@ -635,6 +668,8 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case Toto: goto Toto;
 		case Wancho: goto Wancho;
 		case Nag_Mundari: goto Nag_Mundari;
+		case Ol_Onal: goto Ol_Onal;
+		case Tai_Yo: goto Tai_Yo;
 		case Ethiopic_Extended_B: goto Ethiopic_Extended_B;
 		case Mende_Kikakui: goto Mende_Kikakui;
 		case Adlam: goto Adlam;
@@ -666,36 +701,37 @@ Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {
 		case CJK_Compatibility_Ideographs_Supplement: goto CJK_Compatibility_Ideographs_Supplement;
 		case CJK_Unified_Ideographs_Extension_G: goto CJK_Unified_Ideographs_Extension_G;
 		case CJK_Unified_Ideographs_Extension_H: goto CJK_Unified_Ideographs_Extension_H;
+		case CJK_Unified_Ideographs_Extension_J: goto CJK_Unified_Ideographs_Extension_J;
 		case Tags: goto Tags;
 		case Variation_Selectors_Supplement: goto Variation_Selectors_Supplement;
 		case Supplementary_Private_Use_Area_A: goto Supplementary_Private_Use_Area_A;
 		case Supplementary_Private_Use_Area_B: goto Supplementary_Private_Use_Area_B;
 		default: return Error;
 	}
-#line 1002 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1056 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Basic_Latin:
 	
-#line 680 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 716 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych >= 0x0080) goto yy1;
 	++YYCURSOR;
-#line 1006 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1060 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Basic_Latin; }
-#line 688 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 724 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy1:
 	++YYCURSOR;
-#line 1007 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1061 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Basic_Latin; else return Error; }
-#line 693 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 729 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1008 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1062 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Latin_1_Supplement:
 	
-#line 699 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 735 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -703,20 +739,20 @@ Latin_1_Supplement:
 	if (yych <= 0x00FF) goto yy4;
 yy3:
 	++YYCURSOR;
-#line 1013 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1067 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Latin_1_Supplement; else return Error; }
-#line 709 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 745 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy4:
 	++YYCURSOR;
-#line 1012 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1066 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Latin_1_Supplement; }
-#line 714 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 750 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1014 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1068 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Latin_Extended_A:
 	
-#line 720 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 756 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -724,20 +760,20 @@ Latin_Extended_A:
 	if (yych <= 0x017F) goto yy7;
 yy6:
 	++YYCURSOR;
-#line 1019 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1073 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Latin_Extended_A; else return Error; }
-#line 730 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 766 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy7:
 	++YYCURSOR;
-#line 1018 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1072 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Latin_Extended_A; }
-#line 735 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 771 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1020 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1074 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Latin_Extended_B:
 	
-#line 741 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 777 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -745,20 +781,20 @@ Latin_Extended_B:
 	if (yych <= 0x024F) goto yy10;
 yy9:
 	++YYCURSOR;
-#line 1025 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1079 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Latin_Extended_B; else return Error; }
-#line 751 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 787 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy10:
 	++YYCURSOR;
-#line 1024 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1078 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Latin_Extended_B; }
-#line 756 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 792 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1026 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1080 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 IPA_Extensions:
 	
-#line 762 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 798 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -766,20 +802,20 @@ IPA_Extensions:
 	if (yych <= 0x02AF) goto yy13;
 yy12:
 	++YYCURSOR;
-#line 1031 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1085 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return IPA_Extensions; else return Error; }
-#line 772 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 808 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy13:
 	++YYCURSOR;
-#line 1030 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1084 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto IPA_Extensions; }
-#line 777 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 813 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1032 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1086 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Spacing_Modifier_Letters:
 	
-#line 783 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 819 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -787,20 +823,20 @@ Spacing_Modifier_Letters:
 	if (yych <= 0x02FF) goto yy16;
 yy15:
 	++YYCURSOR;
-#line 1037 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1091 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Spacing_Modifier_Letters; else return Error; }
-#line 793 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 829 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy16:
 	++YYCURSOR;
-#line 1036 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1090 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Spacing_Modifier_Letters; }
-#line 798 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 834 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1038 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1092 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Combining_Diacritical_Marks:
 	
-#line 804 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 840 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -808,20 +844,20 @@ Combining_Diacritical_Marks:
 	if (yych <= 0x036F) goto yy19;
 yy18:
 	++YYCURSOR;
-#line 1043 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1097 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Combining_Diacritical_Marks; else return Error; }
-#line 814 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 850 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy19:
 	++YYCURSOR;
-#line 1042 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1096 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Combining_Diacritical_Marks; }
-#line 819 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 855 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1044 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1098 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Greek_and_Coptic:
 	
-#line 825 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 861 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -829,20 +865,20 @@ Greek_and_Coptic:
 	if (yych <= 0x03FF) goto yy22;
 yy21:
 	++YYCURSOR;
-#line 1049 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1103 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Greek_and_Coptic; else return Error; }
-#line 835 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 871 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy22:
 	++YYCURSOR;
-#line 1048 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1102 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Greek_and_Coptic; }
-#line 840 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 876 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1050 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1104 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Cyrillic:
 	
-#line 846 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 882 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -850,20 +886,20 @@ Cyrillic:
 	if (yych <= 0x04FF) goto yy25;
 yy24:
 	++YYCURSOR;
-#line 1055 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1109 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cyrillic; else return Error; }
-#line 856 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 892 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy25:
 	++YYCURSOR;
-#line 1054 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1108 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Cyrillic; }
-#line 861 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 897 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1056 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1110 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Cyrillic_Supplement:
 	
-#line 867 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 903 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -871,20 +907,20 @@ Cyrillic_Supplement:
 	if (yych <= 0x052F) goto yy28;
 yy27:
 	++YYCURSOR;
-#line 1061 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1115 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cyrillic_Supplement; else return Error; }
-#line 877 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 913 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy28:
 	++YYCURSOR;
-#line 1060 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1114 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Cyrillic_Supplement; }
-#line 882 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 918 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1062 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1116 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Armenian:
 	
-#line 888 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 924 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -892,20 +928,20 @@ Armenian:
 	if (yych <= 0x058F) goto yy31;
 yy30:
 	++YYCURSOR;
-#line 1067 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1121 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Armenian; else return Error; }
-#line 898 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 934 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy31:
 	++YYCURSOR;
-#line 1066 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1120 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Armenian; }
-#line 903 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 939 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1068 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1122 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Hebrew:
 	
-#line 909 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 945 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -913,20 +949,20 @@ Hebrew:
 	if (yych <= 0x05FF) goto yy34;
 yy33:
 	++YYCURSOR;
-#line 1073 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1127 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hebrew; else return Error; }
-#line 919 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 955 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy34:
 	++YYCURSOR;
-#line 1072 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1126 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Hebrew; }
-#line 924 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 960 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1074 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1128 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Arabic:
 	
-#line 930 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 966 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -934,20 +970,20 @@ Arabic:
 	if (yych <= 0x06FF) goto yy37;
 yy36:
 	++YYCURSOR;
-#line 1079 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1133 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Arabic; else return Error; }
-#line 940 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 976 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy37:
 	++YYCURSOR;
-#line 1078 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1132 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Arabic; }
-#line 945 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 981 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1080 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1134 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Syriac:
 	
-#line 951 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 987 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -955,20 +991,20 @@ Syriac:
 	if (yych <= 0x074F) goto yy40;
 yy39:
 	++YYCURSOR;
-#line 1085 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1139 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Syriac; else return Error; }
-#line 961 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 997 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy40:
 	++YYCURSOR;
-#line 1084 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1138 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Syriac; }
-#line 966 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1002 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1086 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1140 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Arabic_Supplement:
 	
-#line 972 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1008 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -976,20 +1012,20 @@ Arabic_Supplement:
 	if (yych <= 0x077F) goto yy43;
 yy42:
 	++YYCURSOR;
-#line 1091 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1145 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Arabic_Supplement; else return Error; }
-#line 982 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1018 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy43:
 	++YYCURSOR;
-#line 1090 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1144 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Arabic_Supplement; }
-#line 987 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1023 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1092 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1146 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Thaana:
 	
-#line 993 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1029 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -997,20 +1033,20 @@ Thaana:
 	if (yych <= 0x07BF) goto yy46;
 yy45:
 	++YYCURSOR;
-#line 1097 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1151 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Thaana; else return Error; }
-#line 1003 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1039 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy46:
 	++YYCURSOR;
-#line 1096 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1150 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Thaana; }
-#line 1008 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1044 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1098 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1152 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 NKo:
 	
-#line 1014 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1050 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1018,20 +1054,20 @@ NKo:
 	if (yych <= 0x07FF) goto yy49;
 yy48:
 	++YYCURSOR;
-#line 1103 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1157 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return NKo; else return Error; }
-#line 1024 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1060 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy49:
 	++YYCURSOR;
-#line 1102 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1156 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto NKo; }
-#line 1029 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1065 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1104 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1158 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Samaritan:
 	
-#line 1035 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1071 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1039,20 +1075,20 @@ Samaritan:
 	if (yych <= 0x083F) goto yy52;
 yy51:
 	++YYCURSOR;
-#line 1109 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1163 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Samaritan; else return Error; }
-#line 1045 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1081 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy52:
 	++YYCURSOR;
-#line 1108 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1162 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Samaritan; }
-#line 1050 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1086 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1110 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1164 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Mandaic:
 	
-#line 1056 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1092 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1060,20 +1096,20 @@ Mandaic:
 	if (yych <= 0x085F) goto yy55;
 yy54:
 	++YYCURSOR;
-#line 1115 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1169 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Mandaic; else return Error; }
-#line 1066 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1102 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy55:
 	++YYCURSOR;
-#line 1114 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1168 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Mandaic; }
-#line 1071 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1107 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1116 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1170 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Syriac_Supplement:
 	
-#line 1077 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1113 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1081,20 +1117,20 @@ Syriac_Supplement:
 	if (yych <= 0x086F) goto yy58;
 yy57:
 	++YYCURSOR;
-#line 1121 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1175 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Syriac_Supplement; else return Error; }
-#line 1087 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1123 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy58:
 	++YYCURSOR;
-#line 1120 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1174 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Syriac_Supplement; }
-#line 1092 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1128 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1122 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1176 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Arabic_Extended_B:
 	
-#line 1098 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1134 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1102,20 +1138,20 @@ Arabic_Extended_B:
 	if (yych <= 0x089F) goto yy61;
 yy60:
 	++YYCURSOR;
-#line 1127 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1181 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Arabic_Extended_B; else return Error; }
-#line 1108 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1144 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy61:
 	++YYCURSOR;
-#line 1126 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1180 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Arabic_Extended_B; }
-#line 1113 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1149 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1128 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1182 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Arabic_Extended_A:
 	
-#line 1119 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1155 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1123,20 +1159,20 @@ Arabic_Extended_A:
 	if (yych <= 0x08FF) goto yy64;
 yy63:
 	++YYCURSOR;
-#line 1133 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1187 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Arabic_Extended_A; else return Error; }
-#line 1129 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1165 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy64:
 	++YYCURSOR;
-#line 1132 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1186 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Arabic_Extended_A; }
-#line 1134 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1170 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1134 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1188 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Devanagari:
 	
-#line 1140 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1176 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1144,20 +1180,20 @@ Devanagari:
 	if (yych <= 0x097F) goto yy67;
 yy66:
 	++YYCURSOR;
-#line 1139 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1193 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Devanagari; else return Error; }
-#line 1150 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1186 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy67:
 	++YYCURSOR;
-#line 1138 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1192 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Devanagari; }
-#line 1155 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1191 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1140 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1194 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Bengali:
 	
-#line 1161 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1197 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1165,20 +1201,20 @@ Bengali:
 	if (yych <= 0x09FF) goto yy70;
 yy69:
 	++YYCURSOR;
-#line 1145 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1199 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Bengali; else return Error; }
-#line 1171 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1207 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy70:
 	++YYCURSOR;
-#line 1144 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1198 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Bengali; }
-#line 1176 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1212 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1146 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1200 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Gurmukhi:
 	
-#line 1182 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1218 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1186,20 +1222,20 @@ Gurmukhi:
 	if (yych <= 0x0A7F) goto yy73;
 yy72:
 	++YYCURSOR;
-#line 1151 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1205 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Gurmukhi; else return Error; }
-#line 1192 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1228 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy73:
 	++YYCURSOR;
-#line 1150 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1204 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Gurmukhi; }
-#line 1197 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1233 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1152 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1206 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Gujarati:
 	
-#line 1203 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1239 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1207,20 +1243,20 @@ Gujarati:
 	if (yych <= 0x0AFF) goto yy76;
 yy75:
 	++YYCURSOR;
-#line 1157 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1211 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Gujarati; else return Error; }
-#line 1213 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1249 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy76:
 	++YYCURSOR;
-#line 1156 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1210 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Gujarati; }
-#line 1218 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1254 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1158 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1212 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Oriya:
 	
-#line 1224 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1260 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1228,20 +1264,20 @@ Oriya:
 	if (yych <= 0x0B7F) goto yy79;
 yy78:
 	++YYCURSOR;
-#line 1163 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1217 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Oriya; else return Error; }
-#line 1234 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1270 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy79:
 	++YYCURSOR;
-#line 1162 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1216 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Oriya; }
-#line 1239 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1275 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1164 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1218 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Tamil:
 	
-#line 1245 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1281 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1249,20 +1285,20 @@ Tamil:
 	if (yych <= 0x0BFF) goto yy82;
 yy81:
 	++YYCURSOR;
-#line 1169 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1223 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tamil; else return Error; }
-#line 1255 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1291 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy82:
 	++YYCURSOR;
-#line 1168 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1222 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Tamil; }
-#line 1260 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1296 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1170 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1224 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Telugu:
 	
-#line 1266 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1302 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1270,20 +1306,20 @@ Telugu:
 	if (yych <= 0x0C7F) goto yy85;
 yy84:
 	++YYCURSOR;
-#line 1175 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1229 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Telugu; else return Error; }
-#line 1276 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1312 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy85:
 	++YYCURSOR;
-#line 1174 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1228 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Telugu; }
-#line 1281 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1317 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1176 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1230 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Kannada:
 	
-#line 1287 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1323 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1291,20 +1327,20 @@ Kannada:
 	if (yych <= 0x0CFF) goto yy88;
 yy87:
 	++YYCURSOR;
-#line 1181 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1235 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Kannada; else return Error; }
-#line 1297 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1333 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy88:
 	++YYCURSOR;
-#line 1180 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1234 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Kannada; }
-#line 1302 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1338 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1182 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1236 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Malayalam:
 	
-#line 1308 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1344 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1312,20 +1348,20 @@ Malayalam:
 	if (yych <= 0x0D7F) goto yy91;
 yy90:
 	++YYCURSOR;
-#line 1187 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1241 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Malayalam; else return Error; }
-#line 1318 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1354 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy91:
 	++YYCURSOR;
-#line 1186 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1240 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Malayalam; }
-#line 1323 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1359 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1188 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1242 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Sinhala:
 	
-#line 1329 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1365 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1333,20 +1369,20 @@ Sinhala:
 	if (yych <= 0x0DFF) goto yy94;
 yy93:
 	++YYCURSOR;
-#line 1193 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1247 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Sinhala; else return Error; }
-#line 1339 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1375 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy94:
 	++YYCURSOR;
-#line 1192 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1246 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Sinhala; }
-#line 1344 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1380 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1194 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1248 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Thai:
 	
-#line 1350 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1386 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1354,20 +1390,20 @@ Thai:
 	if (yych <= 0x0E7F) goto yy97;
 yy96:
 	++YYCURSOR;
-#line 1199 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1253 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Thai; else return Error; }
-#line 1360 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1396 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy97:
 	++YYCURSOR;
-#line 1198 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1252 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Thai; }
-#line 1365 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1401 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1200 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1254 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Lao:
 	
-#line 1371 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1407 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1375,20 +1411,20 @@ Lao:
 	if (yych <= 0x0EFF) goto yy100;
 yy99:
 	++YYCURSOR;
-#line 1205 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1259 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Lao; else return Error; }
-#line 1381 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1417 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy100:
 	++YYCURSOR;
-#line 1204 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1258 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Lao; }
-#line 1386 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1422 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1206 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1260 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Tibetan:
 	
-#line 1392 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1428 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1396,20 +1432,20 @@ Tibetan:
 	if (yych <= 0x0FFF) goto yy103;
 yy102:
 	++YYCURSOR;
-#line 1211 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1265 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tibetan; else return Error; }
-#line 1402 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1438 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy103:
 	++YYCURSOR;
-#line 1210 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1264 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Tibetan; }
-#line 1407 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1443 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1212 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1266 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Myanmar:
 	
-#line 1413 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1449 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1417,20 +1453,20 @@ Myanmar:
 	if (yych <= 0x109F) goto yy106;
 yy105:
 	++YYCURSOR;
-#line 1217 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1271 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Myanmar; else return Error; }
-#line 1423 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1459 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy106:
 	++YYCURSOR;
-#line 1216 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1270 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Myanmar; }
-#line 1428 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1464 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1218 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1272 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Georgian:
 	
-#line 1434 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1470 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1438,20 +1474,20 @@ Georgian:
 	if (yych <= 0x10FF) goto yy109;
 yy108:
 	++YYCURSOR;
-#line 1223 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1277 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Georgian; else return Error; }
-#line 1444 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1480 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy109:
 	++YYCURSOR;
-#line 1222 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1276 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Georgian; }
-#line 1449 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1485 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1224 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1278 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Hangul_Jamo:
 	
-#line 1455 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1491 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1459,20 +1495,20 @@ Hangul_Jamo:
 	if (yych <= 0x11FF) goto yy112;
 yy111:
 	++YYCURSOR;
-#line 1229 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1283 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hangul_Jamo; else return Error; }
-#line 1465 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1501 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy112:
 	++YYCURSOR;
-#line 1228 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1282 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Hangul_Jamo; }
-#line 1470 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1506 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1230 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1284 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Ethiopic:
 	
-#line 1476 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1512 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1480,20 +1516,20 @@ Ethiopic:
 	if (yych <= 0x137F) goto yy115;
 yy114:
 	++YYCURSOR;
-#line 1235 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1289 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ethiopic; else return Error; }
-#line 1486 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1522 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy115:
 	++YYCURSOR;
-#line 1234 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1288 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Ethiopic; }
-#line 1491 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1527 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1236 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1290 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Ethiopic_Supplement:
 	
-#line 1497 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1533 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1501,20 +1537,20 @@ Ethiopic_Supplement:
 	if (yych <= 0x139F) goto yy118;
 yy117:
 	++YYCURSOR;
-#line 1241 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1295 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ethiopic_Supplement; else return Error; }
-#line 1507 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1543 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy118:
 	++YYCURSOR;
-#line 1240 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1294 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Ethiopic_Supplement; }
-#line 1512 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1548 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1242 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1296 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Cherokee:
 	
-#line 1518 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1554 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1522,20 +1558,20 @@ Cherokee:
 	if (yych <= 0x13FF) goto yy121;
 yy120:
 	++YYCURSOR;
-#line 1247 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1301 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cherokee; else return Error; }
-#line 1528 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1564 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy121:
 	++YYCURSOR;
-#line 1246 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1300 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Cherokee; }
-#line 1533 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1569 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1248 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1302 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Unified_Canadian_Aboriginal_Syllabics:
 	
-#line 1539 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1575 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1543,20 +1579,20 @@ Unified_Canadian_Aboriginal_Syllabics:
 	if (yych <= 0x167F) goto yy124;
 yy123:
 	++YYCURSOR;
-#line 1253 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1307 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Unified_Canadian_Aboriginal_Syllabics; else return Error; }
-#line 1549 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1585 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy124:
 	++YYCURSOR;
-#line 1252 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1306 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Unified_Canadian_Aboriginal_Syllabics; }
-#line 1554 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1590 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1254 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1308 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Ogham:
 	
-#line 1560 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1596 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1564,20 +1600,20 @@ Ogham:
 	if (yych <= 0x169F) goto yy127;
 yy126:
 	++YYCURSOR;
-#line 1259 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1313 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ogham; else return Error; }
-#line 1570 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1606 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy127:
 	++YYCURSOR;
-#line 1258 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1312 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Ogham; }
-#line 1575 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1611 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1260 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1314 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Runic:
 	
-#line 1581 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1617 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1585,20 +1621,20 @@ Runic:
 	if (yych <= 0x16FF) goto yy130;
 yy129:
 	++YYCURSOR;
-#line 1265 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1319 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Runic; else return Error; }
-#line 1591 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1627 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy130:
 	++YYCURSOR;
-#line 1264 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1318 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Runic; }
-#line 1596 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1632 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1266 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1320 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Tagalog:
 	
-#line 1602 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1638 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1606,20 +1642,20 @@ Tagalog:
 	if (yych <= 0x171F) goto yy133;
 yy132:
 	++YYCURSOR;
-#line 1271 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1325 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tagalog; else return Error; }
-#line 1612 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1648 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy133:
 	++YYCURSOR;
-#line 1270 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1324 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Tagalog; }
-#line 1617 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1653 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1272 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1326 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Hanunoo:
 	
-#line 1623 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1659 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1627,20 +1663,20 @@ Hanunoo:
 	if (yych <= 0x173F) goto yy136;
 yy135:
 	++YYCURSOR;
-#line 1277 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1331 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hanunoo; else return Error; }
-#line 1633 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1669 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy136:
 	++YYCURSOR;
-#line 1276 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1330 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Hanunoo; }
-#line 1638 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1674 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1278 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1332 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Buhid:
 	
-#line 1644 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1680 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1648,20 +1684,20 @@ Buhid:
 	if (yych <= 0x175F) goto yy139;
 yy138:
 	++YYCURSOR;
-#line 1283 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1337 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Buhid; else return Error; }
-#line 1654 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1690 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy139:
 	++YYCURSOR;
-#line 1282 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1336 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Buhid; }
-#line 1659 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1695 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1284 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1338 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Tagbanwa:
 	
-#line 1665 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1701 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1669,20 +1705,20 @@ Tagbanwa:
 	if (yych <= 0x177F) goto yy142;
 yy141:
 	++YYCURSOR;
-#line 1289 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1343 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tagbanwa; else return Error; }
-#line 1675 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1711 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy142:
 	++YYCURSOR;
-#line 1288 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1342 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Tagbanwa; }
-#line 1680 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1716 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1290 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1344 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Khmer:
 	
-#line 1686 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1722 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1690,20 +1726,20 @@ Khmer:
 	if (yych <= 0x17FF) goto yy145;
 yy144:
 	++YYCURSOR;
-#line 1295 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1349 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Khmer; else return Error; }
-#line 1696 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1732 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy145:
 	++YYCURSOR;
-#line 1294 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1348 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Khmer; }
-#line 1701 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1737 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1296 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1350 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Mongolian:
 	
-#line 1707 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1743 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1711,20 +1747,20 @@ Mongolian:
 	if (yych <= 0x18AF) goto yy148;
 yy147:
 	++YYCURSOR;
-#line 1301 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1355 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Mongolian; else return Error; }
-#line 1717 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1753 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy148:
 	++YYCURSOR;
-#line 1300 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1354 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Mongolian; }
-#line 1722 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1758 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1302 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1356 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Unified_Canadian_Aboriginal_Syllabics_Extended:
 	
-#line 1728 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1764 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1732,20 +1768,20 @@ Unified_Canadian_Aboriginal_Syllabics_Extended:
 	if (yych <= 0x18FF) goto yy151;
 yy150:
 	++YYCURSOR;
-#line 1307 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1361 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Unified_Canadian_Aboriginal_Syllabics_Extended; else return Error; }
-#line 1738 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1774 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy151:
 	++YYCURSOR;
-#line 1306 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1360 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Unified_Canadian_Aboriginal_Syllabics_Extended; }
-#line 1743 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1779 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1308 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1362 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Limbu:
 	
-#line 1749 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1785 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1753,20 +1789,20 @@ Limbu:
 	if (yych <= 0x194F) goto yy154;
 yy153:
 	++YYCURSOR;
-#line 1313 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1367 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Limbu; else return Error; }
-#line 1759 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1795 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy154:
 	++YYCURSOR;
-#line 1312 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1366 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Limbu; }
-#line 1764 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1800 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1314 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1368 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Tai_Le:
 	
-#line 1770 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1806 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1774,20 +1810,20 @@ Tai_Le:
 	if (yych <= 0x197F) goto yy157;
 yy156:
 	++YYCURSOR;
-#line 1319 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1373 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tai_Le; else return Error; }
-#line 1780 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1816 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy157:
 	++YYCURSOR;
-#line 1318 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1372 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Tai_Le; }
-#line 1785 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1821 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1320 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1374 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 New_Tai_Lue:
 	
-#line 1791 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1827 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1795,20 +1831,20 @@ New_Tai_Lue:
 	if (yych <= 0x19DF) goto yy160;
 yy159:
 	++YYCURSOR;
-#line 1325 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1379 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return New_Tai_Lue; else return Error; }
-#line 1801 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1837 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy160:
 	++YYCURSOR;
-#line 1324 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1378 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto New_Tai_Lue; }
-#line 1806 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1842 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1326 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1380 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Khmer_Symbols:
 	
-#line 1812 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1848 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1816,20 +1852,20 @@ Khmer_Symbols:
 	if (yych <= 0x19FF) goto yy163;
 yy162:
 	++YYCURSOR;
-#line 1331 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1385 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Khmer_Symbols; else return Error; }
-#line 1822 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1858 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy163:
 	++YYCURSOR;
-#line 1330 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1384 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Khmer_Symbols; }
-#line 1827 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1863 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1332 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1386 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Buginese:
 	
-#line 1833 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1869 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1837,20 +1873,20 @@ Buginese:
 	if (yych <= 0x1A1F) goto yy166;
 yy165:
 	++YYCURSOR;
-#line 1337 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1391 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Buginese; else return Error; }
-#line 1843 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1879 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy166:
 	++YYCURSOR;
-#line 1336 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1390 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Buginese; }
-#line 1848 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1884 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1338 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1392 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Tai_Tham:
 	
-#line 1854 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1890 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1858,20 +1894,20 @@ Tai_Tham:
 	if (yych <= 0x1AAF) goto yy169;
 yy168:
 	++YYCURSOR;
-#line 1343 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1397 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tai_Tham; else return Error; }
-#line 1864 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1900 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy169:
 	++YYCURSOR;
-#line 1342 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1396 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Tai_Tham; }
-#line 1869 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1905 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1344 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1398 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Combining_Diacritical_Marks_Extended:
 	
-#line 1875 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1911 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1879,20 +1915,20 @@ Combining_Diacritical_Marks_Extended:
 	if (yych <= 0x1AFF) goto yy172;
 yy171:
 	++YYCURSOR;
-#line 1349 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1403 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Combining_Diacritical_Marks_Extended; else return Error; }
-#line 1885 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1921 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy172:
 	++YYCURSOR;
-#line 1348 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1402 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Combining_Diacritical_Marks_Extended; }
-#line 1890 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1926 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1350 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1404 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Balinese:
 	
-#line 1896 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1932 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1900,20 +1936,20 @@ Balinese:
 	if (yych <= 0x1B7F) goto yy175;
 yy174:
 	++YYCURSOR;
-#line 1355 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1409 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Balinese; else return Error; }
-#line 1906 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1942 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy175:
 	++YYCURSOR;
-#line 1354 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1408 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Balinese; }
-#line 1911 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1947 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1356 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1410 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Sundanese:
 	
-#line 1917 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1953 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1921,20 +1957,20 @@ Sundanese:
 	if (yych <= 0x1BBF) goto yy178;
 yy177:
 	++YYCURSOR;
-#line 1361 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1415 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Sundanese; else return Error; }
-#line 1927 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1963 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy178:
 	++YYCURSOR;
-#line 1360 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1414 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Sundanese; }
-#line 1932 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1968 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1362 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1416 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Batak:
 	
-#line 1938 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1974 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1942,20 +1978,20 @@ Batak:
 	if (yych <= 0x1BFF) goto yy181;
 yy180:
 	++YYCURSOR;
-#line 1367 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1421 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Batak; else return Error; }
-#line 1948 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1984 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy181:
 	++YYCURSOR;
-#line 1366 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1420 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Batak; }
-#line 1953 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1989 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1368 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1422 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Lepcha:
 	
-#line 1959 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 1995 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1963,20 +1999,20 @@ Lepcha:
 	if (yych <= 0x1C4F) goto yy184;
 yy183:
 	++YYCURSOR;
-#line 1373 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1427 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Lepcha; else return Error; }
-#line 1969 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2005 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy184:
 	++YYCURSOR;
-#line 1372 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1426 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Lepcha; }
-#line 1974 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2010 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1374 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1428 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Ol_Chiki:
 	
-#line 1980 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2016 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1984,20 +2020,20 @@ Ol_Chiki:
 	if (yych <= 0x1C7F) goto yy187;
 yy186:
 	++YYCURSOR;
-#line 1379 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1433 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ol_Chiki; else return Error; }
-#line 1990 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2026 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy187:
 	++YYCURSOR;
-#line 1378 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1432 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Ol_Chiki; }
-#line 1995 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2031 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1380 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1434 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Cyrillic_Extended_C:
 	
-#line 2001 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2037 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2005,20 +2041,20 @@ Cyrillic_Extended_C:
 	if (yych <= 0x1C8F) goto yy190;
 yy189:
 	++YYCURSOR;
-#line 1385 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1439 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cyrillic_Extended_C; else return Error; }
-#line 2011 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2047 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy190:
 	++YYCURSOR;
-#line 1384 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1438 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Cyrillic_Extended_C; }
-#line 2016 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2052 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1386 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1440 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Georgian_Extended:
 	
-#line 2022 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2058 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2026,20 +2062,20 @@ Georgian_Extended:
 	if (yych <= 0x1CBF) goto yy193;
 yy192:
 	++YYCURSOR;
-#line 1391 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1445 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Georgian_Extended; else return Error; }
-#line 2032 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2068 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy193:
 	++YYCURSOR;
-#line 1390 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1444 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Georgian_Extended; }
-#line 2037 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2073 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1392 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1446 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Sundanese_Supplement:
 	
-#line 2043 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2079 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2047,20 +2083,20 @@ Sundanese_Supplement:
 	if (yych <= 0x1CCF) goto yy196;
 yy195:
 	++YYCURSOR;
-#line 1397 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1451 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Sundanese_Supplement; else return Error; }
-#line 2053 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2089 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy196:
 	++YYCURSOR;
-#line 1396 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1450 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Sundanese_Supplement; }
-#line 2058 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2094 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1398 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1452 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Vedic_Extensions:
 	
-#line 2064 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2100 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2068,20 +2104,20 @@ Vedic_Extensions:
 	if (yych <= 0x1CFF) goto yy199;
 yy198:
 	++YYCURSOR;
-#line 1403 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1457 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Vedic_Extensions; else return Error; }
-#line 2074 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2110 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy199:
 	++YYCURSOR;
-#line 1402 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1456 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Vedic_Extensions; }
-#line 2079 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2115 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1404 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1458 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Phonetic_Extensions:
 	
-#line 2085 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2121 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2089,20 +2125,20 @@ Phonetic_Extensions:
 	if (yych <= 0x1D7F) goto yy202;
 yy201:
 	++YYCURSOR;
-#line 1409 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1463 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Phonetic_Extensions; else return Error; }
-#line 2095 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2131 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy202:
 	++YYCURSOR;
-#line 1408 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1462 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Phonetic_Extensions; }
-#line 2100 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2136 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1410 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1464 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Phonetic_Extensions_Supplement:
 	
-#line 2106 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2142 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2110,20 +2146,20 @@ Phonetic_Extensions_Supplement:
 	if (yych <= 0x1DBF) goto yy205;
 yy204:
 	++YYCURSOR;
-#line 1415 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1469 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Phonetic_Extensions_Supplement; else return Error; }
-#line 2116 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2152 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy205:
 	++YYCURSOR;
-#line 1414 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1468 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Phonetic_Extensions_Supplement; }
-#line 2121 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2157 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1416 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1470 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Combining_Diacritical_Marks_Supplement:
 	
-#line 2127 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2163 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2131,20 +2167,20 @@ Combining_Diacritical_Marks_Supplement:
 	if (yych <= 0x1DFF) goto yy208;
 yy207:
 	++YYCURSOR;
-#line 1421 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1475 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Combining_Diacritical_Marks_Supplement; else return Error; }
-#line 2137 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2173 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy208:
 	++YYCURSOR;
-#line 1420 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1474 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Combining_Diacritical_Marks_Supplement; }
-#line 2142 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2178 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1422 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1476 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Latin_Extended_Additional:
 	
-#line 2148 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2184 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2152,20 +2188,20 @@ Latin_Extended_Additional:
 	if (yych <= 0x1EFF) goto yy211;
 yy210:
 	++YYCURSOR;
-#line 1427 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1481 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Latin_Extended_Additional; else return Error; }
-#line 2158 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2194 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy211:
 	++YYCURSOR;
-#line 1426 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1480 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Latin_Extended_Additional; }
-#line 2163 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2199 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1428 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1482 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Greek_Extended:
 	
-#line 2169 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2205 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2173,20 +2209,20 @@ Greek_Extended:
 	if (yych <= 0x1FFF) goto yy214;
 yy213:
 	++YYCURSOR;
-#line 1433 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1487 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Greek_Extended; else return Error; }
-#line 2179 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2215 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy214:
 	++YYCURSOR;
-#line 1432 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1486 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Greek_Extended; }
-#line 2184 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2220 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1434 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1488 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 General_Punctuation:
 	
-#line 2190 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2226 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2194,20 +2230,20 @@ General_Punctuation:
 	if (yych <= 0x206F) goto yy217;
 yy216:
 	++YYCURSOR;
-#line 1439 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1493 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return General_Punctuation; else return Error; }
-#line 2200 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2236 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy217:
 	++YYCURSOR;
-#line 1438 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1492 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto General_Punctuation; }
-#line 2205 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2241 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1440 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1494 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Superscripts_and_Subscripts:
 	
-#line 2211 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2247 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2215,20 +2251,20 @@ Superscripts_and_Subscripts:
 	if (yych <= 0x209F) goto yy220;
 yy219:
 	++YYCURSOR;
-#line 1445 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1499 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Superscripts_and_Subscripts; else return Error; }
-#line 2221 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2257 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy220:
 	++YYCURSOR;
-#line 1444 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1498 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Superscripts_and_Subscripts; }
-#line 2226 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2262 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1446 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1500 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Currency_Symbols:
 	
-#line 2232 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2268 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2236,20 +2272,20 @@ Currency_Symbols:
 	if (yych <= 0x20CF) goto yy223;
 yy222:
 	++YYCURSOR;
-#line 1451 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1505 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Currency_Symbols; else return Error; }
-#line 2242 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2278 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy223:
 	++YYCURSOR;
-#line 1450 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1504 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Currency_Symbols; }
-#line 2247 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2283 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1452 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1506 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Combining_Diacritical_Marks_for_Symbols:
 	
-#line 2253 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2289 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2257,20 +2293,20 @@ Combining_Diacritical_Marks_for_Symbols:
 	if (yych <= 0x20FF) goto yy226;
 yy225:
 	++YYCURSOR;
-#line 1457 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1511 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Combining_Diacritical_Marks_for_Symbols; else return Error; }
-#line 2263 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2299 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy226:
 	++YYCURSOR;
-#line 1456 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1510 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Combining_Diacritical_Marks_for_Symbols; }
-#line 2268 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2304 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1458 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1512 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Letterlike_Symbols:
 	
-#line 2274 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2310 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2278,20 +2314,20 @@ Letterlike_Symbols:
 	if (yych <= 0x214F) goto yy229;
 yy228:
 	++YYCURSOR;
-#line 1463 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1517 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Letterlike_Symbols; else return Error; }
-#line 2284 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2320 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy229:
 	++YYCURSOR;
-#line 1462 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1516 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Letterlike_Symbols; }
-#line 2289 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2325 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1464 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1518 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Number_Forms:
 	
-#line 2295 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2331 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2299,20 +2335,20 @@ Number_Forms:
 	if (yych <= 0x218F) goto yy232;
 yy231:
 	++YYCURSOR;
-#line 1469 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1523 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Number_Forms; else return Error; }
-#line 2305 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2341 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy232:
 	++YYCURSOR;
-#line 1468 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1522 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Number_Forms; }
-#line 2310 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2346 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1470 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1524 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Arrows:
 	
-#line 2316 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2352 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2320,20 +2356,20 @@ Arrows:
 	if (yych <= 0x21FF) goto yy235;
 yy234:
 	++YYCURSOR;
-#line 1475 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1529 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Arrows; else return Error; }
-#line 2326 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2362 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy235:
 	++YYCURSOR;
-#line 1474 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1528 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Arrows; }
-#line 2331 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2367 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1476 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1530 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Mathematical_Operators:
 	
-#line 2337 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2373 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2341,20 +2377,20 @@ Mathematical_Operators:
 	if (yych <= 0x22FF) goto yy238;
 yy237:
 	++YYCURSOR;
-#line 1481 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1535 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Mathematical_Operators; else return Error; }
-#line 2347 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2383 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy238:
 	++YYCURSOR;
-#line 1480 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1534 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Mathematical_Operators; }
-#line 2352 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2388 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1482 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1536 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Miscellaneous_Technical:
 	
-#line 2358 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2394 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2362,20 +2398,20 @@ Miscellaneous_Technical:
 	if (yych <= 0x23FF) goto yy241;
 yy240:
 	++YYCURSOR;
-#line 1487 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1541 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Technical; else return Error; }
-#line 2368 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2404 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy241:
 	++YYCURSOR;
-#line 1486 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1540 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Miscellaneous_Technical; }
-#line 2373 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2409 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1488 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1542 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Control_Pictures:
 	
-#line 2379 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2415 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2383,20 +2419,20 @@ Control_Pictures:
 	if (yych <= 0x243F) goto yy244;
 yy243:
 	++YYCURSOR;
-#line 1493 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1547 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Control_Pictures; else return Error; }
-#line 2389 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2425 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy244:
 	++YYCURSOR;
-#line 1492 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1546 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Control_Pictures; }
-#line 2394 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2430 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1494 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1548 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Optical_Character_Recognition:
 	
-#line 2400 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2436 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2404,20 +2440,20 @@ Optical_Character_Recognition:
 	if (yych <= 0x245F) goto yy247;
 yy246:
 	++YYCURSOR;
-#line 1499 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1553 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Optical_Character_Recognition; else return Error; }
-#line 2410 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2446 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy247:
 	++YYCURSOR;
-#line 1498 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1552 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Optical_Character_Recognition; }
-#line 2415 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2451 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1500 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1554 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Enclosed_Alphanumerics:
 	
-#line 2421 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2457 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2425,20 +2461,20 @@ Enclosed_Alphanumerics:
 	if (yych <= 0x24FF) goto yy250;
 yy249:
 	++YYCURSOR;
-#line 1505 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1559 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Enclosed_Alphanumerics; else return Error; }
-#line 2431 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2467 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy250:
 	++YYCURSOR;
-#line 1504 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1558 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Enclosed_Alphanumerics; }
-#line 2436 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2472 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1506 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1560 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Box_Drawing:
 	
-#line 2442 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2478 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2446,20 +2482,20 @@ Box_Drawing:
 	if (yych <= 0x257F) goto yy253;
 yy252:
 	++YYCURSOR;
-#line 1511 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1565 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Box_Drawing; else return Error; }
-#line 2452 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2488 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy253:
 	++YYCURSOR;
-#line 1510 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1564 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Box_Drawing; }
-#line 2457 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2493 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1512 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1566 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Block_Elements:
 	
-#line 2463 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2499 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2467,20 +2503,20 @@ Block_Elements:
 	if (yych <= 0x259F) goto yy256;
 yy255:
 	++YYCURSOR;
-#line 1517 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1571 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Block_Elements; else return Error; }
-#line 2473 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2509 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy256:
 	++YYCURSOR;
-#line 1516 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1570 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Block_Elements; }
-#line 2478 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2514 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1518 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1572 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Geometric_Shapes:
 	
-#line 2484 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2520 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2488,20 +2524,20 @@ Geometric_Shapes:
 	if (yych <= 0x25FF) goto yy259;
 yy258:
 	++YYCURSOR;
-#line 1523 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1577 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Geometric_Shapes; else return Error; }
-#line 2494 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2530 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy259:
 	++YYCURSOR;
-#line 1522 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1576 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Geometric_Shapes; }
-#line 2499 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2535 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1524 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1578 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Miscellaneous_Symbols:
 	
-#line 2505 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2541 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2509,20 +2545,20 @@ Miscellaneous_Symbols:
 	if (yych <= 0x26FF) goto yy262;
 yy261:
 	++YYCURSOR;
-#line 1529 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1583 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Symbols; else return Error; }
-#line 2515 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2551 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy262:
 	++YYCURSOR;
-#line 1528 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1582 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Miscellaneous_Symbols; }
-#line 2520 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2556 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1530 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1584 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Dingbats:
 	
-#line 2526 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2562 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2530,20 +2566,20 @@ Dingbats:
 	if (yych <= 0x27BF) goto yy265;
 yy264:
 	++YYCURSOR;
-#line 1535 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1589 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Dingbats; else return Error; }
-#line 2536 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2572 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy265:
 	++YYCURSOR;
-#line 1534 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1588 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Dingbats; }
-#line 2541 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2577 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1536 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1590 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Miscellaneous_Mathematical_Symbols_A:
 	
-#line 2547 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2583 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2551,20 +2587,20 @@ Miscellaneous_Mathematical_Symbols_A:
 	if (yych <= 0x27EF) goto yy268;
 yy267:
 	++YYCURSOR;
-#line 1541 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1595 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Mathematical_Symbols_A; else return Error; }
-#line 2557 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2593 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy268:
 	++YYCURSOR;
-#line 1540 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1594 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Miscellaneous_Mathematical_Symbols_A; }
-#line 2562 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2598 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1542 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1596 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Supplemental_Arrows_A:
 	
-#line 2568 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2604 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2572,20 +2608,20 @@ Supplemental_Arrows_A:
 	if (yych <= 0x27FF) goto yy271;
 yy270:
 	++YYCURSOR;
-#line 1547 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1601 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Supplemental_Arrows_A; else return Error; }
-#line 2578 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2614 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy271:
 	++YYCURSOR;
-#line 1546 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1600 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Supplemental_Arrows_A; }
-#line 2583 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2619 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1548 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1602 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Braille_Patterns:
 	
-#line 2589 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2625 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2593,20 +2629,20 @@ Braille_Patterns:
 	if (yych <= 0x28FF) goto yy274;
 yy273:
 	++YYCURSOR;
-#line 1553 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1607 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Braille_Patterns; else return Error; }
-#line 2599 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2635 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy274:
 	++YYCURSOR;
-#line 1552 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1606 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Braille_Patterns; }
-#line 2604 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2640 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1554 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1608 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Supplemental_Arrows_B:
 	
-#line 2610 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2646 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2614,20 +2650,20 @@ Supplemental_Arrows_B:
 	if (yych <= 0x297F) goto yy277;
 yy276:
 	++YYCURSOR;
-#line 1559 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1613 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Supplemental_Arrows_B; else return Error; }
-#line 2620 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2656 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy277:
 	++YYCURSOR;
-#line 1558 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1612 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Supplemental_Arrows_B; }
-#line 2625 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2661 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1560 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1614 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Miscellaneous_Mathematical_Symbols_B:
 	
-#line 2631 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2667 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2635,20 +2671,20 @@ Miscellaneous_Mathematical_Symbols_B:
 	if (yych <= 0x29FF) goto yy280;
 yy279:
 	++YYCURSOR;
-#line 1565 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1619 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Mathematical_Symbols_B; else return Error; }
-#line 2641 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2677 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy280:
 	++YYCURSOR;
-#line 1564 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1618 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Miscellaneous_Mathematical_Symbols_B; }
-#line 2646 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2682 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1566 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1620 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Supplemental_Mathematical_Operators:
 	
-#line 2652 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2688 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2656,20 +2692,20 @@ Supplemental_Mathematical_Operators:
 	if (yych <= 0x2AFF) goto yy283;
 yy282:
 	++YYCURSOR;
-#line 1571 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1625 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Supplemental_Mathematical_Operators; else return Error; }
-#line 2662 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2698 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy283:
 	++YYCURSOR;
-#line 1570 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1624 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Supplemental_Mathematical_Operators; }
-#line 2667 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2703 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1572 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1626 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Miscellaneous_Symbols_and_Arrows:
 	
-#line 2673 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2709 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2677,20 +2713,20 @@ Miscellaneous_Symbols_and_Arrows:
 	if (yych <= 0x2BFF) goto yy286;
 yy285:
 	++YYCURSOR;
-#line 1577 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1631 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Symbols_and_Arrows; else return Error; }
-#line 2683 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2719 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy286:
 	++YYCURSOR;
-#line 1576 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1630 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Miscellaneous_Symbols_and_Arrows; }
-#line 2688 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2724 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1578 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1632 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Glagolitic:
 	
-#line 2694 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2730 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2698,20 +2734,20 @@ Glagolitic:
 	if (yych <= 0x2C5F) goto yy289;
 yy288:
 	++YYCURSOR;
-#line 1583 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1637 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Glagolitic; else return Error; }
-#line 2704 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2740 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy289:
 	++YYCURSOR;
-#line 1582 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1636 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Glagolitic; }
-#line 2709 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2745 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1584 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1638 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Latin_Extended_C:
 	
-#line 2715 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2751 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2719,20 +2755,20 @@ Latin_Extended_C:
 	if (yych <= 0x2C7F) goto yy292;
 yy291:
 	++YYCURSOR;
-#line 1589 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1643 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Latin_Extended_C; else return Error; }
-#line 2725 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2761 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy292:
 	++YYCURSOR;
-#line 1588 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1642 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Latin_Extended_C; }
-#line 2730 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2766 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1590 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1644 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Coptic:
 	
-#line 2736 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2772 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2740,20 +2776,20 @@ Coptic:
 	if (yych <= 0x2CFF) goto yy295;
 yy294:
 	++YYCURSOR;
-#line 1595 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1649 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Coptic; else return Error; }
-#line 2746 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2782 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy295:
 	++YYCURSOR;
-#line 1594 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1648 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Coptic; }
-#line 2751 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2787 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1596 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1650 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Georgian_Supplement:
 	
-#line 2757 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2793 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2761,20 +2797,20 @@ Georgian_Supplement:
 	if (yych <= 0x2D2F) goto yy298;
 yy297:
 	++YYCURSOR;
-#line 1601 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1655 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Georgian_Supplement; else return Error; }
-#line 2767 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2803 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy298:
 	++YYCURSOR;
-#line 1600 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1654 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Georgian_Supplement; }
-#line 2772 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2808 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1602 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1656 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Tifinagh:
 	
-#line 2778 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2814 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2782,20 +2818,20 @@ Tifinagh:
 	if (yych <= 0x2D7F) goto yy301;
 yy300:
 	++YYCURSOR;
-#line 1607 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1661 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tifinagh; else return Error; }
-#line 2788 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2824 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy301:
 	++YYCURSOR;
-#line 1606 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1660 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Tifinagh; }
-#line 2793 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2829 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1608 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1662 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Ethiopic_Extended:
 	
-#line 2799 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2835 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2803,20 +2839,20 @@ Ethiopic_Extended:
 	if (yych <= 0x2DDF) goto yy304;
 yy303:
 	++YYCURSOR;
-#line 1613 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1667 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ethiopic_Extended; else return Error; }
-#line 2809 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2845 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy304:
 	++YYCURSOR;
-#line 1612 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1666 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Ethiopic_Extended; }
-#line 2814 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2850 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1614 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1668 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Cyrillic_Extended_A:
 	
-#line 2820 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2856 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2824,20 +2860,20 @@ Cyrillic_Extended_A:
 	if (yych <= 0x2DFF) goto yy307;
 yy306:
 	++YYCURSOR;
-#line 1619 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1673 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cyrillic_Extended_A; else return Error; }
-#line 2830 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2866 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy307:
 	++YYCURSOR;
-#line 1618 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1672 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Cyrillic_Extended_A; }
-#line 2835 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2871 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1620 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1674 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Supplemental_Punctuation:
 	
-#line 2841 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2877 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2845,20 +2881,20 @@ Supplemental_Punctuation:
 	if (yych <= 0x2E7F) goto yy310;
 yy309:
 	++YYCURSOR;
-#line 1625 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1679 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Supplemental_Punctuation; else return Error; }
-#line 2851 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2887 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy310:
 	++YYCURSOR;
-#line 1624 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1678 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Supplemental_Punctuation; }
-#line 2856 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2892 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1626 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1680 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 CJK_Radicals_Supplement:
 	
-#line 2862 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2898 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2866,20 +2902,20 @@ CJK_Radicals_Supplement:
 	if (yych <= 0x2EFF) goto yy313;
 yy312:
 	++YYCURSOR;
-#line 1631 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1685 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Radicals_Supplement; else return Error; }
-#line 2872 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2908 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy313:
 	++YYCURSOR;
-#line 1630 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1684 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto CJK_Radicals_Supplement; }
-#line 2877 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2913 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1632 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1686 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Kangxi_Radicals:
 	
-#line 2883 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2919 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2887,20 +2923,20 @@ Kangxi_Radicals:
 	if (yych <= 0x2FDF) goto yy316;
 yy315:
 	++YYCURSOR;
-#line 1637 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1691 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Kangxi_Radicals; else return Error; }
-#line 2893 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2929 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy316:
 	++YYCURSOR;
-#line 1636 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1690 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Kangxi_Radicals; }
-#line 2898 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2934 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1638 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1692 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Ideographic_Description_Characters:
 	
-#line 2904 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2940 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2908,20 +2944,20 @@ Ideographic_Description_Characters:
 	if (yych <= 0x2FFF) goto yy319;
 yy318:
 	++YYCURSOR;
-#line 1643 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1697 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ideographic_Description_Characters; else return Error; }
-#line 2914 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2950 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy319:
 	++YYCURSOR;
-#line 1642 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1696 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Ideographic_Description_Characters; }
-#line 2919 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2955 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1644 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1698 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 CJK_Symbols_and_Punctuation:
 	
-#line 2925 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2961 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2929,20 +2965,20 @@ CJK_Symbols_and_Punctuation:
 	if (yych <= 0x303F) goto yy322;
 yy321:
 	++YYCURSOR;
-#line 1649 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1703 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Symbols_and_Punctuation; else return Error; }
-#line 2935 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2971 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy322:
 	++YYCURSOR;
-#line 1648 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1702 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto CJK_Symbols_and_Punctuation; }
-#line 2940 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2976 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1650 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1704 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Hiragana:
 	
-#line 2946 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2982 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2950,20 +2986,20 @@ Hiragana:
 	if (yych <= 0x309F) goto yy325;
 yy324:
 	++YYCURSOR;
-#line 1655 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1709 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hiragana; else return Error; }
-#line 2956 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2992 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy325:
 	++YYCURSOR;
-#line 1654 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1708 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Hiragana; }
-#line 2961 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2997 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1656 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1710 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Katakana:
 	
-#line 2967 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3003 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2971,20 +3007,20 @@ Katakana:
 	if (yych <= 0x30FF) goto yy328;
 yy327:
 	++YYCURSOR;
-#line 1661 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1715 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Katakana; else return Error; }
-#line 2977 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3013 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy328:
 	++YYCURSOR;
-#line 1660 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1714 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Katakana; }
-#line 2982 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3018 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1662 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1716 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Bopomofo:
 	
-#line 2988 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3024 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2992,20 +3028,20 @@ Bopomofo:
 	if (yych <= 0x312F) goto yy331;
 yy330:
 	++YYCURSOR;
-#line 1667 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1721 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Bopomofo; else return Error; }
-#line 2998 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3034 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy331:
 	++YYCURSOR;
-#line 1666 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1720 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Bopomofo; }
-#line 3003 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3039 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1668 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1722 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Hangul_Compatibility_Jamo:
 	
-#line 3009 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3045 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3013,20 +3049,20 @@ Hangul_Compatibility_Jamo:
 	if (yych <= 0x318F) goto yy334;
 yy333:
 	++YYCURSOR;
-#line 1673 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1727 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hangul_Compatibility_Jamo; else return Error; }
-#line 3019 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3055 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy334:
 	++YYCURSOR;
-#line 1672 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1726 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Hangul_Compatibility_Jamo; }
-#line 3024 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3060 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1674 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1728 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Kanbun:
 	
-#line 3030 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3066 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3034,20 +3070,20 @@ Kanbun:
 	if (yych <= 0x319F) goto yy337;
 yy336:
 	++YYCURSOR;
-#line 1679 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1733 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Kanbun; else return Error; }
-#line 3040 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3076 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy337:
 	++YYCURSOR;
-#line 1678 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1732 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Kanbun; }
-#line 3045 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3081 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1680 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1734 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Bopomofo_Extended:
 	
-#line 3051 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3087 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3055,20 +3091,20 @@ Bopomofo_Extended:
 	if (yych <= 0x31BF) goto yy340;
 yy339:
 	++YYCURSOR;
-#line 1685 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1739 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Bopomofo_Extended; else return Error; }
-#line 3061 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3097 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy340:
 	++YYCURSOR;
-#line 1684 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1738 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Bopomofo_Extended; }
-#line 3066 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3102 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1686 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1740 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 CJK_Strokes:
 	
-#line 3072 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3108 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3076,20 +3112,20 @@ CJK_Strokes:
 	if (yych <= 0x31EF) goto yy343;
 yy342:
 	++YYCURSOR;
-#line 1691 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1745 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Strokes; else return Error; }
-#line 3082 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3118 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy343:
 	++YYCURSOR;
-#line 1690 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1744 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto CJK_Strokes; }
-#line 3087 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3123 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1692 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1746 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Katakana_Phonetic_Extensions:
 	
-#line 3093 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3129 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3097,20 +3133,20 @@ Katakana_Phonetic_Extensions:
 	if (yych <= 0x31FF) goto yy346;
 yy345:
 	++YYCURSOR;
-#line 1697 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1751 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Katakana_Phonetic_Extensions; else return Error; }
-#line 3103 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3139 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy346:
 	++YYCURSOR;
-#line 1696 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1750 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Katakana_Phonetic_Extensions; }
-#line 3108 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3144 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1698 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1752 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Enclosed_CJK_Letters_and_Months:
 	
-#line 3114 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3150 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3118,20 +3154,20 @@ Enclosed_CJK_Letters_and_Months:
 	if (yych <= 0x32FF) goto yy349;
 yy348:
 	++YYCURSOR;
-#line 1703 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1757 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Enclosed_CJK_Letters_and_Months; else return Error; }
-#line 3124 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3160 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy349:
 	++YYCURSOR;
-#line 1702 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1756 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Enclosed_CJK_Letters_and_Months; }
-#line 3129 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3165 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1704 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1758 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 CJK_Compatibility:
 	
-#line 3135 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3171 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3139,20 +3175,20 @@ CJK_Compatibility:
 	if (yych <= 0x33FF) goto yy352;
 yy351:
 	++YYCURSOR;
-#line 1709 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1763 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Compatibility; else return Error; }
-#line 3145 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3181 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy352:
 	++YYCURSOR;
-#line 1708 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1762 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto CJK_Compatibility; }
-#line 3150 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3186 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1710 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1764 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 CJK_Unified_Ideographs_Extension_A:
 	
-#line 3156 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3192 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3160,20 +3196,20 @@ CJK_Unified_Ideographs_Extension_A:
 	if (yych <= 0x4DBF) goto yy355;
 yy354:
 	++YYCURSOR;
-#line 1715 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1769 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_A; else return Error; }
-#line 3166 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3202 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy355:
 	++YYCURSOR;
-#line 1714 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1768 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto CJK_Unified_Ideographs_Extension_A; }
-#line 3171 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3207 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1716 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1770 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Yijing_Hexagram_Symbols:
 	
-#line 3177 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3213 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3181,20 +3217,20 @@ Yijing_Hexagram_Symbols:
 	if (yych <= 0x4DFF) goto yy358;
 yy357:
 	++YYCURSOR;
-#line 1721 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1775 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Yijing_Hexagram_Symbols; else return Error; }
-#line 3187 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3223 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy358:
 	++YYCURSOR;
-#line 1720 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1774 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Yijing_Hexagram_Symbols; }
-#line 3192 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3228 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1722 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1776 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 CJK_Unified_Ideographs:
 	
-#line 3198 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3234 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3202,20 +3238,20 @@ CJK_Unified_Ideographs:
 	if (yych <= 0x9FFF) goto yy361;
 yy360:
 	++YYCURSOR;
-#line 1727 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1781 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs; else return Error; }
-#line 3208 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3244 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy361:
 	++YYCURSOR;
-#line 1726 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1780 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto CJK_Unified_Ideographs; }
-#line 3213 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3249 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1728 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1782 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Yi_Syllables:
 	
-#line 3219 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3255 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3223,20 +3259,20 @@ Yi_Syllables:
 	if (yych <= 0xA48F) goto yy364;
 yy363:
 	++YYCURSOR;
-#line 1733 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1787 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Yi_Syllables; else return Error; }
-#line 3229 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3265 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy364:
 	++YYCURSOR;
-#line 1732 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1786 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Yi_Syllables; }
-#line 3234 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3270 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1734 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1788 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Yi_Radicals:
 	
-#line 3240 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3276 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3244,20 +3280,20 @@ Yi_Radicals:
 	if (yych <= 0xA4CF) goto yy367;
 yy366:
 	++YYCURSOR;
-#line 1739 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1793 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Yi_Radicals; else return Error; }
-#line 3250 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3286 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy367:
 	++YYCURSOR;
-#line 1738 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1792 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Yi_Radicals; }
-#line 3255 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3291 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1740 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1794 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Lisu:
 	
-#line 3261 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3297 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3265,20 +3301,20 @@ Lisu:
 	if (yych <= 0xA4FF) goto yy370;
 yy369:
 	++YYCURSOR;
-#line 1745 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1799 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Lisu; else return Error; }
-#line 3271 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3307 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy370:
 	++YYCURSOR;
-#line 1744 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1798 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Lisu; }
-#line 3276 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3312 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1746 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1800 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Vai:
 	
-#line 3282 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3318 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3286,20 +3322,20 @@ Vai:
 	if (yych <= 0xA63F) goto yy373;
 yy372:
 	++YYCURSOR;
-#line 1751 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1805 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Vai; else return Error; }
-#line 3292 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3328 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy373:
 	++YYCURSOR;
-#line 1750 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1804 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Vai; }
-#line 3297 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3333 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1752 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1806 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Cyrillic_Extended_B:
 	
-#line 3303 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3339 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3307,20 +3343,20 @@ Cyrillic_Extended_B:
 	if (yych <= 0xA69F) goto yy376;
 yy375:
 	++YYCURSOR;
-#line 1757 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1811 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cyrillic_Extended_B; else return Error; }
-#line 3313 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3349 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy376:
 	++YYCURSOR;
-#line 1756 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1810 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Cyrillic_Extended_B; }
-#line 3318 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3354 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1758 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1812 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Bamum:
 	
-#line 3324 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3360 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3328,20 +3364,20 @@ Bamum:
 	if (yych <= 0xA6FF) goto yy379;
 yy378:
 	++YYCURSOR;
-#line 1763 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1817 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Bamum; else return Error; }
-#line 3334 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3370 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy379:
 	++YYCURSOR;
-#line 1762 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1816 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Bamum; }
-#line 3339 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3375 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1764 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1818 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Modifier_Tone_Letters:
 	
-#line 3345 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3381 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3349,20 +3385,20 @@ Modifier_Tone_Letters:
 	if (yych <= 0xA71F) goto yy382;
 yy381:
 	++YYCURSOR;
-#line 1769 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1823 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Modifier_Tone_Letters; else return Error; }
-#line 3355 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3391 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy382:
 	++YYCURSOR;
-#line 1768 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1822 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Modifier_Tone_Letters; }
-#line 3360 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3396 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1770 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1824 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Latin_Extended_D:
 	
-#line 3366 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3402 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3370,20 +3406,20 @@ Latin_Extended_D:
 	if (yych <= 0xA7FF) goto yy385;
 yy384:
 	++YYCURSOR;
-#line 1775 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1829 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Latin_Extended_D; else return Error; }
-#line 3376 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3412 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy385:
 	++YYCURSOR;
-#line 1774 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1828 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Latin_Extended_D; }
-#line 3381 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3417 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1776 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1830 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Syloti_Nagri:
 	
-#line 3387 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3423 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3391,20 +3427,20 @@ Syloti_Nagri:
 	if (yych <= 0xA82F) goto yy388;
 yy387:
 	++YYCURSOR;
-#line 1781 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1835 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Syloti_Nagri; else return Error; }
-#line 3397 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3433 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy388:
 	++YYCURSOR;
-#line 1780 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1834 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Syloti_Nagri; }
-#line 3402 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3438 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1782 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1836 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Common_Indic_Number_Forms:
 	
-#line 3408 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3444 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3412,20 +3448,20 @@ Common_Indic_Number_Forms:
 	if (yych <= 0xA83F) goto yy391;
 yy390:
 	++YYCURSOR;
-#line 1787 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1841 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Common_Indic_Number_Forms; else return Error; }
-#line 3418 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3454 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy391:
 	++YYCURSOR;
-#line 1786 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1840 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Common_Indic_Number_Forms; }
-#line 3423 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3459 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1788 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1842 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Phags_pa:
 	
-#line 3429 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3465 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3433,20 +3469,20 @@ Phags_pa:
 	if (yych <= 0xA87F) goto yy394;
 yy393:
 	++YYCURSOR;
-#line 1793 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1847 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Phags_pa; else return Error; }
-#line 3439 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3475 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy394:
 	++YYCURSOR;
-#line 1792 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1846 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Phags_pa; }
-#line 3444 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3480 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1794 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1848 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Saurashtra:
 	
-#line 3450 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3486 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3454,20 +3490,20 @@ Saurashtra:
 	if (yych <= 0xA8DF) goto yy397;
 yy396:
 	++YYCURSOR;
-#line 1799 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1853 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Saurashtra; else return Error; }
-#line 3460 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3496 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy397:
 	++YYCURSOR;
-#line 1798 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1852 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Saurashtra; }
-#line 3465 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3501 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1800 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1854 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Devanagari_Extended:
 	
-#line 3471 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3507 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3475,20 +3511,20 @@ Devanagari_Extended:
 	if (yych <= 0xA8FF) goto yy400;
 yy399:
 	++YYCURSOR;
-#line 1805 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1859 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Devanagari_Extended; else return Error; }
-#line 3481 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3517 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy400:
 	++YYCURSOR;
-#line 1804 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1858 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Devanagari_Extended; }
-#line 3486 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3522 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1806 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1860 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Kayah_Li:
 	
-#line 3492 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3528 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3496,20 +3532,20 @@ Kayah_Li:
 	if (yych <= 0xA92F) goto yy403;
 yy402:
 	++YYCURSOR;
-#line 1811 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1865 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Kayah_Li; else return Error; }
-#line 3502 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3538 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy403:
 	++YYCURSOR;
-#line 1810 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1864 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Kayah_Li; }
-#line 3507 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3543 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1812 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1866 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Rejang:
 	
-#line 3513 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3549 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3517,20 +3553,20 @@ Rejang:
 	if (yych <= 0xA95F) goto yy406;
 yy405:
 	++YYCURSOR;
-#line 1817 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1871 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Rejang; else return Error; }
-#line 3523 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3559 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy406:
 	++YYCURSOR;
-#line 1816 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1870 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Rejang; }
-#line 3528 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3564 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1818 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1872 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Hangul_Jamo_Extended_A:
 	
-#line 3534 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3570 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3538,20 +3574,20 @@ Hangul_Jamo_Extended_A:
 	if (yych <= 0xA97F) goto yy409;
 yy408:
 	++YYCURSOR;
-#line 1823 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1877 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hangul_Jamo_Extended_A; else return Error; }
-#line 3544 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3580 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy409:
 	++YYCURSOR;
-#line 1822 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1876 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Hangul_Jamo_Extended_A; }
-#line 3549 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3585 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1824 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1878 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Javanese:
 	
-#line 3555 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3591 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3559,20 +3595,20 @@ Javanese:
 	if (yych <= 0xA9DF) goto yy412;
 yy411:
 	++YYCURSOR;
-#line 1829 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1883 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Javanese; else return Error; }
-#line 3565 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3601 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy412:
 	++YYCURSOR;
-#line 1828 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1882 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Javanese; }
-#line 3570 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3606 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1830 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1884 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Myanmar_Extended_B:
 	
-#line 3576 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3612 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3580,20 +3616,20 @@ Myanmar_Extended_B:
 	if (yych <= 0xA9FF) goto yy415;
 yy414:
 	++YYCURSOR;
-#line 1835 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1889 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Myanmar_Extended_B; else return Error; }
-#line 3586 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3622 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy415:
 	++YYCURSOR;
-#line 1834 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1888 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Myanmar_Extended_B; }
-#line 3591 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3627 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1836 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1890 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Cham:
 	
-#line 3597 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3633 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3601,20 +3637,20 @@ Cham:
 	if (yych <= 0xAA5F) goto yy418;
 yy417:
 	++YYCURSOR;
-#line 1841 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1895 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cham; else return Error; }
-#line 3607 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3643 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy418:
 	++YYCURSOR;
-#line 1840 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1894 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Cham; }
-#line 3612 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3648 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1842 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1896 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Myanmar_Extended_A:
 	
-#line 3618 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3654 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3622,20 +3658,20 @@ Myanmar_Extended_A:
 	if (yych <= 0xAA7F) goto yy421;
 yy420:
 	++YYCURSOR;
-#line 1847 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1901 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Myanmar_Extended_A; else return Error; }
-#line 3628 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3664 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy421:
 	++YYCURSOR;
-#line 1846 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1900 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Myanmar_Extended_A; }
-#line 3633 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3669 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1848 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1902 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Tai_Viet:
 	
-#line 3639 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3675 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3643,20 +3679,20 @@ Tai_Viet:
 	if (yych <= 0xAADF) goto yy424;
 yy423:
 	++YYCURSOR;
-#line 1853 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1907 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Tai_Viet; else return Error; }
-#line 3649 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3685 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy424:
 	++YYCURSOR;
-#line 1852 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1906 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Tai_Viet; }
-#line 3654 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3690 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1854 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1908 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Meetei_Mayek_Extensions:
 	
-#line 3660 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3696 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3664,20 +3700,20 @@ Meetei_Mayek_Extensions:
 	if (yych <= 0xAAFF) goto yy427;
 yy426:
 	++YYCURSOR;
-#line 1859 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1913 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Meetei_Mayek_Extensions; else return Error; }
-#line 3670 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3706 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy427:
 	++YYCURSOR;
-#line 1858 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1912 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Meetei_Mayek_Extensions; }
-#line 3675 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3711 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1860 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1914 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Ethiopic_Extended_A:
 	
-#line 3681 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3717 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3685,20 +3721,20 @@ Ethiopic_Extended_A:
 	if (yych <= 0xAB2F) goto yy430;
 yy429:
 	++YYCURSOR;
-#line 1865 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1919 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ethiopic_Extended_A; else return Error; }
-#line 3691 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3727 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy430:
 	++YYCURSOR;
-#line 1864 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1918 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Ethiopic_Extended_A; }
-#line 3696 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3732 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1866 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1920 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Latin_Extended_E:
 	
-#line 3702 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3738 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3706,20 +3742,20 @@ Latin_Extended_E:
 	if (yych <= 0xAB6F) goto yy433;
 yy432:
 	++YYCURSOR;
-#line 1871 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1925 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Latin_Extended_E; else return Error; }
-#line 3712 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3748 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy433:
 	++YYCURSOR;
-#line 1870 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1924 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Latin_Extended_E; }
-#line 3717 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3753 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1872 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1926 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Cherokee_Supplement:
 	
-#line 3723 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3759 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3727,20 +3763,20 @@ Cherokee_Supplement:
 	if (yych <= 0xABBF) goto yy436;
 yy435:
 	++YYCURSOR;
-#line 1877 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1931 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Cherokee_Supplement; else return Error; }
-#line 3733 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3769 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy436:
 	++YYCURSOR;
-#line 1876 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1930 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Cherokee_Supplement; }
-#line 3738 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3774 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1878 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1932 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Meetei_Mayek:
 	
-#line 3744 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3780 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3748,20 +3784,20 @@ Meetei_Mayek:
 	if (yych <= 0xABFF) goto yy439;
 yy438:
 	++YYCURSOR;
-#line 1883 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1937 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Meetei_Mayek; else return Error; }
-#line 3754 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3790 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy439:
 	++YYCURSOR;
-#line 1882 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1936 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Meetei_Mayek; }
-#line 3759 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3795 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1884 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1938 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Hangul_Syllables:
 	
-#line 3765 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3801 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3769,20 +3805,20 @@ Hangul_Syllables:
 	if (yych <= 0xD7AF) goto yy442;
 yy441:
 	++YYCURSOR;
-#line 1889 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1943 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hangul_Syllables; else return Error; }
-#line 3775 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3811 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy442:
 	++YYCURSOR;
-#line 1888 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1942 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Hangul_Syllables; }
-#line 3780 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3816 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1890 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1944 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Hangul_Jamo_Extended_B:
 	
-#line 3786 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3822 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3790,20 +3826,20 @@ Hangul_Jamo_Extended_B:
 	if (yych <= 0xD7FF) goto yy445;
 yy444:
 	++YYCURSOR;
-#line 1895 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1949 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Hangul_Jamo_Extended_B; else return Error; }
-#line 3796 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3832 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy445:
 	++YYCURSOR;
-#line 1894 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1948 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Hangul_Jamo_Extended_B; }
-#line 3801 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3837 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1896 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1950 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 High_Surrogates:
 	
-#line 3807 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3843 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3811,20 +3847,20 @@ High_Surrogates:
 	if (yych <= 0xDB7F) goto yy448;
 yy447:
 	++YYCURSOR;
-#line 1901 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1955 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return High_Surrogates; else return Error; }
-#line 3817 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3853 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy448:
 	++YYCURSOR;
-#line 1900 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1954 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto High_Surrogates; }
-#line 3822 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3858 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1902 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1956 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 High_Private_Use_Surrogates:
 	
-#line 3828 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3864 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3832,20 +3868,20 @@ High_Private_Use_Surrogates:
 	if (yych <= 0xDBFF) goto yy451;
 yy450:
 	++YYCURSOR;
-#line 1907 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1961 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return High_Private_Use_Surrogates; else return Error; }
-#line 3838 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3874 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy451:
 	++YYCURSOR;
-#line 1906 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1960 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto High_Private_Use_Surrogates; }
-#line 3843 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3879 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1908 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1962 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Low_Surrogates:
 	
-#line 3849 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3885 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3853,20 +3889,20 @@ Low_Surrogates:
 	if (yych <= 0xDFFF) goto yy454;
 yy453:
 	++YYCURSOR;
-#line 1913 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1967 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Low_Surrogates; else return Error; }
-#line 3859 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3895 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy454:
 	++YYCURSOR;
-#line 1912 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1966 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Low_Surrogates; }
-#line 3864 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3900 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1914 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1968 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Private_Use_Area:
 	
-#line 3870 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3906 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3874,20 +3910,20 @@ Private_Use_Area:
 	if (yych <= 0xF8FF) goto yy457;
 yy456:
 	++YYCURSOR;
-#line 1919 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1973 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Private_Use_Area; else return Error; }
-#line 3880 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3916 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy457:
 	++YYCURSOR;
-#line 1918 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1972 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Private_Use_Area; }
-#line 3885 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3921 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1920 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1974 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 CJK_Compatibility_Ideographs:
 	
-#line 3891 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3927 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3895,20 +3931,20 @@ CJK_Compatibility_Ideographs:
 	if (yych <= 0xFAFF) goto yy460;
 yy459:
 	++YYCURSOR;
-#line 1925 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1979 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Compatibility_Ideographs; else return Error; }
-#line 3901 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3937 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy460:
 	++YYCURSOR;
-#line 1924 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1978 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto CJK_Compatibility_Ideographs; }
-#line 3906 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3942 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1926 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1980 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Alphabetic_Presentation_Forms:
 	
-#line 3912 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3948 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3916,20 +3952,20 @@ Alphabetic_Presentation_Forms:
 	if (yych <= 0xFB4F) goto yy463;
 yy462:
 	++YYCURSOR;
-#line 1931 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1985 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Alphabetic_Presentation_Forms; else return Error; }
-#line 3922 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3958 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy463:
 	++YYCURSOR;
-#line 1930 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1984 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Alphabetic_Presentation_Forms; }
-#line 3927 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3963 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1932 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1986 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Arabic_Presentation_Forms_A:
 	
-#line 3933 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3969 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3937,20 +3973,20 @@ Arabic_Presentation_Forms_A:
 	if (yych <= 0xFDFF) goto yy466;
 yy465:
 	++YYCURSOR;
-#line 1937 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1991 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Arabic_Presentation_Forms_A; else return Error; }
-#line 3943 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3979 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy466:
 	++YYCURSOR;
-#line 1936 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1990 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Arabic_Presentation_Forms_A; }
-#line 3948 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3984 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1938 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1992 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Variation_Selectors:
 	
-#line 3954 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 3990 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3958,20 +3994,20 @@ Variation_Selectors:
 	if (yych <= 0xFE0F) goto yy469;
 yy468:
 	++YYCURSOR;
-#line 1943 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1997 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Variation_Selectors; else return Error; }
-#line 3964 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4000 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy469:
 	++YYCURSOR;
-#line 1942 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1996 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Variation_Selectors; }
-#line 3969 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4005 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1944 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 1998 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Vertical_Forms:
 	
-#line 3975 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4011 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -3979,20 +4015,20 @@ Vertical_Forms:
 	if (yych <= 0xFE1F) goto yy472;
 yy471:
 	++YYCURSOR;
-#line 1949 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2003 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Vertical_Forms; else return Error; }
-#line 3985 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4021 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy472:
 	++YYCURSOR;
-#line 1948 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2002 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Vertical_Forms; }
-#line 3990 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4026 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1950 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2004 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Combining_Half_Marks:
 	
-#line 3996 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4032 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -4000,20 +4036,20 @@ Combining_Half_Marks:
 	if (yych <= 0xFE2F) goto yy475;
 yy474:
 	++YYCURSOR;
-#line 1955 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2009 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Combining_Half_Marks; else return Error; }
-#line 4006 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4042 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy475:
 	++YYCURSOR;
-#line 1954 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2008 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Combining_Half_Marks; }
-#line 4011 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4047 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1956 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2010 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 CJK_Compatibility_Forms:
 	
-#line 4017 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4053 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -4021,20 +4057,20 @@ CJK_Compatibility_Forms:
 	if (yych <= 0xFE4F) goto yy478;
 yy477:
 	++YYCURSOR;
-#line 1961 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2015 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return CJK_Compatibility_Forms; else return Error; }
-#line 4027 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4063 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy478:
 	++YYCURSOR;
-#line 1960 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2014 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto CJK_Compatibility_Forms; }
-#line 4032 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4068 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1962 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2016 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Small_Form_Variants:
 	
-#line 4038 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4074 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -4042,20 +4078,20 @@ Small_Form_Variants:
 	if (yych <= 0xFE6F) goto yy481;
 yy480:
 	++YYCURSOR;
-#line 1967 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2021 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Small_Form_Variants; else return Error; }
-#line 4048 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4084 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy481:
 	++YYCURSOR;
-#line 1966 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2020 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Small_Form_Variants; }
-#line 4053 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4089 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1968 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2022 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Arabic_Presentation_Forms_B:
 	
-#line 4059 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4095 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -4063,20 +4099,20 @@ Arabic_Presentation_Forms_B:
 	if (yych <= 0xFEFF) goto yy484;
 yy483:
 	++YYCURSOR;
-#line 1973 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2027 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Arabic_Presentation_Forms_B; else return Error; }
-#line 4069 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4105 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy484:
 	++YYCURSOR;
-#line 1972 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2026 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Arabic_Presentation_Forms_B; }
-#line 4074 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4110 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1974 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2028 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Halfwidth_and_Fullwidth_Forms:
 	
-#line 4080 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4116 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -4084,3936 +4120,4374 @@ Halfwidth_and_Fullwidth_Forms:
 	if (yych <= 0xFFEF) goto yy487;
 yy486:
 	++YYCURSOR;
-#line 1979 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2033 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Halfwidth_and_Fullwidth_Forms; else return Error; }
-#line 4090 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4126 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy487:
 	++YYCURSOR;
-#line 1978 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2032 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Halfwidth_and_Fullwidth_Forms; }
-#line 4095 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4131 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1980 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2034 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Specials:
 	
-#line 4101 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4137 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych >= 0xFFF0) goto yy489;
 	++YYCURSOR;
-#line 1985 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2039 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Specials; else return Error; }
-#line 4109 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4145 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy489:
 	++YYCURSOR;
-#line 1984 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2038 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Specials; }
-#line 4114 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4150 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1986 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2040 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Linear_B_Syllabary:
 	
-#line 4120 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4156 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD800) goto yy492;
 	++YYCURSOR;
 yy491:
-#line 1991 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2045 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Linear_B_Syllabary; else return Error; }
-#line 4129 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4165 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy492:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDBFF) goto yy491;
 	if (yych >= 0xDC80) goto yy491;
 	++YYCURSOR;
-#line 1990 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2044 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Linear_B_Syllabary; }
-#line 4137 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4173 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1992 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2046 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Linear_B_Ideograms:
 	
-#line 4143 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4179 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD800) goto yy495;
 	++YYCURSOR;
 yy494:
-#line 1997 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2051 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Linear_B_Ideograms; else return Error; }
-#line 4152 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4188 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy495:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDC7F) goto yy494;
 	if (yych >= 0xDD00) goto yy494;
 	++YYCURSOR;
-#line 1996 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2050 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Linear_B_Ideograms; }
-#line 4160 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4196 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 1998 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2052 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Aegean_Numbers:
 	
-#line 4166 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4202 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD800) goto yy498;
 	++YYCURSOR;
 yy497:
-#line 2003 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2057 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Aegean_Numbers; else return Error; }
-#line 4175 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4211 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy498:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDCFF) goto yy497;
 	if (yych >= 0xDD40) goto yy497;
 	++YYCURSOR;
-#line 2002 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2056 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Aegean_Numbers; }
-#line 4183 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4219 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2004 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2058 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Ancient_Greek_Numbers:
 	
-#line 4189 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4225 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD800) goto yy501;
 	++YYCURSOR;
 yy500:
-#line 2009 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2063 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ancient_Greek_Numbers; else return Error; }
-#line 4198 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4234 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy501:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDD3F) goto yy500;
 	if (yych >= 0xDD90) goto yy500;
 	++YYCURSOR;
-#line 2008 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2062 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Ancient_Greek_Numbers; }
-#line 4206 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4242 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2010 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2064 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Ancient_Symbols:
 	
-#line 4212 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4248 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD800) goto yy504;
 	++YYCURSOR;
 yy503:
-#line 2015 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2069 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ancient_Symbols; else return Error; }
-#line 4221 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4257 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy504:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDD8F) goto yy503;
 	if (yych >= 0xDDD0) goto yy503;
 	++YYCURSOR;
-#line 2014 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2068 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Ancient_Symbols; }
-#line 4229 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4265 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2016 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2070 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Phaistos_Disc:
 	
-#line 4235 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4271 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD800) goto yy507;
 	++YYCURSOR;
 yy506:
-#line 2021 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2075 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Phaistos_Disc; else return Error; }
-#line 4244 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4280 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy507:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDDCF) goto yy506;
 	if (yych >= 0xDE00) goto yy506;
 	++YYCURSOR;
-#line 2020 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2074 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Phaistos_Disc; }
-#line 4252 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4288 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2022 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2076 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Lycian:
 	
-#line 4258 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4294 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD800) goto yy510;
 	++YYCURSOR;
 yy509:
-#line 2027 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2081 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Lycian; else return Error; }
-#line 4267 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4303 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy510:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDE7F) goto yy509;
 	if (yych >= 0xDEA0) goto yy509;
 	++YYCURSOR;
-#line 2026 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2080 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Lycian; }
-#line 4275 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4311 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2028 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2082 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Carian:
 	
-#line 4281 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4317 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD800) goto yy513;
 	++YYCURSOR;
 yy512:
-#line 2033 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2087 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Carian; else return Error; }
-#line 4290 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4326 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy513:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDE9F) goto yy512;
 	if (yych >= 0xDEE0) goto yy512;
 	++YYCURSOR;
-#line 2032 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2086 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Carian; }
-#line 4298 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4334 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2034 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2088 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Coptic_Epact_Numbers:
 	
-#line 4304 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4340 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD800) goto yy516;
 	++YYCURSOR;
 yy515:
-#line 2039 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2093 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Coptic_Epact_Numbers; else return Error; }
-#line 4313 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4349 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy516:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDEDF) goto yy515;
 	if (yych >= 0xDF00) goto yy515;
 	++YYCURSOR;
-#line 2038 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2092 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Coptic_Epact_Numbers; }
-#line 4321 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4357 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2040 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2094 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Old_Italic:
 	
-#line 4327 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4363 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD800) goto yy519;
 	++YYCURSOR;
 yy518:
-#line 2045 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2099 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Old_Italic; else return Error; }
-#line 4336 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4372 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy519:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDEFF) goto yy518;
 	if (yych >= 0xDF30) goto yy518;
 	++YYCURSOR;
-#line 2044 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2098 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Old_Italic; }
-#line 4344 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4380 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2046 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2100 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Gothic:
 	
-#line 4350 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4386 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD800) goto yy522;
 	++YYCURSOR;
 yy521:
-#line 2051 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2105 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Gothic; else return Error; }
-#line 4359 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4395 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy522:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDF2F) goto yy521;
 	if (yych >= 0xDF50) goto yy521;
 	++YYCURSOR;
-#line 2050 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2104 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Gothic; }
-#line 4367 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4403 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2052 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2106 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Old_Permic:
 	
-#line 4373 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4409 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD800) goto yy525;
 	++YYCURSOR;
 yy524:
-#line 2057 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2111 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Old_Permic; else return Error; }
-#line 4382 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4418 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy525:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDF4F) goto yy524;
 	if (yych >= 0xDF80) goto yy524;
 	++YYCURSOR;
-#line 2056 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2110 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Old_Permic; }
-#line 4390 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4426 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2058 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2112 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Ugaritic:
 	
-#line 4396 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4432 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD800) goto yy528;
 	++YYCURSOR;
 yy527:
-#line 2063 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2117 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Ugaritic; else return Error; }
-#line 4405 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4441 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy528:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDF7F) goto yy527;
 	if (yych >= 0xDFA0) goto yy527;
 	++YYCURSOR;
-#line 2062 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2116 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Ugaritic; }
-#line 4413 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4449 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2064 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2118 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Old_Persian:
 	
-#line 4419 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4455 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD800) goto yy531;
 	++YYCURSOR;
 yy530:
-#line 2069 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2123 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Old_Persian; else return Error; }
-#line 4428 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4464 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy531:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDF9F) goto yy530;
 	if (yych >= 0xDFE0) goto yy530;
 	++YYCURSOR;
-#line 2068 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2122 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Old_Persian; }
-#line 4436 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4472 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2070 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2124 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Deseret:
 	
-#line 4442 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4478 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD801) goto yy534;
 	++YYCURSOR;
 yy533:
-#line 2075 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2129 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Deseret; else return Error; }
-#line 4451 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4487 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy534:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDBFF) goto yy533;
 	if (yych >= 0xDC50) goto yy533;
 	++YYCURSOR;
-#line 2074 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2128 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Deseret; }
-#line 4459 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4495 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2076 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2130 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Shavian:
 	
-#line 4465 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4501 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD801) goto yy537;
 	++YYCURSOR;
 yy536:
-#line 2081 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2135 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Shavian; else return Error; }
-#line 4474 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4510 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy537:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDC4F) goto yy536;
 	if (yych >= 0xDC80) goto yy536;
 	++YYCURSOR;
-#line 2080 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2134 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Shavian; }
-#line 4482 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4518 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2082 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2136 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Osmanya:
 	
-#line 4488 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4524 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD801) goto yy540;
 	++YYCURSOR;
 yy539:
-#line 2087 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2141 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Osmanya; else return Error; }
-#line 4497 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4533 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy540:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDC7F) goto yy539;
 	if (yych >= 0xDCB0) goto yy539;
 	++YYCURSOR;
-#line 2086 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2140 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Osmanya; }
-#line 4505 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4541 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2088 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2142 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Osage:
 	
-#line 4511 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4547 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD801) goto yy543;
 	++YYCURSOR;
 yy542:
-#line 2093 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2147 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Osage; else return Error; }
-#line 4520 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4556 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy543:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDCAF) goto yy542;
 	if (yych >= 0xDD00) goto yy542;
 	++YYCURSOR;
-#line 2092 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2146 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Osage; }
-#line 4528 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4564 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2094 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2148 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Elbasan:
 	
-#line 4534 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4570 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD801) goto yy546;
 	++YYCURSOR;
 yy545:
-#line 2099 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2153 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Elbasan; else return Error; }
-#line 4543 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4579 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy546:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDCFF) goto yy545;
 	if (yych >= 0xDD30) goto yy545;
 	++YYCURSOR;
-#line 2098 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2152 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Elbasan; }
-#line 4551 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4587 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2100 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2154 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Caucasian_Albanian:
 	
-#line 4557 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4593 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD801) goto yy549;
 	++YYCURSOR;
 yy548:
-#line 2105 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2159 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Caucasian_Albanian; else return Error; }
-#line 4566 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4602 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy549:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDD2F) goto yy548;
 	if (yych >= 0xDD70) goto yy548;
 	++YYCURSOR;
-#line 2104 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2158 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Caucasian_Albanian; }
-#line 4574 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4610 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2106 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2160 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Vithkuqi:
 	
-#line 4580 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4616 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD801) goto yy552;
 	++YYCURSOR;
 yy551:
-#line 2111 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2165 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ if (YYCURSOR - 1 == limit) return Vithkuqi; else return Error; }
-#line 4589 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4625 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy552:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDD6F) goto yy551;
 	if (yych >= 0xDDC0) goto yy551;
 	++YYCURSOR;
-#line 2110 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2164 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 	{ goto Vithkuqi; }
-#line 4597 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4633 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2112 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2166 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Linear_A:
+Todhri:
 	
-#line 4603 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4639 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD801) goto yy555;
 	++YYCURSOR;
 yy554:
-#line 2117 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Linear_A; else return Error; }
-#line 4612 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2171 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Todhri; else return Error; }
+#line 4648 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy555:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDDFF) goto yy554;
-	if (yych >= 0xDF80) goto yy554;
+	if (yych <= 0xDDBF) goto yy554;
+	if (yych >= 0xDE00) goto yy554;
 	++YYCURSOR;
-#line 2116 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Linear_A; }
-#line 4620 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2170 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Todhri; }
+#line 4656 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2118 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2172 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Latin_Extended_F:
+Linear_A:
 	
-#line 4626 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4662 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD801) goto yy558;
 	++YYCURSOR;
 yy557:
-#line 2123 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Latin_Extended_F; else return Error; }
-#line 4635 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2177 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Linear_A; else return Error; }
+#line 4671 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy558:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDF7F) goto yy557;
-	if (yych >= 0xDFC0) goto yy557;
+	if (yych <= 0xDDFF) goto yy557;
+	if (yych >= 0xDF80) goto yy557;
 	++YYCURSOR;
-#line 2122 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Latin_Extended_F; }
-#line 4643 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2176 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Linear_A; }
+#line 4679 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2124 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2178 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Cypriot_Syllabary:
+Latin_Extended_F:
 	
-#line 4649 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4685 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD802) goto yy561;
+	if (yych == 0xD801) goto yy561;
 	++YYCURSOR;
 yy560:
-#line 2129 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Cypriot_Syllabary; else return Error; }
-#line 4658 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2183 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Latin_Extended_F; else return Error; }
+#line 4694 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy561:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy560;
-	if (yych >= 0xDC40) goto yy560;
+	if (yych <= 0xDF7F) goto yy560;
+	if (yych >= 0xDFC0) goto yy560;
 	++YYCURSOR;
-#line 2128 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Cypriot_Syllabary; }
-#line 4666 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2182 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Latin_Extended_F; }
+#line 4702 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2130 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2184 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Imperial_Aramaic:
+Cypriot_Syllabary:
 	
-#line 4672 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4708 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy564;
 	++YYCURSOR;
 yy563:
-#line 2135 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Imperial_Aramaic; else return Error; }
-#line 4681 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2189 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Cypriot_Syllabary; else return Error; }
+#line 4717 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy564:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDC3F) goto yy563;
-	if (yych >= 0xDC60) goto yy563;
+	if (yych <= 0xDBFF) goto yy563;
+	if (yych >= 0xDC40) goto yy563;
 	++YYCURSOR;
-#line 2134 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Imperial_Aramaic; }
-#line 4689 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2188 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Cypriot_Syllabary; }
+#line 4725 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2136 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2190 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Palmyrene:
+Imperial_Aramaic:
 	
-#line 4695 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4731 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy567;
 	++YYCURSOR;
 yy566:
-#line 2141 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Palmyrene; else return Error; }
-#line 4704 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2195 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Imperial_Aramaic; else return Error; }
+#line 4740 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy567:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDC5F) goto yy566;
-	if (yych >= 0xDC80) goto yy566;
+	if (yych <= 0xDC3F) goto yy566;
+	if (yych >= 0xDC60) goto yy566;
 	++YYCURSOR;
-#line 2140 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Palmyrene; }
-#line 4712 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2194 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Imperial_Aramaic; }
+#line 4748 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2142 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2196 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Nabataean:
+Palmyrene:
 	
-#line 4718 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4754 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy570;
 	++YYCURSOR;
 yy569:
-#line 2147 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Nabataean; else return Error; }
-#line 4727 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2201 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Palmyrene; else return Error; }
+#line 4763 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy570:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDC7F) goto yy569;
-	if (yych >= 0xDCB0) goto yy569;
+	if (yych <= 0xDC5F) goto yy569;
+	if (yych >= 0xDC80) goto yy569;
 	++YYCURSOR;
-#line 2146 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Nabataean; }
-#line 4735 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2200 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Palmyrene; }
+#line 4771 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2148 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2202 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Hatran:
+Nabataean:
 	
-#line 4741 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4777 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy573;
 	++YYCURSOR;
 yy572:
-#line 2153 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Hatran; else return Error; }
-#line 4750 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2207 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Nabataean; else return Error; }
+#line 4786 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy573:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDCDF) goto yy572;
-	if (yych >= 0xDD00) goto yy572;
+	if (yych <= 0xDC7F) goto yy572;
+	if (yych >= 0xDCB0) goto yy572;
 	++YYCURSOR;
-#line 2152 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Hatran; }
-#line 4758 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2206 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Nabataean; }
+#line 4794 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2154 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2208 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Phoenician:
+Hatran:
 	
-#line 4764 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4800 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy576;
 	++YYCURSOR;
 yy575:
-#line 2159 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Phoenician; else return Error; }
-#line 4773 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2213 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Hatran; else return Error; }
+#line 4809 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy576:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy575;
-	if (yych >= 0xDD20) goto yy575;
+	if (yych <= 0xDCDF) goto yy575;
+	if (yych >= 0xDD00) goto yy575;
 	++YYCURSOR;
-#line 2158 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Phoenician; }
-#line 4781 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2212 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Hatran; }
+#line 4817 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2160 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2214 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Lydian:
+Phoenician:
 	
-#line 4787 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4823 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy579;
 	++YYCURSOR;
 yy578:
-#line 2165 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Lydian; else return Error; }
-#line 4796 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2219 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Phoenician; else return Error; }
+#line 4832 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy579:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDD1F) goto yy578;
-	if (yych >= 0xDD40) goto yy578;
+	if (yych <= 0xDCFF) goto yy578;
+	if (yych >= 0xDD20) goto yy578;
 	++YYCURSOR;
-#line 2164 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Lydian; }
-#line 4804 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2218 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Phoenician; }
+#line 4840 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2166 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2220 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Meroitic_Hieroglyphs:
+Lydian:
 	
-#line 4810 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4846 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy582;
 	++YYCURSOR;
 yy581:
-#line 2171 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Meroitic_Hieroglyphs; else return Error; }
-#line 4819 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2225 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Lydian; else return Error; }
+#line 4855 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy582:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDD7F) goto yy581;
-	if (yych >= 0xDDA0) goto yy581;
+	if (yych <= 0xDD1F) goto yy581;
+	if (yych >= 0xDD40) goto yy581;
 	++YYCURSOR;
-#line 2170 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Meroitic_Hieroglyphs; }
-#line 4827 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2224 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Lydian; }
+#line 4863 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2172 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2226 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Meroitic_Cursive:
+Sidetic:
 	
-#line 4833 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4869 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy585;
 	++YYCURSOR;
 yy584:
-#line 2177 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Meroitic_Cursive; else return Error; }
-#line 4842 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2231 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sidetic; else return Error; }
+#line 4878 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy585:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDD9F) goto yy584;
-	if (yych >= 0xDE00) goto yy584;
+	if (yych <= 0xDD3F) goto yy584;
+	if (yych >= 0xDD60) goto yy584;
 	++YYCURSOR;
-#line 2176 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Meroitic_Cursive; }
-#line 4850 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2230 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Sidetic; }
+#line 4886 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2178 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2232 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Kharoshthi:
+Meroitic_Hieroglyphs:
 	
-#line 4856 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4892 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy588;
 	++YYCURSOR;
 yy587:
-#line 2183 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Kharoshthi; else return Error; }
-#line 4865 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2237 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Meroitic_Hieroglyphs; else return Error; }
+#line 4901 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy588:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDDFF) goto yy587;
-	if (yych >= 0xDE60) goto yy587;
+	if (yych <= 0xDD7F) goto yy587;
+	if (yych >= 0xDDA0) goto yy587;
 	++YYCURSOR;
-#line 2182 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Kharoshthi; }
-#line 4873 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2236 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Meroitic_Hieroglyphs; }
+#line 4909 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2184 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2238 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Old_South_Arabian:
+Meroitic_Cursive:
 	
-#line 4879 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4915 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy591;
 	++YYCURSOR;
 yy590:
-#line 2189 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Old_South_Arabian; else return Error; }
-#line 4888 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2243 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Meroitic_Cursive; else return Error; }
+#line 4924 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy591:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDE5F) goto yy590;
-	if (yych >= 0xDE80) goto yy590;
+	if (yych <= 0xDD9F) goto yy590;
+	if (yych >= 0xDE00) goto yy590;
 	++YYCURSOR;
-#line 2188 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Old_South_Arabian; }
-#line 4896 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2242 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Meroitic_Cursive; }
+#line 4932 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2190 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2244 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Old_North_Arabian:
+Kharoshthi:
 	
-#line 4902 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4938 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy594;
 	++YYCURSOR;
 yy593:
-#line 2195 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Old_North_Arabian; else return Error; }
-#line 4911 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2249 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Kharoshthi; else return Error; }
+#line 4947 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy594:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDE7F) goto yy593;
-	if (yych >= 0xDEA0) goto yy593;
+	if (yych <= 0xDDFF) goto yy593;
+	if (yych >= 0xDE60) goto yy593;
 	++YYCURSOR;
-#line 2194 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Old_North_Arabian; }
-#line 4919 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2248 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Kharoshthi; }
+#line 4955 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2196 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2250 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Manichaean:
+Old_South_Arabian:
 	
-#line 4925 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4961 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy597;
 	++YYCURSOR;
 yy596:
-#line 2201 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Manichaean; else return Error; }
-#line 4934 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2255 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Old_South_Arabian; else return Error; }
+#line 4970 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy597:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEBF) goto yy596;
-	if (yych >= 0xDF00) goto yy596;
+	if (yych <= 0xDE5F) goto yy596;
+	if (yych >= 0xDE80) goto yy596;
 	++YYCURSOR;
-#line 2200 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Manichaean; }
-#line 4942 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2254 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Old_South_Arabian; }
+#line 4978 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2202 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2256 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Avestan:
+Old_North_Arabian:
 	
-#line 4948 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 4984 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy600;
 	++YYCURSOR;
 yy599:
-#line 2207 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Avestan; else return Error; }
-#line 4957 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2261 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Old_North_Arabian; else return Error; }
+#line 4993 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy600:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy599;
-	if (yych >= 0xDF40) goto yy599;
+	if (yych <= 0xDE7F) goto yy599;
+	if (yych >= 0xDEA0) goto yy599;
 	++YYCURSOR;
-#line 2206 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Avestan; }
-#line 4965 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2260 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Old_North_Arabian; }
+#line 5001 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2208 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2262 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Inscriptional_Parthian:
+Manichaean:
 	
-#line 4971 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5007 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy603;
 	++YYCURSOR;
 yy602:
-#line 2213 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Inscriptional_Parthian; else return Error; }
-#line 4980 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2267 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Manichaean; else return Error; }
+#line 5016 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy603:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDF3F) goto yy602;
-	if (yych >= 0xDF60) goto yy602;
+	if (yych <= 0xDEBF) goto yy602;
+	if (yych >= 0xDF00) goto yy602;
 	++YYCURSOR;
-#line 2212 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Inscriptional_Parthian; }
-#line 4988 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2266 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Manichaean; }
+#line 5024 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2214 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2268 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Inscriptional_Pahlavi:
+Avestan:
 	
-#line 4994 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5030 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy606;
 	++YYCURSOR;
 yy605:
-#line 2219 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Inscriptional_Pahlavi; else return Error; }
-#line 5003 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2273 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Avestan; else return Error; }
+#line 5039 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy606:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDF5F) goto yy605;
-	if (yych >= 0xDF80) goto yy605;
+	if (yych <= 0xDEFF) goto yy605;
+	if (yych >= 0xDF40) goto yy605;
 	++YYCURSOR;
-#line 2218 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Inscriptional_Pahlavi; }
-#line 5011 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2272 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Avestan; }
+#line 5047 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2220 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2274 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Psalter_Pahlavi:
+Inscriptional_Parthian:
 	
-#line 5017 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5053 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD802) goto yy609;
 	++YYCURSOR;
 yy608:
-#line 2225 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Psalter_Pahlavi; else return Error; }
-#line 5026 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2279 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Inscriptional_Parthian; else return Error; }
+#line 5062 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy609:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDF7F) goto yy608;
-	if (yych >= 0xDFB0) goto yy608;
+	if (yych <= 0xDF3F) goto yy608;
+	if (yych >= 0xDF60) goto yy608;
 	++YYCURSOR;
-#line 2224 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Psalter_Pahlavi; }
-#line 5034 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2278 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Inscriptional_Parthian; }
+#line 5070 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2226 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2280 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Inscriptional_Pahlavi:
+	
+#line 5076 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD802) goto yy612;
+	++YYCURSOR;
+yy611:
+#line 2285 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Inscriptional_Pahlavi; else return Error; }
+#line 5085 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy612:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDF5F) goto yy611;
+	if (yych >= 0xDF80) goto yy611;
+	++YYCURSOR;
+#line 2284 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Inscriptional_Pahlavi; }
+#line 5093 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2286 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Psalter_Pahlavi:
+	
+#line 5099 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD802) goto yy615;
+	++YYCURSOR;
+yy614:
+#line 2291 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Psalter_Pahlavi; else return Error; }
+#line 5108 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy615:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDF7F) goto yy614;
+	if (yych >= 0xDFB0) goto yy614;
+	++YYCURSOR;
+#line 2290 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Psalter_Pahlavi; }
+#line 5116 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2292 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Old_Turkic:
 	
-#line 5040 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD803) goto yy612;
-	++YYCURSOR;
-yy611:
-#line 2231 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Old_Turkic; else return Error; }
-#line 5049 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy612:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy611;
-	if (yych >= 0xDC50) goto yy611;
-	++YYCURSOR;
-#line 2230 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Old_Turkic; }
-#line 5057 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2232 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Old_Hungarian:
-	
-#line 5063 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD803) goto yy615;
-	++YYCURSOR;
-yy614:
-#line 2237 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Old_Hungarian; else return Error; }
-#line 5072 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy615:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDC7F) goto yy614;
-	if (yych >= 0xDD00) goto yy614;
-	++YYCURSOR;
-#line 2236 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Old_Hungarian; }
-#line 5080 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2238 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Hanifi_Rohingya:
-	
-#line 5086 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5122 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD803) goto yy618;
 	++YYCURSOR;
 yy617:
-#line 2243 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Hanifi_Rohingya; else return Error; }
-#line 5095 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2297 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Old_Turkic; else return Error; }
+#line 5131 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy618:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy617;
-	if (yych >= 0xDD40) goto yy617;
+	if (yych <= 0xDBFF) goto yy617;
+	if (yych >= 0xDC50) goto yy617;
 	++YYCURSOR;
-#line 2242 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Hanifi_Rohingya; }
-#line 5103 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2296 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Old_Turkic; }
+#line 5139 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2244 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2298 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Rumi_Numeral_Symbols:
+Old_Hungarian:
 	
-#line 5109 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5145 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD803) goto yy621;
 	++YYCURSOR;
 yy620:
-#line 2249 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Rumi_Numeral_Symbols; else return Error; }
-#line 5118 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2303 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Old_Hungarian; else return Error; }
+#line 5154 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy621:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDE5F) goto yy620;
-	if (yych >= 0xDE80) goto yy620;
+	if (yych <= 0xDC7F) goto yy620;
+	if (yych >= 0xDD00) goto yy620;
 	++YYCURSOR;
-#line 2248 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Rumi_Numeral_Symbols; }
-#line 5126 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2302 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Old_Hungarian; }
+#line 5162 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2250 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2304 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Yezidi:
+Hanifi_Rohingya:
 	
-#line 5132 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5168 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD803) goto yy624;
 	++YYCURSOR;
 yy623:
-#line 2255 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Yezidi; else return Error; }
-#line 5141 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2309 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Hanifi_Rohingya; else return Error; }
+#line 5177 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy624:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDE7F) goto yy623;
-	if (yych >= 0xDEC0) goto yy623;
+	if (yych <= 0xDCFF) goto yy623;
+	if (yych >= 0xDD40) goto yy623;
 	++YYCURSOR;
-#line 2254 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Yezidi; }
-#line 5149 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2308 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Hanifi_Rohingya; }
+#line 5185 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2256 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2310 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Arabic_Extended_C:
+Garay:
 	
-#line 5155 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5191 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD803) goto yy627;
 	++YYCURSOR;
 yy626:
-#line 2261 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Arabic_Extended_C; else return Error; }
-#line 5164 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2315 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Garay; else return Error; }
+#line 5200 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy627:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEBF) goto yy626;
-	if (yych >= 0xDF00) goto yy626;
+	if (yych <= 0xDD3F) goto yy626;
+	if (yych >= 0xDD90) goto yy626;
 	++YYCURSOR;
-#line 2260 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Arabic_Extended_C; }
-#line 5172 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2314 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Garay; }
+#line 5208 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2262 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2316 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Old_Sogdian:
+Rumi_Numeral_Symbols:
 	
-#line 5178 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5214 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD803) goto yy630;
 	++YYCURSOR;
 yy629:
-#line 2267 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Old_Sogdian; else return Error; }
-#line 5187 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2321 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Rumi_Numeral_Symbols; else return Error; }
+#line 5223 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy630:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy629;
-	if (yych >= 0xDF30) goto yy629;
+	if (yych <= 0xDE5F) goto yy629;
+	if (yych >= 0xDE80) goto yy629;
 	++YYCURSOR;
-#line 2266 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Old_Sogdian; }
-#line 5195 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2320 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Rumi_Numeral_Symbols; }
+#line 5231 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2268 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2322 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Sogdian:
+Yezidi:
 	
-#line 5201 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5237 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD803) goto yy633;
 	++YYCURSOR;
 yy632:
-#line 2273 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Sogdian; else return Error; }
-#line 5210 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2327 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Yezidi; else return Error; }
+#line 5246 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy633:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDF2F) goto yy632;
-	if (yych >= 0xDF70) goto yy632;
+	if (yych <= 0xDE7F) goto yy632;
+	if (yych >= 0xDEC0) goto yy632;
 	++YYCURSOR;
-#line 2272 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Sogdian; }
-#line 5218 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2326 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Yezidi; }
+#line 5254 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2274 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2328 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Old_Uyghur:
+Arabic_Extended_C:
 	
-#line 5224 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5260 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD803) goto yy636;
 	++YYCURSOR;
 yy635:
-#line 2279 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Old_Uyghur; else return Error; }
-#line 5233 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2333 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Arabic_Extended_C; else return Error; }
+#line 5269 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy636:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDF6F) goto yy635;
-	if (yych >= 0xDFB0) goto yy635;
+	if (yych <= 0xDEBF) goto yy635;
+	if (yych >= 0xDF00) goto yy635;
 	++YYCURSOR;
-#line 2278 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Old_Uyghur; }
-#line 5241 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2332 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Arabic_Extended_C; }
+#line 5277 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2280 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2334 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Chorasmian:
+Old_Sogdian:
 	
-#line 5247 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5283 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD803) goto yy639;
 	++YYCURSOR;
 yy638:
-#line 2285 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Chorasmian; else return Error; }
-#line 5256 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2339 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Old_Sogdian; else return Error; }
+#line 5292 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy639:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDFAF) goto yy638;
-	if (yych >= 0xDFE0) goto yy638;
+	if (yych <= 0xDEFF) goto yy638;
+	if (yych >= 0xDF30) goto yy638;
 	++YYCURSOR;
-#line 2284 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Chorasmian; }
-#line 5264 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2338 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Old_Sogdian; }
+#line 5300 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2286 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2340 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Elymaic:
+Sogdian:
 	
-#line 5270 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5306 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD803) goto yy642;
 	++YYCURSOR;
 yy641:
-#line 2291 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Elymaic; else return Error; }
-#line 5279 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2345 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sogdian; else return Error; }
+#line 5315 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy642:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDFDF) goto yy641;
-	if (yych >= 0xE000) goto yy641;
+	if (yych <= 0xDF2F) goto yy641;
+	if (yych >= 0xDF70) goto yy641;
 	++YYCURSOR;
-#line 2290 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Elymaic; }
-#line 5287 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2344 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Sogdian; }
+#line 5323 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2292 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2346 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Old_Uyghur:
+	
+#line 5329 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD803) goto yy645;
+	++YYCURSOR;
+yy644:
+#line 2351 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Old_Uyghur; else return Error; }
+#line 5338 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy645:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDF6F) goto yy644;
+	if (yych >= 0xDFB0) goto yy644;
+	++YYCURSOR;
+#line 2350 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Old_Uyghur; }
+#line 5346 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2352 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Chorasmian:
+	
+#line 5352 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD803) goto yy648;
+	++YYCURSOR;
+yy647:
+#line 2357 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Chorasmian; else return Error; }
+#line 5361 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy648:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDFAF) goto yy647;
+	if (yych >= 0xDFE0) goto yy647;
+	++YYCURSOR;
+#line 2356 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Chorasmian; }
+#line 5369 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2358 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Elymaic:
+	
+#line 5375 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD803) goto yy651;
+	++YYCURSOR;
+yy650:
+#line 2363 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Elymaic; else return Error; }
+#line 5384 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy651:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDFDF) goto yy650;
+	if (yych >= 0xE000) goto yy650;
+	++YYCURSOR;
+#line 2362 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Elymaic; }
+#line 5392 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2364 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Brahmi:
 	
-#line 5293 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD804) goto yy645;
-	++YYCURSOR;
-yy644:
-#line 2297 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Brahmi; else return Error; }
-#line 5302 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy645:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy644;
-	if (yych >= 0xDC80) goto yy644;
-	++YYCURSOR;
-#line 2296 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Brahmi; }
-#line 5310 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2298 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Kaithi:
-	
-#line 5316 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD804) goto yy648;
-	++YYCURSOR;
-yy647:
-#line 2303 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Kaithi; else return Error; }
-#line 5325 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy648:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDC7F) goto yy647;
-	if (yych >= 0xDCD0) goto yy647;
-	++YYCURSOR;
-#line 2302 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Kaithi; }
-#line 5333 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2304 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Sora_Sompeng:
-	
-#line 5339 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD804) goto yy651;
-	++YYCURSOR;
-yy650:
-#line 2309 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Sora_Sompeng; else return Error; }
-#line 5348 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy651:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDCCF) goto yy650;
-	if (yych >= 0xDD00) goto yy650;
-	++YYCURSOR;
-#line 2308 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Sora_Sompeng; }
-#line 5356 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2310 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Chakma:
-	
-#line 5362 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5398 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD804) goto yy654;
 	++YYCURSOR;
 yy653:
-#line 2315 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Chakma; else return Error; }
-#line 5371 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2369 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Brahmi; else return Error; }
+#line 5407 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy654:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy653;
-	if (yych >= 0xDD50) goto yy653;
+	if (yych <= 0xDBFF) goto yy653;
+	if (yych >= 0xDC80) goto yy653;
 	++YYCURSOR;
-#line 2314 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Chakma; }
-#line 5379 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2368 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Brahmi; }
+#line 5415 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2316 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2370 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Mahajani:
+Kaithi:
 	
-#line 5385 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5421 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD804) goto yy657;
 	++YYCURSOR;
 yy656:
-#line 2321 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Mahajani; else return Error; }
-#line 5394 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2375 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Kaithi; else return Error; }
+#line 5430 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy657:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDD4F) goto yy656;
-	if (yych >= 0xDD80) goto yy656;
+	if (yych <= 0xDC7F) goto yy656;
+	if (yych >= 0xDCD0) goto yy656;
 	++YYCURSOR;
-#line 2320 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Mahajani; }
-#line 5402 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2374 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Kaithi; }
+#line 5438 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2322 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2376 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Sharada:
+Sora_Sompeng:
 	
-#line 5408 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5444 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD804) goto yy660;
 	++YYCURSOR;
 yy659:
-#line 2327 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Sharada; else return Error; }
-#line 5417 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2381 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sora_Sompeng; else return Error; }
+#line 5453 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy660:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDD7F) goto yy659;
-	if (yych >= 0xDDE0) goto yy659;
+	if (yych <= 0xDCCF) goto yy659;
+	if (yych >= 0xDD00) goto yy659;
 	++YYCURSOR;
-#line 2326 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Sharada; }
-#line 5425 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2380 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Sora_Sompeng; }
+#line 5461 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2328 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2382 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Sinhala_Archaic_Numbers:
+Chakma:
 	
-#line 5431 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5467 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD804) goto yy663;
 	++YYCURSOR;
 yy662:
-#line 2333 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Sinhala_Archaic_Numbers; else return Error; }
-#line 5440 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2387 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Chakma; else return Error; }
+#line 5476 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy663:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDDDF) goto yy662;
-	if (yych >= 0xDE00) goto yy662;
+	if (yych <= 0xDCFF) goto yy662;
+	if (yych >= 0xDD50) goto yy662;
 	++YYCURSOR;
-#line 2332 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Sinhala_Archaic_Numbers; }
-#line 5448 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2386 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Chakma; }
+#line 5484 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2334 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2388 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Khojki:
+Mahajani:
 	
-#line 5454 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5490 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD804) goto yy666;
 	++YYCURSOR;
 yy665:
-#line 2339 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Khojki; else return Error; }
-#line 5463 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2393 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Mahajani; else return Error; }
+#line 5499 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy666:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDDFF) goto yy665;
-	if (yych >= 0xDE50) goto yy665;
+	if (yych <= 0xDD4F) goto yy665;
+	if (yych >= 0xDD80) goto yy665;
 	++YYCURSOR;
-#line 2338 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Khojki; }
-#line 5471 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2392 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Mahajani; }
+#line 5507 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2340 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2394 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Multani:
+Sharada:
 	
-#line 5477 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5513 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD804) goto yy669;
 	++YYCURSOR;
 yy668:
-#line 2345 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Multani; else return Error; }
-#line 5486 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2399 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sharada; else return Error; }
+#line 5522 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy669:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDE7F) goto yy668;
-	if (yych >= 0xDEB0) goto yy668;
+	if (yych <= 0xDD7F) goto yy668;
+	if (yych >= 0xDDE0) goto yy668;
 	++YYCURSOR;
-#line 2344 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Multani; }
-#line 5494 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2398 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Sharada; }
+#line 5530 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2346 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2400 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Khudawadi:
+Sinhala_Archaic_Numbers:
 	
-#line 5500 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5536 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD804) goto yy672;
 	++YYCURSOR;
 yy671:
-#line 2351 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Khudawadi; else return Error; }
-#line 5509 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2405 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sinhala_Archaic_Numbers; else return Error; }
+#line 5545 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy672:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEAF) goto yy671;
-	if (yych >= 0xDF00) goto yy671;
+	if (yych <= 0xDDDF) goto yy671;
+	if (yych >= 0xDE00) goto yy671;
 	++YYCURSOR;
-#line 2350 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Khudawadi; }
-#line 5517 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2404 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Sinhala_Archaic_Numbers; }
+#line 5553 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2352 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2406 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Grantha:
+Khojki:
 	
-#line 5523 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5559 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD804) goto yy675;
 	++YYCURSOR;
 yy674:
-#line 2357 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Grantha; else return Error; }
-#line 5532 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2411 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Khojki; else return Error; }
+#line 5568 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy675:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy674;
-	if (yych >= 0xDF80) goto yy674;
+	if (yych <= 0xDDFF) goto yy674;
+	if (yych >= 0xDE50) goto yy674;
 	++YYCURSOR;
-#line 2356 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Grantha; }
-#line 5540 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2410 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Khojki; }
+#line 5576 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2358 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2412 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Multani:
+	
+#line 5582 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD804) goto yy678;
+	++YYCURSOR;
+yy677:
+#line 2417 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Multani; else return Error; }
+#line 5591 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy678:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDE7F) goto yy677;
+	if (yych >= 0xDEB0) goto yy677;
+	++YYCURSOR;
+#line 2416 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Multani; }
+#line 5599 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2418 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Khudawadi:
+	
+#line 5605 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD804) goto yy681;
+	++YYCURSOR;
+yy680:
+#line 2423 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Khudawadi; else return Error; }
+#line 5614 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy681:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDEAF) goto yy680;
+	if (yych >= 0xDF00) goto yy680;
+	++YYCURSOR;
+#line 2422 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Khudawadi; }
+#line 5622 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2424 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Grantha:
+	
+#line 5628 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD804) goto yy684;
+	++YYCURSOR;
+yy683:
+#line 2429 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Grantha; else return Error; }
+#line 5637 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy684:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDEFF) goto yy683;
+	if (yych >= 0xDF80) goto yy683;
+	++YYCURSOR;
+#line 2428 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Grantha; }
+#line 5645 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2430 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Tulu_Tigalari:
+	
+#line 5651 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD804) goto yy687;
+	++YYCURSOR;
+yy686:
+#line 2435 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tulu_Tigalari; else return Error; }
+#line 5660 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy687:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDF7F) goto yy686;
+	if (yych >= 0xE000) goto yy686;
+	++YYCURSOR;
+#line 2434 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Tulu_Tigalari; }
+#line 5668 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2436 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Newa:
 	
-#line 5546 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD805) goto yy678;
-	++YYCURSOR;
-yy677:
-#line 2363 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Newa; else return Error; }
-#line 5555 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy678:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy677;
-	if (yych >= 0xDC80) goto yy677;
-	++YYCURSOR;
-#line 2362 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Newa; }
-#line 5563 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2364 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Tirhuta:
-	
-#line 5569 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD805) goto yy681;
-	++YYCURSOR;
-yy680:
-#line 2369 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tirhuta; else return Error; }
-#line 5578 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy681:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDC7F) goto yy680;
-	if (yych >= 0xDCE0) goto yy680;
-	++YYCURSOR;
-#line 2368 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Tirhuta; }
-#line 5586 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2370 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Siddham:
-	
-#line 5592 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD805) goto yy684;
-	++YYCURSOR;
-yy683:
-#line 2375 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Siddham; else return Error; }
-#line 5601 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy684:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDD7F) goto yy683;
-	if (yych >= 0xDE00) goto yy683;
-	++YYCURSOR;
-#line 2374 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Siddham; }
-#line 5609 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2376 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Modi:
-	
-#line 5615 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD805) goto yy687;
-	++YYCURSOR;
-yy686:
-#line 2381 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Modi; else return Error; }
-#line 5624 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy687:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDDFF) goto yy686;
-	if (yych >= 0xDE60) goto yy686;
-	++YYCURSOR;
-#line 2380 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Modi; }
-#line 5632 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2382 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Mongolian_Supplement:
-	
-#line 5638 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5674 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD805) goto yy690;
 	++YYCURSOR;
 yy689:
-#line 2387 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Mongolian_Supplement; else return Error; }
-#line 5647 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2441 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Newa; else return Error; }
+#line 5683 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy690:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDE5F) goto yy689;
-	if (yych >= 0xDE80) goto yy689;
+	if (yych <= 0xDBFF) goto yy689;
+	if (yych >= 0xDC80) goto yy689;
 	++YYCURSOR;
-#line 2386 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Mongolian_Supplement; }
-#line 5655 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2440 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Newa; }
+#line 5691 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2388 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2442 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Takri:
+Tirhuta:
 	
-#line 5661 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5697 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD805) goto yy693;
 	++YYCURSOR;
 yy692:
-#line 2393 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Takri; else return Error; }
-#line 5670 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2447 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tirhuta; else return Error; }
+#line 5706 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy693:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDE7F) goto yy692;
-	if (yych >= 0xDED0) goto yy692;
+	if (yych <= 0xDC7F) goto yy692;
+	if (yych >= 0xDCE0) goto yy692;
 	++YYCURSOR;
-#line 2392 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Takri; }
-#line 5678 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2446 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Tirhuta; }
+#line 5714 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2394 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2448 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Ahom:
+Siddham:
 	
-#line 5684 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5720 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD805) goto yy696;
 	++YYCURSOR;
 yy695:
-#line 2399 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Ahom; else return Error; }
-#line 5693 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2453 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Siddham; else return Error; }
+#line 5729 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy696:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy695;
-	if (yych >= 0xDF50) goto yy695;
+	if (yych <= 0xDD7F) goto yy695;
+	if (yych >= 0xDE00) goto yy695;
 	++YYCURSOR;
-#line 2398 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Ahom; }
-#line 5701 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2452 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Siddham; }
+#line 5737 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2400 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2454 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Modi:
+	
+#line 5743 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD805) goto yy699;
+	++YYCURSOR;
+yy698:
+#line 2459 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Modi; else return Error; }
+#line 5752 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy699:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDDFF) goto yy698;
+	if (yych >= 0xDE60) goto yy698;
+	++YYCURSOR;
+#line 2458 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Modi; }
+#line 5760 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2460 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Mongolian_Supplement:
+	
+#line 5766 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD805) goto yy702;
+	++YYCURSOR;
+yy701:
+#line 2465 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Mongolian_Supplement; else return Error; }
+#line 5775 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy702:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDE5F) goto yy701;
+	if (yych >= 0xDE80) goto yy701;
+	++YYCURSOR;
+#line 2464 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Mongolian_Supplement; }
+#line 5783 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2466 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Takri:
+	
+#line 5789 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD805) goto yy705;
+	++YYCURSOR;
+yy704:
+#line 2471 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Takri; else return Error; }
+#line 5798 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy705:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDE7F) goto yy704;
+	if (yych >= 0xDED0) goto yy704;
+	++YYCURSOR;
+#line 2470 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Takri; }
+#line 5806 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2472 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Myanmar_Extended_C:
+	
+#line 5812 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD805) goto yy708;
+	++YYCURSOR;
+yy707:
+#line 2477 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Myanmar_Extended_C; else return Error; }
+#line 5821 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy708:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDECF) goto yy707;
+	if (yych >= 0xDF00) goto yy707;
+	++YYCURSOR;
+#line 2476 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Myanmar_Extended_C; }
+#line 5829 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2478 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Ahom:
+	
+#line 5835 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD805) goto yy711;
+	++YYCURSOR;
+yy710:
+#line 2483 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Ahom; else return Error; }
+#line 5844 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy711:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDEFF) goto yy710;
+	if (yych >= 0xDF50) goto yy710;
+	++YYCURSOR;
+#line 2482 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Ahom; }
+#line 5852 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2484 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Dogra:
 	
-#line 5707 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD806) goto yy699;
-	++YYCURSOR;
-yy698:
-#line 2405 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Dogra; else return Error; }
-#line 5716 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy699:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy698;
-	if (yych >= 0xDC50) goto yy698;
-	++YYCURSOR;
-#line 2404 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Dogra; }
-#line 5724 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2406 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Warang_Citi:
-	
-#line 5730 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD806) goto yy702;
-	++YYCURSOR;
-yy701:
-#line 2411 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Warang_Citi; else return Error; }
-#line 5739 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy702:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDC9F) goto yy701;
-	if (yych >= 0xDD00) goto yy701;
-	++YYCURSOR;
-#line 2410 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Warang_Citi; }
-#line 5747 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2412 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Dives_Akuru:
-	
-#line 5753 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD806) goto yy705;
-	++YYCURSOR;
-yy704:
-#line 2417 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Dives_Akuru; else return Error; }
-#line 5762 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy705:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy704;
-	if (yych >= 0xDD60) goto yy704;
-	++YYCURSOR;
-#line 2416 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Dives_Akuru; }
-#line 5770 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2418 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Nandinagari:
-	
-#line 5776 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD806) goto yy708;
-	++YYCURSOR;
-yy707:
-#line 2423 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Nandinagari; else return Error; }
-#line 5785 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy708:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDD9F) goto yy707;
-	if (yych >= 0xDE00) goto yy707;
-	++YYCURSOR;
-#line 2422 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Nandinagari; }
-#line 5793 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2424 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Zanabazar_Square:
-	
-#line 5799 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD806) goto yy711;
-	++YYCURSOR;
-yy710:
-#line 2429 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Zanabazar_Square; else return Error; }
-#line 5808 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy711:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDDFF) goto yy710;
-	if (yych >= 0xDE50) goto yy710;
-	++YYCURSOR;
-#line 2428 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Zanabazar_Square; }
-#line 5816 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2430 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Soyombo:
-	
-#line 5822 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5858 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD806) goto yy714;
 	++YYCURSOR;
 yy713:
-#line 2435 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Soyombo; else return Error; }
-#line 5831 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2489 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Dogra; else return Error; }
+#line 5867 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy714:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDE4F) goto yy713;
-	if (yych >= 0xDEB0) goto yy713;
+	if (yych <= 0xDBFF) goto yy713;
+	if (yych >= 0xDC50) goto yy713;
 	++YYCURSOR;
-#line 2434 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Soyombo; }
-#line 5839 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2488 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Dogra; }
+#line 5875 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2436 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2490 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Unified_Canadian_Aboriginal_Syllabics_Extended_A:
+Warang_Citi:
 	
-#line 5845 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5881 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD806) goto yy717;
 	++YYCURSOR;
 yy716:
-#line 2441 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Unified_Canadian_Aboriginal_Syllabics_Extended_A; else return Error; }
-#line 5854 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2495 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Warang_Citi; else return Error; }
+#line 5890 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy717:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEAF) goto yy716;
-	if (yych >= 0xDEC0) goto yy716;
+	if (yych <= 0xDC9F) goto yy716;
+	if (yych >= 0xDD00) goto yy716;
 	++YYCURSOR;
-#line 2440 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Unified_Canadian_Aboriginal_Syllabics_Extended_A; }
-#line 5862 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2494 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Warang_Citi; }
+#line 5898 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2442 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2496 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Pau_Cin_Hau:
+Dives_Akuru:
 	
-#line 5868 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5904 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD806) goto yy720;
 	++YYCURSOR;
 yy719:
-#line 2447 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Pau_Cin_Hau; else return Error; }
-#line 5877 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2501 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Dives_Akuru; else return Error; }
+#line 5913 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy720:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEBF) goto yy719;
-	if (yych >= 0xDF00) goto yy719;
+	if (yych <= 0xDCFF) goto yy719;
+	if (yych >= 0xDD60) goto yy719;
 	++YYCURSOR;
-#line 2446 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Pau_Cin_Hau; }
-#line 5885 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2500 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Dives_Akuru; }
+#line 5921 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2448 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2502 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Devanagari_Extended_A:
+Nandinagari:
 	
-#line 5891 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 5927 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD806) goto yy723;
 	++YYCURSOR;
 yy722:
-#line 2453 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Devanagari_Extended_A; else return Error; }
-#line 5900 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2507 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Nandinagari; else return Error; }
+#line 5936 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy723:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy722;
-	if (yych >= 0xDF60) goto yy722;
+	if (yych <= 0xDD9F) goto yy722;
+	if (yych >= 0xDE00) goto yy722;
 	++YYCURSOR;
-#line 2452 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Devanagari_Extended_A; }
-#line 5908 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2506 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Nandinagari; }
+#line 5944 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
-#line 2454 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+#line 2508 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Zanabazar_Square:
+	
+#line 5950 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD806) goto yy726;
+	++YYCURSOR;
+yy725:
+#line 2513 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Zanabazar_Square; else return Error; }
+#line 5959 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy726:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDDFF) goto yy725;
+	if (yych >= 0xDE50) goto yy725;
+	++YYCURSOR;
+#line 2512 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Zanabazar_Square; }
+#line 5967 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2514 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Soyombo:
+	
+#line 5973 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD806) goto yy729;
+	++YYCURSOR;
+yy728:
+#line 2519 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Soyombo; else return Error; }
+#line 5982 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy729:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDE4F) goto yy728;
+	if (yych >= 0xDEB0) goto yy728;
+	++YYCURSOR;
+#line 2518 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Soyombo; }
+#line 5990 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2520 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Unified_Canadian_Aboriginal_Syllabics_Extended_A:
+	
+#line 5996 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD806) goto yy732;
+	++YYCURSOR;
+yy731:
+#line 2525 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Unified_Canadian_Aboriginal_Syllabics_Extended_A; else return Error; }
+#line 6005 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy732:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDEAF) goto yy731;
+	if (yych >= 0xDEC0) goto yy731;
+	++YYCURSOR;
+#line 2524 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Unified_Canadian_Aboriginal_Syllabics_Extended_A; }
+#line 6013 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2526 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Pau_Cin_Hau:
+	
+#line 6019 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD806) goto yy735;
+	++YYCURSOR;
+yy734:
+#line 2531 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Pau_Cin_Hau; else return Error; }
+#line 6028 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy735:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDEBF) goto yy734;
+	if (yych >= 0xDF00) goto yy734;
+	++YYCURSOR;
+#line 2530 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Pau_Cin_Hau; }
+#line 6036 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2532 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Devanagari_Extended_A:
+	
+#line 6042 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD806) goto yy738;
+	++YYCURSOR;
+yy737:
+#line 2537 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Devanagari_Extended_A; else return Error; }
+#line 6051 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy738:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDEFF) goto yy737;
+	if (yych >= 0xDF60) goto yy737;
+	++YYCURSOR;
+#line 2536 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Devanagari_Extended_A; }
+#line 6059 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2538 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Sharada_Supplement:
+	
+#line 6065 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD806) goto yy741;
+	++YYCURSOR;
+yy740:
+#line 2543 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sharada_Supplement; else return Error; }
+#line 6074 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy741:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDF5F) goto yy740;
+	if (yych >= 0xDF80) goto yy740;
+	++YYCURSOR;
+#line 2542 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Sharada_Supplement; }
+#line 6082 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2544 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Sunuwar:
+	
+#line 6088 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD806) goto yy744;
+	++YYCURSOR;
+yy743:
+#line 2549 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Sunuwar; else return Error; }
+#line 6097 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy744:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDFBF) goto yy743;
+	if (yych >= 0xE000) goto yy743;
+	++YYCURSOR;
+#line 2548 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Sunuwar; }
+#line 6105 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2550 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 Bhaiksuki:
 	
-#line 5914 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD807) goto yy726;
-	++YYCURSOR;
-yy725:
-#line 2459 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Bhaiksuki; else return Error; }
-#line 5923 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy726:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy725;
-	if (yych >= 0xDC70) goto yy725;
-	++YYCURSOR;
-#line 2458 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Bhaiksuki; }
-#line 5931 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2460 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Marchen:
-	
-#line 5937 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD807) goto yy729;
-	++YYCURSOR;
-yy728:
-#line 2465 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Marchen; else return Error; }
-#line 5946 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy729:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDC6F) goto yy728;
-	if (yych >= 0xDCC0) goto yy728;
-	++YYCURSOR;
-#line 2464 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Marchen; }
-#line 5954 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2466 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Masaram_Gondi:
-	
-#line 5960 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD807) goto yy732;
-	++YYCURSOR;
-yy731:
-#line 2471 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Masaram_Gondi; else return Error; }
-#line 5969 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy732:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy731;
-	if (yych >= 0xDD60) goto yy731;
-	++YYCURSOR;
-#line 2470 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Masaram_Gondi; }
-#line 5977 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2472 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Gunjala_Gondi:
-	
-#line 5983 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD807) goto yy735;
-	++YYCURSOR;
-yy734:
-#line 2477 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Gunjala_Gondi; else return Error; }
-#line 5992 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy735:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDD5F) goto yy734;
-	if (yych >= 0xDDB0) goto yy734;
-	++YYCURSOR;
-#line 2476 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Gunjala_Gondi; }
-#line 6000 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2478 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Makasar:
-	
-#line 6006 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD807) goto yy738;
-	++YYCURSOR;
-yy737:
-#line 2483 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Makasar; else return Error; }
-#line 6015 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy738:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDEDF) goto yy737;
-	if (yych >= 0xDF00) goto yy737;
-	++YYCURSOR;
-#line 2482 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Makasar; }
-#line 6023 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2484 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Kawi:
-	
-#line 6029 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD807) goto yy741;
-	++YYCURSOR;
-yy740:
-#line 2489 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Kawi; else return Error; }
-#line 6038 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy741:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy740;
-	if (yych >= 0xDF60) goto yy740;
-	++YYCURSOR;
-#line 2488 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Kawi; }
-#line 6046 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2490 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Lisu_Supplement:
-	
-#line 6052 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD807) goto yy744;
-	++YYCURSOR;
-yy743:
-#line 2495 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Lisu_Supplement; else return Error; }
-#line 6061 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy744:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDFAF) goto yy743;
-	if (yych >= 0xDFC0) goto yy743;
-	++YYCURSOR;
-#line 2494 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Lisu_Supplement; }
-#line 6069 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2496 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Tamil_Supplement:
-	
-#line 6075 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6111 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 0xD807) goto yy747;
 	++YYCURSOR;
 yy746:
-#line 2501 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tamil_Supplement; else return Error; }
-#line 6084 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2555 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Bhaiksuki; else return Error; }
+#line 6120 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy747:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDFBF) goto yy746;
-	if (yych >= 0xE000) goto yy746;
-	++YYCURSOR;
-#line 2500 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Tamil_Supplement; }
-#line 6092 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2502 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Cuneiform:
-	
-#line 6098 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD808) goto yy750;
-	++YYCURSOR;
-yy749:
-#line 2507 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Cuneiform; else return Error; }
-#line 6107 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy750:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy749;
-	if (yych >= 0xE000) goto yy749;
-	++YYCURSOR;
-#line 2506 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Cuneiform; }
-#line 6115 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2508 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Cuneiform_Numbers_and_Punctuation:
-	
-#line 6121 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD809) goto yy753;
-	++YYCURSOR;
-yy752:
-#line 2513 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Cuneiform_Numbers_and_Punctuation; else return Error; }
-#line 6130 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy753:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy752;
-	if (yych >= 0xDC80) goto yy752;
-	++YYCURSOR;
-#line 2512 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Cuneiform_Numbers_and_Punctuation; }
-#line 6138 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2514 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Early_Dynastic_Cuneiform:
-	
-#line 6144 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD809) goto yy756;
-	++YYCURSOR;
-yy755:
-#line 2519 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Early_Dynastic_Cuneiform; else return Error; }
-#line 6153 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy756:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDC7F) goto yy755;
-	if (yych >= 0xDD50) goto yy755;
-	++YYCURSOR;
-#line 2518 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Early_Dynastic_Cuneiform; }
-#line 6161 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2520 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Cypro_Minoan:
-	
-#line 6167 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD80B) goto yy759;
-	++YYCURSOR;
-yy758:
-#line 2525 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Cypro_Minoan; else return Error; }
-#line 6176 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy759:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDF8F) goto yy758;
-	if (yych >= 0xE000) goto yy758;
-	++YYCURSOR;
-#line 2524 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Cypro_Minoan; }
-#line 6184 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2526 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Egyptian_Hieroglyphs:
-	
-#line 6190 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych <= 0xD80B) goto yy761;
-	if (yych <= 0xD80C) goto yy763;
-	if (yych <= 0xD80D) goto yy764;
-yy761:
-	++YYCURSOR;
-yy762:
-#line 2531 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Egyptian_Hieroglyphs; else return Error; }
-#line 6202 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy763:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy762;
-	if (yych <= 0xDFFF) goto yy765;
-	goto yy762;
-yy764:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy762;
-	if (yych >= 0xDC30) goto yy762;
-yy765:
-	++YYCURSOR;
-#line 2530 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Egyptian_Hieroglyphs; }
-#line 6216 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2532 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Egyptian_Hieroglyph_Format_Controls:
-	
-#line 6222 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD80D) goto yy768;
-	++YYCURSOR;
-yy767:
-#line 2537 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Egyptian_Hieroglyph_Format_Controls; else return Error; }
-#line 6231 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy768:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDC2F) goto yy767;
-	if (yych >= 0xDC60) goto yy767;
-	++YYCURSOR;
-#line 2536 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Egyptian_Hieroglyph_Format_Controls; }
-#line 6239 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2538 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Anatolian_Hieroglyphs:
-	
-#line 6245 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD811) goto yy771;
-	++YYCURSOR;
-yy770:
-#line 2543 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Anatolian_Hieroglyphs; else return Error; }
-#line 6254 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy771:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy770;
-	if (yych >= 0xDE80) goto yy770;
-	++YYCURSOR;
-#line 2542 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Anatolian_Hieroglyphs; }
-#line 6262 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2544 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Bamum_Supplement:
-	
-#line 6268 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD81A) goto yy774;
-	++YYCURSOR;
-yy773:
-#line 2549 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Bamum_Supplement; else return Error; }
-#line 6277 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy774:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy773;
-	if (yych >= 0xDE40) goto yy773;
-	++YYCURSOR;
-#line 2548 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Bamum_Supplement; }
-#line 6285 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2550 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Mro:
-	
-#line 6291 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD81A) goto yy777;
-	++YYCURSOR;
-yy776:
-#line 2555 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Mro; else return Error; }
-#line 6300 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy777:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDE3F) goto yy776;
-	if (yych >= 0xDE70) goto yy776;
+	if (yych <= 0xDBFF) goto yy746;
+	if (yych >= 0xDC70) goto yy746;
 	++YYCURSOR;
 #line 2554 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Mro; }
-#line 6308 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Bhaiksuki; }
+#line 6128 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2556 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Tangsa:
+Marchen:
 	
-#line 6314 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6134 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD81A) goto yy780;
+	if (yych == 0xD807) goto yy750;
 	++YYCURSOR;
-yy779:
+yy749:
 #line 2561 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tangsa; else return Error; }
-#line 6323 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy780:
+	{ if (YYCURSOR - 1 == limit) return Marchen; else return Error; }
+#line 6143 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy750:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDE6F) goto yy779;
-	if (yych >= 0xDED0) goto yy779;
+	if (yych <= 0xDC6F) goto yy749;
+	if (yych >= 0xDCC0) goto yy749;
 	++YYCURSOR;
 #line 2560 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Tangsa; }
-#line 6331 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Marchen; }
+#line 6151 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2562 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Bassa_Vah:
+Masaram_Gondi:
 	
-#line 6337 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6157 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD81A) goto yy783;
+	if (yych == 0xD807) goto yy753;
 	++YYCURSOR;
-yy782:
+yy752:
 #line 2567 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Bassa_Vah; else return Error; }
-#line 6346 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy783:
+	{ if (YYCURSOR - 1 == limit) return Masaram_Gondi; else return Error; }
+#line 6166 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy753:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDECF) goto yy782;
-	if (yych >= 0xDF00) goto yy782;
+	if (yych <= 0xDCFF) goto yy752;
+	if (yych >= 0xDD60) goto yy752;
 	++YYCURSOR;
 #line 2566 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Bassa_Vah; }
-#line 6354 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Masaram_Gondi; }
+#line 6174 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2568 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Pahawh_Hmong:
+Gunjala_Gondi:
 	
-#line 6360 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6180 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD81A) goto yy786;
+	if (yych == 0xD807) goto yy756;
 	++YYCURSOR;
-yy785:
+yy755:
 #line 2573 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Pahawh_Hmong; else return Error; }
-#line 6369 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy786:
+	{ if (YYCURSOR - 1 == limit) return Gunjala_Gondi; else return Error; }
+#line 6189 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy756:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy785;
-	if (yych >= 0xDF90) goto yy785;
+	if (yych <= 0xDD5F) goto yy755;
+	if (yych >= 0xDDB0) goto yy755;
 	++YYCURSOR;
 #line 2572 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Pahawh_Hmong; }
-#line 6377 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Gunjala_Gondi; }
+#line 6197 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2574 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Medefaidrin:
+Tolong_Siki:
 	
-#line 6383 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6203 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD81B) goto yy789;
+	if (yych == 0xD807) goto yy759;
 	++YYCURSOR;
-yy788:
+yy758:
 #line 2579 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Medefaidrin; else return Error; }
-#line 6392 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy789:
+	{ if (YYCURSOR - 1 == limit) return Tolong_Siki; else return Error; }
+#line 6212 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy759:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDE3F) goto yy788;
-	if (yych >= 0xDEA0) goto yy788;
+	if (yych <= 0xDDAF) goto yy758;
+	if (yych >= 0xDDF0) goto yy758;
 	++YYCURSOR;
 #line 2578 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Medefaidrin; }
-#line 6400 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Tolong_Siki; }
+#line 6220 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2580 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Miao:
+Makasar:
 	
-#line 6406 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6226 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD81B) goto yy792;
+	if (yych == 0xD807) goto yy762;
 	++YYCURSOR;
-yy791:
+yy761:
 #line 2585 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Miao; else return Error; }
-#line 6415 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy792:
+	{ if (YYCURSOR - 1 == limit) return Makasar; else return Error; }
+#line 6235 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy762:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy791;
-	if (yych >= 0xDFA0) goto yy791;
+	if (yych <= 0xDEDF) goto yy761;
+	if (yych >= 0xDF00) goto yy761;
 	++YYCURSOR;
 #line 2584 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Miao; }
-#line 6423 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Makasar; }
+#line 6243 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2586 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Ideographic_Symbols_and_Punctuation:
+Kawi:
 	
-#line 6429 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6249 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD81B) goto yy795;
+	if (yych == 0xD807) goto yy765;
 	++YYCURSOR;
-yy794:
+yy764:
 #line 2591 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Ideographic_Symbols_and_Punctuation; else return Error; }
-#line 6438 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy795:
+	{ if (YYCURSOR - 1 == limit) return Kawi; else return Error; }
+#line 6258 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy765:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDFDF) goto yy794;
-	if (yych >= 0xE000) goto yy794;
+	if (yych <= 0xDEFF) goto yy764;
+	if (yych >= 0xDF60) goto yy764;
 	++YYCURSOR;
 #line 2590 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Ideographic_Symbols_and_Punctuation; }
-#line 6446 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Kawi; }
+#line 6266 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2592 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Tangut:
+Lisu_Supplement:
 	
-#line 6452 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6272 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0xD81B) goto yy797;
-	if (yych <= 0xD821) goto yy799;
-yy797:
+	if (yych == 0xD807) goto yy768;
 	++YYCURSOR;
-yy798:
+yy767:
 #line 2597 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tangut; else return Error; }
-#line 6463 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy799:
+	{ if (YYCURSOR - 1 == limit) return Lisu_Supplement; else return Error; }
+#line 6281 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy768:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy798;
-	if (yych >= 0xE000) goto yy798;
+	if (yych <= 0xDFAF) goto yy767;
+	if (yych >= 0xDFC0) goto yy767;
 	++YYCURSOR;
 #line 2596 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Tangut; }
-#line 6471 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Lisu_Supplement; }
+#line 6289 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2598 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Tangut_Components:
+Tamil_Supplement:
 	
-#line 6477 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6295 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD822) goto yy802;
+	if (yych == 0xD807) goto yy771;
 	++YYCURSOR;
-yy801:
+yy770:
 #line 2603 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tangut_Components; else return Error; }
-#line 6486 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy802:
+	{ if (YYCURSOR - 1 == limit) return Tamil_Supplement; else return Error; }
+#line 6304 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy771:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy801;
-	if (yych >= 0xDF00) goto yy801;
+	if (yych <= 0xDFBF) goto yy770;
+	if (yych >= 0xE000) goto yy770;
 	++YYCURSOR;
 #line 2602 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Tangut_Components; }
-#line 6494 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Tamil_Supplement; }
+#line 6312 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2604 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Khitan_Small_Script:
+Cuneiform:
 	
-#line 6500 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6318 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0xD821) goto yy804;
-	if (yych <= 0xD822) goto yy806;
-	if (yych <= 0xD823) goto yy807;
-yy804:
+	if (yych == 0xD808) goto yy774;
 	++YYCURSOR;
-yy805:
+yy773:
 #line 2609 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Khitan_Small_Script; else return Error; }
-#line 6512 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy806:
+	{ if (YYCURSOR - 1 == limit) return Cuneiform; else return Error; }
+#line 6327 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy774:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy805;
-	if (yych <= 0xDFFF) goto yy808;
-	goto yy805;
-yy807:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy805;
-	if (yych >= 0xDD00) goto yy805;
-yy808:
+	if (yych <= 0xDBFF) goto yy773;
+	if (yych >= 0xE000) goto yy773;
 	++YYCURSOR;
 #line 2608 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Khitan_Small_Script; }
-#line 6526 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Cuneiform; }
+#line 6335 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2610 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Tangut_Supplement:
+Cuneiform_Numbers_and_Punctuation:
 	
-#line 6532 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6341 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD823) goto yy811;
+	if (yych == 0xD809) goto yy777;
 	++YYCURSOR;
-yy810:
+yy776:
 #line 2615 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tangut_Supplement; else return Error; }
-#line 6541 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy811:
+	{ if (YYCURSOR - 1 == limit) return Cuneiform_Numbers_and_Punctuation; else return Error; }
+#line 6350 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy777:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy810;
-	if (yych >= 0xDD80) goto yy810;
+	if (yych <= 0xDBFF) goto yy776;
+	if (yych >= 0xDC80) goto yy776;
 	++YYCURSOR;
 #line 2614 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Tangut_Supplement; }
-#line 6549 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Cuneiform_Numbers_and_Punctuation; }
+#line 6358 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2616 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Kana_Extended_B:
+Early_Dynastic_Cuneiform:
 	
-#line 6555 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6364 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD82B) goto yy814;
+	if (yych == 0xD809) goto yy780;
 	++YYCURSOR;
-yy813:
+yy779:
 #line 2621 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Kana_Extended_B; else return Error; }
-#line 6564 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy814:
+	{ if (YYCURSOR - 1 == limit) return Early_Dynastic_Cuneiform; else return Error; }
+#line 6373 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy780:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDFEF) goto yy813;
-	if (yych >= 0xE000) goto yy813;
+	if (yych <= 0xDC7F) goto yy779;
+	if (yych >= 0xDD50) goto yy779;
 	++YYCURSOR;
 #line 2620 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Kana_Extended_B; }
-#line 6572 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Early_Dynastic_Cuneiform; }
+#line 6381 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2622 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Kana_Supplement:
+Cypro_Minoan:
 	
-#line 6578 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6387 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD82C) goto yy817;
+	if (yych == 0xD80B) goto yy783;
 	++YYCURSOR;
-yy816:
+yy782:
 #line 2627 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Kana_Supplement; else return Error; }
-#line 6587 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy817:
+	{ if (YYCURSOR - 1 == limit) return Cypro_Minoan; else return Error; }
+#line 6396 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy783:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy816;
-	if (yych >= 0xDD00) goto yy816;
+	if (yych <= 0xDF8F) goto yy782;
+	if (yych >= 0xE000) goto yy782;
 	++YYCURSOR;
 #line 2626 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Kana_Supplement; }
-#line 6595 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Cypro_Minoan; }
+#line 6404 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2628 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Kana_Extended_A:
+Egyptian_Hieroglyphs:
 	
-#line 6601 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6410 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD82C) goto yy820;
+	if (yych <= 0xD80B) goto yy785;
+	if (yych <= 0xD80C) goto yy787;
+	if (yych <= 0xD80D) goto yy788;
+yy785:
 	++YYCURSOR;
-yy819:
+yy786:
 #line 2633 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Kana_Extended_A; else return Error; }
-#line 6610 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy820:
+	{ if (YYCURSOR - 1 == limit) return Egyptian_Hieroglyphs; else return Error; }
+#line 6422 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy787:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy819;
-	if (yych >= 0xDD30) goto yy819;
+	if (yych <= 0xDBFF) goto yy786;
+	if (yych <= 0xDFFF) goto yy789;
+	goto yy786;
+yy788:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy786;
+	if (yych >= 0xDC30) goto yy786;
+yy789:
 	++YYCURSOR;
 #line 2632 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Kana_Extended_A; }
-#line 6618 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Egyptian_Hieroglyphs; }
+#line 6436 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2634 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Small_Kana_Extension:
+Egyptian_Hieroglyph_Format_Controls:
 	
-#line 6624 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6442 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD82C) goto yy823;
+	if (yych == 0xD80D) goto yy792;
 	++YYCURSOR;
-yy822:
+yy791:
 #line 2639 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Small_Kana_Extension; else return Error; }
-#line 6633 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy823:
+	{ if (YYCURSOR - 1 == limit) return Egyptian_Hieroglyph_Format_Controls; else return Error; }
+#line 6451 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy792:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDD2F) goto yy822;
-	if (yych >= 0xDD70) goto yy822;
+	if (yych <= 0xDC2F) goto yy791;
+	if (yych >= 0xDC60) goto yy791;
 	++YYCURSOR;
 #line 2638 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Small_Kana_Extension; }
-#line 6641 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Egyptian_Hieroglyph_Format_Controls; }
+#line 6459 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2640 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Nushu:
+Egyptian_Hieroglyphs_Extended_A:
 	
-#line 6647 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6465 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD82C) goto yy826;
+	if (yych <= 0xD80C) goto yy794;
+	if (yych <= 0xD80D) goto yy796;
+	if (yych <= 0xD810) goto yy797;
+yy794:
 	++YYCURSOR;
-yy825:
+yy795:
 #line 2645 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Nushu; else return Error; }
-#line 6656 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy826:
+	{ if (YYCURSOR - 1 == limit) return Egyptian_Hieroglyphs_Extended_A; else return Error; }
+#line 6477 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy796:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDD6F) goto yy825;
-	if (yych >= 0xDF00) goto yy825;
+	if (yych <= 0xDC5F) goto yy795;
+	if (yych <= 0xDFFF) goto yy798;
+	goto yy795;
+yy797:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy795;
+	if (yych >= 0xE000) goto yy795;
+yy798:
 	++YYCURSOR;
 #line 2644 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Nushu; }
-#line 6664 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Egyptian_Hieroglyphs_Extended_A; }
+#line 6491 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2646 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Duployan:
+Anatolian_Hieroglyphs:
 	
-#line 6670 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6497 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD82F) goto yy829;
+	if (yych == 0xD811) goto yy801;
 	++YYCURSOR;
-yy828:
+yy800:
 #line 2651 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Duployan; else return Error; }
-#line 6679 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy829:
+	{ if (YYCURSOR - 1 == limit) return Anatolian_Hieroglyphs; else return Error; }
+#line 6506 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy801:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy828;
-	if (yych >= 0xDCA0) goto yy828;
+	if (yych <= 0xDBFF) goto yy800;
+	if (yych >= 0xDE80) goto yy800;
 	++YYCURSOR;
 #line 2650 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Duployan; }
-#line 6687 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Anatolian_Hieroglyphs; }
+#line 6514 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2652 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Shorthand_Format_Controls:
+Gurung_Khema:
 	
-#line 6693 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6520 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD82F) goto yy832;
+	if (yych == 0xD818) goto yy804;
 	++YYCURSOR;
-yy831:
+yy803:
 #line 2657 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Shorthand_Format_Controls; else return Error; }
-#line 6702 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy832:
+	{ if (YYCURSOR - 1 == limit) return Gurung_Khema; else return Error; }
+#line 6529 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy804:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDC9F) goto yy831;
-	if (yych >= 0xDCB0) goto yy831;
+	if (yych <= 0xDCFF) goto yy803;
+	if (yych >= 0xDD40) goto yy803;
 	++YYCURSOR;
 #line 2656 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Shorthand_Format_Controls; }
-#line 6710 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Gurung_Khema; }
+#line 6537 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2658 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Znamenny_Musical_Notation:
+Bamum_Supplement:
 	
-#line 6716 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6543 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD833) goto yy835;
+	if (yych == 0xD81A) goto yy807;
 	++YYCURSOR;
-yy834:
+yy806:
 #line 2663 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Znamenny_Musical_Notation; else return Error; }
-#line 6725 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy835:
+	{ if (YYCURSOR - 1 == limit) return Bamum_Supplement; else return Error; }
+#line 6552 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy807:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy834;
-	if (yych >= 0xDFD0) goto yy834;
+	if (yych <= 0xDBFF) goto yy806;
+	if (yych >= 0xDE40) goto yy806;
 	++YYCURSOR;
 #line 2662 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Znamenny_Musical_Notation; }
-#line 6733 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Bamum_Supplement; }
+#line 6560 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2664 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Byzantine_Musical_Symbols:
+Mro:
 	
-#line 6739 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6566 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD834) goto yy838;
+	if (yych == 0xD81A) goto yy810;
 	++YYCURSOR;
-yy837:
+yy809:
 #line 2669 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Byzantine_Musical_Symbols; else return Error; }
-#line 6748 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy838:
+	{ if (YYCURSOR - 1 == limit) return Mro; else return Error; }
+#line 6575 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy810:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy837;
-	if (yych >= 0xDD00) goto yy837;
+	if (yych <= 0xDE3F) goto yy809;
+	if (yych >= 0xDE70) goto yy809;
 	++YYCURSOR;
 #line 2668 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Byzantine_Musical_Symbols; }
-#line 6756 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Mro; }
+#line 6583 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2670 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Musical_Symbols:
+Tangsa:
 	
-#line 6762 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6589 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD834) goto yy841;
+	if (yych == 0xD81A) goto yy813;
 	++YYCURSOR;
-yy840:
+yy812:
 #line 2675 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Musical_Symbols; else return Error; }
-#line 6771 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy841:
+	{ if (YYCURSOR - 1 == limit) return Tangsa; else return Error; }
+#line 6598 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy813:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy840;
-	if (yych >= 0xDE00) goto yy840;
+	if (yych <= 0xDE6F) goto yy812;
+	if (yych >= 0xDED0) goto yy812;
 	++YYCURSOR;
 #line 2674 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Musical_Symbols; }
-#line 6779 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Tangsa; }
+#line 6606 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2676 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Ancient_Greek_Musical_Notation:
+Bassa_Vah:
 	
-#line 6785 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6612 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD834) goto yy844;
+	if (yych == 0xD81A) goto yy816;
 	++YYCURSOR;
-yy843:
+yy815:
 #line 2681 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Ancient_Greek_Musical_Notation; else return Error; }
-#line 6794 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy844:
+	{ if (YYCURSOR - 1 == limit) return Bassa_Vah; else return Error; }
+#line 6621 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy816:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDDFF) goto yy843;
-	if (yych >= 0xDE50) goto yy843;
+	if (yych <= 0xDECF) goto yy815;
+	if (yych >= 0xDF00) goto yy815;
 	++YYCURSOR;
 #line 2680 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Ancient_Greek_Musical_Notation; }
-#line 6802 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Bassa_Vah; }
+#line 6629 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2682 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Kaktovik_Numerals:
+Pahawh_Hmong:
 	
-#line 6808 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6635 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD834) goto yy847;
+	if (yych == 0xD81A) goto yy819;
 	++YYCURSOR;
-yy846:
+yy818:
 #line 2687 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Kaktovik_Numerals; else return Error; }
-#line 6817 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy847:
+	{ if (YYCURSOR - 1 == limit) return Pahawh_Hmong; else return Error; }
+#line 6644 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy819:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEBF) goto yy846;
-	if (yych >= 0xDEE0) goto yy846;
+	if (yych <= 0xDEFF) goto yy818;
+	if (yych >= 0xDF90) goto yy818;
 	++YYCURSOR;
 #line 2686 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Kaktovik_Numerals; }
-#line 6825 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Pahawh_Hmong; }
+#line 6652 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2688 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Mayan_Numerals:
+Kirat_Rai:
 	
-#line 6831 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6658 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD834) goto yy850;
+	if (yych == 0xD81B) goto yy822;
 	++YYCURSOR;
-yy849:
+yy821:
 #line 2693 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Mayan_Numerals; else return Error; }
-#line 6840 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy850:
+	{ if (YYCURSOR - 1 == limit) return Kirat_Rai; else return Error; }
+#line 6667 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy822:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEDF) goto yy849;
-	if (yych >= 0xDF00) goto yy849;
+	if (yych <= 0xDD3F) goto yy821;
+	if (yych >= 0xDD80) goto yy821;
 	++YYCURSOR;
 #line 2692 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Mayan_Numerals; }
-#line 6848 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Kirat_Rai; }
+#line 6675 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2694 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Tai_Xuan_Jing_Symbols:
+Medefaidrin:
 	
-#line 6854 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6681 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD834) goto yy853;
+	if (yych == 0xD81B) goto yy825;
 	++YYCURSOR;
-yy852:
+yy824:
 #line 2699 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tai_Xuan_Jing_Symbols; else return Error; }
-#line 6863 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy853:
+	{ if (YYCURSOR - 1 == limit) return Medefaidrin; else return Error; }
+#line 6690 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy825:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy852;
-	if (yych >= 0xDF60) goto yy852;
+	if (yych <= 0xDE3F) goto yy824;
+	if (yych >= 0xDEA0) goto yy824;
 	++YYCURSOR;
 #line 2698 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Tai_Xuan_Jing_Symbols; }
-#line 6871 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Medefaidrin; }
+#line 6698 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2700 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Counting_Rod_Numerals:
+Beria_Erfe:
 	
-#line 6877 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6704 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD834) goto yy856;
+	if (yych == 0xD81B) goto yy828;
 	++YYCURSOR;
-yy855:
+yy827:
 #line 2705 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Counting_Rod_Numerals; else return Error; }
-#line 6886 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy856:
+	{ if (YYCURSOR - 1 == limit) return Beria_Erfe; else return Error; }
+#line 6713 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy828:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDF5F) goto yy855;
-	if (yych >= 0xDF80) goto yy855;
+	if (yych <= 0xDE9F) goto yy827;
+	if (yych >= 0xDEE0) goto yy827;
 	++YYCURSOR;
 #line 2704 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Counting_Rod_Numerals; }
-#line 6894 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Beria_Erfe; }
+#line 6721 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2706 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Mathematical_Alphanumeric_Symbols:
+Miao:
 	
-#line 6900 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6727 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD835) goto yy859;
+	if (yych == 0xD81B) goto yy831;
 	++YYCURSOR;
-yy858:
+yy830:
 #line 2711 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Mathematical_Alphanumeric_Symbols; else return Error; }
-#line 6909 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy859:
+	{ if (YYCURSOR - 1 == limit) return Miao; else return Error; }
+#line 6736 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy831:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy858;
-	if (yych >= 0xE000) goto yy858;
+	if (yych <= 0xDEFF) goto yy830;
+	if (yych >= 0xDFA0) goto yy830;
 	++YYCURSOR;
 #line 2710 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Mathematical_Alphanumeric_Symbols; }
-#line 6917 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Miao; }
+#line 6744 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2712 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Sutton_SignWriting:
+Ideographic_Symbols_and_Punctuation:
 	
-#line 6923 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6750 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD836) goto yy862;
+	if (yych == 0xD81B) goto yy834;
 	++YYCURSOR;
-yy861:
+yy833:
 #line 2717 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Sutton_SignWriting; else return Error; }
-#line 6932 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy862:
+	{ if (YYCURSOR - 1 == limit) return Ideographic_Symbols_and_Punctuation; else return Error; }
+#line 6759 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy834:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy861;
-	if (yych >= 0xDEB0) goto yy861;
+	if (yych <= 0xDFDF) goto yy833;
+	if (yych >= 0xE000) goto yy833;
 	++YYCURSOR;
 #line 2716 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Sutton_SignWriting; }
-#line 6940 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Ideographic_Symbols_and_Punctuation; }
+#line 6767 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2718 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Latin_Extended_G:
+Tangut:
 	
-#line 6946 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6773 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD837) goto yy865;
+	if (yych <= 0xD81B) goto yy836;
+	if (yych <= 0xD821) goto yy838;
+yy836:
 	++YYCURSOR;
-yy864:
+yy837:
 #line 2723 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Latin_Extended_G; else return Error; }
-#line 6955 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy865:
+	{ if (YYCURSOR - 1 == limit) return Tangut; else return Error; }
+#line 6784 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy838:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy864;
-	if (yych >= 0xE000) goto yy864;
+	if (yych <= 0xDBFF) goto yy837;
+	if (yych >= 0xE000) goto yy837;
 	++YYCURSOR;
 #line 2722 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Latin_Extended_G; }
-#line 6963 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Tangut; }
+#line 6792 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2724 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Glagolitic_Supplement:
+Tangut_Components:
 	
-#line 6969 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6798 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD838) goto yy868;
+	if (yych == 0xD822) goto yy841;
 	++YYCURSOR;
-yy867:
+yy840:
 #line 2729 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Glagolitic_Supplement; else return Error; }
-#line 6978 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy868:
+	{ if (YYCURSOR - 1 == limit) return Tangut_Components; else return Error; }
+#line 6807 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy841:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy867;
-	if (yych >= 0xDC30) goto yy867;
+	if (yych <= 0xDBFF) goto yy840;
+	if (yych >= 0xDF00) goto yy840;
 	++YYCURSOR;
 #line 2728 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Glagolitic_Supplement; }
-#line 6986 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Tangut_Components; }
+#line 6815 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2730 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Cyrillic_Extended_D:
+Khitan_Small_Script:
 	
-#line 6992 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6821 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD838) goto yy871;
+	if (yych <= 0xD821) goto yy843;
+	if (yych <= 0xD822) goto yy845;
+	if (yych <= 0xD823) goto yy846;
+yy843:
 	++YYCURSOR;
-yy870:
+yy844:
 #line 2735 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Cyrillic_Extended_D; else return Error; }
-#line 7001 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy871:
+	{ if (YYCURSOR - 1 == limit) return Khitan_Small_Script; else return Error; }
+#line 6833 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy845:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDC2F) goto yy870;
-	if (yych >= 0xDC90) goto yy870;
+	if (yych <= 0xDEFF) goto yy844;
+	if (yych <= 0xDFFF) goto yy847;
+	goto yy844;
+yy846:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy844;
+	if (yych >= 0xDD00) goto yy844;
+yy847:
 	++YYCURSOR;
 #line 2734 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Cyrillic_Extended_D; }
-#line 7009 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Khitan_Small_Script; }
+#line 6847 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2736 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Nyiakeng_Puachue_Hmong:
+Tangut_Supplement:
 	
-#line 7015 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6853 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD838) goto yy874;
+	if (yych == 0xD823) goto yy850;
 	++YYCURSOR;
-yy873:
+yy849:
 #line 2741 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Nyiakeng_Puachue_Hmong; else return Error; }
-#line 7024 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy874:
+	{ if (YYCURSOR - 1 == limit) return Tangut_Supplement; else return Error; }
+#line 6862 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy850:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy873;
-	if (yych >= 0xDD50) goto yy873;
+	if (yych <= 0xDCFF) goto yy849;
+	if (yych >= 0xDD80) goto yy849;
 	++YYCURSOR;
 #line 2740 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Nyiakeng_Puachue_Hmong; }
-#line 7032 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Tangut_Supplement; }
+#line 6870 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2742 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Toto:
+Tangut_Components_Supplement:
 	
-#line 7038 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6876 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD838) goto yy877;
+	if (yych == 0xD823) goto yy853;
 	++YYCURSOR;
-yy876:
+yy852:
 #line 2747 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Toto; else return Error; }
-#line 7047 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy877:
+	{ if (YYCURSOR - 1 == limit) return Tangut_Components_Supplement; else return Error; }
+#line 6885 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy853:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDE8F) goto yy876;
-	if (yych >= 0xDEC0) goto yy876;
+	if (yych <= 0xDD7F) goto yy852;
+	if (yych >= 0xDE00) goto yy852;
 	++YYCURSOR;
 #line 2746 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Toto; }
-#line 7055 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Tangut_Components_Supplement; }
+#line 6893 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2748 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Wancho:
+Kana_Extended_B:
 	
-#line 7061 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 6899 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD838) goto yy880;
+	if (yych == 0xD82B) goto yy856;
+	++YYCURSOR;
+yy855:
+#line 2753 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Kana_Extended_B; else return Error; }
+#line 6908 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy856:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDFEF) goto yy855;
+	if (yych >= 0xE000) goto yy855;
+	++YYCURSOR;
+#line 2752 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Kana_Extended_B; }
+#line 6916 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2754 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Kana_Supplement:
+	
+#line 6922 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD82C) goto yy859;
+	++YYCURSOR;
+yy858:
+#line 2759 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Kana_Supplement; else return Error; }
+#line 6931 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy859:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy858;
+	if (yych >= 0xDD00) goto yy858;
+	++YYCURSOR;
+#line 2758 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Kana_Supplement; }
+#line 6939 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2760 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Kana_Extended_A:
+	
+#line 6945 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD82C) goto yy862;
+	++YYCURSOR;
+yy861:
+#line 2765 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Kana_Extended_A; else return Error; }
+#line 6954 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy862:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDCFF) goto yy861;
+	if (yych >= 0xDD30) goto yy861;
+	++YYCURSOR;
+#line 2764 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Kana_Extended_A; }
+#line 6962 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2766 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Small_Kana_Extension:
+	
+#line 6968 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD82C) goto yy865;
+	++YYCURSOR;
+yy864:
+#line 2771 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Small_Kana_Extension; else return Error; }
+#line 6977 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy865:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDD2F) goto yy864;
+	if (yych >= 0xDD70) goto yy864;
+	++YYCURSOR;
+#line 2770 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Small_Kana_Extension; }
+#line 6985 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2772 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Nushu:
+	
+#line 6991 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD82C) goto yy868;
+	++YYCURSOR;
+yy867:
+#line 2777 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Nushu; else return Error; }
+#line 7000 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy868:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDD6F) goto yy867;
+	if (yych >= 0xDF00) goto yy867;
+	++YYCURSOR;
+#line 2776 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Nushu; }
+#line 7008 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2778 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Duployan:
+	
+#line 7014 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD82F) goto yy871;
+	++YYCURSOR;
+yy870:
+#line 2783 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Duployan; else return Error; }
+#line 7023 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy871:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy870;
+	if (yych >= 0xDCA0) goto yy870;
+	++YYCURSOR;
+#line 2782 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Duployan; }
+#line 7031 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2784 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Shorthand_Format_Controls:
+	
+#line 7037 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD82F) goto yy874;
+	++YYCURSOR;
+yy873:
+#line 2789 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Shorthand_Format_Controls; else return Error; }
+#line 7046 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy874:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDC9F) goto yy873;
+	if (yych >= 0xDCB0) goto yy873;
+	++YYCURSOR;
+#line 2788 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Shorthand_Format_Controls; }
+#line 7054 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2790 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Symbols_for_Legacy_Computing_Supplement:
+	
+#line 7060 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD833) goto yy877;
+	++YYCURSOR;
+yy876:
+#line 2795 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Symbols_for_Legacy_Computing_Supplement; else return Error; }
+#line 7069 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy877:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy876;
+	if (yych >= 0xDEC0) goto yy876;
+	++YYCURSOR;
+#line 2794 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Symbols_for_Legacy_Computing_Supplement; }
+#line 7077 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2796 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Miscellaneous_Symbols_Supplement:
+	
+#line 7083 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD833) goto yy880;
 	++YYCURSOR;
 yy879:
-#line 2753 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Wancho; else return Error; }
-#line 7070 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 2801 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Symbols_Supplement; else return Error; }
+#line 7092 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 yy880:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDEBF) goto yy879;
 	if (yych >= 0xDF00) goto yy879;
 	++YYCURSOR;
-#line 2752 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Wancho; }
-#line 7078 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2754 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Nag_Mundari:
-	
-#line 7084 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD839) goto yy883;
-	++YYCURSOR;
-yy882:
-#line 2759 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Nag_Mundari; else return Error; }
-#line 7093 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy883:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDCCF) goto yy882;
-	if (yych >= 0xDD00) goto yy882;
-	++YYCURSOR;
-#line 2758 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Nag_Mundari; }
-#line 7101 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2760 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Ethiopic_Extended_B:
-	
-#line 7107 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD839) goto yy886;
-	++YYCURSOR;
-yy885:
-#line 2765 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Ethiopic_Extended_B; else return Error; }
-#line 7116 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy886:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDFDF) goto yy885;
-	if (yych >= 0xE000) goto yy885;
-	++YYCURSOR;
-#line 2764 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Ethiopic_Extended_B; }
-#line 7124 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2766 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Mende_Kikakui:
-	
-#line 7130 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD83A) goto yy889;
-	++YYCURSOR;
-yy888:
-#line 2771 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Mende_Kikakui; else return Error; }
-#line 7139 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy889:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy888;
-	if (yych >= 0xDCE0) goto yy888;
-	++YYCURSOR;
-#line 2770 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Mende_Kikakui; }
-#line 7147 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2772 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Adlam:
-	
-#line 7153 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD83A) goto yy892;
-	++YYCURSOR;
-yy891:
-#line 2777 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Adlam; else return Error; }
-#line 7162 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy892:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy891;
-	if (yych >= 0xDD60) goto yy891;
-	++YYCURSOR;
-#line 2776 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Adlam; }
-#line 7170 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2778 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Indic_Siyaq_Numbers:
-	
-#line 7176 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD83B) goto yy895;
-	++YYCURSOR;
-yy894:
-#line 2783 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Indic_Siyaq_Numbers; else return Error; }
-#line 7185 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy895:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDC6F) goto yy894;
-	if (yych >= 0xDCC0) goto yy894;
-	++YYCURSOR;
-#line 2782 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Indic_Siyaq_Numbers; }
-#line 7193 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2784 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Ottoman_Siyaq_Numbers:
-	
-#line 7199 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD83B) goto yy898;
-	++YYCURSOR;
-yy897:
-#line 2789 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Ottoman_Siyaq_Numbers; else return Error; }
-#line 7208 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy898:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy897;
-	if (yych >= 0xDD50) goto yy897;
-	++YYCURSOR;
-#line 2788 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Ottoman_Siyaq_Numbers; }
-#line 7216 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2790 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Arabic_Mathematical_Alphabetic_Symbols:
-	
-#line 7222 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD83B) goto yy901;
-	++YYCURSOR;
-yy900:
-#line 2795 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Arabic_Mathematical_Alphabetic_Symbols; else return Error; }
-#line 7231 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy901:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDDFF) goto yy900;
-	if (yych >= 0xDF00) goto yy900;
-	++YYCURSOR;
-#line 2794 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Arabic_Mathematical_Alphabetic_Symbols; }
-#line 7239 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-}
-#line 2796 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-
-Mahjong_Tiles:
-	
-#line 7245 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-{
-	YYCTYPE yych;
-	yych = *YYCURSOR;
-	if (yych == 0xD83C) goto yy904;
-	++YYCURSOR;
-yy903:
-#line 2801 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Mahjong_Tiles; else return Error; }
-#line 7254 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy904:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy903;
-	if (yych >= 0xDC30) goto yy903;
-	++YYCURSOR;
 #line 2800 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Mahjong_Tiles; }
-#line 7262 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Miscellaneous_Symbols_Supplement; }
+#line 7100 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2802 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Domino_Tiles:
+Znamenny_Musical_Notation:
 	
-#line 7268 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7106 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD83C) goto yy907;
+	if (yych == 0xD833) goto yy883;
 	++YYCURSOR;
-yy906:
+yy882:
 #line 2807 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Domino_Tiles; else return Error; }
-#line 7277 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy907:
+	{ if (YYCURSOR - 1 == limit) return Znamenny_Musical_Notation; else return Error; }
+#line 7115 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy883:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDC2F) goto yy906;
-	if (yych >= 0xDCA0) goto yy906;
+	if (yych <= 0xDEFF) goto yy882;
+	if (yych >= 0xDFD0) goto yy882;
 	++YYCURSOR;
 #line 2806 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Domino_Tiles; }
-#line 7285 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Znamenny_Musical_Notation; }
+#line 7123 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2808 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Playing_Cards:
+Byzantine_Musical_Symbols:
 	
-#line 7291 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7129 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD83C) goto yy910;
+	if (yych == 0xD834) goto yy886;
 	++YYCURSOR;
-yy909:
+yy885:
 #line 2813 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Playing_Cards; else return Error; }
-#line 7300 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy910:
+	{ if (YYCURSOR - 1 == limit) return Byzantine_Musical_Symbols; else return Error; }
+#line 7138 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy886:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDC9F) goto yy909;
-	if (yych >= 0xDD00) goto yy909;
+	if (yych <= 0xDBFF) goto yy885;
+	if (yych >= 0xDD00) goto yy885;
 	++YYCURSOR;
 #line 2812 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Playing_Cards; }
-#line 7308 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Byzantine_Musical_Symbols; }
+#line 7146 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2814 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Enclosed_Alphanumeric_Supplement:
+Musical_Symbols:
 	
-#line 7314 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7152 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD83C) goto yy913;
+	if (yych == 0xD834) goto yy889;
 	++YYCURSOR;
-yy912:
+yy888:
 #line 2819 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Enclosed_Alphanumeric_Supplement; else return Error; }
-#line 7323 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy913:
+	{ if (YYCURSOR - 1 == limit) return Musical_Symbols; else return Error; }
+#line 7161 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy889:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy912;
-	if (yych >= 0xDE00) goto yy912;
+	if (yych <= 0xDCFF) goto yy888;
+	if (yych >= 0xDE00) goto yy888;
 	++YYCURSOR;
 #line 2818 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Enclosed_Alphanumeric_Supplement; }
-#line 7331 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Musical_Symbols; }
+#line 7169 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2820 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Enclosed_Ideographic_Supplement:
+Ancient_Greek_Musical_Notation:
 	
-#line 7337 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7175 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD83C) goto yy916;
+	if (yych == 0xD834) goto yy892;
 	++YYCURSOR;
-yy915:
+yy891:
 #line 2825 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Enclosed_Ideographic_Supplement; else return Error; }
-#line 7346 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy916:
+	{ if (YYCURSOR - 1 == limit) return Ancient_Greek_Musical_Notation; else return Error; }
+#line 7184 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy892:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDDFF) goto yy915;
-	if (yych >= 0xDF00) goto yy915;
+	if (yych <= 0xDDFF) goto yy891;
+	if (yych >= 0xDE50) goto yy891;
 	++YYCURSOR;
 #line 2824 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Enclosed_Ideographic_Supplement; }
-#line 7354 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Ancient_Greek_Musical_Notation; }
+#line 7192 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2826 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Miscellaneous_Symbols_and_Pictographs:
+Kaktovik_Numerals:
 	
-#line 7360 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7198 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0xD83B) goto yy918;
-	if (yych <= 0xD83C) goto yy920;
-	if (yych <= 0xD83D) goto yy921;
-yy918:
+	if (yych == 0xD834) goto yy895;
 	++YYCURSOR;
-yy919:
+yy894:
 #line 2831 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Symbols_and_Pictographs; else return Error; }
-#line 7372 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy920:
+	{ if (YYCURSOR - 1 == limit) return Kaktovik_Numerals; else return Error; }
+#line 7207 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy895:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy919;
-	if (yych <= 0xDFFF) goto yy922;
-	goto yy919;
-yy921:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy919;
-	if (yych >= 0xDE00) goto yy919;
-yy922:
+	if (yych <= 0xDEBF) goto yy894;
+	if (yych >= 0xDEE0) goto yy894;
 	++YYCURSOR;
 #line 2830 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Miscellaneous_Symbols_and_Pictographs; }
-#line 7386 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Kaktovik_Numerals; }
+#line 7215 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2832 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Emoticons:
+Mayan_Numerals:
 	
-#line 7392 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7221 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD83D) goto yy925;
+	if (yych == 0xD834) goto yy898;
 	++YYCURSOR;
-yy924:
+yy897:
 #line 2837 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Emoticons; else return Error; }
-#line 7401 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy925:
+	{ if (YYCURSOR - 1 == limit) return Mayan_Numerals; else return Error; }
+#line 7230 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy898:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDDFF) goto yy924;
-	if (yych >= 0xDE50) goto yy924;
+	if (yych <= 0xDEDF) goto yy897;
+	if (yych >= 0xDF00) goto yy897;
 	++YYCURSOR;
 #line 2836 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Emoticons; }
-#line 7409 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Mayan_Numerals; }
+#line 7238 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2838 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Ornamental_Dingbats:
+Tai_Xuan_Jing_Symbols:
 	
-#line 7415 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7244 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD83D) goto yy928;
+	if (yych == 0xD834) goto yy901;
 	++YYCURSOR;
-yy927:
+yy900:
 #line 2843 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Ornamental_Dingbats; else return Error; }
-#line 7424 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy928:
+	{ if (YYCURSOR - 1 == limit) return Tai_Xuan_Jing_Symbols; else return Error; }
+#line 7253 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy901:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDE4F) goto yy927;
-	if (yych >= 0xDE80) goto yy927;
+	if (yych <= 0xDEFF) goto yy900;
+	if (yych >= 0xDF60) goto yy900;
 	++YYCURSOR;
 #line 2842 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Ornamental_Dingbats; }
-#line 7432 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Tai_Xuan_Jing_Symbols; }
+#line 7261 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2844 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Transport_and_Map_Symbols:
+Counting_Rod_Numerals:
 	
-#line 7438 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7267 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD83D) goto yy931;
+	if (yych == 0xD834) goto yy904;
 	++YYCURSOR;
-yy930:
+yy903:
 #line 2849 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Transport_and_Map_Symbols; else return Error; }
-#line 7447 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy931:
+	{ if (YYCURSOR - 1 == limit) return Counting_Rod_Numerals; else return Error; }
+#line 7276 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy904:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDE7F) goto yy930;
-	if (yych >= 0xDF00) goto yy930;
+	if (yych <= 0xDF5F) goto yy903;
+	if (yych >= 0xDF80) goto yy903;
 	++YYCURSOR;
 #line 2848 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Transport_and_Map_Symbols; }
-#line 7455 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Counting_Rod_Numerals; }
+#line 7284 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2850 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Alchemical_Symbols:
+Mathematical_Alphanumeric_Symbols:
 	
-#line 7461 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7290 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD83D) goto yy934;
+	if (yych == 0xD835) goto yy907;
 	++YYCURSOR;
-yy933:
+yy906:
 #line 2855 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Alchemical_Symbols; else return Error; }
-#line 7470 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy934:
+	{ if (YYCURSOR - 1 == limit) return Mathematical_Alphanumeric_Symbols; else return Error; }
+#line 7299 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy907:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy933;
-	if (yych >= 0xDF80) goto yy933;
+	if (yych <= 0xDBFF) goto yy906;
+	if (yych >= 0xE000) goto yy906;
 	++YYCURSOR;
 #line 2854 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Alchemical_Symbols; }
-#line 7478 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Mathematical_Alphanumeric_Symbols; }
+#line 7307 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2856 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Geometric_Shapes_Extended:
+Sutton_SignWriting:
 	
-#line 7484 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7313 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD83D) goto yy937;
+	if (yych == 0xD836) goto yy910;
 	++YYCURSOR;
-yy936:
+yy909:
 #line 2861 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Geometric_Shapes_Extended; else return Error; }
-#line 7493 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy937:
+	{ if (YYCURSOR - 1 == limit) return Sutton_SignWriting; else return Error; }
+#line 7322 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy910:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDF7F) goto yy936;
-	if (yych >= 0xE000) goto yy936;
+	if (yych <= 0xDBFF) goto yy909;
+	if (yych >= 0xDEB0) goto yy909;
 	++YYCURSOR;
 #line 2860 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Geometric_Shapes_Extended; }
-#line 7501 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Sutton_SignWriting; }
+#line 7330 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2862 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Supplemental_Arrows_C:
+Latin_Extended_G:
 	
-#line 7507 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7336 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD83E) goto yy940;
+	if (yych == 0xD837) goto yy913;
 	++YYCURSOR;
-yy939:
+yy912:
 #line 2867 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Supplemental_Arrows_C; else return Error; }
-#line 7516 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy940:
+	{ if (YYCURSOR - 1 == limit) return Latin_Extended_G; else return Error; }
+#line 7345 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy913:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy939;
-	if (yych >= 0xDD00) goto yy939;
+	if (yych <= 0xDEFF) goto yy912;
+	if (yych >= 0xE000) goto yy912;
 	++YYCURSOR;
 #line 2866 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Supplemental_Arrows_C; }
-#line 7524 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Latin_Extended_G; }
+#line 7353 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2868 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Supplemental_Symbols_and_Pictographs:
+Glagolitic_Supplement:
 	
-#line 7530 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7359 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD83E) goto yy943;
+	if (yych == 0xD838) goto yy916;
 	++YYCURSOR;
-yy942:
+yy915:
 #line 2873 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Supplemental_Symbols_and_Pictographs; else return Error; }
-#line 7539 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy943:
+	{ if (YYCURSOR - 1 == limit) return Glagolitic_Supplement; else return Error; }
+#line 7368 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy916:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy942;
-	if (yych >= 0xDE00) goto yy942;
+	if (yych <= 0xDBFF) goto yy915;
+	if (yych >= 0xDC30) goto yy915;
 	++YYCURSOR;
 #line 2872 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Supplemental_Symbols_and_Pictographs; }
-#line 7547 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Glagolitic_Supplement; }
+#line 7376 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2874 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Chess_Symbols:
+Cyrillic_Extended_D:
 	
-#line 7553 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7382 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD83E) goto yy946;
+	if (yych == 0xD838) goto yy919;
 	++YYCURSOR;
-yy945:
+yy918:
 #line 2879 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Chess_Symbols; else return Error; }
-#line 7562 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy946:
+	{ if (YYCURSOR - 1 == limit) return Cyrillic_Extended_D; else return Error; }
+#line 7391 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy919:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDDFF) goto yy945;
-	if (yych >= 0xDE70) goto yy945;
+	if (yych <= 0xDC2F) goto yy918;
+	if (yych >= 0xDC90) goto yy918;
 	++YYCURSOR;
 #line 2878 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Chess_Symbols; }
-#line 7570 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Cyrillic_Extended_D; }
+#line 7399 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2880 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Symbols_and_Pictographs_Extended_A:
+Nyiakeng_Puachue_Hmong:
 	
-#line 7576 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7405 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD83E) goto yy949;
+	if (yych == 0xD838) goto yy922;
 	++YYCURSOR;
-yy948:
+yy921:
 #line 2885 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Symbols_and_Pictographs_Extended_A; else return Error; }
-#line 7585 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy949:
+	{ if (YYCURSOR - 1 == limit) return Nyiakeng_Puachue_Hmong; else return Error; }
+#line 7414 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy922:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDE6F) goto yy948;
-	if (yych >= 0xDF00) goto yy948;
+	if (yych <= 0xDCFF) goto yy921;
+	if (yych >= 0xDD50) goto yy921;
 	++YYCURSOR;
 #line 2884 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Symbols_and_Pictographs_Extended_A; }
-#line 7593 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Nyiakeng_Puachue_Hmong; }
+#line 7422 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2886 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Symbols_for_Legacy_Computing:
+Toto:
 	
-#line 7599 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7428 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD83E) goto yy952;
+	if (yych == 0xD838) goto yy925;
 	++YYCURSOR;
-yy951:
+yy924:
 #line 2891 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Symbols_for_Legacy_Computing; else return Error; }
-#line 7608 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy952:
+	{ if (YYCURSOR - 1 == limit) return Toto; else return Error; }
+#line 7437 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy925:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy951;
-	if (yych >= 0xE000) goto yy951;
+	if (yych <= 0xDE8F) goto yy924;
+	if (yych >= 0xDEC0) goto yy924;
 	++YYCURSOR;
 #line 2890 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Symbols_for_Legacy_Computing; }
-#line 7616 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Toto; }
+#line 7445 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2892 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-CJK_Unified_Ideographs_Extension_B:
+Wancho:
 	
-#line 7622 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7451 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0xD83F) goto yy954;
-	if (yych <= 0xD868) goto yy956;
-	if (yych <= 0xD869) goto yy957;
-yy954:
+	if (yych == 0xD838) goto yy928;
 	++YYCURSOR;
-yy955:
+yy927:
 #line 2897 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_B; else return Error; }
-#line 7634 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy956:
+	{ if (YYCURSOR - 1 == limit) return Wancho; else return Error; }
+#line 7460 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy928:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy955;
-	if (yych <= 0xDFFF) goto yy958;
-	goto yy955;
-yy957:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy955;
-	if (yych >= 0xDEE0) goto yy955;
-yy958:
+	if (yych <= 0xDEBF) goto yy927;
+	if (yych >= 0xDF00) goto yy927;
 	++YYCURSOR;
 #line 2896 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_B; }
-#line 7648 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Wancho; }
+#line 7468 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2898 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-CJK_Unified_Ideographs_Extension_C:
+Nag_Mundari:
 	
-#line 7654 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7474 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0xD868) goto yy960;
-	if (yych <= 0xD869) goto yy962;
-	if (yych <= 0xD86C) goto yy963;
-	if (yych <= 0xD86D) goto yy964;
-yy960:
+	if (yych == 0xD839) goto yy931;
 	++YYCURSOR;
-yy961:
+yy930:
 #line 2903 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_C; else return Error; }
-#line 7667 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy962:
+	{ if (YYCURSOR - 1 == limit) return Nag_Mundari; else return Error; }
+#line 7483 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy931:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEFF) goto yy961;
-	if (yych <= 0xDFFF) goto yy965;
-	goto yy961;
-yy963:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy961;
-	if (yych <= 0xDFFF) goto yy965;
-	goto yy961;
-yy964:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy961;
-	if (yych >= 0xDF40) goto yy961;
-yy965:
+	if (yych <= 0xDCCF) goto yy930;
+	if (yych >= 0xDD00) goto yy930;
 	++YYCURSOR;
 #line 2902 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_C; }
-#line 7686 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Nag_Mundari; }
+#line 7491 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2904 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-CJK_Unified_Ideographs_Extension_D:
+Ol_Onal:
 	
-#line 7692 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7497 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0xD86C) goto yy967;
-	if (yych <= 0xD86D) goto yy969;
-	if (yych <= 0xD86E) goto yy970;
-yy967:
+	if (yych == 0xD839) goto yy934;
 	++YYCURSOR;
-yy968:
+yy933:
 #line 2909 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_D; else return Error; }
-#line 7704 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy969:
+	{ if (YYCURSOR - 1 == limit) return Ol_Onal; else return Error; }
+#line 7506 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy934:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDF3F) goto yy968;
-	if (yych <= 0xDFFF) goto yy971;
-	goto yy968;
-yy970:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy968;
-	if (yych >= 0xDC20) goto yy968;
-yy971:
+	if (yych <= 0xDDCF) goto yy933;
+	if (yych >= 0xDE00) goto yy933;
 	++YYCURSOR;
 #line 2908 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_D; }
-#line 7718 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Ol_Onal; }
+#line 7514 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2910 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-CJK_Unified_Ideographs_Extension_E:
+Tai_Yo:
 	
-#line 7724 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7520 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0xD86D) goto yy973;
-	if (yych <= 0xD86E) goto yy975;
-	if (yych <= 0xD872) goto yy976;
-	if (yych <= 0xD873) goto yy977;
-yy973:
+	if (yych == 0xD839) goto yy937;
 	++YYCURSOR;
-yy974:
+yy936:
 #line 2915 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_E; else return Error; }
-#line 7737 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy975:
+	{ if (YYCURSOR - 1 == limit) return Tai_Yo; else return Error; }
+#line 7529 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy937:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDC1F) goto yy974;
-	if (yych <= 0xDFFF) goto yy978;
-	goto yy974;
-yy976:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy974;
-	if (yych <= 0xDFFF) goto yy978;
-	goto yy974;
-yy977:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy974;
-	if (yych >= 0xDEB0) goto yy974;
-yy978:
+	if (yych <= 0xDEBF) goto yy936;
+	if (yych >= 0xDF00) goto yy936;
 	++YYCURSOR;
 #line 2914 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_E; }
-#line 7756 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Tai_Yo; }
+#line 7537 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2916 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-CJK_Unified_Ideographs_Extension_F:
+Ethiopic_Extended_B:
 	
-#line 7762 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7543 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0xD872) goto yy980;
-	if (yych <= 0xD873) goto yy982;
-	if (yych <= 0xD879) goto yy983;
-	if (yych <= 0xD87A) goto yy984;
-yy980:
+	if (yych == 0xD839) goto yy940;
 	++YYCURSOR;
-yy981:
+yy939:
 #line 2921 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_F; else return Error; }
-#line 7775 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy982:
+	{ if (YYCURSOR - 1 == limit) return Ethiopic_Extended_B; else return Error; }
+#line 7552 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy940:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDEAF) goto yy981;
-	if (yych <= 0xDFFF) goto yy985;
-	goto yy981;
-yy983:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy981;
-	if (yych <= 0xDFFF) goto yy985;
-	goto yy981;
-yy984:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy981;
-	if (yych >= 0xDFF0) goto yy981;
-yy985:
+	if (yych <= 0xDFDF) goto yy939;
+	if (yych >= 0xE000) goto yy939;
 	++YYCURSOR;
 #line 2920 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_F; }
-#line 7794 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Ethiopic_Extended_B; }
+#line 7560 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2922 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-CJK_Unified_Ideographs_Extension_I:
+Mende_Kikakui:
 	
-#line 7800 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7566 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0xD879) goto yy987;
-	if (yych <= 0xD87A) goto yy989;
-	if (yych <= 0xD87B) goto yy990;
-yy987:
+	if (yych == 0xD83A) goto yy943;
 	++YYCURSOR;
-yy988:
+yy942:
 #line 2927 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_I; else return Error; }
-#line 7812 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy989:
+	{ if (YYCURSOR - 1 == limit) return Mende_Kikakui; else return Error; }
+#line 7575 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy943:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDFEF) goto yy988;
-	if (yych <= 0xDFFF) goto yy991;
-	goto yy988;
-yy990:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy988;
-	if (yych >= 0xDE60) goto yy988;
-yy991:
+	if (yych <= 0xDBFF) goto yy942;
+	if (yych >= 0xDCE0) goto yy942;
 	++YYCURSOR;
 #line 2926 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_I; }
-#line 7826 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Mende_Kikakui; }
+#line 7583 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2928 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-CJK_Compatibility_Ideographs_Supplement:
+Adlam:
 	
-#line 7832 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7589 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xD87E) goto yy994;
+	if (yych == 0xD83A) goto yy946;
 	++YYCURSOR;
-yy993:
+yy945:
 #line 2933 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Compatibility_Ideographs_Supplement; else return Error; }
-#line 7841 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy994:
+	{ if (YYCURSOR - 1 == limit) return Adlam; else return Error; }
+#line 7598 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy946:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy993;
-	if (yych >= 0xDE20) goto yy993;
+	if (yych <= 0xDCFF) goto yy945;
+	if (yych >= 0xDD60) goto yy945;
 	++YYCURSOR;
 #line 2932 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto CJK_Compatibility_Ideographs_Supplement; }
-#line 7849 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Adlam; }
+#line 7606 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2934 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-CJK_Unified_Ideographs_Extension_G:
+Indic_Siyaq_Numbers:
 	
-#line 7855 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7612 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0xD87F) goto yy996;
-	if (yych <= 0xD883) goto yy998;
-	if (yych <= 0xD884) goto yy999;
-yy996:
+	if (yych == 0xD83B) goto yy949;
 	++YYCURSOR;
-yy997:
+yy948:
 #line 2939 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_G; else return Error; }
-#line 7867 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy998:
+	{ if (YYCURSOR - 1 == limit) return Indic_Siyaq_Numbers; else return Error; }
+#line 7621 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy949:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy997;
-	if (yych <= 0xDFFF) goto yy1000;
-	goto yy997;
-yy999:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy997;
-	if (yych >= 0xDF50) goto yy997;
-yy1000:
+	if (yych <= 0xDC6F) goto yy948;
+	if (yych >= 0xDCC0) goto yy948;
 	++YYCURSOR;
 #line 2938 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_G; }
-#line 7881 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Indic_Siyaq_Numbers; }
+#line 7629 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2940 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-CJK_Unified_Ideographs_Extension_H:
+Ottoman_Siyaq_Numbers:
 	
-#line 7887 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7635 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0xD883) goto yy1002;
-	if (yych <= 0xD884) goto yy1004;
-	if (yych <= 0xD887) goto yy1005;
-	if (yych <= 0xD888) goto yy1006;
-yy1002:
+	if (yych == 0xD83B) goto yy952;
 	++YYCURSOR;
-yy1003:
+yy951:
 #line 2945 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_H; else return Error; }
-#line 7900 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy1004:
+	{ if (YYCURSOR - 1 == limit) return Ottoman_Siyaq_Numbers; else return Error; }
+#line 7644 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy952:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDF4F) goto yy1003;
-	if (yych <= 0xDFFF) goto yy1007;
-	goto yy1003;
-yy1005:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy1003;
-	if (yych <= 0xDFFF) goto yy1007;
-	goto yy1003;
-yy1006:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy1003;
-	if (yych >= 0xDFB0) goto yy1003;
-yy1007:
+	if (yych <= 0xDCFF) goto yy951;
+	if (yych >= 0xDD50) goto yy951;
 	++YYCURSOR;
 #line 2944 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto CJK_Unified_Ideographs_Extension_H; }
-#line 7919 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Ottoman_Siyaq_Numbers; }
+#line 7652 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2946 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Tags:
+Arabic_Mathematical_Alphabetic_Symbols:
 	
-#line 7925 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7658 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xDB40) goto yy1010;
+	if (yych == 0xD83B) goto yy955;
 	++YYCURSOR;
-yy1009:
+yy954:
 #line 2951 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Tags; else return Error; }
-#line 7934 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy1010:
+	{ if (YYCURSOR - 1 == limit) return Arabic_Mathematical_Alphabetic_Symbols; else return Error; }
+#line 7667 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy955:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy1009;
-	if (yych >= 0xDC80) goto yy1009;
+	if (yych <= 0xDDFF) goto yy954;
+	if (yych >= 0xDF00) goto yy954;
 	++YYCURSOR;
 #line 2950 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Tags; }
-#line 7942 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Arabic_Mathematical_Alphabetic_Symbols; }
+#line 7675 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2952 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Variation_Selectors_Supplement:
+Mahjong_Tiles:
 	
-#line 7948 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7681 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych == 0xDB40) goto yy1013;
+	if (yych == 0xD83C) goto yy958;
 	++YYCURSOR;
-yy1012:
+yy957:
 #line 2957 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Variation_Selectors_Supplement; else return Error; }
-#line 7957 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy1013:
+	{ if (YYCURSOR - 1 == limit) return Mahjong_Tiles; else return Error; }
+#line 7690 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy958:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy1012;
-	if (yych >= 0xDDF0) goto yy1012;
+	if (yych <= 0xDBFF) goto yy957;
+	if (yych >= 0xDC30) goto yy957;
 	++YYCURSOR;
 #line 2956 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Variation_Selectors_Supplement; }
-#line 7965 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Mahjong_Tiles; }
+#line 7698 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2958 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Supplementary_Private_Use_Area_A:
+Domino_Tiles:
 	
-#line 7971 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7704 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0xDB7F) goto yy1015;
-	if (yych <= 0xDBBF) goto yy1017;
-yy1015:
+	if (yych == 0xD83C) goto yy961;
 	++YYCURSOR;
-yy1016:
+yy960:
 #line 2963 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Supplementary_Private_Use_Area_A; else return Error; }
-#line 7982 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy1017:
+	{ if (YYCURSOR - 1 == limit) return Domino_Tiles; else return Error; }
+#line 7713 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy961:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy1016;
-	if (yych >= 0xE000) goto yy1016;
+	if (yych <= 0xDC2F) goto yy960;
+	if (yych >= 0xDCA0) goto yy960;
 	++YYCURSOR;
 #line 2962 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Supplementary_Private_Use_Area_A; }
-#line 7990 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Domino_Tiles; }
+#line 7721 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2964 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
-Supplementary_Private_Use_Area_B:
+Playing_Cards:
 	
-#line 7996 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+#line 7727 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0xDBBF) goto yy1019;
-	if (yych <= 0xDBFF) goto yy1021;
-yy1019:
+	if (yych == 0xD83C) goto yy964;
 	++YYCURSOR;
-yy1020:
+yy963:
 #line 2969 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ if (YYCURSOR - 1 == limit) return Supplementary_Private_Use_Area_B; else return Error; }
-#line 8007 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
-yy1021:
+	{ if (YYCURSOR - 1 == limit) return Playing_Cards; else return Error; }
+#line 7736 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy964:
 	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy1020;
-	if (yych >= 0xE000) goto yy1020;
+	if (yych <= 0xDC9F) goto yy963;
+	if (yych >= 0xDD00) goto yy963;
 	++YYCURSOR;
 #line 2968 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
-	{ goto Supplementary_Private_Use_Area_B; }
-#line 8015 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+	{ goto Playing_Cards; }
+#line 7744 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
 }
 #line 2970 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Enclosed_Alphanumeric_Supplement:
+	
+#line 7750 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD83C) goto yy967;
+	++YYCURSOR;
+yy966:
+#line 2975 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Enclosed_Alphanumeric_Supplement; else return Error; }
+#line 7759 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy967:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDCFF) goto yy966;
+	if (yych >= 0xDE00) goto yy966;
+	++YYCURSOR;
+#line 2974 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Enclosed_Alphanumeric_Supplement; }
+#line 7767 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2976 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Enclosed_Ideographic_Supplement:
+	
+#line 7773 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD83C) goto yy970;
+	++YYCURSOR;
+yy969:
+#line 2981 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Enclosed_Ideographic_Supplement; else return Error; }
+#line 7782 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy970:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDDFF) goto yy969;
+	if (yych >= 0xDF00) goto yy969;
+	++YYCURSOR;
+#line 2980 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Enclosed_Ideographic_Supplement; }
+#line 7790 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2982 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Miscellaneous_Symbols_and_Pictographs:
+	
+#line 7796 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych <= 0xD83B) goto yy972;
+	if (yych <= 0xD83C) goto yy974;
+	if (yych <= 0xD83D) goto yy975;
+yy972:
+	++YYCURSOR;
+yy973:
+#line 2987 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Miscellaneous_Symbols_and_Pictographs; else return Error; }
+#line 7808 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy974:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDEFF) goto yy973;
+	if (yych <= 0xDFFF) goto yy976;
+	goto yy973;
+yy975:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy973;
+	if (yych >= 0xDE00) goto yy973;
+yy976:
+	++YYCURSOR;
+#line 2986 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Miscellaneous_Symbols_and_Pictographs; }
+#line 7822 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2988 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Emoticons:
+	
+#line 7828 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD83D) goto yy979;
+	++YYCURSOR;
+yy978:
+#line 2993 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Emoticons; else return Error; }
+#line 7837 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy979:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDDFF) goto yy978;
+	if (yych >= 0xDE50) goto yy978;
+	++YYCURSOR;
+#line 2992 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Emoticons; }
+#line 7845 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 2994 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Ornamental_Dingbats:
+	
+#line 7851 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD83D) goto yy982;
+	++YYCURSOR;
+yy981:
+#line 2999 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Ornamental_Dingbats; else return Error; }
+#line 7860 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy982:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDE4F) goto yy981;
+	if (yych >= 0xDE80) goto yy981;
+	++YYCURSOR;
+#line 2998 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Ornamental_Dingbats; }
+#line 7868 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3000 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Transport_and_Map_Symbols:
+	
+#line 7874 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD83D) goto yy985;
+	++YYCURSOR;
+yy984:
+#line 3005 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Transport_and_Map_Symbols; else return Error; }
+#line 7883 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy985:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDE7F) goto yy984;
+	if (yych >= 0xDF00) goto yy984;
+	++YYCURSOR;
+#line 3004 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Transport_and_Map_Symbols; }
+#line 7891 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3006 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Alchemical_Symbols:
+	
+#line 7897 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD83D) goto yy988;
+	++YYCURSOR;
+yy987:
+#line 3011 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Alchemical_Symbols; else return Error; }
+#line 7906 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy988:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDEFF) goto yy987;
+	if (yych >= 0xDF80) goto yy987;
+	++YYCURSOR;
+#line 3010 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Alchemical_Symbols; }
+#line 7914 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3012 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Geometric_Shapes_Extended:
+	
+#line 7920 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD83D) goto yy991;
+	++YYCURSOR;
+yy990:
+#line 3017 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Geometric_Shapes_Extended; else return Error; }
+#line 7929 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy991:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDF7F) goto yy990;
+	if (yych >= 0xE000) goto yy990;
+	++YYCURSOR;
+#line 3016 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Geometric_Shapes_Extended; }
+#line 7937 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3018 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Supplemental_Arrows_C:
+	
+#line 7943 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD83E) goto yy994;
+	++YYCURSOR;
+yy993:
+#line 3023 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Supplemental_Arrows_C; else return Error; }
+#line 7952 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy994:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy993;
+	if (yych >= 0xDD00) goto yy993;
+	++YYCURSOR;
+#line 3022 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Supplemental_Arrows_C; }
+#line 7960 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3024 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Supplemental_Symbols_and_Pictographs:
+	
+#line 7966 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD83E) goto yy997;
+	++YYCURSOR;
+yy996:
+#line 3029 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Supplemental_Symbols_and_Pictographs; else return Error; }
+#line 7975 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy997:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDCFF) goto yy996;
+	if (yych >= 0xDE00) goto yy996;
+	++YYCURSOR;
+#line 3028 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Supplemental_Symbols_and_Pictographs; }
+#line 7983 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3030 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Chess_Symbols:
+	
+#line 7989 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD83E) goto yy1000;
+	++YYCURSOR;
+yy999:
+#line 3035 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Chess_Symbols; else return Error; }
+#line 7998 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1000:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDDFF) goto yy999;
+	if (yych >= 0xDE70) goto yy999;
+	++YYCURSOR;
+#line 3034 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Chess_Symbols; }
+#line 8006 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3036 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Symbols_and_Pictographs_Extended_A:
+	
+#line 8012 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD83E) goto yy1003;
+	++YYCURSOR;
+yy1002:
+#line 3041 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Symbols_and_Pictographs_Extended_A; else return Error; }
+#line 8021 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1003:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDE6F) goto yy1002;
+	if (yych >= 0xDF00) goto yy1002;
+	++YYCURSOR;
+#line 3040 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Symbols_and_Pictographs_Extended_A; }
+#line 8029 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3042 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Symbols_for_Legacy_Computing:
+	
+#line 8035 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD83E) goto yy1006;
+	++YYCURSOR;
+yy1005:
+#line 3047 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Symbols_for_Legacy_Computing; else return Error; }
+#line 8044 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1006:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDEFF) goto yy1005;
+	if (yych >= 0xE000) goto yy1005;
+	++YYCURSOR;
+#line 3046 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Symbols_for_Legacy_Computing; }
+#line 8052 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3048 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_B:
+	
+#line 8058 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych <= 0xD83F) goto yy1008;
+	if (yych <= 0xD868) goto yy1010;
+	if (yych <= 0xD869) goto yy1011;
+yy1008:
+	++YYCURSOR;
+yy1009:
+#line 3053 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_B; else return Error; }
+#line 8070 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1010:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1009;
+	if (yych <= 0xDFFF) goto yy1012;
+	goto yy1009;
+yy1011:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1009;
+	if (yych >= 0xDEE0) goto yy1009;
+yy1012:
+	++YYCURSOR;
+#line 3052 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_B; }
+#line 8084 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3054 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_C:
+	
+#line 8090 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych <= 0xD868) goto yy1014;
+	if (yych <= 0xD869) goto yy1016;
+	if (yych <= 0xD86C) goto yy1017;
+	if (yych <= 0xD86D) goto yy1018;
+yy1014:
+	++YYCURSOR;
+yy1015:
+#line 3059 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_C; else return Error; }
+#line 8103 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1016:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDEFF) goto yy1015;
+	if (yych <= 0xDFFF) goto yy1019;
+	goto yy1015;
+yy1017:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1015;
+	if (yych <= 0xDFFF) goto yy1019;
+	goto yy1015;
+yy1018:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1015;
+	if (yych >= 0xDF40) goto yy1015;
+yy1019:
+	++YYCURSOR;
+#line 3058 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_C; }
+#line 8122 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3060 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_D:
+	
+#line 8128 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych <= 0xD86C) goto yy1021;
+	if (yych <= 0xD86D) goto yy1023;
+	if (yych <= 0xD86E) goto yy1024;
+yy1021:
+	++YYCURSOR;
+yy1022:
+#line 3065 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_D; else return Error; }
+#line 8140 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1023:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDF3F) goto yy1022;
+	if (yych <= 0xDFFF) goto yy1025;
+	goto yy1022;
+yy1024:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1022;
+	if (yych >= 0xDC20) goto yy1022;
+yy1025:
+	++YYCURSOR;
+#line 3064 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_D; }
+#line 8154 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3066 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_E:
+	
+#line 8160 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych <= 0xD86D) goto yy1027;
+	if (yych <= 0xD86E) goto yy1029;
+	if (yych <= 0xD872) goto yy1030;
+	if (yych <= 0xD873) goto yy1031;
+yy1027:
+	++YYCURSOR;
+yy1028:
+#line 3071 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_E; else return Error; }
+#line 8173 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1029:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDC1F) goto yy1028;
+	if (yych <= 0xDFFF) goto yy1032;
+	goto yy1028;
+yy1030:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1028;
+	if (yych <= 0xDFFF) goto yy1032;
+	goto yy1028;
+yy1031:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1028;
+	if (yych >= 0xDEB0) goto yy1028;
+yy1032:
+	++YYCURSOR;
+#line 3070 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_E; }
+#line 8192 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3072 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_F:
+	
+#line 8198 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych <= 0xD872) goto yy1034;
+	if (yych <= 0xD873) goto yy1036;
+	if (yych <= 0xD879) goto yy1037;
+	if (yych <= 0xD87A) goto yy1038;
+yy1034:
+	++YYCURSOR;
+yy1035:
+#line 3077 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_F; else return Error; }
+#line 8211 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1036:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDEAF) goto yy1035;
+	if (yych <= 0xDFFF) goto yy1039;
+	goto yy1035;
+yy1037:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1035;
+	if (yych <= 0xDFFF) goto yy1039;
+	goto yy1035;
+yy1038:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1035;
+	if (yych >= 0xDFF0) goto yy1035;
+yy1039:
+	++YYCURSOR;
+#line 3076 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_F; }
+#line 8230 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3078 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_I:
+	
+#line 8236 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych <= 0xD879) goto yy1041;
+	if (yych <= 0xD87A) goto yy1043;
+	if (yych <= 0xD87B) goto yy1044;
+yy1041:
+	++YYCURSOR;
+yy1042:
+#line 3083 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_I; else return Error; }
+#line 8248 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1043:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDFEF) goto yy1042;
+	if (yych <= 0xDFFF) goto yy1045;
+	goto yy1042;
+yy1044:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1042;
+	if (yych >= 0xDE60) goto yy1042;
+yy1045:
+	++YYCURSOR;
+#line 3082 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_I; }
+#line 8262 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3084 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+CJK_Compatibility_Ideographs_Supplement:
+	
+#line 8268 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xD87E) goto yy1048;
+	++YYCURSOR;
+yy1047:
+#line 3089 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Compatibility_Ideographs_Supplement; else return Error; }
+#line 8277 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1048:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1047;
+	if (yych >= 0xDE20) goto yy1047;
+	++YYCURSOR;
+#line 3088 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto CJK_Compatibility_Ideographs_Supplement; }
+#line 8285 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3090 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_G:
+	
+#line 8291 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych <= 0xD87F) goto yy1050;
+	if (yych <= 0xD883) goto yy1052;
+	if (yych <= 0xD884) goto yy1053;
+yy1050:
+	++YYCURSOR;
+yy1051:
+#line 3095 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_G; else return Error; }
+#line 8303 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1052:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1051;
+	if (yych <= 0xDFFF) goto yy1054;
+	goto yy1051;
+yy1053:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1051;
+	if (yych >= 0xDF50) goto yy1051;
+yy1054:
+	++YYCURSOR;
+#line 3094 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_G; }
+#line 8317 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3096 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_H:
+	
+#line 8323 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych <= 0xD883) goto yy1056;
+	if (yych <= 0xD884) goto yy1058;
+	if (yych <= 0xD887) goto yy1059;
+	if (yych <= 0xD888) goto yy1060;
+yy1056:
+	++YYCURSOR;
+yy1057:
+#line 3101 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_H; else return Error; }
+#line 8336 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1058:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDF4F) goto yy1057;
+	if (yych <= 0xDFFF) goto yy1061;
+	goto yy1057;
+yy1059:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1057;
+	if (yych <= 0xDFFF) goto yy1061;
+	goto yy1057;
+yy1060:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1057;
+	if (yych >= 0xDFB0) goto yy1057;
+yy1061:
+	++YYCURSOR;
+#line 3100 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_H; }
+#line 8355 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3102 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+CJK_Unified_Ideographs_Extension_J:
+	
+#line 8361 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych <= 0xD887) goto yy1063;
+	if (yych <= 0xD888) goto yy1065;
+	if (yych <= 0xD88C) goto yy1066;
+	if (yych <= 0xD88D) goto yy1067;
+yy1063:
+	++YYCURSOR;
+yy1064:
+#line 3107 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return CJK_Unified_Ideographs_Extension_J; else return Error; }
+#line 8374 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1065:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDFAF) goto yy1064;
+	if (yych <= 0xDFFF) goto yy1068;
+	goto yy1064;
+yy1066:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1064;
+	if (yych <= 0xDFFF) goto yy1068;
+	goto yy1064;
+yy1067:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1064;
+	if (yych >= 0xDC80) goto yy1064;
+yy1068:
+	++YYCURSOR;
+#line 3106 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto CJK_Unified_Ideographs_Extension_J; }
+#line 8393 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3108 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Tags:
+	
+#line 8399 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xDB40) goto yy1071;
+	++YYCURSOR;
+yy1070:
+#line 3113 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Tags; else return Error; }
+#line 8408 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1071:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1070;
+	if (yych >= 0xDC80) goto yy1070;
+	++YYCURSOR;
+#line 3112 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Tags; }
+#line 8416 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3114 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Variation_Selectors_Supplement:
+	
+#line 8422 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych == 0xDB40) goto yy1074;
+	++YYCURSOR;
+yy1073:
+#line 3119 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Variation_Selectors_Supplement; else return Error; }
+#line 8431 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1074:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDCFF) goto yy1073;
+	if (yych >= 0xDDF0) goto yy1073;
+	++YYCURSOR;
+#line 3118 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Variation_Selectors_Supplement; }
+#line 8439 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3120 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Supplementary_Private_Use_Area_A:
+	
+#line 8445 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych <= 0xDB7F) goto yy1076;
+	if (yych <= 0xDBBF) goto yy1078;
+yy1076:
+	++YYCURSOR;
+yy1077:
+#line 3125 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Supplementary_Private_Use_Area_A; else return Error; }
+#line 8456 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1078:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1077;
+	if (yych >= 0xE000) goto yy1077;
+	++YYCURSOR;
+#line 3124 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Supplementary_Private_Use_Area_A; }
+#line 8464 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3126 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+
+Supplementary_Private_Use_Area_B:
+	
+#line 8470 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+{
+	YYCTYPE yych;
+	yych = *YYCURSOR;
+	if (yych <= 0xDBBF) goto yy1080;
+	if (yych <= 0xDBFF) goto yy1082;
+yy1080:
+	++YYCURSOR;
+yy1081:
+#line 3131 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ if (YYCURSOR - 1 == limit) return Supplementary_Private_Use_Area_B; else return Error; }
+#line 8481 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+yy1082:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy1081;
+	if (yych >= 0xE000) goto yy1081;
+	++YYCURSOR;
+#line 3130 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
+	{ goto Supplementary_Private_Use_Area_B; }
+#line 8489 "encodings/unicode_blocks_x_encoding_policy_ignore.c"
+}
+#line 3132 "encodings/unicode_blocks_x_encoding_policy_ignore.re"
 
 }
 
@@ -8202,6 +8676,7 @@ static const uint32_t chars_Osage[] = {0x104b0,0x104ff};
 static const uint32_t chars_Elbasan[] = {0x10500,0x1052f};
 static const uint32_t chars_Caucasian_Albanian[] = {0x10530,0x1056f};
 static const uint32_t chars_Vithkuqi[] = {0x10570,0x105bf};
+static const uint32_t chars_Todhri[] = {0x105c0,0x105ff};
 static const uint32_t chars_Linear_A[] = {0x10600,0x1077f};
 static const uint32_t chars_Latin_Extended_F[] = {0x10780,0x107bf};
 static const uint32_t chars_Cypriot_Syllabary[] = {0x10800,0x1083f};
@@ -8211,6 +8686,7 @@ static const uint32_t chars_Nabataean[] = {0x10880,0x108af};
 static const uint32_t chars_Hatran[] = {0x108e0,0x108ff};
 static const uint32_t chars_Phoenician[] = {0x10900,0x1091f};
 static const uint32_t chars_Lydian[] = {0x10920,0x1093f};
+static const uint32_t chars_Sidetic[] = {0x10940,0x1095f};
 static const uint32_t chars_Meroitic_Hieroglyphs[] = {0x10980,0x1099f};
 static const uint32_t chars_Meroitic_Cursive[] = {0x109a0,0x109ff};
 static const uint32_t chars_Kharoshthi[] = {0x10a00,0x10a5f};
@@ -8224,6 +8700,7 @@ static const uint32_t chars_Psalter_Pahlavi[] = {0x10b80,0x10baf};
 static const uint32_t chars_Old_Turkic[] = {0x10c00,0x10c4f};
 static const uint32_t chars_Old_Hungarian[] = {0x10c80,0x10cff};
 static const uint32_t chars_Hanifi_Rohingya[] = {0x10d00,0x10d3f};
+static const uint32_t chars_Garay[] = {0x10d40,0x10d8f};
 static const uint32_t chars_Rumi_Numeral_Symbols[] = {0x10e60,0x10e7f};
 static const uint32_t chars_Yezidi[] = {0x10e80,0x10ebf};
 static const uint32_t chars_Arabic_Extended_C[] = {0x10ec0,0x10eff};
@@ -8243,12 +8720,14 @@ static const uint32_t chars_Khojki[] = {0x11200,0x1124f};
 static const uint32_t chars_Multani[] = {0x11280,0x112af};
 static const uint32_t chars_Khudawadi[] = {0x112b0,0x112ff};
 static const uint32_t chars_Grantha[] = {0x11300,0x1137f};
+static const uint32_t chars_Tulu_Tigalari[] = {0x11380,0x113ff};
 static const uint32_t chars_Newa[] = {0x11400,0x1147f};
 static const uint32_t chars_Tirhuta[] = {0x11480,0x114df};
 static const uint32_t chars_Siddham[] = {0x11580,0x115ff};
 static const uint32_t chars_Modi[] = {0x11600,0x1165f};
 static const uint32_t chars_Mongolian_Supplement[] = {0x11660,0x1167f};
 static const uint32_t chars_Takri[] = {0x11680,0x116cf};
+static const uint32_t chars_Myanmar_Extended_C[] = {0x116d0,0x116ff};
 static const uint32_t chars_Ahom[] = {0x11700,0x1174f};
 static const uint32_t chars_Dogra[] = {0x11800,0x1184f};
 static const uint32_t chars_Warang_Citi[] = {0x118a0,0x118ff};
@@ -8259,10 +8738,13 @@ static const uint32_t chars_Soyombo[] = {0x11a50,0x11aaf};
 static const uint32_t chars_Unified_Canadian_Aboriginal_Syllabics_Extended_A[] = {0x11ab0,0x11abf};
 static const uint32_t chars_Pau_Cin_Hau[] = {0x11ac0,0x11aff};
 static const uint32_t chars_Devanagari_Extended_A[] = {0x11b00,0x11b5f};
+static const uint32_t chars_Sharada_Supplement[] = {0x11b60,0x11b7f};
+static const uint32_t chars_Sunuwar[] = {0x11bc0,0x11bff};
 static const uint32_t chars_Bhaiksuki[] = {0x11c00,0x11c6f};
 static const uint32_t chars_Marchen[] = {0x11c70,0x11cbf};
 static const uint32_t chars_Masaram_Gondi[] = {0x11d00,0x11d5f};
 static const uint32_t chars_Gunjala_Gondi[] = {0x11d60,0x11daf};
+static const uint32_t chars_Tolong_Siki[] = {0x11db0,0x11def};
 static const uint32_t chars_Makasar[] = {0x11ee0,0x11eff};
 static const uint32_t chars_Kawi[] = {0x11f00,0x11f5f};
 static const uint32_t chars_Lisu_Supplement[] = {0x11fb0,0x11fbf};
@@ -8273,19 +8755,24 @@ static const uint32_t chars_Early_Dynastic_Cuneiform[] = {0x12480,0x1254f};
 static const uint32_t chars_Cypro_Minoan[] = {0x12f90,0x12fff};
 static const uint32_t chars_Egyptian_Hieroglyphs[] = {0x13000,0x1342f};
 static const uint32_t chars_Egyptian_Hieroglyph_Format_Controls[] = {0x13430,0x1345f};
+static const uint32_t chars_Egyptian_Hieroglyphs_Extended_A[] = {0x13460,0x143ff};
 static const uint32_t chars_Anatolian_Hieroglyphs[] = {0x14400,0x1467f};
+static const uint32_t chars_Gurung_Khema[] = {0x16100,0x1613f};
 static const uint32_t chars_Bamum_Supplement[] = {0x16800,0x16a3f};
 static const uint32_t chars_Mro[] = {0x16a40,0x16a6f};
 static const uint32_t chars_Tangsa[] = {0x16a70,0x16acf};
 static const uint32_t chars_Bassa_Vah[] = {0x16ad0,0x16aff};
 static const uint32_t chars_Pahawh_Hmong[] = {0x16b00,0x16b8f};
+static const uint32_t chars_Kirat_Rai[] = {0x16d40,0x16d7f};
 static const uint32_t chars_Medefaidrin[] = {0x16e40,0x16e9f};
+static const uint32_t chars_Beria_Erfe[] = {0x16ea0,0x16edf};
 static const uint32_t chars_Miao[] = {0x16f00,0x16f9f};
 static const uint32_t chars_Ideographic_Symbols_and_Punctuation[] = {0x16fe0,0x16fff};
 static const uint32_t chars_Tangut[] = {0x17000,0x187ff};
 static const uint32_t chars_Tangut_Components[] = {0x18800,0x18aff};
 static const uint32_t chars_Khitan_Small_Script[] = {0x18b00,0x18cff};
 static const uint32_t chars_Tangut_Supplement[] = {0x18d00,0x18d7f};
+static const uint32_t chars_Tangut_Components_Supplement[] = {0x18d80,0x18dff};
 static const uint32_t chars_Kana_Extended_B[] = {0x1aff0,0x1afff};
 static const uint32_t chars_Kana_Supplement[] = {0x1b000,0x1b0ff};
 static const uint32_t chars_Kana_Extended_A[] = {0x1b100,0x1b12f};
@@ -8293,6 +8780,8 @@ static const uint32_t chars_Small_Kana_Extension[] = {0x1b130,0x1b16f};
 static const uint32_t chars_Nushu[] = {0x1b170,0x1b2ff};
 static const uint32_t chars_Duployan[] = {0x1bc00,0x1bc9f};
 static const uint32_t chars_Shorthand_Format_Controls[] = {0x1bca0,0x1bcaf};
+static const uint32_t chars_Symbols_for_Legacy_Computing_Supplement[] = {0x1cc00,0x1cebf};
+static const uint32_t chars_Miscellaneous_Symbols_Supplement[] = {0x1cec0,0x1ceff};
 static const uint32_t chars_Znamenny_Musical_Notation[] = {0x1cf00,0x1cfcf};
 static const uint32_t chars_Byzantine_Musical_Symbols[] = {0x1d000,0x1d0ff};
 static const uint32_t chars_Musical_Symbols[] = {0x1d100,0x1d1ff};
@@ -8310,6 +8799,8 @@ static const uint32_t chars_Nyiakeng_Puachue_Hmong[] = {0x1e100,0x1e14f};
 static const uint32_t chars_Toto[] = {0x1e290,0x1e2bf};
 static const uint32_t chars_Wancho[] = {0x1e2c0,0x1e2ff};
 static const uint32_t chars_Nag_Mundari[] = {0x1e4d0,0x1e4ff};
+static const uint32_t chars_Ol_Onal[] = {0x1e5d0,0x1e5ff};
+static const uint32_t chars_Tai_Yo[] = {0x1e6c0,0x1e6ff};
 static const uint32_t chars_Ethiopic_Extended_B[] = {0x1e7e0,0x1e7ff};
 static const uint32_t chars_Mende_Kikakui[] = {0x1e800,0x1e8df};
 static const uint32_t chars_Adlam[] = {0x1e900,0x1e95f};
@@ -8341,6 +8832,7 @@ static const uint32_t chars_CJK_Unified_Ideographs_Extension_I[] = {0x2ebf0,0x2e
 static const uint32_t chars_CJK_Compatibility_Ideographs_Supplement[] = {0x2f800,0x2fa1f};
 static const uint32_t chars_CJK_Unified_Ideographs_Extension_G[] = {0x30000,0x3134f};
 static const uint32_t chars_CJK_Unified_Ideographs_Extension_H[] = {0x31350,0x323af};
+static const uint32_t chars_CJK_Unified_Ideographs_Extension_J[] = {0x323b0,0x3347f};
 static const uint32_t chars_Tags[] = {0xe0000,0xe007f};
 static const uint32_t chars_Variation_Selectors_Supplement[] = {0xe0100,0xe01ef};
 static const uint32_t chars_Supplementary_Private_Use_Area_A[] = {0xf0000,0xfffff};
@@ -9471,6 +9963,12 @@ int main() {
 		printf("test 'Vithkuqi' failed\n");
 	delete[] buffer_Vithkuqi;
 
+	YYCTYPE *buffer_Todhri = new YYCTYPE[130];
+	uint32_t buffer_Todhri_len = encode_utf16(chars_Todhri[0], chars_Todhri[1], buffer_Todhri) - 2;
+	if (scan(buffer_Todhri, buffer_Todhri + buffer_Todhri_len, Todhri) != Todhri)
+		printf("test 'Todhri' failed\n");
+	delete[] buffer_Todhri;
+
 	YYCTYPE *buffer_Linear_A = new YYCTYPE[770];
 	uint32_t buffer_Linear_A_len = encode_utf16(chars_Linear_A[0], chars_Linear_A[1], buffer_Linear_A) - 2;
 	if (scan(buffer_Linear_A, buffer_Linear_A + buffer_Linear_A_len, Linear_A) != Linear_A)
@@ -9524,6 +10022,12 @@ int main() {
 	if (scan(buffer_Lydian, buffer_Lydian + buffer_Lydian_len, Lydian) != Lydian)
 		printf("test 'Lydian' failed\n");
 	delete[] buffer_Lydian;
+
+	YYCTYPE *buffer_Sidetic = new YYCTYPE[66];
+	uint32_t buffer_Sidetic_len = encode_utf16(chars_Sidetic[0], chars_Sidetic[1], buffer_Sidetic) - 2;
+	if (scan(buffer_Sidetic, buffer_Sidetic + buffer_Sidetic_len, Sidetic) != Sidetic)
+		printf("test 'Sidetic' failed\n");
+	delete[] buffer_Sidetic;
 
 	YYCTYPE *buffer_Meroitic_Hieroglyphs = new YYCTYPE[66];
 	uint32_t buffer_Meroitic_Hieroglyphs_len = encode_utf16(chars_Meroitic_Hieroglyphs[0], chars_Meroitic_Hieroglyphs[1], buffer_Meroitic_Hieroglyphs) - 2;
@@ -9602,6 +10106,12 @@ int main() {
 	if (scan(buffer_Hanifi_Rohingya, buffer_Hanifi_Rohingya + buffer_Hanifi_Rohingya_len, Hanifi_Rohingya) != Hanifi_Rohingya)
 		printf("test 'Hanifi_Rohingya' failed\n");
 	delete[] buffer_Hanifi_Rohingya;
+
+	YYCTYPE *buffer_Garay = new YYCTYPE[162];
+	uint32_t buffer_Garay_len = encode_utf16(chars_Garay[0], chars_Garay[1], buffer_Garay) - 2;
+	if (scan(buffer_Garay, buffer_Garay + buffer_Garay_len, Garay) != Garay)
+		printf("test 'Garay' failed\n");
+	delete[] buffer_Garay;
 
 	YYCTYPE *buffer_Rumi_Numeral_Symbols = new YYCTYPE[66];
 	uint32_t buffer_Rumi_Numeral_Symbols_len = encode_utf16(chars_Rumi_Numeral_Symbols[0], chars_Rumi_Numeral_Symbols[1], buffer_Rumi_Numeral_Symbols) - 2;
@@ -9717,6 +10227,12 @@ int main() {
 		printf("test 'Grantha' failed\n");
 	delete[] buffer_Grantha;
 
+	YYCTYPE *buffer_Tulu_Tigalari = new YYCTYPE[258];
+	uint32_t buffer_Tulu_Tigalari_len = encode_utf16(chars_Tulu_Tigalari[0], chars_Tulu_Tigalari[1], buffer_Tulu_Tigalari) - 2;
+	if (scan(buffer_Tulu_Tigalari, buffer_Tulu_Tigalari + buffer_Tulu_Tigalari_len, Tulu_Tigalari) != Tulu_Tigalari)
+		printf("test 'Tulu_Tigalari' failed\n");
+	delete[] buffer_Tulu_Tigalari;
+
 	YYCTYPE *buffer_Newa = new YYCTYPE[258];
 	uint32_t buffer_Newa_len = encode_utf16(chars_Newa[0], chars_Newa[1], buffer_Newa) - 2;
 	if (scan(buffer_Newa, buffer_Newa + buffer_Newa_len, Newa) != Newa)
@@ -9752,6 +10268,12 @@ int main() {
 	if (scan(buffer_Takri, buffer_Takri + buffer_Takri_len, Takri) != Takri)
 		printf("test 'Takri' failed\n");
 	delete[] buffer_Takri;
+
+	YYCTYPE *buffer_Myanmar_Extended_C = new YYCTYPE[98];
+	uint32_t buffer_Myanmar_Extended_C_len = encode_utf16(chars_Myanmar_Extended_C[0], chars_Myanmar_Extended_C[1], buffer_Myanmar_Extended_C) - 2;
+	if (scan(buffer_Myanmar_Extended_C, buffer_Myanmar_Extended_C + buffer_Myanmar_Extended_C_len, Myanmar_Extended_C) != Myanmar_Extended_C)
+		printf("test 'Myanmar_Extended_C' failed\n");
+	delete[] buffer_Myanmar_Extended_C;
 
 	YYCTYPE *buffer_Ahom = new YYCTYPE[162];
 	uint32_t buffer_Ahom_len = encode_utf16(chars_Ahom[0], chars_Ahom[1], buffer_Ahom) - 2;
@@ -9813,6 +10335,18 @@ int main() {
 		printf("test 'Devanagari_Extended_A' failed\n");
 	delete[] buffer_Devanagari_Extended_A;
 
+	YYCTYPE *buffer_Sharada_Supplement = new YYCTYPE[66];
+	uint32_t buffer_Sharada_Supplement_len = encode_utf16(chars_Sharada_Supplement[0], chars_Sharada_Supplement[1], buffer_Sharada_Supplement) - 2;
+	if (scan(buffer_Sharada_Supplement, buffer_Sharada_Supplement + buffer_Sharada_Supplement_len, Sharada_Supplement) != Sharada_Supplement)
+		printf("test 'Sharada_Supplement' failed\n");
+	delete[] buffer_Sharada_Supplement;
+
+	YYCTYPE *buffer_Sunuwar = new YYCTYPE[130];
+	uint32_t buffer_Sunuwar_len = encode_utf16(chars_Sunuwar[0], chars_Sunuwar[1], buffer_Sunuwar) - 2;
+	if (scan(buffer_Sunuwar, buffer_Sunuwar + buffer_Sunuwar_len, Sunuwar) != Sunuwar)
+		printf("test 'Sunuwar' failed\n");
+	delete[] buffer_Sunuwar;
+
 	YYCTYPE *buffer_Bhaiksuki = new YYCTYPE[226];
 	uint32_t buffer_Bhaiksuki_len = encode_utf16(chars_Bhaiksuki[0], chars_Bhaiksuki[1], buffer_Bhaiksuki) - 2;
 	if (scan(buffer_Bhaiksuki, buffer_Bhaiksuki + buffer_Bhaiksuki_len, Bhaiksuki) != Bhaiksuki)
@@ -9836,6 +10370,12 @@ int main() {
 	if (scan(buffer_Gunjala_Gondi, buffer_Gunjala_Gondi + buffer_Gunjala_Gondi_len, Gunjala_Gondi) != Gunjala_Gondi)
 		printf("test 'Gunjala_Gondi' failed\n");
 	delete[] buffer_Gunjala_Gondi;
+
+	YYCTYPE *buffer_Tolong_Siki = new YYCTYPE[130];
+	uint32_t buffer_Tolong_Siki_len = encode_utf16(chars_Tolong_Siki[0], chars_Tolong_Siki[1], buffer_Tolong_Siki) - 2;
+	if (scan(buffer_Tolong_Siki, buffer_Tolong_Siki + buffer_Tolong_Siki_len, Tolong_Siki) != Tolong_Siki)
+		printf("test 'Tolong_Siki' failed\n");
+	delete[] buffer_Tolong_Siki;
 
 	YYCTYPE *buffer_Makasar = new YYCTYPE[66];
 	uint32_t buffer_Makasar_len = encode_utf16(chars_Makasar[0], chars_Makasar[1], buffer_Makasar) - 2;
@@ -9897,11 +10437,23 @@ int main() {
 		printf("test 'Egyptian_Hieroglyph_Format_Controls' failed\n");
 	delete[] buffer_Egyptian_Hieroglyph_Format_Controls;
 
+	YYCTYPE *buffer_Egyptian_Hieroglyphs_Extended_A = new YYCTYPE[8002];
+	uint32_t buffer_Egyptian_Hieroglyphs_Extended_A_len = encode_utf16(chars_Egyptian_Hieroglyphs_Extended_A[0], chars_Egyptian_Hieroglyphs_Extended_A[1], buffer_Egyptian_Hieroglyphs_Extended_A) - 2;
+	if (scan(buffer_Egyptian_Hieroglyphs_Extended_A, buffer_Egyptian_Hieroglyphs_Extended_A + buffer_Egyptian_Hieroglyphs_Extended_A_len, Egyptian_Hieroglyphs_Extended_A) != Egyptian_Hieroglyphs_Extended_A)
+		printf("test 'Egyptian_Hieroglyphs_Extended_A' failed\n");
+	delete[] buffer_Egyptian_Hieroglyphs_Extended_A;
+
 	YYCTYPE *buffer_Anatolian_Hieroglyphs = new YYCTYPE[1282];
 	uint32_t buffer_Anatolian_Hieroglyphs_len = encode_utf16(chars_Anatolian_Hieroglyphs[0], chars_Anatolian_Hieroglyphs[1], buffer_Anatolian_Hieroglyphs) - 2;
 	if (scan(buffer_Anatolian_Hieroglyphs, buffer_Anatolian_Hieroglyphs + buffer_Anatolian_Hieroglyphs_len, Anatolian_Hieroglyphs) != Anatolian_Hieroglyphs)
 		printf("test 'Anatolian_Hieroglyphs' failed\n");
 	delete[] buffer_Anatolian_Hieroglyphs;
+
+	YYCTYPE *buffer_Gurung_Khema = new YYCTYPE[130];
+	uint32_t buffer_Gurung_Khema_len = encode_utf16(chars_Gurung_Khema[0], chars_Gurung_Khema[1], buffer_Gurung_Khema) - 2;
+	if (scan(buffer_Gurung_Khema, buffer_Gurung_Khema + buffer_Gurung_Khema_len, Gurung_Khema) != Gurung_Khema)
+		printf("test 'Gurung_Khema' failed\n");
+	delete[] buffer_Gurung_Khema;
 
 	YYCTYPE *buffer_Bamum_Supplement = new YYCTYPE[1154];
 	uint32_t buffer_Bamum_Supplement_len = encode_utf16(chars_Bamum_Supplement[0], chars_Bamum_Supplement[1], buffer_Bamum_Supplement) - 2;
@@ -9933,11 +10485,23 @@ int main() {
 		printf("test 'Pahawh_Hmong' failed\n");
 	delete[] buffer_Pahawh_Hmong;
 
+	YYCTYPE *buffer_Kirat_Rai = new YYCTYPE[130];
+	uint32_t buffer_Kirat_Rai_len = encode_utf16(chars_Kirat_Rai[0], chars_Kirat_Rai[1], buffer_Kirat_Rai) - 2;
+	if (scan(buffer_Kirat_Rai, buffer_Kirat_Rai + buffer_Kirat_Rai_len, Kirat_Rai) != Kirat_Rai)
+		printf("test 'Kirat_Rai' failed\n");
+	delete[] buffer_Kirat_Rai;
+
 	YYCTYPE *buffer_Medefaidrin = new YYCTYPE[194];
 	uint32_t buffer_Medefaidrin_len = encode_utf16(chars_Medefaidrin[0], chars_Medefaidrin[1], buffer_Medefaidrin) - 2;
 	if (scan(buffer_Medefaidrin, buffer_Medefaidrin + buffer_Medefaidrin_len, Medefaidrin) != Medefaidrin)
 		printf("test 'Medefaidrin' failed\n");
 	delete[] buffer_Medefaidrin;
+
+	YYCTYPE *buffer_Beria_Erfe = new YYCTYPE[130];
+	uint32_t buffer_Beria_Erfe_len = encode_utf16(chars_Beria_Erfe[0], chars_Beria_Erfe[1], buffer_Beria_Erfe) - 2;
+	if (scan(buffer_Beria_Erfe, buffer_Beria_Erfe + buffer_Beria_Erfe_len, Beria_Erfe) != Beria_Erfe)
+		printf("test 'Beria_Erfe' failed\n");
+	delete[] buffer_Beria_Erfe;
 
 	YYCTYPE *buffer_Miao = new YYCTYPE[322];
 	uint32_t buffer_Miao_len = encode_utf16(chars_Miao[0], chars_Miao[1], buffer_Miao) - 2;
@@ -9974,6 +10538,12 @@ int main() {
 	if (scan(buffer_Tangut_Supplement, buffer_Tangut_Supplement + buffer_Tangut_Supplement_len, Tangut_Supplement) != Tangut_Supplement)
 		printf("test 'Tangut_Supplement' failed\n");
 	delete[] buffer_Tangut_Supplement;
+
+	YYCTYPE *buffer_Tangut_Components_Supplement = new YYCTYPE[258];
+	uint32_t buffer_Tangut_Components_Supplement_len = encode_utf16(chars_Tangut_Components_Supplement[0], chars_Tangut_Components_Supplement[1], buffer_Tangut_Components_Supplement) - 2;
+	if (scan(buffer_Tangut_Components_Supplement, buffer_Tangut_Components_Supplement + buffer_Tangut_Components_Supplement_len, Tangut_Components_Supplement) != Tangut_Components_Supplement)
+		printf("test 'Tangut_Components_Supplement' failed\n");
+	delete[] buffer_Tangut_Components_Supplement;
 
 	YYCTYPE *buffer_Kana_Extended_B = new YYCTYPE[34];
 	uint32_t buffer_Kana_Extended_B_len = encode_utf16(chars_Kana_Extended_B[0], chars_Kana_Extended_B[1], buffer_Kana_Extended_B) - 2;
@@ -10016,6 +10586,18 @@ int main() {
 	if (scan(buffer_Shorthand_Format_Controls, buffer_Shorthand_Format_Controls + buffer_Shorthand_Format_Controls_len, Shorthand_Format_Controls) != Shorthand_Format_Controls)
 		printf("test 'Shorthand_Format_Controls' failed\n");
 	delete[] buffer_Shorthand_Format_Controls;
+
+	YYCTYPE *buffer_Symbols_for_Legacy_Computing_Supplement = new YYCTYPE[1410];
+	uint32_t buffer_Symbols_for_Legacy_Computing_Supplement_len = encode_utf16(chars_Symbols_for_Legacy_Computing_Supplement[0], chars_Symbols_for_Legacy_Computing_Supplement[1], buffer_Symbols_for_Legacy_Computing_Supplement) - 2;
+	if (scan(buffer_Symbols_for_Legacy_Computing_Supplement, buffer_Symbols_for_Legacy_Computing_Supplement + buffer_Symbols_for_Legacy_Computing_Supplement_len, Symbols_for_Legacy_Computing_Supplement) != Symbols_for_Legacy_Computing_Supplement)
+		printf("test 'Symbols_for_Legacy_Computing_Supplement' failed\n");
+	delete[] buffer_Symbols_for_Legacy_Computing_Supplement;
+
+	YYCTYPE *buffer_Miscellaneous_Symbols_Supplement = new YYCTYPE[130];
+	uint32_t buffer_Miscellaneous_Symbols_Supplement_len = encode_utf16(chars_Miscellaneous_Symbols_Supplement[0], chars_Miscellaneous_Symbols_Supplement[1], buffer_Miscellaneous_Symbols_Supplement) - 2;
+	if (scan(buffer_Miscellaneous_Symbols_Supplement, buffer_Miscellaneous_Symbols_Supplement + buffer_Miscellaneous_Symbols_Supplement_len, Miscellaneous_Symbols_Supplement) != Miscellaneous_Symbols_Supplement)
+		printf("test 'Miscellaneous_Symbols_Supplement' failed\n");
+	delete[] buffer_Miscellaneous_Symbols_Supplement;
 
 	YYCTYPE *buffer_Znamenny_Musical_Notation = new YYCTYPE[418];
 	uint32_t buffer_Znamenny_Musical_Notation_len = encode_utf16(chars_Znamenny_Musical_Notation[0], chars_Znamenny_Musical_Notation[1], buffer_Znamenny_Musical_Notation) - 2;
@@ -10118,6 +10700,18 @@ int main() {
 	if (scan(buffer_Nag_Mundari, buffer_Nag_Mundari + buffer_Nag_Mundari_len, Nag_Mundari) != Nag_Mundari)
 		printf("test 'Nag_Mundari' failed\n");
 	delete[] buffer_Nag_Mundari;
+
+	YYCTYPE *buffer_Ol_Onal = new YYCTYPE[98];
+	uint32_t buffer_Ol_Onal_len = encode_utf16(chars_Ol_Onal[0], chars_Ol_Onal[1], buffer_Ol_Onal) - 2;
+	if (scan(buffer_Ol_Onal, buffer_Ol_Onal + buffer_Ol_Onal_len, Ol_Onal) != Ol_Onal)
+		printf("test 'Ol_Onal' failed\n");
+	delete[] buffer_Ol_Onal;
+
+	YYCTYPE *buffer_Tai_Yo = new YYCTYPE[130];
+	uint32_t buffer_Tai_Yo_len = encode_utf16(chars_Tai_Yo[0], chars_Tai_Yo[1], buffer_Tai_Yo) - 2;
+	if (scan(buffer_Tai_Yo, buffer_Tai_Yo + buffer_Tai_Yo_len, Tai_Yo) != Tai_Yo)
+		printf("test 'Tai_Yo' failed\n");
+	delete[] buffer_Tai_Yo;
 
 	YYCTYPE *buffer_Ethiopic_Extended_B = new YYCTYPE[66];
 	uint32_t buffer_Ethiopic_Extended_B_len = encode_utf16(chars_Ethiopic_Extended_B[0], chars_Ethiopic_Extended_B[1], buffer_Ethiopic_Extended_B) - 2;
@@ -10304,6 +10898,12 @@ int main() {
 	if (scan(buffer_CJK_Unified_Ideographs_Extension_H, buffer_CJK_Unified_Ideographs_Extension_H + buffer_CJK_Unified_Ideographs_Extension_H_len, CJK_Unified_Ideographs_Extension_H) != CJK_Unified_Ideographs_Extension_H)
 		printf("test 'CJK_Unified_Ideographs_Extension_H' failed\n");
 	delete[] buffer_CJK_Unified_Ideographs_Extension_H;
+
+	YYCTYPE *buffer_CJK_Unified_Ideographs_Extension_J = new YYCTYPE[8610];
+	uint32_t buffer_CJK_Unified_Ideographs_Extension_J_len = encode_utf16(chars_CJK_Unified_Ideographs_Extension_J[0], chars_CJK_Unified_Ideographs_Extension_J[1], buffer_CJK_Unified_Ideographs_Extension_J) - 2;
+	if (scan(buffer_CJK_Unified_Ideographs_Extension_J, buffer_CJK_Unified_Ideographs_Extension_J + buffer_CJK_Unified_Ideographs_Extension_J_len, CJK_Unified_Ideographs_Extension_J) != CJK_Unified_Ideographs_Extension_J)
+		printf("test 'CJK_Unified_Ideographs_Extension_J' failed\n");
+	delete[] buffer_CJK_Unified_Ideographs_Extension_J;
 
 	YYCTYPE *buffer_Tags = new YYCTYPE[258];
 	uint32_t buffer_Tags_len = encode_utf16(chars_Tags[0], chars_Tags[1], buffer_Tags) - 2;
