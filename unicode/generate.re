@@ -14,10 +14,10 @@ struct Block {
     uint32_t first;
     uint32_t last;
 };
-
-using Cat = std::vector<std::pair<uint32_t, uint32_t>>;
-using CatMap = std::map<std::string, Cat>;
 using Blocks = std::vector<Block>;
+
+using Charset = std::vector<std::pair<uint32_t, uint32_t>>;
+using CharsetMap = std::map<std::string, Charset>;
 
 constexpr uint32_t NONE = ~0u;
 constexpr uint32_t MAX = 0x10FFFF;
@@ -70,7 +70,7 @@ static void print_char(FILE* file, uint32_t chr) {
     }
 }
 
-static void add(Cat& cat, uint32_t first, uint32_t last) {
+static void add(Charset& cat, uint32_t first, uint32_t last) {
     if (cat.empty() || cat.back().second + 1 != first) { 
         cat.push_back(std::make_pair(first, last));
     } else {
@@ -89,12 +89,12 @@ loop:
     */
 }
 
-static bool parse_categories(CatMap& categories) {
+static bool parse_categories(CharsetMap& categories) {
     Input in;
     if (!in.init("UnicodeData.txt")) return false;
 
     const uint8_t* token;
-    size_t line = 0;
+    size_t line = 1;
     std::string cat;
     uint32_t first = NONE, last = NONE, prev = 0, cp;
 
@@ -164,15 +164,15 @@ end:
     derived_categories["Z"] = {"Zs", "Zl", "Zp"};
     derived_categories["C"] = {"Cc", "Cf", "Cs", "Co", "Cn"};
 
-    Cat tmp;
+    Charset tmp;
     for (const auto& i : derived_categories) {
         for (const std::string& s : i.second) {
-            Cat& c = categories[s];
+            Charset& c = categories[s];
             tmp.insert(tmp.end(), c.begin(), c.end());
         }
         std::sort(tmp.begin(), tmp.end());
 
-        Cat& c = categories[i.first];
+        Charset& c = categories[i.first];
         c.push_back(tmp[0]);
         for (size_t j = 1; j < tmp.size(); ++j) {
             if (tmp[j].first == tmp[j - 1].second + 1) {
@@ -187,15 +187,15 @@ end:
     return true;
 }
 
-static bool gen_include_file_categories(const CatMap& categories) {
-    FILE* f = fopen("unicode_categories.re", "wb");
+static bool gen_include_file_charsets(const CharsetMap& charsets, const char* filename) {
+    FILE* f = fopen(filename, "wb");
     if (f == nullptr) {
-        fprintf(stderr, "cannot open unicode_categories.re\n");
+        fprintf(stderr, "cannot open %s\n", filename);
         return false;
     }
 
     fprintf(f, "/*!""re2c\n");
-    for (const auto& i : categories) {
+    for (const auto& i : charsets) {
         fprintf(f, "%s = [", i.first.c_str());
         for (const auto& p : i.second) {
             print_char(f, p.first);
@@ -212,7 +212,7 @@ static bool gen_include_file_categories(const CatMap& categories) {
     return true;
 }
 
-static bool gen_tests_categories(const CatMap& categories) {
+static bool gen_tests_categories(const CharsetMap& categories) {
     const std::array<std::string, 3> encodings = {"8", "x", "u"};
     for (const std::string& encoding : encodings) {
         uint32_t max_cunits_per_cpoint = encoding == "8" ? 6 : encoding == "x" ? 2 : 1;
@@ -325,7 +325,7 @@ static bool parse_blocks(Blocks& blocks) {
     if (!in.init("Blocks.txt")) return false;
 
     const uint8_t* token;
-    size_t line = 0;
+    size_t line = 1;
     std::string block;
     uint32_t first = NONE, last = NONE;
 
@@ -504,14 +504,73 @@ static bool gen_tests_blocks(const Blocks& blocks) {
     return true;
 }
 
+static bool parse_properties(CharsetMap& properties) {
+    Input in;
+    if (!in.init("PropList.txt")) return false;
+
+    const uint8_t* token;
+    size_t line = 1;
+    std::string name;
+    uint32_t first = NONE, last = NONE;
+
+    // Example:
+    //   # comments
+    //   0009..000D    ; White_Space # Cc   [5] <control-0009>..<control-000D>
+    //   0020          ; White_Space # Zs       SPACE
+loop:
+    /*!re2c
+        "# EOF\n" [\x00] { goto end; }
+        ([#] [^\x00\n]*)? [\n] { ++line; goto loop; }
+        "" { goto first; }
+    */
+first:
+    first = parse_hex(in);
+    /*!re2c
+        ".." { goto last; }
+        ""   { last = first; goto space; }
+    */
+last:
+    last = parse_hex(in);
+space:
+    /*!re2c
+        [ ]* [;] [ ]{ goto name; }
+        *           { goto error; }
+    */
+name:
+    token = in.cursor;
+    /*!re2c
+        [A-Z][A-Za-z0-9_]* {
+            if (first == NONE || last == NONE) goto error;
+            name.assign((const char*)token, in.cursor - token);
+            add(properties[name], first, last);
+            goto tail;
+        }
+        * { goto error; }
+    */
+tail:
+    /*!re2c
+        (" #" [^\x00\n]*)? [\n] { ++line; goto loop; }
+        * { goto error; }
+    */
+error:
+    fprintf(stderr, "parsing PropList.txt: error at line %lu; '%.*s'\n", line, 100, in.cursor);
+    return false;
+end:
+    return true;
+}
+
 int main() {
-    CatMap categories;
+    CharsetMap categories;
     if (!parse_categories(categories)) return 1;
-    if (!gen_include_file_categories(categories)) return 1;
+    if (!gen_include_file_charsets(categories, "unicode_categories.re")) return 1;
     if (!gen_tests_categories(categories)) return 1;
 
     Blocks blocks;
     if (!parse_blocks(blocks)) return 1;
     if (!gen_include_file_blocks(blocks)) return 1;
     if (!gen_tests_blocks(blocks)) return 1;
+
+    CharsetMap properties;
+    if (!parse_properties(properties)) return 1;
+    if (!gen_include_file_charsets(properties, "unicode_properties.re")) return 1;
 }
