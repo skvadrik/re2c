@@ -1,5 +1,13 @@
-GEN := unicode_categories.re unicode_blocks.re unicode_properties.re
-INPUT := UnicodeData.txt Blocks.txt PropList.txt
+GEN := \
+	unicode_blocks.re \
+	unicode_categories.re \
+	unicode_properties.re
+
+INPUT := \
+	Blocks.txt \
+	DerivedCoreProperties.txt \
+	PropList.txt \
+	UnicodeData.txt
 
 all: $(GEN)
 
@@ -12,6 +20,8 @@ Blocks.txt:
 	wget https://unicode.org/Public/UCD/latest/ucd/Blocks.txt
 PropList.txt:
 	wget https://unicode.org/Public/UCD/latest/ucd/PropList.txt
+DerivedCoreProperties.txt:
+	wget https://unicode.org/Public/UCD/latest/ucd/DerivedCoreProperties.txt
 
 generate: generate.cc
 	c++ generate.cc -o generate -O2 -g -Wall -Wextra

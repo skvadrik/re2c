@@ -27,14 +27,24 @@ constexpr uint32_t MAX = 0x10FFFF;
     re2c:YYCTYPE = uint8_t;
     re2c:YYCURSOR = in.cursor;
     re2c:YYMARKER = in.marker;
+    re2c:tags = 1;
+    re2c:tags:expression = "in.@@";
+
+    hex = [0-9A-F]+;
 */
 
 struct Input {
     uint8_t* buffer;
     uint8_t* cursor;
     uint8_t* marker;
+    /*!stags:re2c format="const uint8_t* @@;"; */
 
-    Input(): buffer(nullptr), cursor(nullptr), marker(nullptr) {}
+    Input()
+        : buffer(nullptr)
+        , cursor(nullptr)
+        , marker(nullptr)
+        /*!stags:re2c format=", @@(nullptr)"; */
+    {}
 
     ~Input() { free(buffer); }
 
@@ -87,6 +97,18 @@ loop:
         [A-F] { cp = cp * 16 + (in.cursor[-1] - 'A' + 10); goto loop; }
         "" { return in.cursor > in.marker ? cp : NONE; }
     */
+}
+
+static uint32_t parse_hex(const uint8_t* x, const uint8_t* y) {
+    uint32_t cp = 0;
+    for (; x < y; ++x) cp = cp * 16 + (*x - (*x < 'A' ? '0' : ('A' - 10)));
+    return cp;
+}
+
+static uint32_t parse_dec(const uint8_t* x, const uint8_t* y) {
+    uint32_t cp = 0;
+    for (; x < y; ++x) cp = cp * 10 + (*x - '0');
+    return cp;
 }
 
 static bool parse_categories(CharsetMap& categories) {
@@ -504,11 +526,12 @@ static bool gen_tests_blocks(const Blocks& blocks) {
     return true;
 }
 
-static bool parse_properties(CharsetMap& properties) {
+static bool parse_properties(CharsetMap& properties, std::map<std::string, uint32_t>& counts) {
     Input in;
     if (!in.init("PropList.txt")) return false;
 
     const uint8_t* token;
+    const uint8_t* x, *y;
     size_t line = 1;
     std::string name;
     uint32_t first = NONE, last = NONE;
@@ -520,6 +543,11 @@ static bool parse_properties(CharsetMap& properties) {
 loop:
     /*!re2c
         "# EOF\n" [\x00] { goto end; }
+        "# Total code points: " @x [0-9]+ @y [\n] {
+            counts[name] += parse_dec(x, y);
+            ++line;
+            goto loop;
+        }
         ([#] [^\x00\n]*)? [\n] { ++line; goto loop; }
         "" { goto first; }
     */
@@ -559,6 +587,74 @@ end:
     return true;
 }
 
+static bool parse_derived_properties(
+        CharsetMap& properties, std::map<std::string, uint32_t>& counts) {
+    Input in;
+    if (!in.init("DerivedCoreProperties.txt")) return false;
+
+    const uint8_t* p1, *p2, *p3, *p4;
+    size_t line = 1;
+    std::string name;
+
+    // Example:
+    //   # comments
+    //   # Derived Property: Math
+    //   002B          ; Math # Sm       PLUS SIGN
+    //   ...
+    //   # Total code points: 2322
+loop:
+    /*!re2c
+        "# EOF\n" [\x00] {
+            goto end;
+        }
+        "# Derived Property:" [ ]+ @p1 [A-Z][A-Za-z0-9_]* @p2 ([ ]+ [(][A-Za-z0-9_]+[)])? [\n] {
+            ++line;
+            name.assign((const char*)p1, (const char*)p2);
+            goto loop;
+        }
+        "# Total code points: " @p1 [0-9]+ @p2 [\n] {
+            counts[name] += parse_dec(p1, p2);
+            ++line;
+            goto loop;
+        }
+        ([#] [^\x00\n]*)? [\n] {
+            ++line;
+            goto loop;
+        }
+        @p1 hex @p2 (".." @p3 hex @p4)? [ ]* [;] [^\x00\n]* [\n] {
+            uint32_t first = parse_hex(p1, p2);
+            uint32_t last = p3 ? parse_hex(p3, p4) : first;
+            ++line;
+            add(properties[name], first, last);
+            goto loop;
+        }
+        * { goto error; }
+    */
+error:
+    fprintf(stderr, "parsing DerivedCoreProperties.txt: error at line %lu; '%.*s'\n",
+        line, 100, in.cursor);
+    return false;
+end:
+    if (properties.size() != counts.size()) {
+        fprintf(stderr, "properties and count maps have different size: %lu vs %lu\n",
+            properties.size(), counts.size());
+        return false;
+    }
+    for (const auto& i: properties) {
+        uint32_t count = 0;
+        for (const auto& p: i.second) {
+            count += p.second - p.first + 1;
+        }
+        auto j = counts.find(i.first);
+        if (j == counts.end() || j->second != count) {
+            fprintf(stderr, "wrong code point count for property '%s': expected %u, have %u\n",
+                name.c_str(), j->second, count);
+            return false;
+        }
+    }
+    return true;
+}
+
 int main() {
     CharsetMap categories;
     if (!parse_categories(categories)) return 1;
@@ -571,6 +667,8 @@ int main() {
     if (!gen_tests_blocks(blocks)) return 1;
 
     CharsetMap properties;
-    if (!parse_properties(properties)) return 1;
+    std::map<std::string, uint32_t> counts;
+    if (!parse_properties(properties, counts)) return 1;
+    if (!parse_derived_properties(properties, counts)) return 1;
     if (!gen_include_file_charsets(properties, "unicode_properties.re")) return 1;
 }
