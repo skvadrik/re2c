@@ -31,6 +31,8 @@ constexpr uint32_t MAX = 0x10FFFF;
     re2c:tags:expression = "in.@@";
 
     hex = [0-9A-F]+;
+    name = [A-Z][A-Za-z0-9_]*;
+    comment = ([#] [^\x00\n]*)? [\n];
 */
 
 struct Input {
@@ -88,20 +90,10 @@ static void add(Charset& cat, uint32_t first, uint32_t last) {
     }
 }
 
-static uint32_t parse_hex(Input& in) {
-    uint32_t cp = 0;
-    in.marker = in.cursor;
-loop:
-    /*!re2c
-        [0-9] { cp = cp * 16 + (in.cursor[-1] - '0');      goto loop; }
-        [A-F] { cp = cp * 16 + (in.cursor[-1] - 'A' + 10); goto loop; }
-        "" { return in.cursor > in.marker ? cp : NONE; }
-    */
-}
-
 static uint32_t parse_hex(const uint8_t* x, const uint8_t* y) {
+    constexpr uint32_t translate[] = {0,1,2,3,4,5,6,7,8,9,0,0,0,0,0,0,0,10,11,12,13,14,15};
     uint32_t cp = 0;
-    for (; x < y; ++x) cp = cp * 16 + (*x - (*x < 'A' ? '0' : ('A' - 10)));
+    for (; x < y; ++x) cp = cp * 16 + translate[*x - '0'];
     return cp;
 }
 
@@ -115,66 +107,59 @@ static bool parse_categories(CharsetMap& categories) {
     Input in;
     if (!in.init("UnicodeData.txt")) return false;
 
-    const uint8_t* token;
+    const uint8_t* p1, *p2, *p3, *p4, *p5, *p6;
     size_t line = 1;
     std::string cat;
-    uint32_t first = NONE, last = NONE, prev = 0, cp;
+    uint32_t prev = 0;
 
-    // Example:
-    //   0000;<control>;Cc;0;BN;;;;;N;NULL;;;;
+    // Format:
+    //   <hex>;...;<category>;...
+    //   ...
+    //   <hex>;\<..., First\>;<category>;...
+    //   ...
+    //   <hex>;\<..., Last\>;<category>;...
+    //   ...
 loop:
-    token = in.cursor;
     /*!re2c
+        tail = ([;] [^;\n\x00]*)* [\n];
+        cat = [A-Z][a-z]?;
+
         [\x00] {
             if (prev <= MAX) {
                 add(categories["Cn"], prev, 0x10FFFF);
             }
             goto end;
         }
-        "" { goto cpoint; }
-    */
-cpoint:
-    cp = parse_hex(in);
-    if (cp == NONE) goto error;
-    /*!re2c
-        [;] { goto desc; }
-        * { goto error; }
-    */
-desc:
-    /*!re2c
-        "<" [A-Za-z0-9 -]+ ", First>;" { first = cp; assert(last == NONE);  goto cat; }
-        "<" [A-Za-z0-9 -]+ ", Last>;"  { last = cp;  assert(first != NONE); goto cat; }
-        [^;\n\x00]+ [;] { first = last = cp; goto cat; }
-        * { goto error; }
-    */
-cat:
-    token = in.cursor;
-    /*!re2c
-        [A-Z][a-z]? { cat.assign((const char*)token, in.cursor - token); goto rest; }
-        * { goto error; }
-    */
-rest:
-    /*!re2c
-        [;] [^;\n\x00]* { goto rest; }
-        * { goto error; }
-        [\n] {
-            ++line;
-            if (last != NONE) {
-                if (first > prev) {
-                    add(categories["Cn"], prev, first - 1);
-                }
-                add(categories[cat], first, last);
-                prev = last + 1;
-                first = last = NONE;
+        @p1 hex @p2 ";" [^;\n\x00]+ ";" @p3 cat @p4 tail {
+            uint32_t cp = parse_hex(p1, p2);
+            cat.assign((const char*)p3, (const char*)p4);
+            if (cp > prev) {
+                add(categories["Cn"], prev, cp - 1);
             }
+            add(categories[cat], cp, cp);
+            prev = cp + 1;
+            ++line;
             goto loop;
         }
+        @p1 hex @p2 ";<" [A-Za-z0-9 -]+ ", First>;" @p3 cat @p4 tail
+        @p5 hex @p6 ";<" [A-Za-z0-9 -]+ ", Last>;"      cat     tail {
+            uint32_t first = parse_hex(p1, p2);
+            uint32_t last = parse_hex(p5, p6);
+            cat.assign((const char*)p3, (const char*)p4);
+            if (first > prev) {
+                add(categories["Cn"], prev, first - 1);
+            }
+            add(categories[cat], first, last);
+            prev = last + 1;
+            line += 2;
+            goto loop;
+        }
+        * {
+            fprintf(stderr, "parsing UnicodeData.txt: error at line %lu; '%.*s'\n",
+                line, 100, in.cursor);
+            return false;
+        }
     */
-
-error:
-    fprintf(stderr, "parsing UnicodeData.txt: error at line %lu; '%.*s'\n", line, 100, in.cursor);
-    return false;
-
 end:
     std::map<std::string, std::vector<std::string>> derived_categories;
     derived_categories["L_"] = {"Lu", "Ll", "Lt"};
@@ -346,55 +331,42 @@ static bool parse_blocks(Blocks& blocks) {
     Input in;
     if (!in.init("Blocks.txt")) return false;
 
-    const uint8_t* token;
+    const uint8_t* p1, *p2, *p3, *p4, *p5, *p6;
     size_t line = 1;
     std::string block;
-    uint32_t first = NONE, last = NONE;
 
-    // Example:
-    //   # comments
-    //   0000..007F; Basic Latin
+    // Format:
+    //   # ...
+    //   <hex>..<hex>; <name>
+    //   ...
 loop:
     /*!re2c
-        "# EOF\n" [\x00] { goto end; }
-        ([#] [^\x00\n]*)? [\n] { ++line; goto loop; }
-        "" { goto first; }
-    */
-first:
-    first = parse_hex(in);
-    /*!re2c
-        ".." { goto last; }
-        * { goto error; }
-    */
-last:
-    last = parse_hex(in);
-    /*!re2c
-        "; " { goto block; }
-        * { goto error; }
-    */
-block:
-    token = in.cursor;
-    /*!re2c
-        [A-Z][A-Za-z0-9_ -]* [\n] {
-            if (first == NONE || last == NONE) goto error;
-
+        "# EOF\n" [\x00] {
+            return true;
+        }
+        comment {
             ++line;
-            block.assign((const char*)token, in.cursor - token - 1);
+            goto loop;
+        }
+        @p1 hex @p2 ".." @p3 hex @p4 "; " @p5 [A-Z][A-Za-z0-9_ -]* @p6 [\n] {
+            uint32_t first = parse_hex(p1, p2);
+            uint32_t last = parse_hex(p3, p4);
+            block.assign((const char*)p5, (const char*)p6);
             for (size_t i = 0; i < block.size(); ++i) {
                 if (!isdigit(block[i]) && !isalpha(block[i])) {
                     block[i] = '_';
                 }
             }
             blocks.push_back({block, first, last});
+            ++line;
             goto loop;
         }
-        * { goto error; }
+        * {
+            fprintf(stderr, "parsing Blocks.txt: error at line %lu; '%.*s'\n",
+                line, 100, in.cursor);
+            return false;
+        }
     */
-error:
-    fprintf(stderr, "parsing Blocks.txt: error at line %lu; '%.*s'\n", line, 100, in.cursor);
-    return false;
-end:
-    return true;
 }
 
 static void print_block_defs(FILE* f, const Blocks& blocks) {
@@ -530,61 +502,44 @@ static bool parse_properties(CharsetMap& properties, std::map<std::string, uint3
     Input in;
     if (!in.init("PropList.txt")) return false;
 
-    const uint8_t* token;
-    const uint8_t* x, *y;
+    const uint8_t* p1, *p2, *p3, *p4, *p5, *p6;
     size_t line = 1;
     std::string name;
-    uint32_t first = NONE, last = NONE;
 
-    // Example:
-    //   # comments
-    //   0009..000D    ; White_Space # Cc   [5] <control-0009>..<control-000D>
-    //   0020          ; White_Space # Zs       SPACE
+    // Format:
+    //   # ...
+    //   <hex>[..<hex>] ; <name> [# ... ]
+    //   ...
+    //   # Total code points: <decimal>
+    //   ...
 loop:
     /*!re2c
-        "# EOF\n" [\x00] { goto end; }
-        "# Total code points: " @x [0-9]+ @y [\n] {
-            counts[name] += parse_dec(x, y);
+        "# EOF\n" [\x00] {
+            return true;
+        }
+        "# Total code points: " @p1 [0-9]+ @p2 [\n] {
+            counts[name] += parse_dec(p1, p2);
             ++line;
             goto loop;
         }
-        ([#] [^\x00\n]*)? [\n] { ++line; goto loop; }
-        "" { goto first; }
-    */
-first:
-    first = parse_hex(in);
-    /*!re2c
-        ".." { goto last; }
-        ""   { last = first; goto space; }
-    */
-last:
-    last = parse_hex(in);
-space:
-    /*!re2c
-        [ ]* [;] [ ]{ goto name; }
-        *           { goto error; }
-    */
-name:
-    token = in.cursor;
-    /*!re2c
-        [A-Z][A-Za-z0-9_]* {
-            if (first == NONE || last == NONE) goto error;
-            name.assign((const char*)token, in.cursor - token);
-            add(properties[name], first, last);
-            goto tail;
+        comment {
+            ++line;
+            goto loop;
         }
-        * { goto error; }
+        @p1 hex @p2 (".." @p3 hex @p4)? [ ]* "; " @p5 name @p6 [ ]? comment {
+            uint32_t first = parse_hex(p1, p2);
+            uint32_t last = p3 ? parse_hex(p3, p4) : first;
+            name.assign((const char*)p5, (const char*)p6);
+            add(properties[name], first, last);
+            ++line;
+            goto loop;
+        }
+        * {
+            fprintf(stderr, "parsing PropList.txt: error at line %lu; '%.*s'\n", line, 100,
+                in.cursor);
+            return false;
+        }
     */
-tail:
-    /*!re2c
-        (" #" [^\x00\n]*)? [\n] { ++line; goto loop; }
-        * { goto error; }
-    */
-error:
-    fprintf(stderr, "parsing PropList.txt: error at line %lu; '%.*s'\n", line, 100, in.cursor);
-    return false;
-end:
-    return true;
 }
 
 static bool parse_derived_properties(
@@ -596,18 +551,19 @@ static bool parse_derived_properties(
     size_t line = 1;
     std::string name;
 
-    // Example:
-    //   # comments
-    //   # Derived Property: Math
-    //   002B          ; Math # Sm       PLUS SIGN
+    // Format:
+    //   # ...
+    //   # Derived Property: <name>
+    //   <hex>[..<hex]] ; ...
     //   ...
-    //   # Total code points: 2322
+    //   # Total code points: <decimal>
+    //   ...
 loop:
     /*!re2c
         "# EOF\n" [\x00] {
             goto end;
         }
-        "# Derived Property:" [ ]+ @p1 [A-Z][A-Za-z0-9_]* @p2 ([ ]+ [(][A-Za-z0-9_]+[)])? [\n] {
+        "# Derived Property:" [ ]+ @p1 name @p2 ([ ]+ [(][A-Za-z0-9_]+[)])? [\n] {
             ++line;
             name.assign((const char*)p1, (const char*)p2);
             goto loop;
@@ -617,23 +573,23 @@ loop:
             ++line;
             goto loop;
         }
-        ([#] [^\x00\n]*)? [\n] {
+        comment {
             ++line;
             goto loop;
         }
         @p1 hex @p2 (".." @p3 hex @p4)? [ ]* [;] [^\x00\n]* [\n] {
             uint32_t first = parse_hex(p1, p2);
             uint32_t last = p3 ? parse_hex(p3, p4) : first;
-            ++line;
             add(properties[name], first, last);
+            ++line;
             goto loop;
         }
-        * { goto error; }
+        * {
+            fprintf(stderr, "parsing DerivedCoreProperties.txt: error at line %lu; '%.*s'\n",
+                line, 100, in.cursor);
+            return false;
+        }
     */
-error:
-    fprintf(stderr, "parsing DerivedCoreProperties.txt: error at line %lu; '%.*s'\n",
-        line, 100, in.cursor);
-    return false;
 end:
     if (properties.size() != counts.size()) {
         fprintf(stderr, "properties and count maps have different size: %lu vs %lu\n",
