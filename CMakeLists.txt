@@ -230,6 +230,7 @@ set(re2c_sources
     src/encoding/ebcdic.cc
     src/encoding/enc.cc
     src/encoding/range_suffix.cc
+    src/encoding/unicode_casemap.cc
     src/encoding/utf8.cc
     src/encoding/utf16.cc
     src/msg/msg.cc
@@ -598,6 +599,7 @@ if (RE2C_BUILD_LIBS)
         src/nfa/re_to_nfa.cc
         src/encoding/enc.cc
         src/encoding/range_suffix.cc
+        src/encoding/unicode_casemap.cc
         src/encoding/ebcdic.cc
         src/encoding/utf16.cc
         src/encoding/utf8.cc

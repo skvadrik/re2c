@@ -1,6 +1,7 @@
 GEN := \
-	unicode_blocks.re \
+	unicode_casemap.cc \
 	unicode_categories.re \
+	unicode_blocks.re \
 	unicode_properties.re
 
 INPUT := \
@@ -14,14 +15,14 @@ all: $(GEN)
 $(GEN): $(INPUT) generate
 	./generate
 
-UnicodeData.txt:
-	wget https://unicode.org/Public/UCD/latest/ucd/UnicodeData.txt
 Blocks.txt:
 	wget https://unicode.org/Public/UCD/latest/ucd/Blocks.txt
-PropList.txt:
-	wget https://unicode.org/Public/UCD/latest/ucd/PropList.txt
 DerivedCoreProperties.txt:
 	wget https://unicode.org/Public/UCD/latest/ucd/DerivedCoreProperties.txt
+PropList.txt:
+	wget https://unicode.org/Public/UCD/latest/ucd/PropList.txt
+UnicodeData.txt:
+	wget https://unicode.org/Public/UCD/latest/ucd/UnicodeData.txt
 
 generate: generate.cc
 	c++ generate.cc -o generate -O2 -g -Wall -Wextra
@@ -33,6 +34,7 @@ clean:
 	rm -f $(GEN) $(INPUT) generate generate.cc
 
 install: $(GEN)
+	mv unicode_casemap.cc ../src/encoding/unicode_casemap.cc
 	mv unicode_categories.re ../include/unicode_categories.re
 	mv unicode_blocks.re ../include/unicode_blocks.re
 	mv unicode_blocks_{8,x,u}_encoding_policy_{ignore,substitute,fail}.re ../test/encodings

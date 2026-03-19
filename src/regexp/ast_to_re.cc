@@ -169,6 +169,7 @@ LOCAL_NODISCARD(inline bool is_icase(const opt_t* opts, bool icase)) {
     return opts->case_insensitive || icase != opts->case_inverted;
 }
 
+/*
 LOCAL_NODISCARD(inline bool is_alpha(uint32_t c)) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
@@ -180,17 +181,27 @@ LOCAL_NODISCARD(inline uint32_t to_lower_unsafe(uint32_t c)) {
 LOCAL_NODISCARD(inline uint32_t to_upper_unsafe(uint32_t c)) {
     return c & ~0x20u;
 }
-
+*/
 LOCAL_NODISCARD(Ret char_to_range(RESpec& spec, const AstChar& chr, bool icase, Range** prange)) {
     RangeMgr& rm = spec.rangemgr;
     uint32_t c = chr.chr;
+    const Enc& enc = spec.opts->encoding;
 
-    if (!spec.opts->encoding.validate_char(c)) {
+    if (!enc.validate_char(c)) {
         RET_FAIL(spec.msg.error(chr.loc, "bad code point: '0x%X'", c));
     }
 
-    *prange = icase && is_alpha(c)
-           ? rm.add(rm.sym(to_lower_unsafe(c)), rm.sym(to_upper_unsafe(c))) : rm.sym(c);
+    if (icase) {
+        uint32_t lower = enc.to_lower(c);
+        uint32_t upper = enc.to_upper(c);
+        if (lower != upper) {
+            *prange = rm.add(rm.sym(lower), rm.sym(upper));
+            return Ret::OK;
+        }
+        CHECK(lower == c);
+    }
+
+    *prange = rm.sym(c);
     return Ret::OK;
 }
 

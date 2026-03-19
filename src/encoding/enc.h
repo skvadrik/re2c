@@ -72,6 +72,9 @@ class Enc {
     bool validate_char(uint32_t& c) const;
     Range* validate_range(RangeMgr& rm, uint32_t l, uint32_t h) const;
     Range* full_range(RangeMgr& rm) const;
+
+    uint32_t to_lower(uint32_t c) const;
+    uint32_t to_upper(uint32_t c) const;
 };
 
 inline const char* Enc::name(Type t) {

@@ -19,6 +19,8 @@ using Blocks = std::vector<Block>;
 using Charset = std::vector<std::pair<uint32_t, uint32_t>>;
 using CharsetMap = std::map<std::string, Charset>;
 
+using CaseMap = std::map<uint32_t, uint32_t>;
+
 constexpr uint32_t NONE = ~0u;
 constexpr uint32_t MAX = 0x10FFFF;
 
@@ -103,26 +105,23 @@ static uint32_t parse_dec(const uint8_t* x, const uint8_t* y) {
     return cp;
 }
 
-static bool parse_categories(CharsetMap& categories) {
+static bool parse_unicode_data(CharsetMap& categories, CaseMap& to_upper, CaseMap& to_lower) {
     Input in;
     if (!in.init("UnicodeData.txt")) return false;
 
-    const uint8_t* p1, *p2, *p3, *p4, *p5, *p6;
+    const uint8_t* code1, *code2, *first, *last, *cat1, *cat2, *upper1, *upper2, *lower1, *lower2;
     size_t line = 1;
-    std::string cat;
     uint32_t prev = 0;
 
     // Format:
-    //   <hex>;...;<category>;...
-    //   ...
-    //   <hex>;\<..., First\>;<category>;...
-    //   ...
-    //   <hex>;\<..., Last\>;<category>;...
+    //   <hex> ; ...            ; <category> ; ... ; <uppercase> ; <lowercase> ; ...
+    //   <hex> ; \<..., First\> ; <category> ; ... ; <uppercase> ; <lowercase> ; ...
+    //   <hex> ; \<..., Last\>  ; <category> ; ... ; <uppercase> ; <lowercase> ; ...
     //   ...
 loop:
     /*!re2c
-        tail = ([;] [^;\n\x00]*)* [\n];
-        cat = [A-Z][a-z]?;
+        s = [;];
+        field = [^;\n\x00]*;
 
         [\x00] {
             if (prev <= MAX) {
@@ -130,28 +129,31 @@ loop:
             }
             goto end;
         }
-        @p1 hex @p2 ";" [^;\n\x00]+ ";" @p3 cat @p4 tail {
-            uint32_t cp = parse_hex(p1, p2);
-            cat.assign((const char*)p3, (const char*)p4);
-            if (cp > prev) {
-                add(categories["Cn"], prev, cp - 1);
+        @code1 hex @code2
+                s ("<" [A-Za-z0-9 -]+ ", " (@first "First" | @last "Last") ">" | field)
+                s @cat1 [A-Z][a-z]? @cat2
+                (s field){9}
+                s (@upper1 hex @upper2)?
+                s (@lower1 hex @lower2)?
+                s field [\n] {
+            uint32_t code = parse_hex(code1, code2);
+            if (upper1 != upper2) {
+                to_upper[code] = parse_hex(upper1, upper2);
             }
-            add(categories[cat], cp, cp);
-            prev = cp + 1;
+            if (lower1 != lower2) {
+                to_lower[code] = parse_hex(lower1, lower2);
+            }
+            if (code > prev && !last) {
+                add(categories["Cn"], prev, code - 1);
+            }
+            if (first) {
+                prev = code;
+            } else {
+                const std::string cat((char*)cat1, (char*)cat2);
+                add(categories[cat], last ? prev : code, code);
+                prev = code + 1;
+            }
             ++line;
-            goto loop;
-        }
-        @p1 hex @p2 ";<" [A-Za-z0-9 -]+ ", First>;" @p3 cat @p4 tail
-        @p5 hex @p6 ";<" [A-Za-z0-9 -]+ ", Last>;"      cat     tail {
-            uint32_t first = parse_hex(p1, p2);
-            uint32_t last = parse_hex(p5, p6);
-            cat.assign((const char*)p3, (const char*)p4);
-            if (first > prev) {
-                add(categories["Cn"], prev, first - 1);
-            }
-            add(categories[cat], first, last);
-            prev = last + 1;
-            line += 2;
             goto loop;
         }
         * {
@@ -191,6 +193,40 @@ end:
         tmp.clear();
     }
 
+    return true;
+}
+
+static bool gen_source_file_casemap(const CaseMap& to_upper, const CaseMap& to_lower) {
+    const char* filename = "unicode_casemap.cc";
+    FILE* f = fopen(filename, "wb");
+    if (f == nullptr) {
+        fprintf(stderr, "cannot open %s\n", filename);
+        return false;
+    }
+
+    fprintf(f, "#include <stdint.h>\n");
+    fprintf(f, "#include <map>\n");
+    fprintf(f, "\n");
+    fprintf(f, "#include \"src/encoding/enc.h\"\n");
+    fprintf(f, "\n");
+    fprintf(f, "namespace re2c {\n");
+    fprintf(f, "\n");
+    fprintf(f, "std::map<uint32_t, uint32_t> unicode_to_upper = {\n");
+    for (const auto& i : to_upper) {
+        fprintf(f, "    {0x%x, 0x%x},\n", i.first, i.second);
+    }
+    fprintf(f, "};\n");
+    fprintf(f, "\n");
+    fprintf(f, "std::map<uint32_t, uint32_t> unicode_to_lower = {\n");
+    for (const auto& i : to_lower) {
+        fprintf(f, "    {0x%x, 0x%x},\n", i.first, i.second);
+    }
+    fprintf(f, "};\n");
+    fprintf(f, "\n");
+    fprintf(f, "} // namespace re2c\n");
+    fprintf(f, "\n");
+
+    fclose(f);
     return true;
 }
 
@@ -613,8 +649,11 @@ end:
 
 int main() {
     CharsetMap categories;
-    if (!parse_categories(categories)) return 1;
+    CaseMap to_upper;
+    CaseMap to_lower;
+    if (!parse_unicode_data(categories, to_upper, to_lower)) return 1;
     if (!gen_include_file_charsets(categories, "unicode_categories.re")) return 1;
+    if (!gen_source_file_casemap(to_upper, to_lower)) return 1;
     if (!gen_tests_categories(categories)) return 1;
 
     Blocks blocks;

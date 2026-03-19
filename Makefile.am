@@ -104,6 +104,7 @@ re2c_SRC = \
 	src/encoding/ebcdic.cc \
 	src/encoding/enc.cc \
 	src/encoding/range_suffix.cc \
+	src/encoding/unicode_casemap.cc \
 	src/encoding/utf8.cc \
 	src/encoding/utf16.cc \
 	src/msg/msg.cc \

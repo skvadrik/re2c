@@ -1,10 +1,15 @@
 #include <stddef.h>
+#include <map>
 
 #include "src/encoding/ebcdic.h"
 #include "src/encoding/enc.h"
 #include "src/util/range.h"
 
 namespace re2c {
+
+extern std::map<uint32_t, uint32_t> unicode_to_lower;
+extern std::map<uint32_t, uint32_t> unicode_to_upper;
+
 
 // Returns code point representation with regard to the current policy (overwrites the argument code
 // point). The code point is specified by the user; re2c validates it. A code point is invalid if it
@@ -99,6 +104,62 @@ Range* Enc::full_range(RangeMgr& rm) const {
         r = rm.sub(r, rm.ran(SURR_MIN, SURR_MAX + 1));
     }
     return r;
+}
+
+static inline bool is_alpha(uint32_t c) {
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
+
+static inline uint32_t to_lower_unsafe(uint32_t c) {
+    return c | 0x20u;
+}
+
+static inline uint32_t to_upper_unsafe(uint32_t c) {
+    return c & ~0x20u;
+}
+
+uint32_t Enc::to_lower(uint32_t c) const {
+    switch (type_) {
+    case Type::UCS2:
+    case Type::UTF16:
+    case Type::UTF32:
+    case Type::UTF8: {
+        auto i = unicode_to_lower.find(c);
+        if (i != unicode_to_lower.end()) {
+            c = i->second;
+        }
+        break;
+    }
+    case Type::ASCII:
+    case Type::EBCDIC:
+        if (is_alpha(c)) {
+            c = to_lower_unsafe(c);
+        }
+        break;
+    }
+    return c;
+}
+
+uint32_t Enc::to_upper(uint32_t c) const {
+    switch (type_) {
+    case Type::UCS2:
+    case Type::UTF16:
+    case Type::UTF32:
+    case Type::UTF8: {
+        auto i = unicode_to_upper.find(c);
+        if (i != unicode_to_upper.end()) {
+            c = i->second;
+        }
+        break;
+    }
+    case Type::ASCII:
+    case Type::EBCDIC:
+        if (is_alpha(c)) {
+            c = to_upper_unsafe(c);
+        }
+        break;
+    }
+    return c;
 }
 
 // C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).
