@@ -2,6 +2,26 @@ Changelog
 =========
 
 
+4.5 (2026-03-23)
+~~~~~~~~~~~~~~~~
+
+- Migrated include files to Unicode 17.0.0 standard.
+
+- Added Unicode include files:
+
+  + `include/unicode_blocks.re <https://github.com/skvadrik/re2c/blob/master/include/unicode_blocks.re>`_
+  + `include/unicode_properties.re <https://github.com/skvadrik/re2c/blob/master/include/unicode_properties.re>`_
+
+- Implemented Unicode case mapping for case-insensitive string literals
+  (`#235 <https://github.com/skvadrik/re2c/issues/235>`_).
+
+- Fixed `#571 <https://github.com/skvadrik/re2c/issues/571>`_
+  (segmentation fault on erroneous input during determinization).
+
+- Updated paper `A closer look at TDFA <https://arxiv.org/abs/2206.01398>`_
+  (applied corrections by Lisa Felidae).
+
+
 4.4 (2025-12-20)
 ~~~~~~~~~~~~~~~~
 
