@@ -126,29 +126,25 @@ fn lex(yyinput: [:0]const u8) bool {
                         yystate = 28;
                         continue :yyl;
                     },
-                    0xE5...0xE8,
+                    0xE5...0xE9,
                     0xEB...0xEC => {
                         yystate = 29;
                         continue :yyl;
                     },
-                    0xE9 => {
+                    0xEA => {
                         yystate = 30;
                         continue :yyl;
                     },
-                    0xEA => {
+                    0xED => {
                         yystate = 31;
                         continue :yyl;
                     },
-                    0xED => {
+                    0xEF => {
                         yystate = 32;
                         continue :yyl;
                     },
-                    0xEF => {
-                        yystate = 33;
-                        continue :yyl;
-                    },
                     0xF0 => {
-                        yystate = 34;
+                        yystate = 33;
                         continue :yyl;
                     },
                     else => {
@@ -178,12 +174,12 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xC2 => {
                         yycursor += 1;
-                        yystate = 35;
+                        yystate = 34;
                         continue :yyl;
                     },
                     0xC3 => {
                         yycursor += 1;
-                        yystate = 37;
+                        yystate = 36;
                         continue :yyl;
                     },
                     0xC4...0xCA,
@@ -192,148 +188,143 @@ fn lex(yyinput: [:0]const u8) bool {
                     0xD3,
                     0xDA => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0xCB => {
                         yycursor += 1;
-                        yystate = 39;
+                        yystate = 38;
                         continue :yyl;
                     },
                     0xCD => {
                         yycursor += 1;
-                        yystate = 40;
+                        yystate = 39;
                         continue :yyl;
                     },
                     0xCE => {
                         yycursor += 1;
-                        yystate = 41;
+                        yystate = 40;
                         continue :yyl;
                     },
                     0xCF => {
                         yycursor += 1;
-                        yystate = 42;
+                        yystate = 41;
                         continue :yyl;
                     },
                     0xD2 => {
                         yycursor += 1;
-                        yystate = 43;
+                        yystate = 42;
                         continue :yyl;
                     },
                     0xD4 => {
                         yycursor += 1;
-                        yystate = 44;
+                        yystate = 43;
                         continue :yyl;
                     },
                     0xD5 => {
                         yycursor += 1;
-                        yystate = 45;
+                        yystate = 44;
                         continue :yyl;
                     },
                     0xD6 => {
                         yycursor += 1;
-                        yystate = 46;
+                        yystate = 45;
                         continue :yyl;
                     },
                     0xD7 => {
                         yycursor += 1;
-                        yystate = 47;
+                        yystate = 46;
                         continue :yyl;
                     },
                     0xD8 => {
                         yycursor += 1;
-                        yystate = 48;
+                        yystate = 47;
                         continue :yyl;
                     },
                     0xD9 => {
                         yycursor += 1;
-                        yystate = 49;
+                        yystate = 48;
                         continue :yyl;
                     },
                     0xDB => {
                         yycursor += 1;
-                        yystate = 50;
+                        yystate = 49;
                         continue :yyl;
                     },
                     0xDC => {
                         yycursor += 1;
-                        yystate = 51;
+                        yystate = 50;
                         continue :yyl;
                     },
                     0xDD => {
                         yycursor += 1;
-                        yystate = 52;
+                        yystate = 51;
                         continue :yyl;
                     },
                     0xDE => {
                         yycursor += 1;
-                        yystate = 53;
+                        yystate = 52;
                         continue :yyl;
                     },
                     0xDF => {
                         yycursor += 1;
-                        yystate = 54;
+                        yystate = 53;
                         continue :yyl;
                     },
                     0xE0 => {
                         yycursor += 1;
-                        yystate = 55;
+                        yystate = 54;
                         continue :yyl;
                     },
                     0xE1 => {
                         yycursor += 1;
-                        yystate = 56;
+                        yystate = 55;
                         continue :yyl;
                     },
                     0xE2 => {
                         yycursor += 1;
-                        yystate = 57;
+                        yystate = 56;
                         continue :yyl;
                     },
                     0xE3 => {
                         yycursor += 1;
-                        yystate = 58;
+                        yystate = 57;
                         continue :yyl;
                     },
                     0xE4 => {
                         yycursor += 1;
-                        yystate = 59;
+                        yystate = 58;
                         continue :yyl;
                     },
-                    0xE5...0xE8,
+                    0xE5...0xE9,
                     0xEB...0xEC => {
                         yycursor += 1;
-                        yystate = 60;
-                        continue :yyl;
-                    },
-                    0xE9 => {
-                        yycursor += 1;
-                        yystate = 61;
+                        yystate = 59;
                         continue :yyl;
                     },
                     0xEA => {
                         yycursor += 1;
-                        yystate = 62;
+                        yystate = 60;
                         continue :yyl;
                     },
                     0xED => {
                         yycursor += 1;
-                        yystate = 63;
+                        yystate = 61;
                         continue :yyl;
                     },
                     0xEF => {
                         yycursor += 1;
-                        yystate = 64;
+                        yystate = 62;
                         continue :yyl;
                     },
                     0xF0 => {
                         yycursor += 1;
-                        yystate = 65;
+                        yystate = 63;
                         continue :yyl;
                     },
                     0xF3 => {
                         yycursor += 1;
-                        yystate = 66;
+                        yystate = 64;
                         continue :yyl;
                     },
                     else => {
@@ -648,148 +639,153 @@ fn lex(yyinput: [:0]const u8) bool {
                 switch (yych) {
                     0xA0 => {
                         yycursor += 1;
-                        yystate = 67;
+                        yystate = 65;
                         continue :yyl;
                     },
                     0xA1 => {
                         yycursor += 1;
-                        yystate = 68;
+                        yystate = 66;
                         continue :yyl;
                     },
                     0xA2 => {
                         yycursor += 1;
-                        yystate = 69;
+                        yystate = 67;
+                        continue :yyl;
+                    },
+                    0xA3 => {
+                        yycursor += 1;
+                        yystate = 68;
                         continue :yyl;
                     },
                     0xA4 => {
                         yycursor += 1;
-                        yystate = 70;
+                        yystate = 69;
                         continue :yyl;
                     },
                     0xA5 => {
                         yycursor += 1;
-                        yystate = 71;
+                        yystate = 70;
                         continue :yyl;
                     },
                     0xA6 => {
                         yycursor += 1;
-                        yystate = 72;
+                        yystate = 71;
                         continue :yyl;
                     },
                     0xA7 => {
                         yycursor += 1;
-                        yystate = 73;
+                        yystate = 72;
                         continue :yyl;
                     },
                     0xA8 => {
                         yycursor += 1;
-                        yystate = 74;
+                        yystate = 73;
                         continue :yyl;
                     },
                     0xA9 => {
                         yycursor += 1;
-                        yystate = 75;
+                        yystate = 74;
                         continue :yyl;
                     },
                     0xAA => {
                         yycursor += 1;
-                        yystate = 76;
+                        yystate = 75;
                         continue :yyl;
                     },
                     0xAB => {
                         yycursor += 1;
-                        yystate = 77;
+                        yystate = 76;
                         continue :yyl;
                     },
                     0xAC => {
                         yycursor += 1;
-                        yystate = 78;
+                        yystate = 77;
                         continue :yyl;
                     },
                     0xAD => {
                         yycursor += 1;
-                        yystate = 79;
+                        yystate = 78;
                         continue :yyl;
                     },
                     0xAE => {
                         yycursor += 1;
-                        yystate = 80;
+                        yystate = 79;
                         continue :yyl;
                     },
                     0xAF => {
                         yycursor += 1;
-                        yystate = 81;
+                        yystate = 80;
                         continue :yyl;
                     },
                     0xB0 => {
                         yycursor += 1;
-                        yystate = 82;
+                        yystate = 81;
                         continue :yyl;
                     },
                     0xB1 => {
                         yycursor += 1;
-                        yystate = 83;
+                        yystate = 82;
                         continue :yyl;
                     },
                     0xB2 => {
                         yycursor += 1;
-                        yystate = 84;
+                        yystate = 83;
                         continue :yyl;
                     },
                     0xB3 => {
                         yycursor += 1;
-                        yystate = 85;
+                        yystate = 84;
                         continue :yyl;
                     },
                     0xB4 => {
                         yycursor += 1;
-                        yystate = 86;
+                        yystate = 85;
                         continue :yyl;
                     },
                     0xB5 => {
                         yycursor += 1;
-                        yystate = 87;
+                        yystate = 86;
                         continue :yyl;
                     },
                     0xB6 => {
                         yycursor += 1;
-                        yystate = 88;
+                        yystate = 87;
                         continue :yyl;
                     },
                     0xB7,
                     0xB9 => {
                         yycursor += 1;
-                        yystate = 89;
+                        yystate = 88;
                         continue :yyl;
                     },
                     0xB8 => {
                         yycursor += 1;
-                        yystate = 90;
+                        yystate = 89;
                         continue :yyl;
                     },
                     0xBA => {
                         yycursor += 1;
-                        yystate = 91;
+                        yystate = 90;
                         continue :yyl;
                     },
                     0xBB => {
                         yycursor += 1;
-                        yystate = 92;
+                        yystate = 91;
                         continue :yyl;
                     },
                     0xBC => {
                         yycursor += 1;
-                        yystate = 93;
+                        yystate = 92;
                         continue :yyl;
                     },
                     0xBD => {
                         yycursor += 1;
-                        yystate = 94;
+                        yystate = 93;
                         continue :yyl;
                     },
                     0xBE => {
                         yycursor += 1;
-                        yystate = 95;
+                        yystate = 94;
                         continue :yyl;
                     },
                     else => {
@@ -805,22 +801,22 @@ fn lex(yyinput: [:0]const u8) bool {
                 switch (yych) {
                     0x80 => {
                         yycursor += 1;
-                        yystate = 96;
+                        yystate = 95;
                         continue :yyl;
                     },
                     0x81 => {
                         yycursor += 1;
-                        yystate = 97;
+                        yystate = 96;
                         continue :yyl;
                     },
                     0x82 => {
                         yycursor += 1;
-                        yystate = 98;
+                        yystate = 97;
                         continue :yyl;
                     },
                     0x83 => {
                         yycursor += 1;
-                        yystate = 99;
+                        yystate = 98;
                         continue :yyl;
                     },
                     0x84...0x88,
@@ -828,197 +824,197 @@ fn lex(yyinput: [:0]const u8) bool {
                     0xB4...0xB6,
                     0xB8...0xBB => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0x89 => {
                         yycursor += 1;
-                        yystate = 100;
+                        yystate = 99;
                         continue :yyl;
                     },
                     0x8A => {
                         yycursor += 1;
-                        yystate = 101;
+                        yystate = 100;
                         continue :yyl;
                     },
                     0x8B => {
                         yycursor += 1;
-                        yystate = 102;
+                        yystate = 101;
                         continue :yyl;
                     },
                     0x8C => {
                         yycursor += 1;
-                        yystate = 103;
+                        yystate = 102;
                         continue :yyl;
                     },
                     0x8D => {
                         yycursor += 1;
-                        yystate = 104;
+                        yystate = 103;
                         continue :yyl;
                     },
                     0x8E => {
                         yycursor += 1;
-                        yystate = 105;
+                        yystate = 104;
                         continue :yyl;
                     },
                     0x8F => {
                         yycursor += 1;
-                        yystate = 106;
+                        yystate = 105;
                         continue :yyl;
                     },
                     0x90 => {
                         yycursor += 1;
-                        yystate = 107;
+                        yystate = 106;
                         continue :yyl;
                     },
                     0x99 => {
                         yycursor += 1;
-                        yystate = 108;
+                        yystate = 107;
                         continue :yyl;
                     },
                     0x9A => {
                         yycursor += 1;
-                        yystate = 109;
+                        yystate = 108;
                         continue :yyl;
                     },
                     0x9B => {
                         yycursor += 1;
-                        yystate = 110;
+                        yystate = 109;
                         continue :yyl;
                     },
                     0x9C => {
                         yycursor += 1;
-                        yystate = 111;
+                        yystate = 110;
                         continue :yyl;
                     },
                     0x9D => {
                         yycursor += 1;
-                        yystate = 112;
+                        yystate = 111;
                         continue :yyl;
                     },
                     0x9E => {
                         yycursor += 1;
-                        yystate = 113;
+                        yystate = 112;
                         continue :yyl;
                     },
                     0x9F => {
                         yycursor += 1;
-                        yystate = 114;
+                        yystate = 113;
                         continue :yyl;
                     },
                     0xA0 => {
                         yycursor += 1;
-                        yystate = 115;
+                        yystate = 114;
                         continue :yyl;
                     },
                     0xA1 => {
                         yycursor += 1;
-                        yystate = 116;
+                        yystate = 115;
                         continue :yyl;
                     },
                     0xA2 => {
                         yycursor += 1;
-                        yystate = 117;
+                        yystate = 116;
                         continue :yyl;
                     },
                     0xA3 => {
                         yycursor += 1;
-                        yystate = 118;
+                        yystate = 117;
                         continue :yyl;
                     },
                     0xA4 => {
                         yycursor += 1;
-                        yystate = 119;
+                        yystate = 118;
                         continue :yyl;
                     },
                     0xA5 => {
                         yycursor += 1;
-                        yystate = 120;
+                        yystate = 119;
                         continue :yyl;
                     },
                     0xA6 => {
                         yycursor += 1;
-                        yystate = 121;
+                        yystate = 120;
                         continue :yyl;
                     },
                     0xA7 => {
                         yycursor += 1;
-                        yystate = 122;
+                        yystate = 68;
                         continue :yyl;
                     },
                     0xA8 => {
                         yycursor += 1;
-                        yystate = 123;
+                        yystate = 121;
                         continue :yyl;
                     },
                     0xA9 => {
                         yycursor += 1;
-                        yystate = 124;
+                        yystate = 122;
                         continue :yyl;
                     },
                     0xAA => {
                         yycursor += 1;
-                        yystate = 125;
+                        yystate = 123;
                         continue :yyl;
                     },
                     0xAC => {
                         yycursor += 1;
-                        yystate = 126;
+                        yystate = 124;
                         continue :yyl;
                     },
                     0xAD => {
                         yycursor += 1;
-                        yystate = 127;
+                        yystate = 125;
                         continue :yyl;
                     },
                     0xAE => {
                         yycursor += 1;
-                        yystate = 128;
+                        yystate = 126;
                         continue :yyl;
                     },
                     0xAF => {
                         yycursor += 1;
-                        yystate = 129;
+                        yystate = 127;
                         continue :yyl;
                     },
                     0xB0 => {
                         yycursor += 1;
-                        yystate = 130;
+                        yystate = 128;
                         continue :yyl;
                     },
                     0xB1 => {
                         yycursor += 1;
-                        yystate = 131;
+                        yystate = 129;
                         continue :yyl;
                     },
                     0xB2 => {
                         yycursor += 1;
-                        yystate = 132;
+                        yystate = 130;
                         continue :yyl;
                     },
                     0xB3 => {
                         yycursor += 1;
-                        yystate = 133;
+                        yystate = 131;
                         continue :yyl;
                     },
                     0xBC => {
                         yycursor += 1;
-                        yystate = 134;
+                        yystate = 132;
                         continue :yyl;
                     },
                     0xBD => {
                         yycursor += 1;
-                        yystate = 135;
+                        yystate = 133;
                         continue :yyl;
                     },
                     0xBE => {
                         yycursor += 1;
-                        yystate = 136;
+                        yystate = 134;
                         continue :yyl;
                     },
                     0xBF => {
                         yycursor += 1;
-                        yystate = 137;
+                        yystate = 135;
                         continue :yyl;
                     },
                     else => {
@@ -1034,72 +1030,62 @@ fn lex(yyinput: [:0]const u8) bool {
                 switch (yych) {
                     0x81 => {
                         yycursor += 1;
-                        yystate = 138;
+                        yystate = 136;
                         continue :yyl;
                     },
                     0x82 => {
                         yycursor += 1;
-                        yystate = 139;
+                        yystate = 137;
                         continue :yyl;
                     },
                     0x84 => {
                         yycursor += 1;
-                        yystate = 140;
+                        yystate = 138;
                         continue :yyl;
                     },
                     0x85 => {
                         yycursor += 1;
-                        yystate = 141;
+                        yystate = 139;
                         continue :yyl;
                     },
                     0x86 => {
                         yycursor += 1;
-                        yystate = 142;
+                        yystate = 140;
                         continue :yyl;
                     },
-                    0xB0 => {
+                    0xB0...0xB2 => {
                         yycursor += 1;
-                        yystate = 143;
-                        continue :yyl;
-                    },
-                    0xB1 => {
-                        yycursor += 1;
-                        yystate = 144;
-                        continue :yyl;
-                    },
-                    0xB2 => {
-                        yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0xB3 => {
                         yycursor += 1;
-                        yystate = 145;
+                        yystate = 141;
                         continue :yyl;
                     },
                     0xB4 => {
                         yycursor += 1;
-                        yystate = 146;
+                        yystate = 142;
                         continue :yyl;
                     },
                     0xB5 => {
                         yycursor += 1;
-                        yystate = 147;
+                        yystate = 143;
                         continue :yyl;
                     },
                     0xB6 => {
                         yycursor += 1;
-                        yystate = 148;
+                        yystate = 144;
                         continue :yyl;
                     },
                     0xB7 => {
                         yycursor += 1;
-                        yystate = 149;
+                        yystate = 145;
                         continue :yyl;
                     },
                     0xB8 => {
                         yycursor += 1;
-                        yystate = 150;
+                        yystate = 146;
                         continue :yyl;
                     },
                     else => {
@@ -1115,43 +1101,43 @@ fn lex(yyinput: [:0]const u8) bool {
                 switch (yych) {
                     0x80 => {
                         yycursor += 1;
-                        yystate = 151;
+                        yystate = 147;
                         continue :yyl;
                     },
                     0x81 => {
                         yycursor += 1;
-                        yystate = 107;
+                        yystate = 106;
                         continue :yyl;
                     },
                     0x82 => {
                         yycursor += 1;
-                        yystate = 152;
+                        yystate = 148;
                         continue :yyl;
                     },
                     0x83 => {
                         yycursor += 1;
-                        yystate = 153;
+                        yystate = 149;
                         continue :yyl;
                     },
                     0x84 => {
                         yycursor += 1;
-                        yystate = 154;
+                        yystate = 150;
                         continue :yyl;
                     },
                     0x85,
                     0x90...0xBF => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0x86 => {
                         yycursor += 1;
-                        yystate = 155;
+                        yystate = 151;
                         continue :yyl;
                     },
                     0x87 => {
                         yycursor += 1;
-                        yystate = 156;
+                        yystate = 152;
                         continue :yyl;
                     },
                     else => {
@@ -1165,15 +1151,10 @@ fn lex(yyinput: [:0]const u8) bool {
                 yymarker = yycursor;
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0xB5,
+                    0x80...0xB6,
                     0xB8...0xBF => {
                         yycursor += 1;
-                        yystate = 38;
-                        continue :yyl;
-                    },
-                    0xB6 => {
-                        yycursor += 1;
-                        yystate = 118;
+                        yystate = 37;
                         continue :yyl;
                     },
                     else => {
@@ -1189,7 +1170,7 @@ fn lex(yyinput: [:0]const u8) bool {
                 switch (yych) {
                     0x80...0xBF => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     else => {
@@ -1203,14 +1184,133 @@ fn lex(yyinput: [:0]const u8) bool {
                 yymarker = yycursor;
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0xBE => {
+                    0x80...0x91,
+                    0x94...0x97,
+                    0x9D,
+                    0xAE,
+                    0xB0...0xBF => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
-                    0xBF => {
+                    0x92 => {
+                        yycursor += 1;
+                        yystate = 153;
+                        continue :yyl;
+                    },
+                    0x93 => {
+                        yycursor += 1;
+                        yystate = 154;
+                        continue :yyl;
+                    },
+                    0x98 => {
+                        yycursor += 1;
+                        yystate = 155;
+                        continue :yyl;
+                    },
+                    0x99 => {
+                        yycursor += 1;
+                        yystate = 156;
+                        continue :yyl;
+                    },
+                    0x9A => {
                         yycursor += 1;
                         yystate = 157;
+                        continue :yyl;
+                    },
+                    0x9B => {
+                        yycursor += 1;
+                        yystate = 158;
+                        continue :yyl;
+                    },
+                    0x9C => {
+                        yycursor += 1;
+                        yystate = 159;
+                        continue :yyl;
+                    },
+                    0x9E => {
+                        yycursor += 1;
+                        yystate = 160;
+                        continue :yyl;
+                    },
+                    0x9F => {
+                        yycursor += 1;
+                        yystate = 161;
+                        continue :yyl;
+                    },
+                    0xA0 => {
+                        yycursor += 1;
+                        yystate = 162;
+                        continue :yyl;
+                    },
+                    0xA1 => {
+                        yycursor += 1;
+                        yystate = 112;
+                        continue :yyl;
+                    },
+                    0xA2 => {
+                        yycursor += 1;
+                        yystate = 163;
+                        continue :yyl;
+                    },
+                    0xA3 => {
+                        yycursor += 1;
+                        yystate = 164;
+                        continue :yyl;
+                    },
+                    0xA4 => {
+                        yycursor += 1;
+                        yystate = 165;
+                        continue :yyl;
+                    },
+                    0xA5 => {
+                        yycursor += 1;
+                        yystate = 166;
+                        continue :yyl;
+                    },
+                    0xA6 => {
+                        yycursor += 1;
+                        yystate = 167;
+                        continue :yyl;
+                    },
+                    0xA7 => {
+                        yycursor += 1;
+                        yystate = 168;
+                        continue :yyl;
+                    },
+                    0xA8 => {
+                        yycursor += 1;
+                        yystate = 169;
+                        continue :yyl;
+                    },
+                    0xA9 => {
+                        yycursor += 1;
+                        yystate = 170;
+                        continue :yyl;
+                    },
+                    0xAA => {
+                        yycursor += 1;
+                        yystate = 171;
+                        continue :yyl;
+                    },
+                    0xAB => {
+                        yycursor += 1;
+                        yystate = 172;
+                        continue :yyl;
+                    },
+                    0xAC => {
+                        yycursor += 1;
+                        yystate = 173;
+                        continue :yyl;
+                    },
+                    0xAD => {
+                        yycursor += 1;
+                        yystate = 174;
+                        continue :yyl;
+                    },
+                    0xAF => {
+                        yycursor += 1;
+                        yystate = 175;
                         continue :yyl;
                     },
                     else => {
@@ -1224,133 +1324,19 @@ fn lex(yyinput: [:0]const u8) bool {
                 yymarker = yycursor;
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x91,
-                    0x94...0x97,
-                    0x9D,
-                    0xAE,
-                    0xB0...0xBF => {
+                    0x80...0x9D => {
                         yycursor += 1;
-                        yystate = 38;
-                        continue :yyl;
-                    },
-                    0x92 => {
-                        yycursor += 1;
-                        yystate = 158;
-                        continue :yyl;
-                    },
-                    0x93 => {
-                        yycursor += 1;
-                        yystate = 159;
-                        continue :yyl;
-                    },
-                    0x98 => {
-                        yycursor += 1;
-                        yystate = 160;
-                        continue :yyl;
-                    },
-                    0x99 => {
-                        yycursor += 1;
-                        yystate = 161;
-                        continue :yyl;
-                    },
-                    0x9A => {
-                        yycursor += 1;
-                        yystate = 162;
-                        continue :yyl;
-                    },
-                    0x9B => {
-                        yycursor += 1;
-                        yystate = 157;
-                        continue :yyl;
-                    },
-                    0x9C => {
-                        yycursor += 1;
-                        yystate = 163;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0x9E => {
                         yycursor += 1;
-                        yystate = 164;
+                        yystate = 176;
                         continue :yyl;
                     },
                     0x9F => {
                         yycursor += 1;
-                        yystate = 165;
-                        continue :yyl;
-                    },
-                    0xA0 => {
-                        yycursor += 1;
-                        yystate = 166;
-                        continue :yyl;
-                    },
-                    0xA1 => {
-                        yycursor += 1;
-                        yystate = 113;
-                        continue :yyl;
-                    },
-                    0xA2 => {
-                        yycursor += 1;
-                        yystate = 167;
-                        continue :yyl;
-                    },
-                    0xA3 => {
-                        yycursor += 1;
-                        yystate = 168;
-                        continue :yyl;
-                    },
-                    0xA4 => {
-                        yycursor += 1;
-                        yystate = 169;
-                        continue :yyl;
-                    },
-                    0xA5 => {
-                        yycursor += 1;
-                        yystate = 170;
-                        continue :yyl;
-                    },
-                    0xA6 => {
-                        yycursor += 1;
-                        yystate = 171;
-                        continue :yyl;
-                    },
-                    0xA7 => {
-                        yycursor += 1;
-                        yystate = 172;
-                        continue :yyl;
-                    },
-                    0xA8 => {
-                        yycursor += 1;
-                        yystate = 173;
-                        continue :yyl;
-                    },
-                    0xA9 => {
-                        yycursor += 1;
-                        yystate = 174;
-                        continue :yyl;
-                    },
-                    0xAA => {
-                        yycursor += 1;
-                        yystate = 175;
-                        continue :yyl;
-                    },
-                    0xAB => {
-                        yycursor += 1;
-                        yystate = 176;
-                        continue :yyl;
-                    },
-                    0xAC => {
-                        yycursor += 1;
                         yystate = 177;
-                        continue :yyl;
-                    },
-                    0xAD => {
-                        yycursor += 1;
-                        yystate = 178;
-                        continue :yyl;
-                    },
-                    0xAF => {
-                        yycursor += 1;
-                        yystate = 179;
                         continue :yyl;
                     },
                     else => {
@@ -1364,19 +1350,92 @@ fn lex(yyinput: [:0]const u8) bool {
                 yymarker = yycursor;
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x9D => {
+                    0xA4...0xA8,
+                    0xAA,
+                    0xB0...0xB3,
+                    0xBA => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
-                    0x9E => {
+                    0xA9 => {
+                        yycursor += 1;
+                        yystate = 178;
+                        continue :yyl;
+                    },
+                    0xAB => {
+                        yycursor += 1;
+                        yystate = 179;
+                        continue :yyl;
+                    },
+                    0xAC => {
                         yycursor += 1;
                         yystate = 180;
                         continue :yyl;
                     },
-                    0x9F => {
+                    0xAD => {
                         yycursor += 1;
                         yystate = 181;
+                        continue :yyl;
+                    },
+                    0xAE => {
+                        yycursor += 1;
+                        yystate = 52;
+                        continue :yyl;
+                    },
+                    0xAF => {
+                        yycursor += 1;
+                        yystate = 182;
+                        continue :yyl;
+                    },
+                    0xB4 => {
+                        yycursor += 1;
+                        yystate = 183;
+                        continue :yyl;
+                    },
+                    0xB5 => {
+                        yycursor += 1;
+                        yystate = 50;
+                        continue :yyl;
+                    },
+                    0xB6 => {
+                        yycursor += 1;
+                        yystate = 184;
+                        continue :yyl;
+                    },
+                    0xB7 => {
+                        yycursor += 1;
+                        yystate = 185;
+                        continue :yyl;
+                    },
+                    0xB9 => {
+                        yycursor += 1;
+                        yystate = 186;
+                        continue :yyl;
+                    },
+                    0xBB => {
+                        yycursor += 1;
+                        yystate = 187;
+                        continue :yyl;
+                    },
+                    0xBC => {
+                        yycursor += 1;
+                        yystate = 188;
+                        continue :yyl;
+                    },
+                    0xBD => {
+                        yycursor += 1;
+                        yystate = 189;
+                        continue :yyl;
+                    },
+                    0xBE => {
+                        yycursor += 1;
+                        yystate = 190;
+                        continue :yyl;
+                    },
+                    0xBF => {
+                        yycursor += 1;
+                        yystate = 191;
                         continue :yyl;
                     },
                     else => {
@@ -1390,92 +1449,103 @@ fn lex(yyinput: [:0]const u8) bool {
                 yymarker = yycursor;
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0xA4...0xA8,
-                    0xAA,
-                    0xB0...0xB3,
-                    0xBA => {
-                        yycursor += 1;
-                        yystate = 38;
-                        continue :yyl;
-                    },
-                    0xA9 => {
-                        yycursor += 1;
-                        yystate = 182;
-                        continue :yyl;
-                    },
-                    0xAB => {
-                        yycursor += 1;
-                        yystate = 183;
-                        continue :yyl;
-                    },
-                    0xAC => {
-                        yycursor += 1;
-                        yystate = 184;
-                        continue :yyl;
-                    },
-                    0xAD => {
-                        yycursor += 1;
-                        yystate = 185;
-                        continue :yyl;
-                    },
-                    0xAE => {
-                        yycursor += 1;
-                        yystate = 53;
-                        continue :yyl;
-                    },
-                    0xAF => {
-                        yycursor += 1;
-                        yystate = 186;
-                        continue :yyl;
-                    },
-                    0xB4 => {
-                        yycursor += 1;
-                        yystate = 187;
-                        continue :yyl;
-                    },
-                    0xB5 => {
-                        yycursor += 1;
-                        yystate = 51;
-                        continue :yyl;
-                    },
-                    0xB6 => {
-                        yycursor += 1;
-                        yystate = 188;
-                        continue :yyl;
-                    },
-                    0xB7 => {
-                        yycursor += 1;
-                        yystate = 189;
-                        continue :yyl;
-                    },
-                    0xB9 => {
-                        yycursor += 1;
-                        yystate = 190;
-                        continue :yyl;
-                    },
-                    0xBB => {
-                        yycursor += 1;
-                        yystate = 191;
-                        continue :yyl;
-                    },
-                    0xBC => {
+                    0x90 => {
                         yycursor += 1;
                         yystate = 192;
                         continue :yyl;
                     },
-                    0xBD => {
+                    0x91 => {
                         yycursor += 1;
                         yystate = 193;
                         continue :yyl;
                     },
-                    0xBE => {
+                    0x92 => {
                         yycursor += 1;
                         yystate = 194;
                         continue :yyl;
                     },
-                    0xBF => {
+                    0x93 => {
                         yycursor += 1;
                         yystate = 195;
+                        continue :yyl;
+                    },
+                    0x94 => {
+                        yycursor += 1;
+                        yystate = 196;
+                        continue :yyl;
+                    },
+                    0x96 => {
+                        yycursor += 1;
+                        yystate = 197;
+                        continue :yyl;
+                    },
+                    0x97,
+                    0xA0...0xA9,
+                    0xAD,
+                    0xB0,
+                    0xB2 => {
+                        yycursor += 1;
+                        yystate = 59;
+                        continue :yyl;
+                    },
+                    0x98 => {
+                        yycursor += 1;
+                        yystate = 198;
+                        continue :yyl;
+                    },
+                    0x9A => {
+                        yycursor += 1;
+                        yystate = 199;
+                        continue :yyl;
+                    },
+                    0x9B => {
+                        yycursor += 1;
+                        yystate = 200;
+                        continue :yyl;
+                    },
+                    0x9D => {
+                        yycursor += 1;
+                        yystate = 201;
+                        continue :yyl;
+                    },
+                    0x9E => {
+                        yycursor += 1;
+                        yystate = 202;
+                        continue :yyl;
+                    },
+                    0xAA => {
+                        yycursor += 1;
+                        yystate = 203;
+                        continue :yyl;
+                    },
+                    0xAB => {
+                        yycursor += 1;
+                        yystate = 204;
+                        continue :yyl;
+                    },
+                    0xAC => {
+                        yycursor += 1;
+                        yystate = 205;
+                        continue :yyl;
+                    },
+                    0xAE => {
+                        yycursor += 1;
+                        yystate = 206;
+                        continue :yyl;
+                    },
+                    0xAF => {
+                        yycursor += 1;
+                        yystate = 207;
+                        continue :yyl;
+                    },
+                    0xB1 => {
+                        yycursor += 1;
+                        yystate = 208;
+                        continue :yyl;
+                    },
+                    0xB3 => {
+                        yycursor += 1;
+                        yystate = 209;
                         continue :yyl;
                     },
                     else => {
@@ -1485,99 +1555,6 @@ fn lex(yyinput: [:0]const u8) bool {
                 }
             },
             34 => {
-                yyaccept = 1;
-                yymarker = yycursor;
-                yych = yyinput[yycursor];
-                switch (yych) {
-                    0x90 => {
-                        yycursor += 1;
-                        yystate = 196;
-                        continue :yyl;
-                    },
-                    0x91 => {
-                        yycursor += 1;
-                        yystate = 197;
-                        continue :yyl;
-                    },
-                    0x92 => {
-                        yycursor += 1;
-                        yystate = 198;
-                        continue :yyl;
-                    },
-                    0x93 => {
-                        yycursor += 1;
-                        yystate = 199;
-                        continue :yyl;
-                    },
-                    0x94 => {
-                        yycursor += 1;
-                        yystate = 200;
-                        continue :yyl;
-                    },
-                    0x96 => {
-                        yycursor += 1;
-                        yystate = 201;
-                        continue :yyl;
-                    },
-                    0x97,
-                    0xA0...0xA9,
-                    0xAD => {
-                        yycursor += 1;
-                        yystate = 60;
-                        continue :yyl;
-                    },
-                    0x98 => {
-                        yycursor += 1;
-                        yystate = 202;
-                        continue :yyl;
-                    },
-                    0x9B => {
-                        yycursor += 1;
-                        yystate = 203;
-                        continue :yyl;
-                    },
-                    0x9D => {
-                        yycursor += 1;
-                        yystate = 204;
-                        continue :yyl;
-                    },
-                    0x9E => {
-                        yycursor += 1;
-                        yystate = 205;
-                        continue :yyl;
-                    },
-                    0xAA => {
-                        yycursor += 1;
-                        yystate = 206;
-                        continue :yyl;
-                    },
-                    0xAB => {
-                        yycursor += 1;
-                        yystate = 207;
-                        continue :yyl;
-                    },
-                    0xAC => {
-                        yycursor += 1;
-                        yystate = 208;
-                        continue :yyl;
-                    },
-                    0xAE => {
-                        yycursor += 1;
-                        yystate = 209;
-                        continue :yyl;
-                    },
-                    0xAF => {
-                        yycursor += 1;
-                        yystate = 210;
-                        continue :yyl;
-                    },
-                    else => {
-                        yystate = 2;
-                        continue :yyl;
-                    },
-                }
-            },
-            35 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xAA,
@@ -1588,12 +1565,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            36 => {
+            35 => {
                 yycursor = yymarker;
                 if (yyaccept == 0) {
                     yystate = 4;
@@ -1603,7 +1580,7 @@ fn lex(yyinput: [:0]const u8) bool {
                     continue :yyl;
                 }
             },
-            37 => {
+            36 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x96,
@@ -1614,12 +1591,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            38 => {
+            37 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xBF => {
@@ -1628,12 +1605,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            39 => {
+            38 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x81,
@@ -1646,12 +1623,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            40 => {
+            39 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB4,
@@ -1663,12 +1640,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            41 => {
+            40 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x86,
@@ -1681,12 +1658,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            42 => {
+            41 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB5,
@@ -1696,12 +1673,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            43 => {
+            42 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x81,
@@ -1712,12 +1689,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            44 => {
+            43 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAF,
@@ -1727,12 +1704,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            45 => {
+            44 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x96,
@@ -1743,12 +1720,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            46 => {
+            45 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x88,
@@ -1759,12 +1736,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            47 => {
+            46 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x81...0x82,
@@ -1777,12 +1754,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            48 => {
+            47 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90...0x9A,
@@ -1792,12 +1769,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            49 => {
+            48 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xA9,
@@ -1807,12 +1784,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            50 => {
+            49 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x93,
@@ -1825,12 +1802,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            51 => {
+            50 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90...0xBF => {
@@ -1839,12 +1816,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            52 => {
+            51 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8A,
@@ -1854,12 +1831,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            53 => {
+            52 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB1 => {
@@ -1868,12 +1845,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            54 => {
+            53 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB5,
@@ -1884,27 +1861,27 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            55 => {
+            54 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xA0 => {
                         yycursor += 1;
-                        yystate = 211;
+                        yystate = 210;
                         continue :yyl;
                     },
                     0xA1 => {
                         yycursor += 1;
-                        yystate = 212;
+                        yystate = 211;
                         continue :yyl;
                     },
                     0xA2 => {
                         yycursor += 1;
-                        yystate = 69;
+                        yystate = 212;
                         continue :yyl;
                     },
                     0xA3 => {
@@ -1914,7 +1891,7 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xA4 => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0xA5 => {
@@ -2053,12 +2030,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            56 => {
+            55 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80,
@@ -2067,10 +2044,9 @@ fn lex(yyinput: [:0]const u8) bool {
                     0x9E,
                     0xAC,
                     0xAE,
-                    0xB4...0xB6,
-                    0xB8...0xBB => {
+                    0xB4...0xBB => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0x81 => {
@@ -2080,32 +2056,32 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0x82 => {
                         yycursor += 1;
-                        yystate = 162;
+                        yystate = 157;
                         continue :yyl;
                     },
                     0x83 => {
                         yycursor += 1;
-                        yystate = 99;
+                        yystate = 98;
                         continue :yyl;
                     },
                     0x89 => {
                         yycursor += 1;
-                        yystate = 100;
+                        yystate = 99;
                         continue :yyl;
                     },
                     0x8A => {
                         yycursor += 1;
-                        yystate = 101;
+                        yystate = 100;
                         continue :yyl;
                     },
                     0x8B => {
                         yycursor += 1;
-                        yystate = 102;
+                        yystate = 101;
                         continue :yyl;
                     },
                     0x8C => {
                         yycursor += 1;
-                        yystate = 103;
+                        yystate = 102;
                         continue :yyl;
                     },
                     0x8D => {
@@ -2115,32 +2091,32 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0x8E => {
                         yycursor += 1;
-                        yystate = 105;
+                        yystate = 104;
                         continue :yyl;
                     },
                     0x8F => {
                         yycursor += 1;
-                        yystate = 106;
+                        yystate = 105;
                         continue :yyl;
                     },
                     0x90 => {
                         yycursor += 1;
-                        yystate = 107;
+                        yystate = 106;
                         continue :yyl;
                     },
                     0x99 => {
                         yycursor += 1;
-                        yystate = 108;
+                        yystate = 107;
                         continue :yyl;
                     },
                     0x9A => {
                         yycursor += 1;
-                        yystate = 109;
+                        yystate = 108;
                         continue :yyl;
                     },
                     0x9B => {
                         yycursor += 1;
-                        yystate = 110;
+                        yystate = 109;
                         continue :yyl;
                     },
                     0x9C => {
@@ -2165,7 +2141,7 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xA1 => {
                         yycursor += 1;
-                        yystate = 116;
+                        yystate = 115;
                         continue :yyl;
                     },
                     0xA2 => {
@@ -2175,7 +2151,7 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xA3 => {
                         yycursor += 1;
-                        yystate = 118;
+                        yystate = 117;
                         continue :yyl;
                     },
                     0xA4 => {
@@ -2190,7 +2166,7 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xA6 => {
                         yycursor += 1;
-                        yystate = 121;
+                        yystate = 120;
                         continue :yyl;
                     },
                     0xA7 => {
@@ -2213,68 +2189,68 @@ fn lex(yyinput: [:0]const u8) bool {
                         yystate = 253;
                         continue :yyl;
                     },
-                    0xAD => {
+                    0xAB => {
                         yycursor += 1;
                         yystate = 254;
                         continue :yyl;
                     },
-                    0xAF => {
-                        yycursor += 1;
-                        yystate = 113;
-                        continue :yyl;
-                    },
-                    0xB0 => {
+                    0xAD => {
                         yycursor += 1;
                         yystate = 255;
                         continue :yyl;
                     },
-                    0xB1 => {
+                    0xAF => {
+                        yycursor += 1;
+                        yystate = 112;
+                        continue :yyl;
+                    },
+                    0xB0 => {
                         yycursor += 1;
                         yystate = 256;
                         continue :yyl;
                     },
-                    0xB2 => {
-                        yycursor += 1;
-                        yystate = 132;
-                        continue :yyl;
-                    },
-                    0xB3 => {
+                    0xB1 => {
                         yycursor += 1;
                         yystate = 257;
                         continue :yyl;
                     },
-                    0xB7 => {
+                    0xB2 => {
+                        yycursor += 1;
+                        yystate = 130;
+                        continue :yyl;
+                    },
+                    0xB3 => {
                         yycursor += 1;
                         yystate = 258;
                         continue :yyl;
                     },
                     0xBC => {
                         yycursor += 1;
-                        yystate = 134;
+                        yystate = 132;
                         continue :yyl;
                     },
                     0xBD => {
                         yycursor += 1;
-                        yystate = 135;
+                        yystate = 133;
                         continue :yyl;
                     },
                     0xBE => {
                         yycursor += 1;
-                        yystate = 136;
+                        yystate = 134;
                         continue :yyl;
                     },
                     0xBF => {
                         yycursor += 1;
-                        yystate = 137;
+                        yystate = 135;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            57 => {
+            56 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80 => {
@@ -2289,7 +2265,7 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0x82 => {
                         yycursor += 1;
-                        yystate = 139;
+                        yystate = 137;
                         continue :yyl;
                     },
                     0x83 => {
@@ -2299,32 +2275,22 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0x84 => {
                         yycursor += 1;
-                        yystate = 140;
+                        yystate = 138;
                         continue :yyl;
                     },
                     0x85 => {
                         yycursor += 1;
-                        yystate = 141;
+                        yystate = 139;
                         continue :yyl;
                     },
                     0x86 => {
                         yycursor += 1;
-                        yystate = 142;
+                        yystate = 140;
                         continue :yyl;
                     },
-                    0xB0 => {
+                    0xB0...0xB2 => {
                         yycursor += 1;
-                        yystate = 143;
-                        continue :yyl;
-                    },
-                    0xB1 => {
-                        yycursor += 1;
-                        yystate = 144;
-                        continue :yyl;
-                    },
-                    0xB2 => {
-                        yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0xB3 => {
@@ -2334,7 +2300,7 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xB4 => {
                         yycursor += 1;
-                        yystate = 146;
+                        yystate = 142;
                         continue :yyl;
                     },
                     0xB5 => {
@@ -2344,7 +2310,7 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xB6 => {
                         yycursor += 1;
-                        yystate = 148;
+                        yystate = 144;
                         continue :yyl;
                     },
                     0xB7 => {
@@ -2354,16 +2320,16 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xB8 => {
                         yycursor += 1;
-                        yystate = 150;
+                        yystate = 146;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            58 => {
+            57 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80 => {
@@ -2373,7 +2339,7 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0x81 => {
                         yycursor += 1;
-                        yystate = 107;
+                        yystate = 106;
                         continue :yyl;
                     },
                     0x82 => {
@@ -2383,32 +2349,47 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0x83 => {
                         yycursor += 1;
-                        yystate = 153;
+                        yystate = 149;
                         continue :yyl;
                     },
                     0x84 => {
                         yycursor += 1;
-                        yystate = 154;
+                        yystate = 150;
                         continue :yyl;
                     },
                     0x85,
                     0x90...0xBF => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0x86 => {
                         yycursor += 1;
-                        yystate = 155;
+                        yystate = 151;
                         continue :yyl;
                     },
                     0x87 => {
                         yycursor += 1;
-                        yystate = 156;
+                        yystate = 152;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            58 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0xB6,
+                    0xB8...0xBF => {
+                        yycursor += 1;
+                        yystate = 37;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -2416,57 +2397,18 @@ fn lex(yyinput: [:0]const u8) bool {
             59 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0xB5,
-                    0xB8...0xBF => {
+                    0x80...0xBF => {
                         yycursor += 1;
-                        yystate = 38;
-                        continue :yyl;
-                    },
-                    0xB6 => {
-                        yycursor += 1;
-                        yystate = 118;
+                        yystate = 37;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
             60 => {
-                yych = yyinput[yycursor];
-                switch (yych) {
-                    0x80...0xBF => {
-                        yycursor += 1;
-                        yystate = 38;
-                        continue :yyl;
-                    },
-                    else => {
-                        yystate = 36;
-                        continue :yyl;
-                    },
-                }
-            },
-            61 => {
-                yych = yyinput[yycursor];
-                switch (yych) {
-                    0x80...0xBE => {
-                        yycursor += 1;
-                        yystate = 38;
-                        continue :yyl;
-                    },
-                    0xBF => {
-                        yycursor += 1;
-                        yystate = 157;
-                        continue :yyl;
-                    },
-                    else => {
-                        yystate = 36;
-                        continue :yyl;
-                    },
-                }
-            },
-            62 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x91,
@@ -2479,17 +2421,17 @@ fn lex(yyinput: [:0]const u8) bool {
                     0xAE,
                     0xB0...0xBF => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0x92 => {
                         yycursor += 1;
-                        yystate = 158;
+                        yystate = 153;
                         continue :yyl;
                     },
                     0x93 => {
                         yycursor += 1;
-                        yystate = 159;
+                        yystate = 154;
                         continue :yyl;
                     },
                     0x98 => {
@@ -2504,22 +2446,22 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0x9B => {
                         yycursor += 1;
-                        yystate = 53;
+                        yystate = 52;
                         continue :yyl;
                     },
                     0x9C => {
                         yycursor += 1;
-                        yystate = 163;
+                        yystate = 159;
                         continue :yyl;
                     },
                     0x9E => {
                         yycursor += 1;
-                        yystate = 164;
+                        yystate = 160;
                         continue :yyl;
                     },
                     0x9F => {
                         yycursor += 1;
-                        yystate = 165;
+                        yystate = 161;
                         continue :yyl;
                     },
                     0xA0 => {
@@ -2529,7 +2471,7 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xA1 => {
                         yycursor += 1;
-                        yystate = 113;
+                        yystate = 112;
                         continue :yyl;
                     },
                     0xA3 => {
@@ -2539,7 +2481,7 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xA4 => {
                         yycursor += 1;
-                        yystate = 182;
+                        yystate = 178;
                         continue :yyl;
                     },
                     0xA5 => {
@@ -2569,12 +2511,12 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xAC => {
                         yycursor += 1;
-                        yystate = 177;
+                        yystate = 173;
                         continue :yyl;
                     },
                     0xAD => {
                         yycursor += 1;
-                        yystate = 178;
+                        yystate = 174;
                         continue :yyl;
                     },
                     0xAF => {
@@ -2583,36 +2525,36 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            63 => {
+            61 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9D => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0x9E => {
                         yycursor += 1;
-                        yystate = 180;
+                        yystate = 176;
                         continue :yyl;
                     },
                     0x9F => {
                         yycursor += 1;
-                        yystate = 181;
+                        yystate = 177;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            64 => {
+            62 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xA4...0xA8,
@@ -2620,17 +2562,17 @@ fn lex(yyinput: [:0]const u8) bool {
                     0xB0...0xB3,
                     0xBA => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0xA9 => {
                         yycursor += 1;
-                        yystate = 182;
+                        yystate = 178;
                         continue :yyl;
                     },
                     0xAB => {
                         yycursor += 1;
-                        yystate = 183;
+                        yystate = 179;
                         continue :yyl;
                     },
                     0xAC => {
@@ -2640,37 +2582,37 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xAD => {
                         yycursor += 1;
-                        yystate = 185;
+                        yystate = 181;
                         continue :yyl;
                     },
                     0xAE => {
                         yycursor += 1;
-                        yystate = 53;
+                        yystate = 52;
                         continue :yyl;
                     },
                     0xAF => {
                         yycursor += 1;
-                        yystate = 186;
+                        yystate = 182;
                         continue :yyl;
                     },
                     0xB4 => {
                         yycursor += 1;
-                        yystate = 187;
+                        yystate = 183;
                         continue :yyl;
                     },
                     0xB5 => {
                         yycursor += 1;
-                        yystate = 51;
+                        yystate = 50;
                         continue :yyl;
                     },
                     0xB6 => {
                         yycursor += 1;
-                        yystate = 188;
+                        yystate = 184;
                         continue :yyl;
                     },
                     0xB7 => {
                         yycursor += 1;
-                        yystate = 189;
+                        yystate = 185;
                         continue :yyl;
                     },
                     0xB8 => {
@@ -2685,7 +2627,7 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xBB => {
                         yycursor += 1;
-                        yystate = 191;
+                        yystate = 187;
                         continue :yyl;
                     },
                     0xBC => {
@@ -2695,26 +2637,26 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xBD => {
                         yycursor += 1;
-                        yystate = 193;
+                        yystate = 189;
                         continue :yyl;
                     },
                     0xBE => {
                         yycursor += 1;
-                        yystate = 194;
+                        yystate = 190;
                         continue :yyl;
                     },
                     0xBF => {
                         yycursor += 1;
-                        yystate = 195;
+                        yystate = 191;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            65 => {
+            63 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90 => {
@@ -2729,97 +2671,124 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0x92 => {
                         yycursor += 1;
-                        yystate = 198;
+                        yystate = 194;
                         continue :yyl;
                     },
                     0x93 => {
                         yycursor += 1;
-                        yystate = 199;
+                        yystate = 283;
                         continue :yyl;
                     },
                     0x94 => {
                         yycursor += 1;
-                        yystate = 200;
+                        yystate = 196;
                         continue :yyl;
                     },
                     0x96 => {
                         yycursor += 1;
-                        yystate = 283;
+                        yystate = 284;
                         continue :yyl;
                     },
                     0x97,
                     0xA0...0xA9,
-                    0xAD => {
+                    0xAD,
+                    0xB0,
+                    0xB2 => {
                         yycursor += 1;
-                        yystate = 60;
+                        yystate = 59;
                         continue :yyl;
                     },
                     0x98 => {
                         yycursor += 1;
-                        yystate = 202;
+                        yystate = 198;
+                        continue :yyl;
+                    },
+                    0x9A => {
+                        yycursor += 1;
+                        yystate = 199;
                         continue :yyl;
                     },
                     0x9B => {
                         yycursor += 1;
-                        yystate = 284;
-                        continue :yyl;
-                    },
-                    0x9D => {
-                        yycursor += 1;
                         yystate = 285;
                         continue :yyl;
                     },
-                    0x9E => {
+                    0x9C => {
                         yycursor += 1;
                         yystate = 286;
                         continue :yyl;
                     },
-                    0xAA => {
-                        yycursor += 1;
-                        yystate = 206;
-                        continue :yyl;
-                    },
-                    0xAB => {
-                        yycursor += 1;
-                        yystate = 207;
-                        continue :yyl;
-                    },
-                    0xAC => {
-                        yycursor += 1;
-                        yystate = 208;
-                        continue :yyl;
-                    },
-                    0xAE => {
-                        yycursor += 1;
-                        yystate = 209;
-                        continue :yyl;
-                    },
-                    0xAF => {
-                        yycursor += 1;
-                        yystate = 210;
-                        continue :yyl;
-                    },
-                    else => {
-                        yystate = 36;
-                        continue :yyl;
-                    },
-                }
-            },
-            66 => {
-                yych = yyinput[yycursor];
-                switch (yych) {
-                    0xA0 => {
+                    0x9D => {
                         yycursor += 1;
                         yystate = 287;
                         continue :yyl;
                     },
+                    0x9E => {
+                        yycursor += 1;
+                        yystate = 288;
+                        continue :yyl;
+                    },
+                    0x9F => {
+                        yycursor += 1;
+                        yystate = 289;
+                        continue :yyl;
+                    },
+                    0xAA => {
+                        yycursor += 1;
+                        yystate = 203;
+                        continue :yyl;
+                    },
+                    0xAB => {
+                        yycursor += 1;
+                        yystate = 204;
+                        continue :yyl;
+                    },
+                    0xAC => {
+                        yycursor += 1;
+                        yystate = 205;
+                        continue :yyl;
+                    },
+                    0xAE => {
+                        yycursor += 1;
+                        yystate = 206;
+                        continue :yyl;
+                    },
+                    0xAF => {
+                        yycursor += 1;
+                        yystate = 207;
+                        continue :yyl;
+                    },
+                    0xB1 => {
+                        yycursor += 1;
+                        yystate = 208;
+                        continue :yyl;
+                    },
+                    0xB3 => {
+                        yycursor += 1;
+                        yystate = 209;
+                        continue :yyl;
+                    },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            67 => {
+            64 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0xA0 => {
+                        yycursor += 1;
+                        yystate = 290;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            65 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x95,
@@ -2831,7 +2800,39 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            66 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x98,
+                    0xA0...0xAA,
+                    0xB0...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            67 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x87,
+                    0x89...0x8F,
+                    0xA0...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -2839,34 +2840,18 @@ fn lex(yyinput: [:0]const u8) bool {
             68 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x98,
-                    0xA0...0xAA => {
+                    0x80...0x89 => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
             69 => {
-                yych = yyinput[yycursor];
-                switch (yych) {
-                    0xA0...0xB4,
-                    0xB6...0xBD => {
-                        yycursor += 1;
-                        yystate = 3;
-                        continue :yyl;
-                    },
-                    else => {
-                        yystate = 36;
-                        continue :yyl;
-                    },
-                }
-            },
-            70 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x84...0xB9,
@@ -2876,12 +2861,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            71 => {
+            70 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90,
@@ -2892,12 +2877,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            72 => {
+            71 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80,
@@ -2913,12 +2898,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            73 => {
+            72 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x8E,
@@ -2931,12 +2916,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            74 => {
+            73 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x85...0x8A,
@@ -2951,12 +2936,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            75 => {
+            74 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x99...0x9C,
@@ -2967,12 +2952,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            76 => {
+            75 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x85...0x8D,
@@ -2987,12 +2972,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            77 => {
+            76 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90,
@@ -3003,12 +2988,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            78 => {
+            77 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x85...0x8C,
@@ -3023,12 +3008,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            79 => {
+            78 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x9C...0x9D,
@@ -3039,12 +3024,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            80 => {
+            79 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x83,
@@ -3062,12 +3047,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            81 => {
+            80 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90 => {
@@ -3076,12 +3061,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            82 => {
+            81 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x85...0x8C,
@@ -3094,27 +3079,28 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            83 => {
+            82 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x98...0x9A,
+                    0x9C...0x9D,
                     0xA0...0xA1 => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            84 => {
+            83 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80,
@@ -3129,15 +3115,15 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            85 => {
+            84 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x9E,
+                    0x9C...0x9E,
                     0xA0...0xA1,
                     0xB1...0xB2 => {
                         yycursor += 1;
@@ -3145,15 +3131,15 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            86 => {
+            85 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x85...0x8C,
+                    0x84...0x8C,
                     0x8E...0x90,
                     0x92...0xBA,
                     0xBD => {
@@ -3162,12 +3148,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            87 => {
+            86 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x8E,
@@ -3179,12 +3165,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            88 => {
+            87 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x85...0x96,
@@ -3196,12 +3182,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            89 => {
+            88 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x86 => {
@@ -3210,12 +3196,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            90 => {
+            89 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x81...0xB0,
@@ -3225,12 +3211,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            91 => {
+            90 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x81...0x82,
@@ -3246,12 +3232,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            92 => {
+            91 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x84,
@@ -3262,12 +3248,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            93 => {
+            92 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80 => {
@@ -3276,12 +3262,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            94 => {
+            93 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x87,
@@ -3291,12 +3277,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            95 => {
+            94 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x88...0x8C => {
@@ -3305,12 +3291,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            96 => {
+            95 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAA,
@@ -3320,12 +3306,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            97 => {
+            96 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90...0x95,
@@ -3339,12 +3325,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            98 => {
+            97 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x81,
@@ -3355,12 +3341,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            99 => {
+            98 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x85,
@@ -3373,12 +3359,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            100 => {
+            99 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x88,
@@ -3392,12 +3378,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            101 => {
+            100 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x88,
@@ -3410,12 +3396,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            102 => {
+            101 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80,
@@ -3427,12 +3413,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            103 => {
+            102 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x90,
@@ -3443,12 +3429,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            104 => {
+            103 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9A => {
@@ -3457,12 +3443,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            105 => {
+            104 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8F,
@@ -3472,12 +3458,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            106 => {
+            105 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB5,
@@ -3487,12 +3473,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            107 => {
+            106 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x81...0xBF => {
@@ -3501,12 +3487,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            108 => {
+            107 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAC,
@@ -3516,12 +3502,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            109 => {
+            108 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x81...0x9A,
@@ -3531,12 +3517,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            110 => {
+            109 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAA,
@@ -3546,28 +3532,27 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            111 => {
+            110 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x8C,
-                    0x8E...0x91,
-                    0xA0...0xB1 => {
+                    0x80...0x91,
+                    0x9F...0xB1 => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            112 => {
+            111 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x91,
@@ -3578,12 +3563,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            113 => {
+            112 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB3 => {
@@ -3592,12 +3577,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            114 => {
+            113 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x97,
@@ -3607,12 +3592,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            115 => {
+            114 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xA0...0xBF => {
@@ -3621,12 +3606,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            116 => {
+            115 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB8 => {
@@ -3635,12 +3620,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            117 => {
+            116 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x84,
@@ -3652,12 +3637,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            118 => {
+            117 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB5 => {
@@ -3666,12 +3651,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            119 => {
+            118 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9E => {
@@ -3680,12 +3665,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            120 => {
+            119 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90...0xAD,
@@ -3695,12 +3680,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            121 => {
+            120 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAB,
@@ -3710,26 +3695,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            122 => {
-                yych = yyinput[yycursor];
-                switch (yych) {
-                    0x80...0x89 => {
-                        yycursor += 1;
-                        yystate = 3;
-                        continue :yyl;
-                    },
-                    else => {
-                        yystate = 36;
-                        continue :yyl;
-                    },
-                }
-            },
-            123 => {
+            121 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x96,
@@ -3739,12 +3710,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            124 => {
+            122 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x94 => {
@@ -3753,12 +3724,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            125 => {
+            123 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xA7 => {
@@ -3767,12 +3738,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            126 => {
+            124 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x85...0xB3 => {
@@ -3781,26 +3752,26 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            127 => {
+            125 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x85...0x8B => {
+                    0x85...0x8C => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            128 => {
+            126 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x83...0xA0,
@@ -3811,12 +3782,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            129 => {
+            127 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xA5 => {
@@ -3825,12 +3796,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            130 => {
+            128 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xA3 => {
@@ -3839,12 +3810,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            131 => {
+            129 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x8D...0x8F,
@@ -3854,15 +3825,15 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            132 => {
+            130 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x88,
+                    0x80...0x8A,
                     0x90...0xBA,
                     0xBD...0xBF => {
                         yycursor += 1;
@@ -3870,12 +3841,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            133 => {
+            131 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xA9...0xAC,
@@ -3887,12 +3858,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            134 => {
+            132 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x95,
@@ -3903,12 +3874,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            135 => {
+            133 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x85,
@@ -3923,12 +3894,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            136 => {
+            134 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB4,
@@ -3939,12 +3910,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            137 => {
+            135 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x82...0x84,
@@ -3959,12 +3930,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            138 => {
+            136 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xB1,
@@ -3974,12 +3945,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            139 => {
+            137 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90...0x9C => {
@@ -3988,12 +3959,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            140 => {
+            138 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x82,
@@ -4012,12 +3983,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            141 => {
+            139 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x85...0x89,
@@ -4028,12 +3999,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            142 => {
+            140 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x88 => {
@@ -4042,42 +4013,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            143 => {
-                yych = yyinput[yycursor];
-                switch (yych) {
-                    0x80...0xAE,
-                    0xB0...0xBF => {
-                        yycursor += 1;
-                        yystate = 3;
-                        continue :yyl;
-                    },
-                    else => {
-                        yystate = 36;
-                        continue :yyl;
-                    },
-                }
-            },
-            144 => {
-                yych = yyinput[yycursor];
-                switch (yych) {
-                    0x80...0x9E,
-                    0xA0...0xBF => {
-                        yycursor += 1;
-                        yystate = 3;
-                        continue :yyl;
-                    },
-                    else => {
-                        yystate = 36;
-                        continue :yyl;
-                    },
-                }
-            },
-            145 => {
+            141 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xA4,
@@ -4088,12 +4029,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            146 => {
+            142 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xA5,
@@ -4105,12 +4046,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            147 => {
+            143 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xA7,
@@ -4120,12 +4061,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            148 => {
+            144 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x96,
@@ -4138,12 +4079,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            149 => {
+            145 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x86,
@@ -4155,12 +4096,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            150 => {
+            146 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xAF => {
@@ -4169,12 +4110,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            151 => {
+            147 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x85...0x87,
@@ -4186,12 +4127,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            152 => {
+            148 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x96,
@@ -4202,12 +4143,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            153 => {
+            149 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xBA,
@@ -4217,12 +4158,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            154 => {
+            150 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x85...0xAF,
@@ -4232,27 +4173,27 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            155 => {
+            151 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8E,
-                    0xA0...0xBA => {
+                    0xA0...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            156 => {
+            152 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xB0...0xBF => {
@@ -4261,26 +4202,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            157 => {
-                yych = yyinput[yycursor];
-                switch (yych) {
-                    0x80...0xAF => {
-                        yycursor += 1;
-                        yystate = 3;
-                        continue :yyl;
-                    },
-                    else => {
-                        yystate = 36;
-                        continue :yyl;
-                    },
-                }
-            },
-            158 => {
+            153 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8C => {
@@ -4289,12 +4216,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            159 => {
+            154 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90...0xBD => {
@@ -4303,12 +4230,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            160 => {
+            155 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8C,
@@ -4319,12 +4246,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            161 => {
+            156 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAE,
@@ -4334,12 +4261,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            162 => {
+            157 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9D,
@@ -4349,12 +4276,26 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            163 => {
+            158 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0xAF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            159 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x97...0x9F,
@@ -4364,12 +4305,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            164 => {
+            160 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x88,
@@ -4379,27 +4320,27 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            165 => {
+            161 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x82...0x86,
-                    0xB7...0xBF => {
+                    0x80...0x9C,
+                    0xB1...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            166 => {
+            162 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x81,
@@ -4411,12 +4352,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            167 => {
+            163 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x82...0xB3 => {
@@ -4425,12 +4366,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            168 => {
+            164 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xB2...0xB7,
@@ -4441,12 +4382,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            169 => {
+            165 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x8A...0xA5,
@@ -4456,12 +4397,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            170 => {
+            166 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x86,
@@ -4471,12 +4412,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            171 => {
+            167 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x84...0xB2 => {
@@ -4485,12 +4426,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            172 => {
+            168 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x8F,
@@ -4502,12 +4443,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            173 => {
+            169 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xA8 => {
@@ -4516,12 +4457,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            174 => {
+            170 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x82,
@@ -4534,12 +4475,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            175 => {
+            171 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAF,
@@ -4551,12 +4492,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            176 => {
+            172 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80,
@@ -4569,12 +4510,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            177 => {
+            173 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x81...0x86,
@@ -4588,28 +4529,28 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            178 => {
+            174 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9A,
-                    0x9C...0xA7,
+                    0x9C...0xA9,
                     0xB0...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            179 => {
+            175 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xA2 => {
@@ -4618,12 +4559,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            180 => {
+            176 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xA3,
@@ -4633,12 +4574,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            181 => {
+            177 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x86,
@@ -4648,12 +4589,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            182 => {
+            178 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAD,
@@ -4663,12 +4604,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            183 => {
+            179 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x99 => {
@@ -4677,12 +4618,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            184 => {
+            180 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x86,
@@ -4697,12 +4638,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            185 => {
+            181 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x81,
@@ -4713,12 +4654,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            186 => {
+            182 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x93...0xBF => {
@@ -4727,12 +4668,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            187 => {
+            183 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xBD => {
@@ -4741,12 +4682,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            188 => {
+            184 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8F,
@@ -4756,12 +4697,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            189 => {
+            185 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x87,
@@ -4771,12 +4712,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            190 => {
+            186 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xB0...0xB4,
@@ -4786,12 +4727,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            191 => {
+            187 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xBC => {
@@ -4800,12 +4741,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            192 => {
+            188 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xA1...0xBA => {
@@ -4814,12 +4755,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            193 => {
+            189 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x81...0x9A,
@@ -4829,12 +4770,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            194 => {
+            190 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xBE => {
@@ -4843,12 +4784,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            195 => {
+            191 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x82...0x87,
@@ -4860,22 +4801,22 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            196 => {
+            192 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80 => {
                         yycursor += 1;
-                        yystate = 288;
+                        yystate = 291;
                         continue :yyl;
                     },
                     0x81 => {
                         yycursor += 1;
-                        yystate = 289;
+                        yystate = 292;
                         continue :yyl;
                     },
                     0x82,
@@ -4883,68 +4824,77 @@ fn lex(yyinput: [:0]const u8) bool {
                     0x98...0x9B,
                     0xB0 => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0x83 => {
                         yycursor += 1;
-                        yystate = 290;
+                        yystate = 293;
                         continue :yyl;
                     },
                     0x85 => {
                         yycursor += 1;
-                        yystate = 291;
+                        yystate = 294;
                         continue :yyl;
                     },
                     0x8A => {
                         yycursor += 1;
-                        yystate = 292;
+                        yystate = 295;
                         continue :yyl;
                     },
                     0x8B => {
                         yycursor += 1;
-                        yystate = 293;
+                        yystate = 296;
                         continue :yyl;
                     },
                     0x8C => {
                         yycursor += 1;
-                        yystate = 294;
+                        yystate = 297;
                         continue :yyl;
                     },
                     0x8D => {
                         yycursor += 1;
-                        yystate = 295;
+                        yystate = 298;
                         continue :yyl;
                     },
                     0x8E => {
                         yycursor += 1;
-                        yystate = 162;
+                        yystate = 157;
                         continue :yyl;
                     },
                     0x8F => {
                         yycursor += 1;
-                        yystate = 296;
+                        yystate = 299;
                         continue :yyl;
                     },
                     0x92 => {
                         yycursor += 1;
-                        yystate = 297;
+                        yystate = 300;
                         continue :yyl;
                     },
                     0x93 => {
                         yycursor += 1;
-                        yystate = 298;
+                        yystate = 301;
                         continue :yyl;
                     },
                     0x94 => {
                         yycursor += 1;
-                        yystate = 299;
+                        yystate = 302;
                         continue :yyl;
                     },
-                    0x95,
-                    0xB4 => {
+                    0x95 => {
                         yycursor += 1;
-                        yystate = 130;
+                        yystate = 303;
+                        continue :yyl;
+                    },
+                    0x96 => {
+                        yycursor += 1;
+                        yystate = 304;
+                        continue :yyl;
+                    },
+                    0x97 => {
+                        yycursor += 1;
+                        yystate = 112;
                         continue :yyl;
                     },
                     0x9C => {
@@ -4954,101 +4904,482 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0x9D => {
                         yycursor += 1;
-                        yystate = 300;
-                        continue :yyl;
-                    },
-                    0xA0 => {
-                        yycursor += 1;
-                        yystate = 301;
-                        continue :yyl;
-                    },
-                    0xA1 => {
-                        yycursor += 1;
-                        yystate = 302;
-                        continue :yyl;
-                    },
-                    0xA2 => {
-                        yycursor += 1;
-                        yystate = 119;
-                        continue :yyl;
-                    },
-                    0xA3 => {
-                        yycursor += 1;
-                        yystate = 303;
-                        continue :yyl;
-                    },
-                    0xA4 => {
-                        yycursor += 1;
-                        yystate = 304;
-                        continue :yyl;
-                    },
-                    0xA6 => {
-                        yycursor += 1;
                         yystate = 305;
                         continue :yyl;
                     },
-                    0xA8 => {
+                    0x9E => {
                         yycursor += 1;
                         yystate = 306;
                         continue :yyl;
                     },
-                    0xA9 => {
+                    0xA0 => {
                         yycursor += 1;
                         yystate = 307;
                         continue :yyl;
                     },
-                    0xAA => {
+                    0xA1 => {
                         yycursor += 1;
                         yystate = 308;
                         continue :yyl;
                     },
-                    0xAB => {
-                        yycursor += 1;
-                        yystate = 309;
-                        continue :yyl;
-                    },
-                    0xAC => {
+                    0xA2 => {
                         yycursor += 1;
                         yystate = 118;
                         continue :yyl;
                     },
-                    0xAD => {
+                    0xA3 => {
+                        yycursor += 1;
+                        yystate = 309;
+                        continue :yyl;
+                    },
+                    0xA4 => {
                         yycursor += 1;
                         yystate = 310;
                         continue :yyl;
                     },
-                    0xAE => {
+                    0xA5 => {
+                        yycursor += 1;
+                        yystate = 179;
+                        continue :yyl;
+                    },
+                    0xA6 => {
                         yycursor += 1;
                         yystate = 311;
                         continue :yyl;
                     },
-                    0xB1 => {
-                        yycursor += 1;
-                        yystate = 142;
-                        continue :yyl;
-                    },
-                    0xB2...0xB3 => {
+                    0xA8 => {
                         yycursor += 1;
                         yystate = 312;
                         continue :yyl;
                     },
-                    0xBC => {
+                    0xA9 => {
                         yycursor += 1;
                         yystate = 313;
                         continue :yyl;
                     },
-                    0xBD => {
+                    0xAA => {
                         yycursor += 1;
                         yystate = 314;
                         continue :yyl;
                     },
-                    0xBF => {
+                    0xAB => {
                         yycursor += 1;
                         yystate = 315;
                         continue :yyl;
                     },
+                    0xAC => {
+                        yycursor += 1;
+                        yystate = 117;
+                        continue :yyl;
+                    },
+                    0xAD => {
+                        yycursor += 1;
+                        yystate = 316;
+                        continue :yyl;
+                    },
+                    0xAE => {
+                        yycursor += 1;
+                        yystate = 317;
+                        continue :yyl;
+                    },
+                    0xB1 => {
+                        yycursor += 1;
+                        yystate = 140;
+                        continue :yyl;
+                    },
+                    0xB2...0xB3 => {
+                        yycursor += 1;
+                        yystate = 318;
+                        continue :yyl;
+                    },
+                    0xB4 => {
+                        yycursor += 1;
+                        yystate = 128;
+                        continue :yyl;
+                    },
+                    0xB5 => {
+                        yycursor += 1;
+                        yystate = 319;
+                        continue :yyl;
+                    },
+                    0xB6 => {
+                        yycursor += 1;
+                        yystate = 320;
+                        continue :yyl;
+                    },
+                    0xBA => {
+                        yycursor += 1;
+                        yystate = 321;
+                        continue :yyl;
+                    },
+                    0xBB => {
+                        yycursor += 1;
+                        yystate = 322;
+                        continue :yyl;
+                    },
+                    0xBC => {
+                        yycursor += 1;
+                        yystate = 323;
+                        continue :yyl;
+                    },
+                    0xBD => {
+                        yycursor += 1;
+                        yystate = 324;
+                        continue :yyl;
+                    },
+                    0xBE => {
+                        yycursor += 1;
+                        yystate = 325;
+                        continue :yyl;
+                    },
+                    0xBF => {
+                        yycursor += 1;
+                        yystate = 326;
+                        continue :yyl;
+                    },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            193 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80 => {
+                        yycursor += 1;
+                        yystate = 327;
+                        continue :yyl;
+                    },
+                    0x81 => {
+                        yycursor += 1;
+                        yystate = 328;
+                        continue :yyl;
+                    },
+                    0x82 => {
+                        yycursor += 1;
+                        yystate = 329;
+                        continue :yyl;
+                    },
+                    0x83 => {
+                        yycursor += 1;
+                        yystate = 330;
+                        continue :yyl;
+                    },
+                    0x84 => {
+                        yycursor += 1;
+                        yystate = 331;
+                        continue :yyl;
+                    },
+                    0x85 => {
+                        yycursor += 1;
+                        yystate = 332;
+                        continue :yyl;
+                    },
+                    0x86 => {
+                        yycursor += 1;
+                        yystate = 333;
+                        continue :yyl;
+                    },
+                    0x87 => {
+                        yycursor += 1;
+                        yystate = 334;
+                        continue :yyl;
+                    },
+                    0x88 => {
+                        yycursor += 1;
+                        yystate = 335;
+                        continue :yyl;
+                    },
+                    0x89 => {
+                        yycursor += 1;
+                        yystate = 92;
+                        continue :yyl;
+                    },
+                    0x8A => {
+                        yycursor += 1;
+                        yystate = 336;
+                        continue :yyl;
+                    },
+                    0x8B => {
+                        yycursor += 1;
+                        yystate = 118;
+                        continue :yyl;
+                    },
+                    0x8C => {
+                        yycursor += 1;
+                        yystate = 77;
+                        continue :yyl;
+                    },
+                    0x8D => {
+                        yycursor += 1;
+                        yystate = 337;
+                        continue :yyl;
+                    },
+                    0x8E => {
+                        yycursor += 1;
+                        yystate = 338;
+                        continue :yyl;
+                    },
+                    0x8F => {
+                        yycursor += 1;
+                        yystate = 339;
+                        continue :yyl;
+                    },
+                    0x90 => {
+                        yycursor += 1;
+                        yystate = 294;
+                        continue :yyl;
+                    },
+                    0x91 => {
+                        yycursor += 1;
+                        yystate = 340;
+                        continue :yyl;
+                    },
+                    0x92,
+                    0x98 => {
+                        yycursor += 1;
+                        yystate = 158;
+                        continue :yyl;
+                    },
+                    0x93 => {
+                        yycursor += 1;
+                        yystate = 341;
+                        continue :yyl;
+                    },
+                    0x96 => {
+                        yycursor += 1;
+                        yystate = 342;
+                        continue :yyl;
+                    },
+                    0x97 => {
+                        yycursor += 1;
+                        yystate = 343;
+                        continue :yyl;
+                    },
+                    0x99 => {
+                        yycursor += 1;
+                        yystate = 344;
+                        continue :yyl;
+                    },
+                    0x9A => {
+                        yycursor += 1;
+                        yystate = 345;
+                        continue :yyl;
+                    },
+                    0x9C => {
+                        yycursor += 1;
+                        yystate = 103;
+                        continue :yyl;
+                    },
+                    0x9D => {
+                        yycursor += 1;
+                        yystate = 88;
+                        continue :yyl;
+                    },
+                    0xA0 => {
+                        yycursor += 1;
+                        yystate = 346;
+                        continue :yyl;
+                    },
+                    0xA2 => {
+                        yycursor += 1;
+                        yystate = 114;
+                        continue :yyl;
+                    },
+                    0xA3 => {
+                        yycursor += 1;
+                        yystate = 347;
+                        continue :yyl;
+                    },
+                    0xA4 => {
+                        yycursor += 1;
+                        yystate = 348;
+                        continue :yyl;
+                    },
+                    0xA5 => {
+                        yycursor += 1;
+                        yystate = 349;
+                        continue :yyl;
+                    },
+                    0xA6 => {
+                        yycursor += 1;
+                        yystate = 350;
+                        continue :yyl;
+                    },
+                    0xA7 => {
+                        yycursor += 1;
+                        yystate = 351;
+                        continue :yyl;
+                    },
+                    0xA8 => {
+                        yycursor += 1;
+                        yystate = 352;
+                        continue :yyl;
+                    },
+                    0xA9 => {
+                        yycursor += 1;
+                        yystate = 353;
+                        continue :yyl;
+                    },
+                    0xAA => {
+                        yycursor += 1;
+                        yystate = 354;
+                        continue :yyl;
+                    },
+                    0xAB => {
+                        yycursor += 1;
+                        yystate = 115;
+                        continue :yyl;
+                    },
+                    0xAF => {
+                        yycursor += 1;
+                        yystate = 355;
+                        continue :yyl;
+                    },
+                    0xB0 => {
+                        yycursor += 1;
+                        yystate = 356;
+                        continue :yyl;
+                    },
+                    0xB1 => {
+                        yycursor += 1;
+                        yystate = 357;
+                        continue :yyl;
+                    },
+                    0xB2 => {
+                        yycursor += 1;
+                        yystate = 358;
+                        continue :yyl;
+                    },
+                    0xB4 => {
+                        yycursor += 1;
+                        yystate = 359;
+                        continue :yyl;
+                    },
+                    0xB5 => {
+                        yycursor += 1;
+                        yystate = 360;
+                        continue :yyl;
+                    },
+                    0xB6 => {
+                        yycursor += 1;
+                        yystate = 361;
+                        continue :yyl;
+                    },
+                    0xB7 => {
+                        yycursor += 1;
+                        yystate = 362;
+                        continue :yyl;
+                    },
+                    0xBB => {
+                        yycursor += 1;
+                        yystate = 363;
+                        continue :yyl;
+                    },
+                    0xBC => {
+                        yycursor += 1;
+                        yystate = 364;
+                        continue :yyl;
+                    },
+                    0xBE => {
+                        yycursor += 1;
+                        yystate = 365;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            194 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x8D,
+                    0x90,
+                    0x92...0x94 => {
+                        yycursor += 1;
+                        yystate = 37;
+                        continue :yyl;
+                    },
+                    0x8E => {
+                        yycursor += 1;
+                        yystate = 179;
+                        continue :yyl;
+                    },
+                    0x91 => {
+                        yycursor += 1;
+                        yystate = 342;
+                        continue :yyl;
+                    },
+                    0x95 => {
+                        yycursor += 1;
+                        yystate = 366;
+                        continue :yyl;
+                    },
+                    0xBE => {
+                        yycursor += 1;
+                        yystate = 50;
+                        continue :yyl;
+                    },
+                    0xBF => {
+                        yycursor += 1;
+                        yystate = 367;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            195 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x8F,
+                    0x92...0xBF => {
+                        yycursor += 1;
+                        yystate = 37;
+                        continue :yyl;
+                    },
+                    0x90 => {
+                        yycursor += 1;
+                        yystate = 158;
+                        continue :yyl;
+                    },
+                    0x91 => {
+                        yycursor += 1;
+                        yystate = 368;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            196 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x8E,
+                    0x90...0x98 => {
+                        yycursor += 1;
+                        yystate = 37;
+                        continue :yyl;
+                    },
+                    0x8F => {
+                        yycursor += 1;
+                        yystate = 293;
+                        continue :yyl;
+                    },
+                    0x99 => {
+                        yycursor += 1;
+                        yystate = 88;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5056,194 +5387,85 @@ fn lex(yyinput: [:0]const u8) bool {
             197 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80 => {
-                        yycursor += 1;
-                        yystate = 316;
-                        continue :yyl;
-                    },
-                    0x82 => {
-                        yycursor += 1;
-                        yystate = 317;
-                        continue :yyl;
-                    },
-                    0x83 => {
-                        yycursor += 1;
-                        yystate = 318;
-                        continue :yyl;
-                    },
                     0x84 => {
                         yycursor += 1;
-                        yystate = 319;
+                        yystate = 369;
                         continue :yyl;
                     },
-                    0x85 => {
+                    0xA0...0xA7,
+                    0xB9,
+                    0xBC => {
                         yycursor += 1;
-                        yystate = 320;
-                        continue :yyl;
-                    },
-                    0x86 => {
-                        yycursor += 1;
-                        yystate = 321;
-                        continue :yyl;
-                    },
-                    0x87 => {
-                        yycursor += 1;
-                        yystate = 322;
-                        continue :yyl;
-                    },
-                    0x88 => {
-                        yycursor += 1;
-                        yystate = 323;
-                        continue :yyl;
-                    },
-                    0x8A => {
-                        yycursor += 1;
-                        yystate = 324;
-                        continue :yyl;
-                    },
-                    0x8B => {
-                        yycursor += 1;
-                        yystate = 119;
-                        continue :yyl;
-                    },
-                    0x8C => {
-                        yycursor += 1;
-                        yystate = 78;
-                        continue :yyl;
-                    },
-                    0x8D => {
-                        yycursor += 1;
-                        yystate = 325;
-                        continue :yyl;
-                    },
-                    0x90 => {
-                        yycursor += 1;
-                        yystate = 291;
-                        continue :yyl;
-                    },
-                    0x91 => {
-                        yycursor += 1;
-                        yystate = 326;
-                        continue :yyl;
-                    },
-                    0x92,
-                    0x98 => {
-                        yycursor += 1;
-                        yystate = 157;
-                        continue :yyl;
-                    },
-                    0x93 => {
-                        yycursor += 1;
-                        yystate = 327;
-                        continue :yyl;
-                    },
-                    0x96 => {
-                        yycursor += 1;
-                        yystate = 328;
-                        continue :yyl;
-                    },
-                    0x97 => {
-                        yycursor += 1;
-                        yystate = 329;
-                        continue :yyl;
-                    },
-                    0x99 => {
-                        yycursor += 1;
-                        yystate = 330;
-                        continue :yyl;
-                    },
-                    0x9A => {
-                        yycursor += 1;
-                        yystate = 331;
-                        continue :yyl;
-                    },
-                    0x9C => {
-                        yycursor += 1;
-                        yystate = 104;
-                        continue :yyl;
-                    },
-                    0xA0 => {
-                        yycursor += 1;
-                        yystate = 332;
-                        continue :yyl;
-                    },
-                    0xA2 => {
-                        yycursor += 1;
-                        yystate = 115;
-                        continue :yyl;
-                    },
-                    0xA3 => {
-                        yycursor += 1;
-                        yystate = 333;
-                        continue :yyl;
-                    },
-                    0xA6 => {
-                        yycursor += 1;
-                        yystate = 334;
-                        continue :yyl;
-                    },
-                    0xA7 => {
-                        yycursor += 1;
-                        yystate = 335;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0xA8 => {
                         yycursor += 1;
-                        yystate = 336;
+                        yystate = 115;
                         continue :yyl;
                     },
                     0xA9 => {
                         yycursor += 1;
-                        yystate = 337;
+                        yystate = 370;
                         continue :yyl;
                     },
                     0xAA => {
                         yycursor += 1;
-                        yystate = 338;
+                        yystate = 190;
                         continue :yyl;
                     },
                     0xAB => {
                         yycursor += 1;
-                        yystate = 116;
+                        yystate = 371;
                         continue :yyl;
                     },
-                    0xB0 => {
+                    0xAC => {
                         yycursor += 1;
-                        yystate = 339;
+                        yystate = 158;
                         continue :yyl;
                     },
-                    0xB1 => {
+                    0xAD => {
                         yycursor += 1;
-                        yystate = 340;
+                        yystate = 372;
                         continue :yyl;
                     },
-                    0xB2 => {
+                    0xAE => {
                         yycursor += 1;
-                        yystate = 341;
-                        continue :yyl;
-                    },
-                    0xB4 => {
-                        yycursor += 1;
-                        yystate = 342;
+                        yystate = 358;
                         continue :yyl;
                     },
                     0xB5 => {
                         yycursor += 1;
-                        yystate = 343;
+                        yystate = 373;
                         continue :yyl;
                     },
-                    0xB6 => {
+                    0xBA => {
                         yycursor += 1;
-                        yystate = 344;
+                        yystate = 374;
                         continue :yyl;
                     },
                     0xBB => {
                         yycursor += 1;
-                        yystate = 345;
+                        yystate = 375;
+                        continue :yyl;
+                    },
+                    0xBD => {
+                        yycursor += 1;
+                        yystate = 376;
+                        continue :yyl;
+                    },
+                    0xBE => {
+                        yycursor += 1;
+                        yystate = 377;
+                        continue :yyl;
+                    },
+                    0xBF => {
+                        yycursor += 1;
+                        yystate = 378;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5251,30 +5473,29 @@ fn lex(yyinput: [:0]const u8) bool {
             198 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x8D,
-                    0x90,
-                    0x92...0x94 => {
+                    0x80...0xB2,
+                    0xB6 => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
-                    0x8E => {
+                    0xB3 => {
                         yycursor += 1;
-                        yystate = 183;
+                        yystate = 379;
                         continue :yyl;
                     },
-                    0x91 => {
+                    0xB4 => {
                         yycursor += 1;
-                        yystate = 328;
+                        yystate = 118;
                         continue :yyl;
                     },
-                    0x95 => {
+                    0xB7 => {
                         yycursor += 1;
-                        yystate = 346;
+                        yystate = 318;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5282,18 +5503,13 @@ fn lex(yyinput: [:0]const u8) bool {
             199 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x8F => {
+                    0xBF => {
                         yycursor += 1;
-                        yystate = 38;
-                        continue :yyl;
-                    },
-                    0x90 => {
-                        yycursor += 1;
-                        yystate = 328;
+                        yystate = 380;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5301,18 +5517,40 @@ fn lex(yyinput: [:0]const u8) bool {
             200 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x90...0x98 => {
+                    0x80...0x83,
+                    0x86...0x8A,
+                    0xB0 => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
-                    0x99 => {
+                    0x84 => {
                         yycursor += 1;
-                        yystate = 89;
+                        yystate = 381;
+                        continue :yyl;
+                    },
+                    0x85 => {
+                        yycursor += 1;
+                        yystate = 382;
+                        continue :yyl;
+                    },
+                    0x8B => {
+                        yycursor += 1;
+                        yystate = 383;
+                        continue :yyl;
+                    },
+                    0xB1 => {
+                        yycursor += 1;
+                        yystate = 384;
+                        continue :yyl;
+                    },
+                    0xB2 => {
+                        yycursor += 1;
+                        yystate = 385;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5320,60 +5558,74 @@ fn lex(yyinput: [:0]const u8) bool {
             201 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0xA0...0xA7,
-                    0xB9,
+                    0x90,
+                    0x96...0x99 => {
+                        yycursor += 1;
+                        yystate = 37;
+                        continue :yyl;
+                    },
+                    0x91 => {
+                        yycursor += 1;
+                        yystate = 386;
+                        continue :yyl;
+                    },
+                    0x92 => {
+                        yycursor += 1;
+                        yystate = 387;
+                        continue :yyl;
+                    },
+                    0x93 => {
+                        yycursor += 1;
+                        yystate = 388;
+                        continue :yyl;
+                    },
+                    0x94 => {
+                        yycursor += 1;
+                        yystate = 389;
+                        continue :yyl;
+                    },
+                    0x95 => {
+                        yycursor += 1;
+                        yystate = 390;
+                        continue :yyl;
+                    },
+                    0x9A => {
+                        yycursor += 1;
+                        yystate = 391;
+                        continue :yyl;
+                    },
+                    0x9B => {
+                        yycursor += 1;
+                        yystate = 392;
+                        continue :yyl;
+                    },
+                    0x9C => {
+                        yycursor += 1;
+                        yystate = 393;
+                        continue :yyl;
+                    },
+                    0x9D => {
+                        yycursor += 1;
+                        yystate = 394;
+                        continue :yyl;
+                    },
+                    0x9E => {
+                        yycursor += 1;
+                        yystate = 395;
+                        continue :yyl;
+                    },
+                    0x9F => {
+                        yycursor += 1;
+                        yystate = 396;
+                        continue :yyl;
+                    },
                     0xBC => {
                         yycursor += 1;
-                        yystate = 38;
-                        continue :yyl;
-                    },
-                    0xA8 => {
-                        yycursor += 1;
-                        yystate = 116;
-                        continue :yyl;
-                    },
-                    0xA9 => {
-                        yycursor += 1;
-                        yystate = 119;
-                        continue :yyl;
-                    },
-                    0xAB => {
-                        yycursor += 1;
-                        yystate = 347;
-                        continue :yyl;
-                    },
-                    0xAC => {
-                        yycursor += 1;
-                        yystate = 157;
-                        continue :yyl;
-                    },
-                    0xAD => {
-                        yycursor += 1;
-                        yystate = 348;
-                        continue :yyl;
-                    },
-                    0xAE => {
-                        yycursor += 1;
-                        yystate = 341;
-                        continue :yyl;
-                    },
-                    0xBD => {
-                        yycursor += 1;
-                        yystate = 349;
-                        continue :yyl;
-                    },
-                    0xBE => {
-                        yycursor += 1;
-                        yystate = 350;
-                        continue :yyl;
-                    },
-                    0xBF => {
-                        yycursor += 1;
-                        yystate = 351;
+                        yystate = 397;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5381,24 +5633,89 @@ fn lex(yyinput: [:0]const u8) bool {
             202 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x9E,
-                    0xA0...0xAA => {
+                    0x80 => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 152;
+                        continue :yyl;
+                    },
+                    0x81 => {
+                        yycursor += 1;
+                        yystate = 210;
+                        continue :yyl;
+                    },
+                    0x84 => {
+                        yycursor += 1;
+                        yystate = 398;
+                        continue :yyl;
+                    },
+                    0x85 => {
+                        yycursor += 1;
+                        yystate = 399;
+                        continue :yyl;
+                    },
+                    0x8A => {
+                        yycursor += 1;
+                        yystate = 371;
+                        continue :yyl;
+                    },
+                    0x8B => {
+                        yycursor += 1;
+                        yystate = 346;
+                        continue :yyl;
+                    },
+                    0x93 => {
+                        yycursor += 1;
+                        yystate = 400;
+                        continue :yyl;
+                    },
+                    0x97 => {
+                        yycursor += 1;
+                        yystate = 401;
+                        continue :yyl;
+                    },
+                    0x9B => {
+                        yycursor += 1;
+                        yystate = 402;
                         continue :yyl;
                     },
                     0x9F => {
                         yycursor += 1;
-                        yystate = 255;
+                        yystate = 403;
                         continue :yyl;
                     },
-                    0xAB => {
+                    0xA0...0xA2,
+                    0xA4 => {
                         yycursor += 1;
-                        yystate = 312;
+                        yystate = 37;
+                        continue :yyl;
+                    },
+                    0xA3 => {
+                        yycursor += 1;
+                        yystate = 404;
+                        continue :yyl;
+                    },
+                    0xA5 => {
+                        yycursor += 1;
+                        yystate = 405;
+                        continue :yyl;
+                    },
+                    0xB8 => {
+                        yycursor += 1;
+                        yystate = 406;
+                        continue :yyl;
+                    },
+                    0xB9 => {
+                        yycursor += 1;
+                        yystate = 407;
+                        continue :yyl;
+                    },
+                    0xBA => {
+                        yycursor += 1;
+                        yystate = 408;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5406,40 +5723,19 @@ fn lex(yyinput: [:0]const u8) bool {
             203 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x83,
-                    0x86...0x8A,
-                    0xB0 => {
+                    0x80...0x9A,
+                    0x9C...0xBF => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
-                    0x84 => {
+                    0x9B => {
                         yycursor += 1;
-                        yystate = 119;
-                        continue :yyl;
-                    },
-                    0x85 => {
-                        yycursor += 1;
-                        yystate = 352;
-                        continue :yyl;
-                    },
-                    0x8B => {
-                        yycursor += 1;
-                        yystate = 353;
-                        continue :yyl;
-                    },
-                    0xB1 => {
-                        yycursor += 1;
-                        yystate = 354;
-                        continue :yyl;
-                    },
-                    0xB2 => {
-                        yycursor += 1;
-                        yystate = 355;
+                        yystate = 409;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5447,69 +5743,19 @@ fn lex(yyinput: [:0]const u8) bool {
             204 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x90,
-                    0x96...0x99 => {
+                    0x80...0x9F,
+                    0xA1...0xBF => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
-                    0x91 => {
+                    0xA0 => {
                         yycursor += 1;
-                        yystate = 356;
-                        continue :yyl;
-                    },
-                    0x92 => {
-                        yycursor += 1;
-                        yystate = 357;
-                        continue :yyl;
-                    },
-                    0x93 => {
-                        yycursor += 1;
-                        yystate = 358;
-                        continue :yyl;
-                    },
-                    0x94 => {
-                        yycursor += 1;
-                        yystate = 359;
-                        continue :yyl;
-                    },
-                    0x95 => {
-                        yycursor += 1;
-                        yystate = 360;
-                        continue :yyl;
-                    },
-                    0x9A => {
-                        yycursor += 1;
-                        yystate = 361;
-                        continue :yyl;
-                    },
-                    0x9B => {
-                        yycursor += 1;
-                        yystate = 362;
-                        continue :yyl;
-                    },
-                    0x9C => {
-                        yycursor += 1;
-                        yystate = 363;
-                        continue :yyl;
-                    },
-                    0x9D => {
-                        yycursor += 1;
-                        yystate = 364;
-                        continue :yyl;
-                    },
-                    0x9E => {
-                        yycursor += 1;
-                        yystate = 365;
-                        continue :yyl;
-                    },
-                    0x9F => {
-                        yycursor += 1;
-                        yystate = 366;
+                        yystate = 157;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5517,54 +5763,19 @@ fn lex(yyinput: [:0]const u8) bool {
             205 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x84 => {
+                    0x80...0xB9,
+                    0xBB...0xBF => {
                         yycursor += 1;
-                        yystate = 367;
-                        continue :yyl;
-                    },
-                    0x85 => {
-                        yycursor += 1;
-                        yystate = 368;
-                        continue :yyl;
-                    },
-                    0x8B => {
-                        yycursor += 1;
-                        yystate = 332;
-                        continue :yyl;
-                    },
-                    0xA0...0xA2,
-                    0xA4 => {
-                        yycursor += 1;
-                        yystate = 38;
-                        continue :yyl;
-                    },
-                    0xA3 => {
-                        yycursor += 1;
-                        yystate = 369;
-                        continue :yyl;
-                    },
-                    0xA5 => {
-                        yycursor += 1;
-                        yystate = 370;
-                        continue :yyl;
-                    },
-                    0xB8 => {
-                        yycursor += 1;
-                        yystate = 371;
-                        continue :yyl;
-                    },
-                    0xB9 => {
-                        yycursor += 1;
-                        yystate = 372;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0xBA => {
                         yycursor += 1;
-                        yystate = 373;
+                        yystate = 178;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5572,19 +5783,24 @@ fn lex(yyinput: [:0]const u8) bool {
             206 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x9A,
-                    0x9C...0xBF => {
+                    0x80...0xAE,
+                    0xB0...0xB8 => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
-                    0x9B => {
+                    0xAF => {
                         yycursor += 1;
-                        yystate = 374;
+                        yystate = 410;
+                        continue :yyl;
+                    },
+                    0xB9 => {
+                        yycursor += 1;
+                        yystate = 369;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5592,25 +5808,18 @@ fn lex(yyinput: [:0]const u8) bool {
             207 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x9B,
-                    0x9D...0x9F,
-                    0xA1...0xBF => {
+                    0xA0...0xA7 => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
-                    0x9C => {
+                    0xA8 => {
                         yycursor += 1;
-                        yystate = 291;
-                        continue :yyl;
-                    },
-                    0xA0 => {
-                        yycursor += 1;
-                        yystate = 162;
+                        yystate = 369;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5618,19 +5827,19 @@ fn lex(yyinput: [:0]const u8) bool {
             208 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0xB9,
-                    0xBB...0xBF => {
+                    0x80...0x8C,
+                    0x8E...0xBF => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
-                    0xBA => {
+                    0x8D => {
                         yycursor += 1;
-                        yystate = 375;
+                        yystate = 411;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5638,42 +5847,23 @@ fn lex(yyinput: [:0]const u8) bool {
             209 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0xAE => {
+                    0x80...0x90 => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
-                    0xAF => {
+                    0x91 => {
                         yycursor += 1;
-                        yystate = 376;
+                        yystate = 412;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
             210 => {
-                yych = yyinput[yycursor];
-                switch (yych) {
-                    0xA0...0xA7 => {
-                        yycursor += 1;
-                        yystate = 38;
-                        continue :yyl;
-                    },
-                    0xA8 => {
-                        yycursor += 1;
-                        yystate = 377;
-                        continue :yyl;
-                    },
-                    else => {
-                        yystate = 36;
-                        continue :yyl;
-                    },
-                }
-            },
-            211 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAD => {
@@ -5682,7 +5872,23 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            211 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x9B,
+                    0xA0...0xAA,
+                    0xB0...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5690,14 +5896,15 @@ fn lex(yyinput: [:0]const u8) bool {
             212 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x9B,
-                    0xA0...0xAA => {
+                    0x80...0x87,
+                    0x89...0x8F,
+                    0x97...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5705,14 +5912,14 @@ fn lex(yyinput: [:0]const u8) bool {
             213 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x93...0xA1,
+                    0x80...0xA1,
                     0xA3...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5728,7 +5935,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5749,7 +5956,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5771,7 +5978,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5794,7 +6001,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5814,7 +6021,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5835,7 +6042,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5855,7 +6062,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5876,7 +6083,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5887,7 +6094,7 @@ fn lex(yyinput: [:0]const u8) bool {
                     0x80...0x84,
                     0x87...0x88,
                     0x8B...0x8D,
-                    0x96...0x97,
+                    0x95...0x97,
                     0x9C...0x9D,
                     0x9F...0xA3,
                     0xA6...0xAF,
@@ -5897,7 +6104,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5921,7 +6128,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5940,7 +6147,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5952,13 +6159,13 @@ fn lex(yyinput: [:0]const u8) bool {
                     0x8E...0x90,
                     0x92...0xA8,
                     0xAA...0xB9,
-                    0xBD...0xBF => {
+                    0xBC...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5971,6 +6178,7 @@ fn lex(yyinput: [:0]const u8) bool {
                     0x8A...0x8D,
                     0x95...0x96,
                     0x98...0x9A,
+                    0x9C...0x9D,
                     0xA0...0xA3,
                     0xA6...0xAF => {
                         yycursor += 1;
@@ -5978,7 +6186,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -5998,7 +6206,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6010,16 +6218,16 @@ fn lex(yyinput: [:0]const u8) bool {
                     0x86...0x88,
                     0x8A...0x8D,
                     0x95...0x96,
-                    0x9E,
+                    0x9C...0x9E,
                     0xA0...0xA3,
                     0xA6...0xAF,
-                    0xB1...0xB2 => {
+                    0xB1...0xB3 => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6027,8 +6235,7 @@ fn lex(yyinput: [:0]const u8) bool {
             229 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x83,
-                    0x85...0x8C,
+                    0x80...0x8C,
                     0x8E...0x90,
                     0x92...0xBF => {
                         yycursor += 1;
@@ -6036,7 +6243,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6056,7 +6263,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6064,7 +6271,7 @@ fn lex(yyinput: [:0]const u8) bool {
             231 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x82...0x83,
+                    0x81...0x83,
                     0x85...0x96,
                     0x9A...0xB1,
                     0xB3...0xBB,
@@ -6074,7 +6281,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6094,7 +6301,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6108,7 +6315,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6123,7 +6330,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6142,7 +6349,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6152,7 +6359,7 @@ fn lex(yyinput: [:0]const u8) bool {
                 switch (yych) {
                     0x80...0x84,
                     0x86,
-                    0x88...0x8D,
+                    0x88...0x8E,
                     0x90...0x99,
                     0x9C...0x9F => {
                         yycursor += 1;
@@ -6160,7 +6367,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6180,7 +6387,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6196,7 +6403,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6212,7 +6419,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6226,7 +6433,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6241,7 +6448,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6256,7 +6463,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6264,15 +6471,14 @@ fn lex(yyinput: [:0]const u8) bool {
             243 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x8C,
-                    0x8E...0x94,
-                    0xA0...0xB4 => {
+                    0x80...0x95,
+                    0x9F...0xB4 => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6289,7 +6495,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6306,7 +6512,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6315,14 +6521,14 @@ fn lex(yyinput: [:0]const u8) bool {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x8B...0x8D,
-                    0x90...0x99,
+                    0x8F...0x99,
                     0xA0...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6337,7 +6543,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6353,7 +6559,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6368,7 +6574,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6383,7 +6589,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6398,7 +6604,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6414,7 +6620,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6425,13 +6631,14 @@ fn lex(yyinput: [:0]const u8) bool {
                     0x80...0x89,
                     0x90...0x99,
                     0xA7,
-                    0xB0...0xBD => {
+                    0xB0...0xBD,
+                    0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6439,7 +6646,22 @@ fn lex(yyinput: [:0]const u8) bool {
             254 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x8B,
+                    0x80...0x9D,
+                    0xA0...0xAB => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            255 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x8C,
                     0x90...0x99,
                     0xAB...0xB3 => {
                         yycursor += 1;
@@ -6447,12 +6669,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            255 => {
+            256 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB7 => {
@@ -6461,12 +6683,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            256 => {
+            257 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x89,
@@ -6476,12 +6698,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            257 => {
+            258 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90...0x92,
@@ -6491,22 +6713,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
-                        continue :yyl;
-                    },
-                }
-            },
-            258 => {
-                yych = yyinput[yycursor];
-                switch (yych) {
-                    0x80...0xB9,
-                    0xBB...0xBF => {
-                        yycursor += 1;
-                        yystate = 3;
-                        continue :yyl;
-                    },
-                    else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6521,7 +6728,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6538,7 +6745,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6554,7 +6761,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6569,7 +6776,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6585,7 +6792,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6603,7 +6810,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6620,7 +6827,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6637,7 +6844,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6652,7 +6859,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6668,7 +6875,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6676,13 +6883,14 @@ fn lex(yyinput: [:0]const u8) bool {
             269 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0xA7 => {
+                    0x80...0xA7,
+                    0xAC => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6700,7 +6908,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6715,7 +6923,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6731,7 +6939,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6745,7 +6953,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6762,7 +6970,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6779,7 +6987,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6795,7 +7003,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6814,7 +7022,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6830,7 +7038,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6846,7 +7054,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6862,7 +7070,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -6872,12 +7080,12 @@ fn lex(yyinput: [:0]const u8) bool {
                 switch (yych) {
                     0x80 => {
                         yycursor += 1;
-                        yystate = 288;
+                        yystate = 291;
                         continue :yyl;
                     },
                     0x81 => {
                         yycursor += 1;
-                        yystate = 289;
+                        yystate = 292;
                         continue :yyl;
                     },
                     0x82,
@@ -6885,72 +7093,82 @@ fn lex(yyinput: [:0]const u8) bool {
                     0x98...0x9B,
                     0xB0 => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0x83 => {
                         yycursor += 1;
-                        yystate = 290;
+                        yystate = 293;
                         continue :yyl;
                     },
                     0x85 => {
                         yycursor += 1;
-                        yystate = 291;
+                        yystate = 294;
                         continue :yyl;
                     },
                     0x87 => {
                         yycursor += 1;
-                        yystate = 378;
+                        yystate = 413;
                         continue :yyl;
                     },
                     0x8A => {
                         yycursor += 1;
-                        yystate = 292;
+                        yystate = 295;
                         continue :yyl;
                     },
                     0x8B => {
                         yycursor += 1;
-                        yystate = 379;
+                        yystate = 414;
                         continue :yyl;
                     },
                     0x8C => {
                         yycursor += 1;
-                        yystate = 294;
+                        yystate = 297;
                         continue :yyl;
                     },
                     0x8D => {
                         yycursor += 1;
-                        yystate = 380;
+                        yystate = 415;
                         continue :yyl;
                     },
                     0x8E => {
                         yycursor += 1;
-                        yystate = 162;
+                        yystate = 157;
                         continue :yyl;
                     },
                     0x8F => {
                         yycursor += 1;
-                        yystate = 296;
+                        yystate = 299;
                         continue :yyl;
                     },
                     0x92 => {
                         yycursor += 1;
-                        yystate = 381;
+                        yystate = 416;
                         continue :yyl;
                     },
                     0x93 => {
                         yycursor += 1;
-                        yystate = 298;
+                        yystate = 301;
                         continue :yyl;
                     },
                     0x94 => {
                         yycursor += 1;
-                        yystate = 299;
+                        yystate = 302;
                         continue :yyl;
                     },
                     0x95 => {
                         yycursor += 1;
-                        yystate = 130;
+                        yystate = 303;
+                        continue :yyl;
+                    },
+                    0x96 => {
+                        yycursor += 1;
+                        yystate = 304;
+                        continue :yyl;
+                    },
+                    0x97 => {
+                        yycursor += 1;
+                        yystate = 112;
                         continue :yyl;
                     },
                     0x9C => {
@@ -6960,106 +7178,141 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0x9D => {
                         yycursor += 1;
-                        yystate = 300;
+                        yystate = 305;
+                        continue :yyl;
+                    },
+                    0x9E => {
+                        yycursor += 1;
+                        yystate = 306;
                         continue :yyl;
                     },
                     0xA0 => {
                         yycursor += 1;
-                        yystate = 301;
+                        yystate = 307;
                         continue :yyl;
                     },
                     0xA1 => {
                         yycursor += 1;
-                        yystate = 302;
+                        yystate = 308;
                         continue :yyl;
                     },
                     0xA2 => {
                         yycursor += 1;
-                        yystate = 119;
+                        yystate = 118;
                         continue :yyl;
                     },
                     0xA3 => {
                         yycursor += 1;
-                        yystate = 303;
+                        yystate = 309;
                         continue :yyl;
                     },
                     0xA4 => {
                         yycursor += 1;
-                        yystate = 304;
+                        yystate = 310;
+                        continue :yyl;
+                    },
+                    0xA5 => {
+                        yycursor += 1;
+                        yystate = 179;
                         continue :yyl;
                     },
                     0xA6 => {
                         yycursor += 1;
-                        yystate = 305;
+                        yystate = 311;
                         continue :yyl;
                     },
                     0xA8 => {
                         yycursor += 1;
-                        yystate = 382;
+                        yystate = 417;
                         continue :yyl;
                     },
                     0xA9 => {
                         yycursor += 1;
-                        yystate = 307;
+                        yystate = 313;
                         continue :yyl;
                     },
                     0xAA => {
                         yycursor += 1;
-                        yystate = 308;
+                        yystate = 314;
                         continue :yyl;
                     },
                     0xAB => {
                         yycursor += 1;
-                        yystate = 383;
+                        yystate = 418;
                         continue :yyl;
                     },
                     0xAC => {
                         yycursor += 1;
-                        yystate = 118;
+                        yystate = 117;
                         continue :yyl;
                     },
                     0xAD => {
                         yycursor += 1;
-                        yystate = 310;
+                        yystate = 316;
                         continue :yyl;
                     },
                     0xAE => {
                         yycursor += 1;
-                        yystate = 311;
+                        yystate = 317;
                         continue :yyl;
                     },
                     0xB1 => {
                         yycursor += 1;
-                        yystate = 142;
+                        yystate = 140;
                         continue :yyl;
                     },
                     0xB2...0xB3 => {
                         yycursor += 1;
-                        yystate = 312;
+                        yystate = 318;
                         continue :yyl;
                     },
                     0xB4 => {
                         yycursor += 1;
-                        yystate = 384;
+                        yystate = 419;
+                        continue :yyl;
+                    },
+                    0xB5 => {
+                        yycursor += 1;
+                        yystate = 420;
+                        continue :yyl;
+                    },
+                    0xB6 => {
+                        yycursor += 1;
+                        yystate = 320;
+                        continue :yyl;
+                    },
+                    0xBA => {
+                        yycursor += 1;
+                        yystate = 421;
+                        continue :yyl;
+                    },
+                    0xBB => {
+                        yycursor += 1;
+                        yystate = 422;
                         continue :yyl;
                     },
                     0xBC => {
                         yycursor += 1;
-                        yystate = 313;
+                        yystate = 323;
                         continue :yyl;
                     },
                     0xBD => {
                         yycursor += 1;
-                        yystate = 293;
+                        yystate = 423;
+                        continue :yyl;
+                    },
+                    0xBE => {
+                        yycursor += 1;
+                        yystate = 324;
                         continue :yyl;
                     },
                     0xBF => {
                         yycursor += 1;
-                        yystate = 315;
+                        yystate = 326;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -7073,178 +7326,238 @@ fn lex(yyinput: [:0]const u8) bool {
                     0x92,
                     0x98 => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0x81 => {
                         yycursor += 1;
-                        yystate = 385;
+                        yystate = 424;
                         continue :yyl;
                     },
                     0x82,
                     0xA0 => {
                         yycursor += 1;
-                        yystate = 290;
+                        yystate = 293;
                         continue :yyl;
                     },
                     0x83 => {
                         yycursor += 1;
-                        yystate = 386;
+                        yystate = 425;
                         continue :yyl;
                     },
                     0x84 => {
                         yycursor += 1;
-                        yystate = 387;
+                        yystate = 426;
                         continue :yyl;
                     },
                     0x85 => {
                         yycursor += 1;
-                        yystate = 388;
+                        yystate = 427;
                         continue :yyl;
                     },
                     0x87 => {
                         yycursor += 1;
-                        yystate = 389;
+                        yystate = 428;
                         continue :yyl;
                     },
                     0x88 => {
                         yycursor += 1;
-                        yystate = 390;
+                        yystate = 429;
+                        continue :yyl;
+                    },
+                    0x89 => {
+                        yycursor += 1;
+                        yystate = 430;
                         continue :yyl;
                     },
                     0x8A => {
                         yycursor += 1;
-                        yystate = 324;
+                        yystate = 336;
                         continue :yyl;
                     },
                     0x8B => {
                         yycursor += 1;
-                        yystate = 391;
+                        yystate = 431;
                         continue :yyl;
                     },
                     0x8C => {
                         yycursor += 1;
-                        yystate = 392;
+                        yystate = 432;
                         continue :yyl;
                     },
                     0x8D => {
                         yycursor += 1;
-                        yystate = 393;
+                        yystate = 433;
+                        continue :yyl;
+                    },
+                    0x8E => {
+                        yycursor += 1;
+                        yystate = 434;
+                        continue :yyl;
+                    },
+                    0x8F => {
+                        yycursor += 1;
+                        yystate = 435;
                         continue :yyl;
                     },
                     0x91 => {
                         yycursor += 1;
-                        yystate = 394;
+                        yystate = 436;
                         continue :yyl;
                     },
                     0x93 => {
                         yycursor += 1;
-                        yystate = 395;
+                        yystate = 437;
                         continue :yyl;
                     },
                     0x96 => {
                         yycursor += 1;
-                        yystate = 396;
+                        yystate = 438;
                         continue :yyl;
                     },
                     0x97 => {
                         yycursor += 1;
-                        yystate = 397;
+                        yystate = 439;
                         continue :yyl;
                     },
                     0x99 => {
                         yycursor += 1;
-                        yystate = 398;
+                        yystate = 440;
                         continue :yyl;
                     },
                     0x9A,
                     0xAB => {
                         yycursor += 1;
-                        yystate = 116;
+                        yystate = 115;
                         continue :yyl;
                     },
                     0x9B => {
                         yycursor += 1;
-                        yystate = 122;
+                        yystate = 441;
                         continue :yyl;
                     },
                     0x9C => {
                         yycursor += 1;
-                        yystate = 399;
+                        yystate = 442;
+                        continue :yyl;
+                    },
+                    0x9D => {
+                        yycursor += 1;
+                        yystate = 88;
                         continue :yyl;
                     },
                     0xA2 => {
                         yycursor += 1;
-                        yystate = 115;
+                        yystate = 114;
                         continue :yyl;
                     },
                     0xA3 => {
                         yycursor += 1;
-                        yystate = 400;
+                        yystate = 443;
+                        continue :yyl;
+                    },
+                    0xA4 => {
+                        yycursor += 1;
+                        yystate = 444;
+                        continue :yyl;
+                    },
+                    0xA5 => {
+                        yycursor += 1;
+                        yystate = 445;
                         continue :yyl;
                     },
                     0xA6 => {
                         yycursor += 1;
-                        yystate = 334;
+                        yystate = 350;
                         continue :yyl;
                     },
                     0xA7 => {
                         yycursor += 1;
-                        yystate = 401;
+                        yystate = 446;
                         continue :yyl;
                     },
                     0xA8 => {
                         yycursor += 1;
-                        yystate = 194;
+                        yystate = 190;
                         continue :yyl;
                     },
                     0xA9 => {
                         yycursor += 1;
-                        yystate = 402;
+                        yystate = 447;
                         continue :yyl;
                     },
                     0xAA => {
                         yycursor += 1;
-                        yystate = 403;
+                        yystate = 448;
+                        continue :yyl;
+                    },
+                    0xAD => {
+                        yycursor += 1;
+                        yystate = 449;
+                        continue :yyl;
+                    },
+                    0xAF => {
+                        yycursor += 1;
+                        yystate = 450;
                         continue :yyl;
                     },
                     0xB0 => {
                         yycursor += 1;
-                        yystate = 404;
+                        yystate = 451;
                         continue :yyl;
                     },
                     0xB1 => {
                         yycursor += 1;
-                        yystate = 405;
+                        yystate = 452;
                         continue :yyl;
                     },
                     0xB2 => {
                         yycursor += 1;
-                        yystate = 406;
+                        yystate = 453;
                         continue :yyl;
                     },
                     0xB4 => {
                         yycursor += 1;
-                        yystate = 407;
+                        yystate = 454;
                         continue :yyl;
                     },
                     0xB5 => {
                         yycursor += 1;
-                        yystate = 408;
+                        yystate = 455;
                         continue :yyl;
                     },
                     0xB6 => {
                         yycursor += 1;
-                        yystate = 409;
+                        yystate = 456;
+                        continue :yyl;
+                    },
+                    0xB7 => {
+                        yycursor += 1;
+                        yystate = 457;
                         continue :yyl;
                     },
                     0xBB => {
                         yycursor += 1;
-                        yystate = 315;
+                        yystate = 458;
+                        continue :yyl;
+                    },
+                    0xBC => {
+                        yycursor += 1;
+                        yystate = 459;
+                        continue :yyl;
+                    },
+                    0xBD => {
+                        yycursor += 1;
+                        yystate = 460;
+                        continue :yyl;
+                    },
+                    0xBE => {
+                        yycursor += 1;
+                        yystate = 365;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -7252,26 +7565,61 @@ fn lex(yyinput: [:0]const u8) bool {
             283 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
+                    0x80...0x8F,
+                    0x92...0xBF => {
+                        yycursor += 1;
+                        yystate = 37;
+                        continue :yyl;
+                    },
+                    0x90 => {
+                        yycursor += 1;
+                        yystate = 158;
+                        continue :yyl;
+                    },
+                    0x91 => {
+                        yycursor += 1;
+                        yystate = 461;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            284 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x84 => {
+                        yycursor += 1;
+                        yystate = 412;
+                        continue :yyl;
+                    },
                     0xA0...0xA7,
                     0xB9,
                     0xBC => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 37;
                         continue :yyl;
                     },
                     0xA8 => {
                         yycursor += 1;
-                        yystate = 116;
+                        yystate = 115;
                         continue :yyl;
                     },
                     0xA9 => {
                         yycursor += 1;
-                        yystate = 410;
+                        yystate = 462;
+                        continue :yyl;
+                    },
+                    0xAA => {
+                        yycursor += 1;
+                        yystate = 190;
                         continue :yyl;
                     },
                     0xAB => {
                         yycursor += 1;
-                        yystate = 120;
+                        yystate = 463;
                         continue :yyl;
                     },
                     0xAC => {
@@ -7281,72 +7629,46 @@ fn lex(yyinput: [:0]const u8) bool {
                     },
                     0xAD => {
                         yycursor += 1;
-                        yystate = 411;
+                        yystate = 464;
                         continue :yyl;
                     },
                     0xAE => {
                         yycursor += 1;
-                        yystate = 341;
+                        yystate = 358;
+                        continue :yyl;
+                    },
+                    0xB5 => {
+                        yycursor += 1;
+                        yystate = 465;
+                        continue :yyl;
+                    },
+                    0xBA => {
+                        yycursor += 1;
+                        yystate = 374;
+                        continue :yyl;
+                    },
+                    0xBB => {
+                        yycursor += 1;
+                        yystate = 375;
                         continue :yyl;
                     },
                     0xBD => {
                         yycursor += 1;
-                        yystate = 412;
+                        yystate = 466;
                         continue :yyl;
                     },
                     0xBE => {
                         yycursor += 1;
-                        yystate = 413;
+                        yystate = 467;
                         continue :yyl;
                     },
                     0xBF => {
                         yycursor += 1;
-                        yystate = 351;
+                        yystate = 468;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
-                        continue :yyl;
-                    },
-                }
-            },
-            284 => {
-                yych = yyinput[yycursor];
-                switch (yych) {
-                    0x80...0x83,
-                    0x86...0x8A,
-                    0xB0 => {
-                        yycursor += 1;
-                        yystate = 38;
-                        continue :yyl;
-                    },
-                    0x84 => {
-                        yycursor += 1;
-                        yystate = 119;
-                        continue :yyl;
-                    },
-                    0x85 => {
-                        yycursor += 1;
-                        yystate = 352;
-                        continue :yyl;
-                    },
-                    0x8B => {
-                        yycursor += 1;
-                        yystate = 353;
-                        continue :yyl;
-                    },
-                    0xB1 => {
-                        yycursor += 1;
-                        yystate = 354;
-                        continue :yyl;
-                    },
-                    0xB2 => {
-                        yycursor += 1;
-                        yystate = 414;
-                        continue :yyl;
-                    },
-                    else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -7354,99 +7676,40 @@ fn lex(yyinput: [:0]const u8) bool {
             285 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
+                    0x80...0x83,
+                    0x86...0x8A,
+                    0xB0 => {
+                        yycursor += 1;
+                        yystate = 37;
+                        continue :yyl;
+                    },
+                    0x84 => {
+                        yycursor += 1;
+                        yystate = 381;
+                        continue :yyl;
+                    },
                     0x85 => {
                         yycursor += 1;
-                        yystate = 415;
+                        yystate = 382;
                         continue :yyl;
                     },
-                    0x86 => {
+                    0x8B => {
                         yycursor += 1;
-                        yystate = 416;
+                        yystate = 383;
                         continue :yyl;
                     },
-                    0x89 => {
+                    0xB1 => {
                         yycursor += 1;
-                        yystate = 417;
+                        yystate = 384;
                         continue :yyl;
                     },
-                    0x90,
-                    0x96...0x99 => {
+                    0xB2 => {
                         yycursor += 1;
-                        yystate = 38;
-                        continue :yyl;
-                    },
-                    0x91 => {
-                        yycursor += 1;
-                        yystate = 356;
-                        continue :yyl;
-                    },
-                    0x92 => {
-                        yycursor += 1;
-                        yystate = 357;
-                        continue :yyl;
-                    },
-                    0x93 => {
-                        yycursor += 1;
-                        yystate = 358;
-                        continue :yyl;
-                    },
-                    0x94 => {
-                        yycursor += 1;
-                        yystate = 359;
-                        continue :yyl;
-                    },
-                    0x95 => {
-                        yycursor += 1;
-                        yystate = 360;
-                        continue :yyl;
-                    },
-                    0x9A => {
-                        yycursor += 1;
-                        yystate = 361;
-                        continue :yyl;
-                    },
-                    0x9B => {
-                        yycursor += 1;
-                        yystate = 362;
-                        continue :yyl;
-                    },
-                    0x9C => {
-                        yycursor += 1;
-                        yystate = 363;
-                        continue :yyl;
-                    },
-                    0x9D => {
-                        yycursor += 1;
-                        yystate = 364;
-                        continue :yyl;
-                    },
-                    0x9E => {
-                        yycursor += 1;
-                        yystate = 365;
-                        continue :yyl;
-                    },
-                    0x9F => {
-                        yycursor += 1;
-                        yystate = 418;
-                        continue :yyl;
-                    },
-                    0xA8 => {
-                        yycursor += 1;
-                        yystate = 419;
-                        continue :yyl;
-                    },
-                    0xA9 => {
-                        yycursor += 1;
-                        yystate = 420;
-                        continue :yyl;
-                    },
-                    0xAA => {
-                        yycursor += 1;
-                        yystate = 421;
+                        yystate = 469;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -7454,59 +7717,23 @@ fn lex(yyinput: [:0]const u8) bool {
             286 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80 => {
+                    0xB3 => {
                         yycursor += 1;
-                        yystate = 422;
+                        yystate = 470;
                         continue :yyl;
                     },
-                    0x84 => {
+                    0xBC => {
                         yycursor += 1;
-                        yystate = 423;
+                        yystate = 178;
                         continue :yyl;
                     },
-                    0x85 => {
+                    0xBD => {
                         yycursor += 1;
-                        yystate = 424;
-                        continue :yyl;
-                    },
-                    0x8B => {
-                        yycursor += 1;
-                        yystate = 425;
-                        continue :yyl;
-                    },
-                    0xA0...0xA2,
-                    0xA4 => {
-                        yycursor += 1;
-                        yystate = 38;
-                        continue :yyl;
-                    },
-                    0xA3 => {
-                        yycursor += 1;
-                        yystate = 426;
-                        continue :yyl;
-                    },
-                    0xA5 => {
-                        yycursor += 1;
-                        yystate = 427;
-                        continue :yyl;
-                    },
-                    0xB8 => {
-                        yycursor += 1;
-                        yystate = 371;
-                        continue :yyl;
-                    },
-                    0xB9 => {
-                        yycursor += 1;
-                        yystate = 372;
-                        continue :yyl;
-                    },
-                    0xBA => {
-                        yycursor += 1;
-                        yystate = 373;
+                        yystate = 88;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
@@ -7514,23 +7741,237 @@ fn lex(yyinput: [:0]const u8) bool {
             287 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x84...0x86 => {
+                    0x85 => {
                         yycursor += 1;
-                        yystate = 38;
+                        yystate = 471;
                         continue :yyl;
                     },
-                    0x87 => {
+                    0x86 => {
                         yycursor += 1;
-                        yystate = 157;
+                        yystate = 472;
+                        continue :yyl;
+                    },
+                    0x89 => {
+                        yycursor += 1;
+                        yystate = 473;
+                        continue :yyl;
+                    },
+                    0x90,
+                    0x96...0x99 => {
+                        yycursor += 1;
+                        yystate = 37;
+                        continue :yyl;
+                    },
+                    0x91 => {
+                        yycursor += 1;
+                        yystate = 386;
+                        continue :yyl;
+                    },
+                    0x92 => {
+                        yycursor += 1;
+                        yystate = 387;
+                        continue :yyl;
+                    },
+                    0x93 => {
+                        yycursor += 1;
+                        yystate = 388;
+                        continue :yyl;
+                    },
+                    0x94 => {
+                        yycursor += 1;
+                        yystate = 389;
+                        continue :yyl;
+                    },
+                    0x95 => {
+                        yycursor += 1;
+                        yystate = 390;
+                        continue :yyl;
+                    },
+                    0x9A => {
+                        yycursor += 1;
+                        yystate = 391;
+                        continue :yyl;
+                    },
+                    0x9B => {
+                        yycursor += 1;
+                        yystate = 392;
+                        continue :yyl;
+                    },
+                    0x9C => {
+                        yycursor += 1;
+                        yystate = 393;
+                        continue :yyl;
+                    },
+                    0x9D => {
+                        yycursor += 1;
+                        yystate = 394;
+                        continue :yyl;
+                    },
+                    0x9E => {
+                        yycursor += 1;
+                        yystate = 395;
+                        continue :yyl;
+                    },
+                    0x9F => {
+                        yycursor += 1;
+                        yystate = 474;
+                        continue :yyl;
+                    },
+                    0xA8 => {
+                        yycursor += 1;
+                        yystate = 475;
+                        continue :yyl;
+                    },
+                    0xA9 => {
+                        yycursor += 1;
+                        yystate = 476;
+                        continue :yyl;
+                    },
+                    0xAA => {
+                        yycursor += 1;
+                        yystate = 477;
+                        continue :yyl;
+                    },
+                    0xBC => {
+                        yycursor += 1;
+                        yystate = 397;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
             288 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80 => {
+                        yycursor += 1;
+                        yystate = 478;
+                        continue :yyl;
+                    },
+                    0x81 => {
+                        yycursor += 1;
+                        yystate = 210;
+                        continue :yyl;
+                    },
+                    0x82 => {
+                        yycursor += 1;
+                        yystate = 479;
+                        continue :yyl;
+                    },
+                    0x84 => {
+                        yycursor += 1;
+                        yystate = 480;
+                        continue :yyl;
+                    },
+                    0x85 => {
+                        yycursor += 1;
+                        yystate = 481;
+                        continue :yyl;
+                    },
+                    0x8A => {
+                        yycursor += 1;
+                        yystate = 482;
+                        continue :yyl;
+                    },
+                    0x8B => {
+                        yycursor += 1;
+                        yystate = 412;
+                        continue :yyl;
+                    },
+                    0x93 => {
+                        yycursor += 1;
+                        yystate = 483;
+                        continue :yyl;
+                    },
+                    0x97 => {
+                        yycursor += 1;
+                        yystate = 484;
+                        continue :yyl;
+                    },
+                    0x9B => {
+                        yycursor += 1;
+                        yystate = 485;
+                        continue :yyl;
+                    },
+                    0x9F => {
+                        yycursor += 1;
+                        yystate = 403;
+                        continue :yyl;
+                    },
+                    0xA0...0xA2,
+                    0xA4 => {
+                        yycursor += 1;
+                        yystate = 37;
+                        continue :yyl;
+                    },
+                    0xA3 => {
+                        yycursor += 1;
+                        yystate = 486;
+                        continue :yyl;
+                    },
+                    0xA5 => {
+                        yycursor += 1;
+                        yystate = 487;
+                        continue :yyl;
+                    },
+                    0xB8 => {
+                        yycursor += 1;
+                        yystate = 406;
+                        continue :yyl;
+                    },
+                    0xB9 => {
+                        yycursor += 1;
+                        yystate = 407;
+                        continue :yyl;
+                    },
+                    0xBA => {
+                        yycursor += 1;
+                        yystate = 408;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            289 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0xAF => {
+                        yycursor += 1;
+                        yystate = 470;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            290 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x84...0x86 => {
+                        yycursor += 1;
+                        yystate = 37;
+                        continue :yyl;
+                    },
+                    0x87 => {
+                        yycursor += 1;
+                        yystate = 158;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            291 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8B,
@@ -7543,12 +7984,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            289 => {
+            292 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8D,
@@ -7558,12 +7999,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            290 => {
+            293 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xBA => {
@@ -7572,12 +8013,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            291 => {
+            294 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB4 => {
@@ -7586,12 +8027,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            292 => {
+            295 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9C,
@@ -7601,12 +8042,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            293 => {
+            296 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x90 => {
@@ -7615,12 +8056,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            294 => {
+            297 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9F,
@@ -7630,12 +8071,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            295 => {
+            298 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8A,
@@ -7645,12 +8086,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            296 => {
+            299 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x83,
@@ -7661,12 +8102,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            297 => {
+            300 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9D,
@@ -7676,12 +8117,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            298 => {
+            301 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x93,
@@ -7691,12 +8132,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            299 => {
+            302 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xA7,
@@ -7706,12 +8147,48 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            300 => {
+            303 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0xA3,
+                    0xB0...0xBA,
+                    0xBC...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            304 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x8A,
+                    0x8C...0x92,
+                    0x94...0x95,
+                    0x97...0xA1,
+                    0xA3...0xB1,
+                    0xB3...0xB9,
+                    0xBB...0xBC => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            305 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x95,
@@ -7721,12 +8198,28 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            301 => {
+            306 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x85,
+                    0x87...0xB0,
+                    0xB2...0xBA => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            307 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x85,
@@ -7740,12 +8233,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            302 => {
+            308 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x95,
@@ -7755,12 +8248,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            303 => {
+            309 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xA0...0xB2,
@@ -7770,12 +8263,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            304 => {
+            310 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x95,
@@ -7785,12 +8278,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            305 => {
+            311 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB7,
@@ -7800,12 +8293,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            306 => {
+            312 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80,
@@ -7817,12 +8310,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            307 => {
+            313 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xA0...0xBC => {
@@ -7831,12 +8324,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            308 => {
+            314 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9C => {
@@ -7845,12 +8338,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            309 => {
+            315 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x87,
@@ -7860,12 +8353,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            310 => {
+            316 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x95,
@@ -7875,12 +8368,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            311 => {
+            317 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x91 => {
@@ -7889,12 +8382,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            312 => {
+            318 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB2 => {
@@ -7903,12 +8396,70 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            313 => {
+            319 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x8A...0xA5,
+                    0xAF...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            320 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x85 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            321 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0xA9,
+                    0xB0...0xB1 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            322 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x82...0x87 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            323 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9C,
@@ -7919,40 +8470,57 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            314 => {
+            324 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x85 => {
+                    0x80...0x85,
+                    0xB0...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            315 => {
+            325 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
+                    0x80...0x81,
+                    0xB0...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            326 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x84,
                     0xA0...0xB6 => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            316 => {
+            327 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x83...0xB7 => {
@@ -7961,12 +8529,27 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            317 => {
+            328 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0xB1...0xB2,
+                    0xB5 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            329 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x83...0xAF => {
@@ -7975,12 +8558,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            318 => {
+            330 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90...0xA8 => {
@@ -7989,12 +8572,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            319 => {
+            331 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x83...0xA6 => {
@@ -8003,15 +8586,16 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            320 => {
+            332 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x84,
+                    0x87,
                     0x90...0xB2,
                     0xB6 => {
                         yycursor += 1;
@@ -8019,12 +8603,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            321 => {
+            333 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x83...0xB2 => {
@@ -8033,12 +8617,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            322 => {
+            334 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x81...0x84,
@@ -8049,27 +8633,28 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            323 => {
+            335 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x91,
-                    0x93...0xAB => {
+                    0x93...0xAB,
+                    0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            324 => {
+            336 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x86,
@@ -8083,12 +8668,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            325 => {
+            337 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90,
@@ -8098,27 +8683,60 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            326 => {
+            338 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x87...0x8A,
-                    0x9F => {
+                    0x80...0x89,
+                    0x8B,
+                    0x8E,
+                    0x90...0xB5,
+                    0xB7 => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            327 => {
+            339 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x91,
+                    0x93 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            340 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x87...0x8A,
+                    0x9F...0xA1 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            341 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x84...0x85,
@@ -8128,12 +8746,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            328 => {
+            342 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAE => {
@@ -8142,12 +8760,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            329 => {
+            343 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x98...0x9B => {
@@ -8156,12 +8774,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            330 => {
+            344 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x84 => {
@@ -8170,12 +8788,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            331 => {
+            345 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAA,
@@ -8185,12 +8803,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            332 => {
+            346 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAB => {
@@ -8199,12 +8817,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            333 => {
+            347 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9F,
@@ -8214,12 +8832,45 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            334 => {
+            348 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x86,
+                    0x89,
+                    0x8C...0x93,
+                    0x95...0x96,
+                    0x98...0xAF,
+                    0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            349 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x81 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            350 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xA0...0xA7,
@@ -8229,12 +8880,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            335 => {
+            351 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x90,
@@ -8245,12 +8896,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            336 => {
+            352 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80,
@@ -8261,12 +8912,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            337 => {
+            353 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90,
@@ -8276,27 +8927,42 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            338 => {
+            354 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x89,
-                    0x9D => {
+                    0x9D,
+                    0xB0...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            339 => {
+            355 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0xA0 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            356 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x88,
@@ -8306,12 +8972,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            340 => {
+            357 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80,
@@ -8321,12 +8987,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            341 => {
+            358 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8F => {
@@ -8335,12 +9001,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            342 => {
+            359 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x86,
@@ -8351,12 +9017,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            343 => {
+            360 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x86,
@@ -8368,27 +9034,42 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            344 => {
+            361 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x89,
-                    0x98 => {
+                    0x98,
+                    0xB0...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            345 => {
+            362 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x9B => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            363 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xA0...0xB2 => {
@@ -8397,12 +9078,42 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            346 => {
+            364 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x82,
+                    0x84...0x90,
+                    0x92...0xB3 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            365 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0xB0 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            366 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x83 => {
@@ -8411,12 +9122,70 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            347 => {
+            367 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0xB0 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            368 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x81...0x86,
+                    0xA0...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            369 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x9D => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            370 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x9E,
+                    0xB0...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            371 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90...0xAD => {
@@ -8425,12 +9194,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            348 => {
+            372 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x83,
@@ -8441,12 +9210,55 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            349 => {
+            373 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0xAC => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            374 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0xA0...0xB8,
+                    0xBB...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            375 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x93 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            376 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8A,
@@ -8456,12 +9268,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            350 => {
+            377 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x93...0x9F => {
@@ -8470,30 +9282,78 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            351 => {
+            378 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xA0...0xA1,
-                    0xA3 => {
+                    0xA3,
+                    0xB2...0xB6 => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            352 => {
+            379 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x95,
+                    0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            380 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0xB0...0xB3,
+                    0xB5...0xBB,
+                    0xBD...0xBE => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            381 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0xA2,
+                    0xB2 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            382 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x90...0x92,
+                    0x95,
                     0xA4...0xA7,
                     0xB0...0xBF => {
                         yycursor += 1;
@@ -8501,12 +9361,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            353 => {
+            383 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xBB => {
@@ -8515,12 +9375,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            354 => {
+            384 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAA,
@@ -8530,12 +9390,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            355 => {
+            385 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x88,
@@ -8545,12 +9405,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            356 => {
+            386 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x94,
@@ -8560,12 +9420,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            357 => {
+            387 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9C,
@@ -8581,12 +9441,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            358 => {
+            388 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x83,
@@ -8596,12 +9456,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            359 => {
+            389 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x85,
@@ -8615,12 +9475,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            360 => {
+            390 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x84,
@@ -8632,12 +9492,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            361 => {
+            391 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xA5,
@@ -8647,12 +9507,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            362 => {
+            392 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80,
@@ -8664,12 +9524,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            363 => {
+            393 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x94,
@@ -8680,12 +9540,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            364 => {
+            394 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8E,
@@ -8696,12 +9556,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            365 => {
+            395 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x88,
@@ -8712,12 +9572,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            366 => {
+            396 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x82,
@@ -8727,12 +9587,27 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            367 => {
+            397 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x9E,
+                    0xA5...0xAA => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            398 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAC,
@@ -8742,12 +9617,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            368 => {
+            399 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x8E => {
@@ -8756,12 +9631,77 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            369 => {
+            400 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x90...0xAB => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            401 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x90...0xAD,
+                    0xB0 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            402 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x9E,
+                    0xA0...0xA2,
+                    0xA4...0xA5,
+                    0xA7...0xAD,
+                    0xB0...0xB4,
+                    0xBE...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            403 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0xA0...0xA6,
+                    0xA8...0xAB,
+                    0xAD...0xAE,
+                    0xB0...0xBE => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            404 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x84 => {
@@ -8770,12 +9710,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            370 => {
+            405 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x83,
@@ -8785,12 +9725,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            371 => {
+            406 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x83,
@@ -8807,12 +9747,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            372 => {
+            407 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x82,
@@ -8839,12 +9779,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            373 => {
+            408 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x89,
@@ -8857,69 +9797,70 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            374 => {
+            409 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x96 => {
+                    0x80...0x9F => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            375 => {
+            410 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0xA1,
+                    0x80...0xA0,
                     0xB0...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            376 => {
+            411 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0xA0 => {
+                    0x80...0x8A,
+                    0x90...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            377 => {
+            412 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x9D => {
+                    0x80...0xB9 => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            378 => {
+            413 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xBD => {
@@ -8928,12 +9869,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            379 => {
+            414 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x90,
@@ -8943,12 +9884,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            380 => {
+            415 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8A,
@@ -8958,12 +9899,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            381 => {
+            416 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9D,
@@ -8974,12 +9915,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            382 => {
+            417 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x83,
@@ -8994,12 +9935,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            383 => {
+            418 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x87,
@@ -9009,12 +9950,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            384 => {
+            419 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xA7,
@@ -9024,30 +9965,93 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            385 => {
+            420 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0xA5,
+                    0xA9...0xAD,
+                    0xAF...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            421 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0xA9,
+                    0xAB...0xAC,
+                    0xB0...0xB1 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            422 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x82...0x87,
+                    0xBA...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            423 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x90,
+                    0xB0...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            424 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x86,
-                    0xA6...0xAF,
+                    0xA6...0xB5,
                     0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            386 => {
+            425 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
+                    0x82,
                     0x90...0xA8,
                     0xB0...0xB9 => {
                         yycursor += 1;
@@ -9055,12 +10059,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            387 => {
+            426 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB4,
@@ -9070,15 +10074,15 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            388 => {
+            427 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x84...0x86,
+                    0x84...0x87,
                     0x90...0xB3,
                     0xB6 => {
                         yycursor += 1;
@@ -9086,45 +10090,59 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            389 => {
+            428 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x84,
                     0x89...0x8C,
-                    0x90...0x9A,
+                    0x8E...0x9A,
                     0x9C => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            390 => {
+            429 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x91,
                     0x93...0xB7,
-                    0xBE => {
+                    0xBE...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            391 => {
+            430 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x81 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            431 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAA,
@@ -9134,12 +10152,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            392 => {
+            432 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x83,
@@ -9155,12 +10173,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            393 => {
+            433 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x84,
@@ -9176,28 +10194,65 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            394 => {
+            434 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0x8A,
-                    0x90...0x99,
-                    0x9E...0x9F => {
+                    0x80...0x89,
+                    0x8B,
+                    0x8E,
+                    0x90...0xB5,
+                    0xB7...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            395 => {
+            435 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80,
+                    0x82,
+                    0x85,
+                    0x87...0x8A,
+                    0x8C...0x93,
+                    0xA1...0xA2 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            436 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x8A,
+                    0x90...0x99,
+                    0x9E...0xA1 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            437 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x85,
@@ -9208,12 +10263,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            396 => {
+            438 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB5,
@@ -9223,12 +10278,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            397 => {
+            439 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80,
@@ -9238,12 +10293,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            398 => {
+            440 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80,
@@ -9254,12 +10309,27 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            399 => {
+            441 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x89,
+                    0x90...0xA3 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            442 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9A,
@@ -9270,12 +10340,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            400 => {
+            443 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xA9,
@@ -9285,12 +10355,47 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            401 => {
+            444 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x86,
+                    0x89,
+                    0x8C...0x93,
+                    0x95...0x96,
+                    0x98...0xB5,
+                    0xB7...0xB8,
+                    0xBB...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            445 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x83,
+                    0x90...0x99 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            446 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x97,
@@ -9301,12 +10406,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            402 => {
+            447 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x87,
@@ -9316,27 +10421,57 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            403 => {
+            448 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x99,
-                    0x9D => {
+                    0x9D,
+                    0xB0...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            404 => {
+            449 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0xA0...0xA7 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            450 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0xA0,
+                    0xB0...0xB9 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            451 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x88,
@@ -9347,12 +10482,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            405 => {
+            452 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80,
@@ -9363,12 +10498,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            406 => {
+            453 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8F,
@@ -9379,12 +10514,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            407 => {
+            454 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x86,
@@ -9398,12 +10533,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            408 => {
+            455 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x87,
@@ -9416,44 +10551,137 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            409 => {
+            456 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8E,
                     0x90...0x91,
                     0x93...0x98,
+                    0xA0...0xA9,
+                    0xB0...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            457 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x9B,
                     0xA0...0xA9 => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            410 => {
+            458 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0xA0...0xB6 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            459 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x90,
+                    0x92...0xBA,
+                    0xBE...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            460 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x82,
+                    0x90...0x9A => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            461 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x95,
+                    0xA0...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            462 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x9E,
-                    0xA0...0xA9 => {
+                    0xA0...0xA9,
+                    0xB0...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            411 => {
+            463 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x89,
+                    0x90...0xAD,
+                    0xB0...0xB4 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            464 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x83,
@@ -9465,12 +10693,27 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            412 => {
+            465 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0xAC,
+                    0xB0...0xB9 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            466 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8A,
@@ -9480,12 +10723,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            413 => {
+            467 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x87,
@@ -9495,12 +10738,28 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            414 => {
+            468 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0xA0...0xA1,
+                    0xA3...0xA4,
+                    0xB0...0xB6 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            469 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x88,
@@ -9511,12 +10770,26 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            415 => {
+            470 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0xB0...0xB9 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            471 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0xA5...0xA9,
@@ -9527,12 +10800,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            416 => {
+            472 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x82,
@@ -9543,12 +10816,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            417 => {
+            473 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x82...0x84 => {
@@ -9557,12 +10830,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            418 => {
+            474 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x82,
@@ -9573,12 +10846,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            419 => {
+            475 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xB6,
@@ -9588,12 +10861,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            420 => {
+            476 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAC,
@@ -9603,12 +10876,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            421 => {
+            477 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x84,
@@ -9619,30 +10892,45 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            422 => {
+            478 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x86,
                     0x88...0x98,
                     0x9B...0xA1,
                     0xA3...0xA4,
-                    0xA6...0xAA => {
+                    0xA6...0xAA,
+                    0xB0...0xBF => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            423 => {
+            479 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x8F => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            480 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0xAC,
@@ -9652,12 +10940,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            424 => {
+            481 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x89,
@@ -9667,26 +10955,70 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            425 => {
+            482 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
-                    0x80...0xB9 => {
+                    0x90...0xAE => {
                         yycursor += 1;
                         yystate = 3;
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            426 => {
+            483 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x90...0xB9 => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            484 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x90...0xBA => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            485 => {
+                yych = yyinput[yycursor];
+                switch (yych) {
+                    0x80...0x9E,
+                    0xA0...0xB5,
+                    0xBE...0xBF => {
+                        yycursor += 1;
+                        yystate = 3;
+                        continue :yyl;
+                    },
+                    else => {
+                        yystate = 35;
+                        continue :yyl;
+                    },
+                }
+            },
+            486 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x84,
@@ -9696,12 +11028,12 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
             },
-            427 => {
+            487 => {
                 yych = yyinput[yycursor];
                 switch (yych) {
                     0x80...0x8B,
@@ -9711,7 +11043,7 @@ fn lex(yyinput: [:0]const u8) bool {
                         continue :yyl;
                     },
                     else => {
-                        yystate = 36;
+                        yystate = 35;
                         continue :yyl;
                     },
                 }
