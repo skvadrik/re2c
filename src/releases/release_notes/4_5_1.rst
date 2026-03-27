@@ -1,0 +1,7 @@
+Release 4.5.1
+=============
+
+This is a minor release that adds missing include files to the distribution
+(thanks to `jcfp  <https://github.com/jcfp>`_ for the bug report
+`#573 <https://github.com/skvadrik/re2c/issues/573>`_).
+See the changelog :ref:`releases/changelog/changelog:4.5.1 (2026-03-27)` for details.
