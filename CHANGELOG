@@ -2,6 +2,15 @@ Changelog
 =========
 
 
+4.5.1 (2026-03-27)
+~~~~~~~~~~~~~~~~~~
+
+- Added missing include files to the distribution
+  (`#573 <https://github.com/skvadrik/re2c/issues/573>`_).
+
+- Updated the documentation to mention the new include files.
+
+
 4.5 (2026-03-23)
 ~~~~~~~~~~~~~~~~
 
