@@ -38,8 +38,9 @@ The following encodings are supported:
   fixed-length Unicode encoding with code space ``[0-0x10FFFF]`` and 4-byte code
   points and code units.
 
-Include file ``include/unicode_categories.re`` provides |re2c| definitions for the
-standard Unicode categories.
+Include files ``include/unicode_blocks.re``, ``include/unicode_categories.re``
+and ``include/unicode_properties.re`` provide |re2c| definitions for blocks,
+categories and properties described in the Unicode standard.
 
 Option ``--input-encoding`` specifies source file encoding, which can be used to
 enable Unicode literals in regular expressions. For example
