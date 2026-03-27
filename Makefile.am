@@ -629,7 +629,9 @@ dist_stdlib_DATA = \
 	include/syntax/swift \
 	include/syntax/v \
 	include/syntax/zig \
-	include/unicode_categories.re
+	include/unicode_blocks.re \
+	include/unicode_categories.re \
+	include/unicode_properties.re
 
 BAZELFILES := \
 	BUILD.bazel \

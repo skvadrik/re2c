@@ -471,7 +471,9 @@ if(RE2C_IS_ROOT_PROJECT)
         include/syntax/swift
         include/syntax/v
         include/syntax/zig
+        include/unicode_blocks.re
         include/unicode_categories.re
+        include/unicode_properties.re
         DESTINATION "${RE2C_STDLIB_DIR}")
 
     # rebuild all re2c sources using newly built re2c
