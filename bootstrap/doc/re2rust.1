@@ -4119,8 +4119,9 @@ fixed\-length Unicode encoding with code space \fB[0\-0x10FFFF]\fP and 4\-byte c
 points and code units.
 .UNINDENT
 .sp
-Include file \fBinclude/unicode_categories.re\fP provides re2rust definitions for the
-standard Unicode categories.
+Include files \fBinclude/unicode_blocks.re\fP, \fBinclude/unicode_categories.re\fP
+and \fBinclude/unicode_properties.re\fP provide re2rust definitions for blocks,
+categories and properties described in the Unicode standard.
 .sp
 Option \fB\-\-input\-encoding\fP specifies source file encoding, which can be used to
 enable Unicode literals in regular expressions. For example
