@@ -1,0 +1,50 @@
+Release 2.1
+===========
+
+This release adds continuous integration with GitHub Actions, portability
+improvements, benchmarks, depfile generation and bugfixes.
+
+**GitHub Actions CI.**
+`Serghei Iakovlev <https://github.com/sergeyklay>`_ has added continuous
+integration with GitHub Actions for Linux, macOS and Windows platforms.
+Now every change in re2c gets build and tested in various configurations on all
+three platforms, which (hopefully!) leads to fewer bugs and better support for
+these platforms. GitHub Actions complement the existing Travis CI.
+
+**Benchmarks.**
+A lot of work has been done on adding infrastructure for benchmarks. Previously
+re2c had some benchmarks, but they were not integrated into the build system,
+and as a result somewhat difficult to build and run. Now there is a new
+benchmark subsystem, which includes three groups.
+The first group contains AOT-compiled benchmarks (a.k.a. lexer generators):
+regular expressions that are compiled ahead of time to C code, which is further
+compiled to native code. The currently supported generators are re2c, ragel and
+kleenex.
+The second group contains JIT-compiled benchmarks: library algorithms that are
+based on deterministic automata.
+Finally, the third group contains interpreted benchmarks: library algorithms
+that are based on non-deterministic automata.
+Benchmarks are fully integrated in both build systems (they are enabled with
+Autotools options ``--enable-benchmarks``, ``--enable-benchmarks-regenerate``
+and CMake options ``-DRE2C_BUILD_BENCHMARKS``, ``-DRE2C_REGEN_BENCHMARKS``).
+All benchmarks are regularly built and ran on CI.
+There is also a `script <https://github.com/skvadrik/re2c/blob/master/benchmarks/json2pgfplot.py>`_
+for rendering benchmark results as bar charts.
+
+For lexer generators, benchmark results show that re2c-TDFA(1) and ragel are the
+fastest algorithms. Their performance is very close, but in non-deterministic
+cases ragel gives incorrect results due to its inability to remember multiple
+parallel versions of one tag. On the other hand, kleenex programs are much
+shorter and easier to read.
+
+**Dependency files.**
+This release adds a ``--depfile`` option that allows one to generate dependency
+(.d) files. This is needed in order to track build dependencies in the presence
+of ``/*!include:re2c*/`` directives. The generated depfiles have the same format
+as the ones generated with GCC ``-MF`` option.
+
+There are also a few other improvements and bugfixes, see the full changelog
+:ref:`releases/changelog/changelog:2.1 (2021-03-26)` for details.
+
+A big warm thank you to all the people who contributed to this release!
+
