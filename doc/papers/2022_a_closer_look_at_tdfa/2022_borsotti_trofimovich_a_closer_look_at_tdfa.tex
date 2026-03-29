@@ -759,7 +759,8 @@ and $l$ is the new sequence constructed by the $\epsilon$-closure.
     $O:$ empty list of operations \;
     \For {each $(q, r, h, l) \in C$} {
         \For {each tag $t \in T$} {
-            \If {$h_t = history(h, t) \neq \epsilon$} {
+            \If {$h_t = history(h, t) \neq \epsilon$ and \;
+                    \quad\quad $(history(l, t) = \epsilon$ or $t$ is a multi-tag$)$} {
                 $v = regop \Xund rhs(r, h_t, t)$ \;
                 $i = V[t][v]$ \;
                 \If {$i$ is undefined } {
@@ -791,9 +792,9 @@ and $l$ is the new sequence constructed by the $\epsilon$-closure.
 \vspace{2em}
 
 \nonl\Fn {$\underline{regop \Xund rhs \big( r, h_t, t \big)} \smallskip$} {
-    \If {$t$ is a multi-valued tag} {
+    \lIf {$t$ is a multi-tag} {
         \Return $r[t] \cdot h_t$
-    } \Else {
+    } \lElse {
         \Return the last element of $h_t$
     }
 }
@@ -1377,7 +1378,7 @@ RE2C uses the following optimization passes for the number of repetitions $N=2$
         \For {each operation in $b$} {
             \If {copy or append $i \leftarrow j ...$ and $i \neq j$} {
                 $x = B[i], \; y = B[j]$ \;
-                \If {$x = -1$ and $y = -1$} {
+                \If {$x = -1$ and $y = -1$ and $\neg I[i][j]$} {
                     $B[i] = B[j] = i$ \;
                     $S[i] = \{i, j\}$ \;
                 } \ElseIf {$x \neq -1$ and $y = -1$} {
@@ -1409,6 +1410,9 @@ RE2C uses the following optimization passes for the number of repetitions $N=2$
         \If {$\exists j$ in $G: B[j] = j$ and $\forall k \in S[j]: \neg I[i][k]$} {
             $B[i] = j$ \;
             $S[j] = S[j] \cup \{i\}$ \;
+        } \Else {
+            $B[i] = i$ \;
+            $S[i] = \{i\}$ \;
         }
     }
     \BlankLine
