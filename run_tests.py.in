@@ -361,6 +361,8 @@ def run_test(test):
             ext = "ml"
         elif head.startswith("# re2py"):
             ext = "py"
+        elif head.startswith("// re2php"):
+            ext = "php"
         elif head.startswith("// re2rust"):
             ext = "rs"
         elif head.startswith("// re2v"):
@@ -381,6 +383,7 @@ def run_test(test):
     switches = switches.replace('re2java', 're2c --lang java')
     switches = switches.replace('re2js', 're2c --lang js')
     switches = switches.replace('re2ocaml', 're2c --lang ocaml')
+    switches = switches.replace('re2php', 're2c --lang php')
     switches = switches.replace('re2py', 're2c --lang python')
     switches = switches.replace('re2rust', 're2c --lang rust')
     switches = switches.replace('re2v', 're2c --lang v')

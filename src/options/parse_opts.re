@@ -82,6 +82,7 @@ opt_warn: /*!local:re2c
     "swapped-range"          end { msg.warn.set(Warn::SWAPPED_RANGE,          option); goto opt; }
     "undefined-control-flow" end { msg.warn.set(Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
     "unreachable-rules"      end { msg.warn.set(Warn::UNREACHABLE_RULES,      option); goto opt; }
+    "deprecated-eof-rule"    end { msg.warn.set(Warn::DEPRECATED_EOF_RULE,    option); goto opt; }
     "useless-escape"         end { msg.warn.set(Warn::USELESS_ESCAPE,         option); goto opt; }
     "sentinel-in-midrule"    end { msg.warn.set(Warn::SENTINEL_IN_MIDRULE,    option); goto opt; }
 */
@@ -155,16 +156,17 @@ opt_long: /*!local:re2c
     "loop-switch"           end { global.set_code_model(CodeModel::LOOP_SWITCH); goto opt; }
     "recursive-functions"   end { global.set_code_model(CodeModel::REC_FUNC);    goto opt; }
 
-    "bit-vectors"           end { opts.set_bitmaps(true);            goto opt; }
-    "debug-output"          end { opts.set_debug(true);              goto opt; }
-    "case-ranges"           end { opts.set_case_ranges(true);        goto opt; }
-    "computed-gotos"        end { opts.set_computed_gotos(true);     goto opt; }
-    "nested-ifs"            end { opts.set_nested_ifs(true);         goto opt; }
-    "case-insensitive"      end { opts.set_case_insensitive(true);   goto opt; }
-    "case-inverted"         end { opts.set_case_inverted(true);      goto opt; }
-    "tags"                  end { opts.set_tags(true);               goto opt; }
-    "no-unsafe"             end { opts.set_unsafe(false);            goto opt; }
-    "invert-captures"       end { opts.set_captures_invert(true);    goto opt; }
+    "bit-vectors"             end { opts.set_bitmaps(true);                 goto opt; }
+    "debug-output"            end { opts.set_debug(true);                   goto opt; }
+    "case-ranges"             end { opts.set_case_ranges(true);             goto opt; }
+    "computed-gotos"          end { opts.set_computed_gotos(true);          goto opt; }
+    "computed-gotos-relative" end { opts.set_computed_gotos_relative(true); goto opt; }
+    "nested-ifs"              end { opts.set_nested_ifs(true);              goto opt; }
+    "case-insensitive"        end { opts.set_case_insensitive(true);        goto opt; }
+    "case-inverted"           end { opts.set_case_inverted(true);           goto opt; }
+    "tags"                    end { opts.set_tags(true);                    goto opt; }
+    "no-unsafe"               end { opts.set_unsafe(false);                 goto opt; }
+    "invert-captures"         end { opts.set_captures_invert(true);         goto opt; }
 
     "ebcdic" | "ecb"        end { opts.set_encoding(Enc::Type::EBCDIC, true); goto opt; }
     "utf32"  | "unicode"    end { opts.set_encoding(Enc::Type::UTF32, true);  goto opt; }
@@ -237,7 +239,7 @@ opt_long: /*!local:re2c
 opt_lang: /*!local:re2c
     * {
         ERRARG("--lang",
-            "c | d | go | haskell | java | js | ocaml | python | rust | v | zig | none",
+            "c | d | go | haskell | java | js | ocaml | php | python | rust | swift | v | zig | none",
             *argv);
     }
     "c"       end { *lang = Lang::C;       goto opt; }
@@ -250,6 +252,7 @@ opt_lang: /*!local:re2c
     "php"     end { *lang = Lang::PHP;     goto opt; }
     "python"  end { *lang = Lang::PYTHON;  goto opt; }
     "rust"    end { *lang = Lang::RUST;    goto opt; }
+    "swift"   end { *lang = Lang::SWIFT;   goto opt; }
     "v"       end { *lang = Lang::V;       goto opt; }
     "zig"     end { *lang = Lang::ZIG;     goto opt; }
     "none"    end { *lang = Lang::NONE;    goto opt; }
