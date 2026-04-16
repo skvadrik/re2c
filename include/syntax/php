@@ -1,19 +1,20 @@
 // supported feature lists -----------------------------------------------------
 
 supported_apis = ["simple", "generic", "record"];
-supported_api_styles = ["free-form"];
-supported_code_models = ["loop-switch"];
+supported_api_styles = ["functions", "free-form"];
+supported_code_models = ["goto-label", "loop-switch"];
 supported_targets = ["code", "dot"];
-supported_features = ["nested-ifs", "bitmaps", "tags", "captures", "captvars"];
+supported_features = [];
 
 
 // language-specific options ---------------------------------------------------
 
-semicolons = 0;
-backtick_quoted_strings = 1;
+semicolons = 1;
+backtick_quoted_strings = 0;
 single_quoted_strings = 1;
 indentation_sensitive = 0;
-wrap_blocks_in_braces = 1;
+wrap_blocks_in_braces = 0;
+special_escapes = "\n\r\t\v\f\\'\"";
 
 
 // immutable configurations (command-line only options) ------------------------
@@ -33,7 +34,7 @@ re2c:line-dirs = 0;
 // mutable configurations ------------------------------------------------------
 
 re2c:api = simple;
-re2c:api:style = free-form;
+re2c:api:style = functions;
 re2c:api:sigil = "@@";
 re2c:YYGETCOND:naked = 0;
 re2c:YYSETCOND:naked = 0;
@@ -45,19 +46,19 @@ re2c:YYFILL@len = "@@";
 re2c:YYFILL:naked = 0;
 re2c:YYFN = ["<undefined-function-name>;<undefined-function-type>"];
 re2c:yyfn:sep = ";";
-re2c:yycond = "yycond";
-re2c:yyctable = "yyctable";
-re2c:yyaccept = "yyaccept";
-re2c:yytarget = "yytarget";
-re2c:yystate = "yystate";
-re2c:yynmatch = "yynmatch";
-re2c:yypmatch = "yypmatch";
-re2c:yyrecord = "yyrecord";
-re2c:yych = "yych";
+re2c:yycond = "$yycond";
+re2c:yyctable = "$yyctable";
+re2c:yyaccept = "$yyaccept";
+re2c:yytarget = "$yytarget";
+re2c:yystate = "$yystate";
+re2c:yynmatch = "$yynmatch";
+re2c:yypmatch = "$yypmatch";
+re2c:yyrecord = "$yyrecord";
+re2c:yych = "$yych";
 re2c:yych:conversion = 0;
 re2c:yych:literals = hex;
 re2c:yych:emit = 1;
-re2c:yybm = "yybm";
+re2c:yybm = "$yybm";
 re2c:yybm:hex = 0;
 re2c:yyfill = "";
 re2c:yystable = ""; // deprecated
@@ -109,72 +110,74 @@ re2c:label:start = 0;
 
 // mutable code configuration --------------------------------------------------
 
-re2c:YYBACKUP = "yybackup";
-re2c:YYBACKUPCTX = "yybackupctx";
-re2c:YYCONDTYPE = "YYCond";
+re2c:YYBACKUP = "$yybackup";
+re2c:YYBACKUPCTX = "$yybackupctx";
+re2c:YYCONDTYPE = "$YYCond";
 re2c:YYCOPYMTAG = sigil "{lhs} = " sigil "{rhs}";
 re2c:YYCOPYSTAG = sigil "{lhs} = " sigil "{rhs}";
-re2c:YYCTYPE = "YYChar";
-re2c:YYCTXMARKER = (.api.record ? yyrecord ".") "yyctxmarker";
-re2c:YYCURSOR = (.api.record ? yyrecord ".") "yycursor";
+re2c:YYCTYPE = "$YYChar";
+re2c:YYCTXMARKER = (.api.record ? yyrecord "->yyctxmarker" : "$yyctxmarker");
+re2c:YYCURSOR = (.api.record ? yyrecord "->yycursor" : "$yycursor");
 re2c:YYDEBUG = "yydebug";
-re2c:YYFILL = "yyfill";
+re2c:YYEND = "$yyend";
+re2c:YYFILL = "YYFILL";
 re2c:YYGETACCEPT = sigil "{var}";
 re2c:YYGETCOND = "yygetcond";
 re2c:YYGETSTATE = "yygetstate";
-re2c:YYINPUT = (.api.record ? yyrecord ".") "yyinput";
+re2c:YYINPUT = (.api.record ? yyrecord "->yyinput" : "$yyinput");
 re2c:YYLESSTHAN = "yylessthan";
-re2c:YYLIMIT = (.api.record ? yyrecord ".") "yylimit";
-re2c:YYMARKER = (.api.record ? yyrecord ".") "yymarker";
+re2c:YYLIMIT = (.api.record ? yyrecord "->yylimit" : "$yylimit");
+re2c:YYMARKER = (.api.record ? yyrecord "->yymarker" : "$yymarker");
 re2c:YYMAXFILL = "YYMAXFILL";
 re2c:YYMAXNMATCH = "YYMAXNMATCH";
-re2c:YYMTAGN = "yymtagn";
-re2c:YYMTAGP = "yymtagp";
-re2c:YYPEEK = (.api.generic ? "yypeek" : "charCodeAt");
-re2c:YYRESTORE = "yyrestore";
-re2c:YYRESTORECTX = "yyrestorectx";
-re2c:YYRESTORETAG = "yyrestoretag";
+re2c:YYMTAGN = "$yymtagn";
+re2c:YYMTAGP = "$yymtagp";
+re2c:YYPEEK = (.api.generic ? "$yypeek" : "");
+re2c:YYRESTORE = "$yyrestore";
+re2c:YYRESTORECTX = "$yyrestorectx";
+re2c:YYRESTORETAG = "$yyrestoretag";
 re2c:YYSETACCEPT = sigil "{var} = " sigil "{val}";
-re2c:YYSETCOND = "yysetcond";
-re2c:YYSETSTATE = "yysetstate";
-re2c:YYSHIFT = "yyshift";
-re2c:YYSHIFTSTAG = "yyshiftstag";
-re2c:YYSHIFTMTAG = "yyshiftmtag";
-re2c:YYSKIP = "yyskip";
-re2c:YYSTAGN = "yystagn";
-re2c:YYSTAGP = "yystagp";
-re2c:tags:expression = (.api.record ? yyrecord ".") sigil;
+re2c:YYSETCOND = "$yysetcond";
+re2c:YYSETSTATE = "$yysetstate";
+re2c:YYSHIFT = "$yyshift";
+re2c:YYSHIFTSTAG = "$yyshiftstag";
+re2c:YYSHIFTMTAG = "$yyshiftmtag";
+re2c:YYSKIP = "$yyskip";
+re2c:YYSTAGN = "$yystagn";
+re2c:YYSTAGP = "$yystagp";
+re2c:tags:expression = (.api.record ? yyrecord "->" : "$") sigil;
 re2c:tags:negative = (.api.generic ? "@@" : "-1");
 re2c:cond:divider = "";
-re2c:cond:goto = "";
+re2c:cond:goto = "goto " sigil ";";
 
 
 // code templates --------------------------------------------------------------
 
-code:var_local = topindent "let " name " = " init nl;
+code:var_local = topindent name " = " init ";" nl;
 code:var_global = code:var_local;
 
-code:const_local = topindent "const " name " = " init nl;
-code:const_global = code:const_local;
+code:const_local = topindent "$" name " = " init ";" nl;
+code:const_global = topindent "define('" name "', " init ");" nl;
 
 code:array_local =
-    topindent "const " name " = [" nl indent
+    topindent "static " name " = [" nl indent
         [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
-    dedent topindent "]" nl;
+    dedent topindent "];" nl;
 
 code:array_global = <undefined>;
 
 code:array_elem = array "[" index "]";
 
-code:enum = [elem: topindent "const " elem " = " init nl];
+code:enum = [elem: topindent "const " elem " = " init ";" nl];
 
 code:enum_elem = name;
 
-code:assign = topindent lhs " = " rhs nl;
+code:assign = topindent lhs " = " rhs ";" nl;
 
-code:type_int = <undefined>;
-code:type_uint = <undefined>;
-code:type_yybm = <undefined>;
+code:type_int = "int";
+code:type_uint = "int";
+code:type_yybm = "string";
+code:type_yyctable = <undefined>;
 code:type_yytarget = <undefined>;
 
 code:cmp_eq = "===";
@@ -216,9 +219,9 @@ code:loop =
         indent [stmt: stmt] dedent
     topindent "}" nl;
 
-code:continue = topindent "continue" (.loop_label ? " " label) nl;
+code:continue = topindent "goto " label ";" nl;
 
-code:goto = <undefined>;
+code:goto = topindent "goto " label ";" nl;
 
 code:fndecl = <undefined>;
 code:fndef = <undefined>;
@@ -228,14 +231,17 @@ code:recursive_functions = <undefined>;
 
 code:line_info = <undefined>;
 
-code:fingerprint =
-    "// Generated by re2js" (.version ? " " version) (.date ? " on " date) nl;
+code:cgoto = <undefined>;
+code:cgoto_data = <undefined>;
 
-code:abort = topindent "throw \"internal lexer error\"" nl;
+code:fingerprint =
+    "// Generated by re2php" (.version ? " " version) (.date ? " on " date) nl;
+
+code:abort = topindent "throw new \\Exception(\"internal lexer error\");" nl;
 
 code:yydebug =
     topindent (.api.generic
-        ? YYDEBUG
+        ? YYDEBUG ";"
     : (.api.record
         ? YYDEBUG "(" yyrecord ");"
         : YYDEBUG "(" state ", " yych ");"
@@ -243,25 +249,25 @@ code:yydebug =
 
 code:yypeek =
     topindent (.code_model.recursive_functions ? YYCTYPE " ") yych " = " (.api.generic
-        ? YYPEEK
-        : YYINPUT "." YYPEEK "(" YYCURSOR ")"
+        ? YYPEEK ";"
+        : "ord(" YYINPUT "[" YYCURSOR "]);"
     ) nl;
 
 code:yyskip =
     topindent (.api.generic
-        ? YYSKIP
+        ? YYSKIP ";"
         : YYCURSOR " += 1;"
     ) nl;
 
 code:yybackup =
     topindent (.api.generic
-        ? YYBACKUP
+        ? YYBACKUP ";"
         : YYMARKER " = " YYCURSOR ";"
     ) nl;
 
 code:yybackupctx =
     topindent (.api.generic
-        ? YYBACKUPCTX
+        ? YYBACKUPCTX ";"
         : YYCTXMARKER " = " YYCURSOR ";"
     ) nl;
 
@@ -275,64 +281,64 @@ code:yybackup_yypeek_yyskip = <undefined>;
 
 code:yyrestore =
     topindent (.api.generic
-        ? YYRESTORE
+        ? YYRESTORE ";"
         : YYCURSOR " = " YYMARKER ";"
     ) nl;
 
 code:yyrestorectx =
     topindent (.api.generic
-        ? YYRESTORECTX
+        ? YYRESTORECTX ";"
         : YYCURSOR " = " YYCTXMARKER ";"
     ) nl;
 
 code:yyrestoretag =
     topindent (.api.generic
-        ? YYRESTORETAG
+        ? YYRESTORETAG ";"
         : YYCURSOR " = " tag ";"
     ) nl;
 
 code:yyshift =
     topindent (.api.generic
-        ? YYSHIFT
+        ? YYSHIFT ";"
         : YYCURSOR " -= " offset ";"
     ) nl;
 
 code:yyshiftstag =
     topindent (.nested ? "if (" tag " != " neg ") ") (.api.generic
-        ? YYSHIFTSTAG
+        ? YYSHIFTSTAG ";"
         : tag " -= " offset ";"
     ) nl;
 
 code:yyshiftmtag =
-    topindent YYSHIFTMTAG nl;
+    topindent YYSHIFTMTAG ";" nl;
 
 code:yystagp =
     topindent (.api.generic
-        ? YYSTAGP
+        ? YYSTAGP ";"
         : tag " = " YYCURSOR ";"
     ) nl;
 
 code:yymtagp =
-    topindent YYMTAGP nl;
+    topindent YYMTAGP ";" nl;
 
 code:yystagn =
     topindent (.api.generic
-        ? YYSTAGN
+        ? YYSTAGN ";"
         : tag " = " neg ";"
     ) nl;
 
 code:yymtagn =
-    topindent YYMTAGN nl;
+    topindent YYMTAGN ";" nl;
 
 code:yycopystag =
     topindent (.api.generic
-        ? YYCOPYSTAG
+        ? YYCOPYSTAG ";"
         : lhs " = " rhs ";"
     ) nl;
 
 code:yycopymtag =
     topindent (.api.generic
-        ? YYCOPYMTAG
+        ? YYCOPYMTAG ";"
         : lhs " = " rhs ";"
     ) nl;
 
@@ -343,7 +349,7 @@ code:yygetaccept =
 
 code:yysetaccept =
     topindent (.api.generic
-        ? YYSETACCEPT
+        ? YYSETACCEPT ";"
         : (.api.record & .storable_state ? yyrecord ".") var " = " val ";"
     ) nl;
 
@@ -354,7 +360,7 @@ code:yygetcond =
 
 code:yysetcond =
     topindent (.api.generic
-        ? YYSETCOND
+        ? YYSETCOND ";"
         : (.api.record ? yyrecord ".") var " = " val ";"
     ) nl;
 
@@ -365,7 +371,7 @@ code:yygetstate =
 
 code:yysetstate =
     topindent (.api.generic
-        ? YYSETSTATE
+        ? YYSETSTATE ";"
         : (.api.record ? yyrecord ".") var " = " val ";"
     ) nl;
 
@@ -376,6 +382,13 @@ code:yylessthan =
             ? "(" YYLIMIT " - " YYCURSOR ") < " need
             : YYLIMIT " <= " YYCURSOR));
 
+code:yyend =
+    (.api.generic | .yyfill.enable
+        ? YYEND
+        : YYLIMIT " <= " YYCURSOR);
+
 code:yybm_filter = yych " & ~0xFF";
 
 code:yybm_match = "(" yybm "[" offset "+" yych "] & " mask ") !== 0";
+
+code:yytarget_filter = <undefined>;
