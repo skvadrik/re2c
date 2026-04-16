@@ -1,5 +1,5 @@
-<?php
 // re2php $INPUT -o $OUTPUT
+<?php
 
 // expects a null-terminated string
 function lex($yyinput) {

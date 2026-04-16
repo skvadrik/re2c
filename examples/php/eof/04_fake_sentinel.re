@@ -1,5 +1,5 @@
-<?php
 // re2php $INPUT -o $OUTPUT
+<?php
 
 // expects a string without terminating null
 function lex($str) {
@@ -10,8 +10,8 @@ function lex($str) {
     while (true) {
     /*!re2c
         re2c:api = generic;
-        re2c:YYPEEK = "$cur < $lim ? ord($cur) : 0;";
-        re2c:YYSKIP = "$cur += 1;";
+        re2c:YYPEEK = "$cur < $lim ? ord($str[$cur]) : 0";
+        re2c:YYSKIP = "$cur += 1";
         re2c:yyfill:enable = 0;
 
         *      { return -1; }

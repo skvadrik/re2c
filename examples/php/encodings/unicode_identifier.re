@@ -1,5 +1,5 @@
+// re2php $INPUT -o $OUTPUT --utf8
 <?php
-// re2php $INPUT -o $OUTPUT --utf8 -s
 
 /*!include:re2c "unicode_categories.re" */
 

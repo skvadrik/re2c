@@ -1,5 +1,5 @@
-<?php
 // re2php $INPUT -o $OUTPUT -c
+<?php
 
 /*!conditions:re2c*/
 

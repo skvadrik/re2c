@@ -1,5 +1,5 @@
-<?php
 // re2php $INPUT -o $OUTPUT
+<?php
 
 /*!max:re2c*/
 
@@ -11,6 +11,7 @@ function lex($yyinput) {
     while (true) {
     /*!re2c
         re2c:YYFILL = "return -1";
+        re2c:yyfill:parameter = 0;
 
         str = ['] ([^'\\] | [\\][^])* ['];
 

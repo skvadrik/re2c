@@ -1,81 +1,77 @@
-<?php
 // re2php $INPUT -o $OUTPUT
-
-const fs = require('fs')
+<?php
 
 const BUFSIZE = 4096;
-const OK = 0;
-const EOF = 1;
-const LONG_LEXEME = 2;
+define('STATUS_OK', 0);
+define('STATUS_EOF', 1);
+define('STATUS_LONG_LEXEME', 2);
 
-function fill($st) {
-    if (st.eof) return EOF
+function fill(object $st): int {
+    if ($st->eof) return STATUS_EOF;
 
     // Error: lexeme too long. In real life could reallocate a larger buffer.
-    if (st.token < 1) return LONG_LEXEME;
+    if ($st->token < 1) return STATUS_LONG_LEXEME;
 
     // Shift buffer contents (discard everything up to the current token).
-    st.yyinput.copy(st.yyinput, 0, st.token, st.yylimit)
-    st.yycursor -= st.token;
-    st.yymarker -= st.token;
-    st.yylimit -= st.token;
-    st.token = 0;
+    $st->yyinput = substr($st->yyinput, $st->token, $st->yylimit - $st->token);
+    $st->yycursor -= $st->token;
+    $st->yymarker -= $st->token;
+    $st->yylimit -= $st->token;
+    $st->token = 0;
 
-    // Read a new chunk of data from file and append it to `yyinput`.
-    let want = BUFSIZE - st.yylimit - 1 // -1 for sentinel
-    let nread = fs.readSync(st.file, st.yyinput, st.yylimit, want)
-    st.eof = nread < want // end of file?
-    st.yylimit += nread
-    st.yyinput.writeUInt8(0, st.yylimit) // sentinel
+    // Read a new chunk of data from file and append it to the buffer.
+    $want = BUFSIZE - $st->yylimit - 1; // -1 for sentinel
+    $chunk = fread($st->file, $want);
+    $nread = ($chunk !== false) ? strlen($chunk) : 0;
+    $st->eof = $nread < $want; // end of file?
+    $st->yyinput .= ($chunk !== false ? $chunk : '') . "\0"; // append data and sentinel
+    $st->yylimit += $nread;
 
-    return OK;
+    return STATUS_OK;
 }
 
-function lex($yyrecord, $count) {
-    while (true) {
-        yyrecord.token = yyrecord.yycursor
-        /*!re2c
-            re2c:api = record;
-            re2c:YYPEEK = "readUInt8";
-            re2c:YYFILL = "fill(yyrecord) == OK";
-            re2c:eof = 0;
+function lex(object $yyrecord, int $count): int {
+    lex_top:
+    $yyrecord->token = $yyrecord->yycursor;
+    /*!re2c
+        re2c:api = record;
+        re2c:yyrecord = $yyrecord;
+        re2c:YYFILL = "fill($yyrecord) === STATUS_OK";
+        re2c:eof = 0;
 
-            str = ['] ([^'\\] | [\\][^])* ['];
+        str = ['] ([^'\\] | [\\][^])* ['];
 
-            *    { return -1 }
-            $    { return count }
-            [ ]+ { continue loop }
-            str  { count += 1; continue loop }
-        */
-    }
+        *    { return -1; }
+        $    { return $count; }
+        [ ]+ { goto lex_top; }
+        str  { $count += 1; goto lex_top; }
+    */
 }
 
-function main() {
-    $fname = "input";
+function main(): void {
+    $fname = tempnam(sys_get_temp_dir(), 're2php_fill_');
 
     // Create input file.
-    $content = str_repeat("'qu\0tes' 'are' 'fine: \\'' ", BUFSIZE);
-    $handle = fopen($name, 'w+');
-    fwrite($handle, $content);
-    fclose($handle);
+    $f = fopen($fname, 'wb');
+    $line = "'qu\0tes' 'are' 'fine: \\'' ";
+    for ($i = 0; $i < BUFSIZE; $i++) {
+        fwrite($f, $line);
+    }
+    fclose($f);
 
-    // Init lexer state.
+    // Init lexer state (cursor at limit triggers initial YYFILL).
     $limit = BUFSIZE - 1; // exclude terminating null
     $st = new \stdClass();
-    $st->file = fopen($fname, 'r');
+    $st->file = fopen($fname, 'rb');
     $st->yyinput = str_repeat("\0", BUFSIZE);
-    $st->yylimit = $limit;
     $st->yycursor = $limit;
     $st->yymarker = $limit;
+    $st->yylimit = $limit;
     $st->token = $limit;
     $st->eof = false;
 
-    // Run lexer on the prepared file.
-    if (lex($st, 0) != 3 * BUFSIZE) {
-        throw new \Exception("error :[");
-    }
+    assert(lex($st, 0) === 3 * BUFSIZE);
 
-    // Cleanup.
     fclose($st->file);
     unlink($fname);
 }

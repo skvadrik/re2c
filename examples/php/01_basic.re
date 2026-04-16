@@ -1,5 +1,5 @@
-<?php
 // re2php $INPUT -o $OUTPUT
+<?php
 
 function lex($yyinput) {
     $yycursor = 0;
