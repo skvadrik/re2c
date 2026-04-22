@@ -40,11 +40,11 @@ loop:
         in->tok = in->cur;
     /*!re2c
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE = "unsigned char";
-        re2c:define:YYCURSOR = in->cur;
-        re2c:define:YYMARKER = in->mar;
-        re2c:define:YYLIMIT = in->lim;
-        re2c:define:YYFILL = "fill(in) == 0";
+        re2c:YYCTYPE = "unsigned char";
+        re2c:YYCURSOR = in->cur;
+        re2c:YYMARKER = in->mar;
+        re2c:YYLIMIT = in->lim;
+        re2c:YYFILL = "fill(in) == 0";
         re2c:eof = 0;
 
         str = ['] ([^'\\] | [\\][^])* ['];
