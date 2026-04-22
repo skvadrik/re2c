@@ -15,8 +15,8 @@ long lex(LexerState* st) {
     /*!re2c
         re2c:header = "lexer/state.h";
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = "unsigned char";
-        re2c:define:YYCURSOR = "st->cur";
+        re2c:YYCTYPE = "unsigned char";
+        re2c:YYCURSOR = "st->cur";
         re2c:tags = 1;
         re2c:tags:expression = "st->@@";
 

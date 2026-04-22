@@ -15,7 +15,7 @@
 static int lex_utf8(const uint8_t *s) {
     const uint8_t *YYCURSOR = s, *YYMARKER;
     /*!use:re2c
-        re2c:define:YYCTYPE = uint8_t;
+        re2c:YYCTYPE = uint8_t;
         re2c:encoding:utf8 = 1;
     */
 }
@@ -23,7 +23,7 @@ static int lex_utf8(const uint8_t *s) {
 static int lex_utf32(const uint32_t *s) {
     const uint32_t *YYCURSOR = s, *YYMARKER;
     /*!use:re2c
-        re2c:define:YYCTYPE = uint32_t;
+        re2c:YYCTYPE = uint32_t;
         re2c:encoding:utf32 = 1;
     */
 }

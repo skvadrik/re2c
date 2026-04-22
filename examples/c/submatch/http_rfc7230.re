@@ -146,20 +146,9 @@ static void print_headers(const char *tok,
 
 static int lex(input_t *in, long *count)
 {
-    const char *of, *au, *at,
-        *hs1, *hs3, *m1, *p1, *p3, *p5, *q1, *q3,
-        *hs2, *hs4, *m2, *p2, *p4, *p6, *q2, *q4,
-        *r1, *r3, *rp1, *s1, *st1, *u1, *u3, *v1, *v3,
-        *r2, *r4, *rp2, *s2, *st2, *u2, *u4, *v2, *v4;
-    mtag_t *h1, *h2, *h3, *h4, *h5;
-    long c;
-
-    c = 0;;
-    of = au = at
-        = hs1 = hs3 = m1 = p1 = p3 = p5 = q1 = q3
-        = hs2 = hs4 = m2 = p2 = p4 = p6 = q2 = q4
-        = r1 = r3 = rp1 = s1 = st1 = u1 = u3 = v1 = v3
-        = r2 = r4 = rp2 = s2 = st2 = u2 = u4 = v2 = v4 = NULL;
+    /*!svars:re2c format = 'const char *@@ = NULL;\n'; */
+    /*!mvars:re2c format = 'mtag_t *@@;\n'; */
+    long c = 0;
 loop:
     in->tok = in->cur;
 /*!re2c

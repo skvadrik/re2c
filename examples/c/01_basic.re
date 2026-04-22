@@ -4,7 +4,7 @@
 int lex(const char* YYCURSOR) {
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = "unsigned char";
+        re2c:YYCTYPE = "unsigned char";
 
         [1-9][0-9]* { return 0; }
         *           { return 1; }
