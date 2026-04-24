@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-#include <stddef.h>
+#include <cstddef>
 #include <algorithm>
 #include <vector>
 
@@ -82,7 +82,7 @@ class slab_allocator_t {
 // Use alignment based on pointer size: 32-bit platforms need stronger alignment
 // for 64-bit types (double, long long), while 64-bit platforms are already
 // sufficiently aligned with pointer-sized alignment.
-constexpr size_t ALLOCATOR_ALIGNMENT = (sizeof(void*) == 4) ? alignof(max_align_t) : sizeof(void*);
+constexpr size_t ALLOCATOR_ALIGNMENT = (sizeof(void*) == 4) ? alignof(std::max_align_t) : sizeof(void*);
 
 // Use different types to prevent accidentally mixing allocators for data with different life spans.
 using AstAllocator = slab_allocator_t<AllocatorKind::AST, 16 * 4096, ALLOCATOR_ALIGNMENT>;
