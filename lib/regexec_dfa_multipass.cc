@@ -27,7 +27,7 @@ static MpTdfaBacklink forward_pass(const regex_t* preg, const char* string, size
 
     log.clear();
     for (size_t stidx = 0;;) {
-        const int32_t chr = *strptr++;
+        const size_t chr = static_cast<uint8_t>(*strptr++);
         const size_t cls = preg->char2class[chr];
 
         const MpTdfaState* state = states[stidx];

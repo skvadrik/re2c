@@ -35,7 +35,7 @@ int regexec_dfa(
 
     for (;;) {
         s = dfa->states[i];
-        const int32_t c = *p++;
+        const size_t c = static_cast<uint8_t>(*p++);
         const size_t j = preg->char2class[c];
         i = s->arcs[j];
 
@@ -102,7 +102,7 @@ subhistory_t* regparse_dfa(const regex_t* preg, const char* string, size_t nmatc
 
     for (;;) {
         s = dfa->states[i];
-        const int32_t c = *p++;
+        const size_t c = static_cast<uint8_t>(*p++);
         const size_t j = preg->char2class[c];
         i = s->arcs[j];
 
