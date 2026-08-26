@@ -5,7 +5,7 @@ supported_api_styles = ["free-form"];
 supported_code_models = ["loop-switch", "recursive-functions"];
 supported_targets = ["code", "dot"];
 supported_features = ["nested-ifs", "bitmaps", "case-ranges",
-    "tags", "captures", "captvars"];
+    "tags", "captures", "captvars", "computed-continue"];
 
 
 // language-specific options ---------------------------------------------------
@@ -220,12 +220,21 @@ code:switch_case_range = [val{0}: val] (.many ? "..." [val{-1}: val]);
 
 code:switch_case_default = "else";
 
-code:loop =
-    topindent (.loop_label ? label ": ") "while (true) {" nl
+code:loop = (.computed_continue
+    ? topindent var ": switch (@as(enum {" nl
+        indent [state: topindent state "," nl] dedent
+      topindent "}, ." val ")) {" nl
+        indent [state:
+            topindent "." state " => {" nl
+                indent [stmt: stmt] dedent
+            topindent "}," nl] dedent
+      topindent "}" nl
+    : topindent (.loop_label ? label ": ") "while (true) {" nl
         indent [stmt: stmt] dedent
-    topindent "}" nl;
+    topindent "}" nl);
 
-code:continue = topindent "continue" (.loop_label ? " :" label) ";" nl;
+code:continue = topindent "continue"
+    (.computed_continue ? " :" var " ." val : (.loop_label ? " :" label)) ";" nl;
 
 code:goto = topindent "goto " label ";" nl;
 

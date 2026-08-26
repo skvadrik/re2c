@@ -41,6 +41,21 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
         glob.set_eager_skip(true);
     }
 
+    if (glob.computed_continue) {
+        if (glob.code_model != CodeModel::LOOP_SWITCH) {
+            RET_FAIL(error("--computed-continue requires --loop-switch code model"));
+        }
+        if (glob.storable_state) {
+            RET_FAIL(error("storable state is not supported with --computed-continue"));
+        }
+        if (glob.start_conditions) {
+            RET_FAIL(error("conditions are not supported with --computed-continue"));
+        }
+        if (!glob.supported_features_contains("computed-continue")) {
+            RET_FAIL(error("--computed-continue is not supported for this backend"));
+        }
+    }
+
     if (glob.target == Target::SKELETON) {
         if (!glob.supported_targets_contains("skeleton")) {
             RET_FAIL(error("skeleton is not supported for this backend"));
@@ -836,6 +851,8 @@ static bool eval_cond(
             return opts->code_model == CodeModel::LOOP_SWITCH;
         case StxGOpt::CODE_MODEL_REC_FUNC:
             return opts->code_model == CodeModel::REC_FUNC;
+        case StxGOpt::COMPUTED_CONTINUE:
+            return opts->computed_continue;
         case StxGOpt::START_CONDITIONS:
             return opts->start_conditions;
         case StxGOpt::STORABLE_STATE:

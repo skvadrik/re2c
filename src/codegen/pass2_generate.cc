@@ -478,14 +478,33 @@ void expand_fintags(Output& output, const Tag& tag, std::vector<const char*>& fi
     }
 }
 
-static void gen_continue_yyloop(Output& output, CodeList* stmts, const char* next) {
+static void gen_continue_yyswitch(Output& output, CodeList* stmts, const char* next) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
 
-    append(stmts, code_assign(alc, opts->var_state.c_str(), next));
-
     const char* label = opts->label_loop.empty() ? nullptr : opts->label_loop.c_str();
-    append(stmts, code_continue(alc, label));
+    if (opts->computed_continue) {
+        append(stmts, code_continue(alc, label, next));
+    } else {
+        append(stmts, code_assign(alc, opts->var_state.c_str(), next));
+        append(stmts, code_continue(alc, label));
+    }
+}
+
+static const char* gen_yyswitch_state(Output& output, const Label& label) {
+    const opt_t* opts = output.block().opts;
+    Scratchbuf& o = output.scratchbuf;
+
+    if (opts->computed_continue) {
+        // Computed-continue uses state labels as enum fields, so prefix them to
+        // turn the numeric labels into valid identifiers.
+        o.str(opts->label_prefix);
+    }
+    return o.label(label).flush();
+}
+
+static void gen_continue_yyswitch(Output& output, CodeList* stmts, const Label& next) {
+    gen_continue_yyswitch(output, stmts, gen_yyswitch_state(output, next));
 }
 
 static CodeList* gen_fill_falllback(
@@ -524,8 +543,7 @@ static CodeList* gen_fill_falllback(
             append(fallback_trans, code_goto(alc, buf.flush()));
             break;
         case CodeModel::LOOP_SWITCH:
-            buf.label(*fallback->label);
-            gen_continue_yyloop(output, fallback_trans, buf.flush());
+            gen_continue_yyswitch(output, fallback_trans, *fallback->label);
             break;
         case CodeModel::REC_FUNC: {
             const CodeFnCommon* fn = output.block().fn_common;
@@ -575,8 +593,7 @@ CodeList* gen_goto_after_fill(
         }
         break;
     case CodeModel::LOOP_SWITCH:
-        o.u32(s->label->index);
-        gen_continue_yyloop(output, resume, o.flush());
+        gen_continue_yyswitch(output, resume, *s->label);
         break;
     case CodeModel::REC_FUNC: {
         const CodeFnCommon* fn = output.block().fn_common;
@@ -704,8 +721,7 @@ static void gen_goto(
             append(transition, code_goto(alc, o.flush()));
             break;
         case CodeModel::LOOP_SWITCH:
-            o.label(*jump.to->label);
-            gen_continue_yyloop(output, transition, o.flush());
+            gen_continue_yyswitch(output, transition, *jump.to->label);
             break;
         case CodeModel::REC_FUNC: {
             const CodeFnCommon* fn = output.block().fn_common;
@@ -1099,9 +1115,10 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
             append(stmts, code_text(alc, o.flush()));
             break;
         case CodeModel::LOOP_SWITCH:
+            CHECK(!opts->computed_continue);
             // loop/switch mode: set `yystate` to the start DFA state of the next condition and
             // continue to the head of the loop.
-            gen_continue_yyloop(output, stmts, next_cond);
+            gen_continue_yyswitch(output, stmts, next_cond);
             break;
         case CodeModel::REC_FUNC: {
             // func/rec mode: emit function call to the start of the next condition
@@ -1875,11 +1892,10 @@ void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases) {
     for (State* s = dfa.head; s; s = s->next) {
         CodeList* body = code_list(alc);
 
-        uint32_t label = s->label->index;
-        DCHECK(label != Label::NONE);
-
+        const Label& state_label = *s->label;
+        DCHECK(state_label.index != Label::NONE);
         // Emit current state.
-        if (opts->debug) append(body, code_debug(alc, label));
+        if (opts->debug) append(body, code_debug(alc, state_label.index));
         emit_state(output, dfa, s, body, nullptr);
 
         // As long as the following state has no incoming transitions (its label is unused),
@@ -1890,7 +1906,13 @@ void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases) {
             emit_state(output, dfa, s, body, nullptr);
         }
 
-        append(cases, code_case_number(alc, body, static_cast<int32_t>(label)));
+        if (opts->computed_continue) {
+            const char* switch_label = gen_yyswitch_state(output, state_label);
+            append(cases, code_case_string(alc, body, switch_label));
+        } else {
+            append(cases,
+                   code_case_number(alc, body, static_cast<int32_t>(state_label.index)));
+        }
     }
 }
 
@@ -1899,13 +1921,19 @@ void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases)
     OutAllocator& alc = output.allocator;
     DCHECK(opts->code_model == CodeModel::LOOP_SWITCH);
 
-    CodeList* loop = code_list(alc);
-    gen_storable_state_cases(output, cases);
-    if (opts->state_abort) {
-        append(cases, code_case_default(alc, gen_abort(alc)));
+    if (opts->computed_continue) {
+        DCHECK(!output.block().dfas.empty());
+        const Label& start = *output.block().dfas[0]->head->label;
+        append(stmts, code_loop(alc, nullptr, gen_yyswitch_state(output, start), cases));
+    } else {
+        CodeList* loop = code_list(alc);
+        gen_storable_state_cases(output, cases);
+        if (opts->state_abort) {
+            append(cases, code_case_default(alc, gen_abort(alc)));
+        }
+        append(loop, code_switch(alc, opts->var_state.c_str(), cases));
+        append(stmts, code_loop(alc, loop));
     }
-    append(loop, code_switch(alc, opts->var_state.c_str(), cases));
-    append(stmts, code_loop(alc, loop));
 }
 
 static void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, CodeList* code) {
@@ -2075,7 +2103,11 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
         // In the loop/switch mode append all DFA states as cases of the `yystate` switch.
         // Merge DFAs for different conditions together in one switch.
         local_decls = true;
-        append(code, gen_yystate_def(output, is_cond_block));
+        if (!opts->computed_continue) {
+            // Computed-continue passes the next state directly to the labeled switch,
+            // so the yystate variable is not needed.
+            append(code, gen_yystate_def(output, is_cond_block));
+        }
 
         local_decls |= gen_bitmaps(output, code);
 
