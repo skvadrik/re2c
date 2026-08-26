@@ -199,6 +199,12 @@ struct CodeSwitch {
     CodeCases* cases;
 };
 
+struct CodeLoop {
+    const char* init;
+    CodeCases* cases;
+    CodeList* body;
+};
+
 struct CodeBlock {
     enum class Kind: uint32_t {
         WRAPPED,
@@ -243,6 +249,11 @@ struct CodeCgoto {
     const char* array;
     const char* base;
     const char* index;
+};
+
+struct CodeContinue {
+    const char* label;
+    const char* value;
 };
 
 struct CodeParam {
@@ -324,6 +335,7 @@ struct Code {
         CodeSwitch swch;
         CodeBlock block;
         CodeCgoto cgoto;
+        CodeContinue cont;
         CodeFnDef fndef;
         CodeFnCall fncall;
         CodeRaw raw;
@@ -335,7 +347,7 @@ struct Code {
         CodeLabel label;
         CodeDebug debug;
         CodeTag tag;
-        CodeList* loop;
+        CodeLoop loop;
         CodeList* rfuncs;
         loc_t loc;
         size_t accept;
@@ -383,15 +395,22 @@ inline Code* code_cgoto(OutAllocator& alc, const char* array, const char* base, 
     return x;
 }
 
-inline Code* code_continue(OutAllocator& alc, const char* target) {
+inline Code* code_continue(OutAllocator& alc, const char* label, const char* value = nullptr) {
     Code* x = new_code(alc, CodeKind::CONTINUE);
-    x->target = target;
+    x->cont.label = label;
+    x->cont.value = value;
     return x;
 }
 
-inline Code* code_loop(OutAllocator& alc, CodeList* loop) {
+inline Code* code_loop(
+        OutAllocator& alc,
+        CodeList* body,
+        const char* init = nullptr,
+        CodeCases* cases = nullptr) {
     Code* x = new_code(alc, CodeKind::LOOP);
-    x->loop = loop;
+    x->loop.init = init;
+    x->loop.cases = cases;
+    x->loop.body = body;
     return x;
 }
 

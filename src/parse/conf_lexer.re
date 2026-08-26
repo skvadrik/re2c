@@ -784,6 +784,7 @@ start:
     ".case_ranges"         { RET_GOPT(StxGOpt::CASE_RANGES); }
     ".unsafe"              { RET_GOPT(StxGOpt::UNSAFE); }
     ".monadic"             { RET_GOPT(StxGOpt::MONADIC); }
+    ".computed_continue"   { RET_GOPT(StxGOpt::COMPUTED_CONTINUE); }
     ".loop_label"          { RET_GOPT(StxGOpt::LOOP_LABEL); }
     ".cgoto.relative"      { RET_GOPT(StxGOpt::CGOTO_RELATIVE); }
     ".yyfill.enable"       { RET_GOPT(StxGOpt::FILL_ENABLE); }

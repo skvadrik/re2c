@@ -549,49 +549,103 @@ class RenderSwitch : public RenderCallback {
 
 class RenderLoop : public RenderCallback {
     RenderContext& rctx;
-    const CodeList* code;
+    const CodeLoop* code;
+    const CodeCase* curr_case;
+    const CodeCase* last_case;
     const Code* curr_stmt;
     const Code* last_stmt;
+    size_t ncases;
     size_t nstmts;
 
   public:
-    RenderLoop(RenderContext& rctx, const CodeList* code)
-            : rctx(rctx), code(code), curr_stmt(nullptr), last_stmt(nullptr), nstmts(0) {
-        for (const Code* s = code->head; s; s = s->next) ++nstmts;
+    RenderLoop(RenderContext& rctx, const CodeLoop* code)
+            : rctx(rctx)
+            , code(code)
+            , curr_case(nullptr)
+            , last_case(nullptr)
+            , curr_stmt(nullptr)
+            , last_stmt(nullptr)
+            , ncases(0)
+            , nstmts(0) {
+        if (code->cases) {
+            for (const CodeCase* c = code->cases->head; c; c = c->next) ++ncases;
+        }
+        if (code->body) {
+            for (const Code* s = code->body->head; s; s = s->next) ++nstmts;
+        }
     }
 
     void render_var(StxVarId var) override {
         switch (var) {
-            case StxVarId::LABEL: rctx.os << rctx.opts->label_loop; break;
-            case StxVarId::STMT: render(rctx, curr_stmt); break;
-            default: render_global_var(rctx, var); break;
+        case StxVarId::LABEL:
+            rctx.os << rctx.opts->label_loop;
+            break;
+        case StxVarId::STATE:
+            DCHECK(curr_case->kind == CodeCase::Kind::STRING);
+            rctx.os << curr_case->string;
+            break;
+        case StxVarId::VAL:
+            rctx.os << code->init;
+            break;
+        case StxVarId::VAR:
+            rctx.os << rctx.opts->var_state;
+            break;
+        case StxVarId::STMT:
+            render(rctx, curr_stmt);
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
         }
     }
 
     size_t get_list_size(StxVarId var) const override {
-        if (var == StxVarId::STMT) {
-            return nstmts;
+        switch (var) {
+        case StxVarId::STATE:
+            return ncases;
+        case StxVarId::STMT: {
+            if (!curr_case) return nstmts;
+            size_t n = 0;
+            for (const Code* s = curr_case->body->head; s; s = s->next) ++n;
+            return n;
         }
-        UNREACHABLE();
-        return 0;
+        default:
+            UNREACHABLE();
+            return 0;
+        }
     }
 
     void start_list(StxVarId var, size_t lbound, size_t rbound) override {
-        if (var == StxVarId::STMT) {
-            DCHECK(rbound < nstmts);
-            find_list_bounds(code->head, lbound, rbound, &curr_stmt, &last_stmt);
-        } else {
+        switch (var) {
+        case StxVarId::STATE:
+            DCHECK(rbound < ncases);
+            find_list_bounds(code->cases->head, lbound, rbound, &curr_case, &last_case);
+            break;
+        case StxVarId::STMT: {
+            const CodeList* stmts = curr_case ? curr_case->body : code->body;
+            DCHECK(stmts);
+            DCHECK(rbound < get_list_size(var));
+            find_list_bounds(stmts->head, lbound, rbound, &curr_stmt, &last_stmt);
+            break;
+        }
+        default:
             UNREACHABLE();
+            break;
         }
     }
 
     bool next_in_list(StxVarId var) override {
-        if (var == StxVarId::STMT) {
+        switch (var) {
+        case StxVarId::STATE:
+            curr_case = curr_case->next;
+            return curr_case != last_case;
+        case StxVarId::STMT:
             curr_stmt = curr_stmt->next;
             return curr_stmt != last_stmt;
+        default:
+            UNREACHABLE();
+            return false;
         }
-        UNREACHABLE();
-        return false;
     }
 
     FORBID_COPY(RenderLoop);
@@ -613,6 +667,26 @@ class RenderJmp : public RenderCallback {
     }
 
     FORBID_COPY(RenderJmp);
+};
+
+class RenderContinue : public RenderCallback {
+    RenderContext& rctx;
+    const CodeContinue* code;
+
+  public:
+    RenderContinue(RenderContext& rctx, const CodeContinue* code)
+            : rctx(rctx), code(code) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::LABEL: rctx.os << code->label; break;
+            case StxVarId::VAL: rctx.os << code->value; break;
+            case StxVarId::VAR: rctx.os << rctx.opts->var_state; break;
+            default: render_global_var(rctx, var); break;
+        }
+    }
+
+    FORBID_COPY(RenderContinue);
 };
 
 class RenderCgoto : public RenderCallback {
@@ -1435,7 +1509,7 @@ static void render(RenderContext& rctx, const Code* code) {
         break;
     }
     case CodeKind::LOOP: {
-        RenderLoop callback(rctx, code->loop);
+        RenderLoop callback(rctx, &code->loop);
         rctx.opts->render_code_loop(rctx.os, callback);
         break;
     }
@@ -1450,7 +1524,7 @@ static void render(RenderContext& rctx, const Code* code) {
         break;
     }
     case CodeKind::CONTINUE: {
-        RenderJmp callback(rctx, code->target);
+        RenderContinue callback(rctx, &code->cont);
         rctx.opts->render_code_continue(rctx.os, callback);
         break;
     }

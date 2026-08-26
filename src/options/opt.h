@@ -66,7 +66,7 @@ using StxCodes = list_t<StxCode>;
             ({"code", "dot", "skeleton"})) \
     CHECKED_LIST(supported_features, \
             ({"nested-ifs", "bitmaps", "computed-gotos", "case-ranges", "unsafe", "monadic", \
-                "tags", "captures", "captvars"}))
+                "tags", "captures", "captvars", "computed-continue"}))
 
 #define RE2C_STX_OPTS \
     STX_OPT(bool, semicolons, false) \
@@ -164,10 +164,12 @@ using StxCodes = list_t<StxCode>;
         ({}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(loop, \
-        ({StxVarId::LABEL}), ({StxVarId::STMT}), ({}) \
+        ({StxVarId::LABEL, StxVarId::VAL, StxVarId::VAR}), \
+        ({StxVarId::STATE, StxVarId::STMT}), ({}) \
     ) \
     CODE_TEMPLATE(continue, \
-        ({StxVarId::LABEL}), ({}), ({}) \
+        ({StxVarId::LABEL, StxVarId::VAL, StxVarId::VAR}), \
+        ({}), ({}) \
     ) \
     CODE_TEMPLATE(goto, \
         ({StxVarId::LABEL}), ({}), ({}) \
@@ -428,6 +430,7 @@ enum class StxVarId : uint32_t {
     CONSTOPT(bool, version, true) \
     CONSTOPT(bool, start_conditions, false) \
     CONSTOPT(bool, storable_state, false) \
+    CONSTOPT(bool, computed_continue, false) \
     CONSTOPT(bool, flex_syntax, false) \
     CONSTOPT(bool, verbose, false) \
     CONSTOPT(bool, line_dirs, true) \

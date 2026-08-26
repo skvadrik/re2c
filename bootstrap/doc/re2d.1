@@ -1323,6 +1323,12 @@ variable \fByystate\fP\&. Transitions between states update \fByystate\fP to the
 case label of the destination state and continue execution to the head of
 the loop.
 .TP
+.B \fB\-\-computed\-continue\fP
+This option requires the \fB\-\-loop\-switch\fP code model. It uses computed
+\fBcontinue\fP statements to select the next switch case directly, enabling
+jump\-table optimization similar to \fB\-\-computed\-gotos\fP in the goto/label
+code model.
+.TP
 .B \fB\-\-nested\-ifs \-s\fP
 Use nested \fBif\fP statements instead of \fBswitch\fP statements in conditional
 jumps. This usually results in more efficient code with non\-optimizing
@@ -1924,12 +1930,15 @@ Default switch case.
 .TP
 .B \fBcode:loop\fP
 A loop that runs forever (unless interrupted from the loop body).
-Supported variables: \fBlabel\fP (loop label), \fBstmt\fP (a list variable
-that expands to all statements in the loop body).
+Supported variables: \fBlabel\fP (loop label), \fBval\fP (initial state),
+\fBvar\fP (state variable), \fBstate\fP (a list variable that expands to all
+state names) and \fBstmt\fP (a list variable that expands to all statements
+in the loop body or the current state).
 .TP
 .B \fBcode:continue\fP
 Continue statement. Supported variables: \fBlabel\fP (label from which to
-continue execution).
+continue execution), \fBval\fP (value passed to a labeled switch) and \fBvar\fP
+(state variable).
 .TP
 .B \fBcode:goto\fP
 Goto statement. Supported variables: \fBlabel\fP (label of the jump
@@ -2242,6 +2251,10 @@ True if  code model based on goto/label is used (\fB\-\-goto\-label\fP).
 .TP
 .B \fB\&.code_model.loop_switch\fP
 True if code model based on loop/switch is used (\fB\-\-loop\-switch\fP).
+.TP
+.B \fB\&.computed_continue\fP
+True if loop/switch model uses labeled\-switch transitions
+(\fB\-\-computed\-continue\fP).
 .TP
 .B \fB\&.code_model.recursive_functions\fP
 True if code model based on recursive functions is used
