@@ -141,6 +141,12 @@
     case label of the destination state and continue execution to the head of
     the loop.
 
+``--computed-continue``
+    This option requires the ``--loop-switch`` code model. It uses computed
+    ``continue`` statements to select the next switch case directly, enabling
+    jump-table optimization similar to ``--computed-gotos`` in the goto/label
+    code model.
+
 ``--nested-ifs -s``
     Use nested ``if`` statements instead of ``switch`` statements in conditional
     jumps. This usually results in more efficient code with non-optimizing

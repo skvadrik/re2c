@@ -37,7 +37,7 @@ language configurations, inplace configurations and code templates.
   ``supported_features``
       A list of supported features with possible elements ``nested-ifs``,
       ``bitmaps``, ``computed-gotos``, ``case-ranges``, ``monadic``, ``unsafe``,
-      ``tags``, ``captures``, ``captvars``.
+      ``tags``, ``captures``, ``captvars``, ``computed-continue``.
 
 **Language configurations**
 
@@ -270,12 +270,15 @@ language configurations, inplace configurations and code templates.
 
   ``code:loop``
       A loop that runs forever (unless interrupted from the loop body).
-      Supported variables: ``label`` (loop label), ``stmt`` (a list variable
-      that expands to all statements in the loop body).
+      Supported variables: ``label`` (loop label), ``val`` (initial state),
+      ``var`` (state variable), ``state`` (a list variable that expands to all
+      state names) and ``stmt`` (a list variable that expands to all statements
+      in the loop body or the current state).
 
   ``code:continue``
       Continue statement. Supported variables: ``label`` (label from which to
-      continue execution).
+      continue execution), ``val`` (value passed to a labeled switch) and ``var``
+      (state variable).
 
   ``code:goto``
       Goto statement. Supported variables: ``label`` (label of the jump
@@ -579,6 +582,10 @@ language configurations, inplace configurations and code templates.
       True if the relative form of computed ``goto`` is used
       (``--computed-gotos-relative`` or ``re2c:cgoto:relative = 1``).
 
+  ``.computed_continue``
+      True if loop/switch model uses labeled-switch transitions
+      (``--computed-continue``).
+
   ``.code_model.goto_label``
       True if  code model based on goto/label is used (``--goto-label``).
 
@@ -619,4 +626,3 @@ language configurations, inplace configurations and code templates.
 
   ``.yyfn.throw``
       True if ``re2c:yyfn:throw`` configuration is defined to a nonempty string.
-

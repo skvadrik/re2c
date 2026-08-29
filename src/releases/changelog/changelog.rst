@@ -2,6 +2,15 @@ Changelog
 =========
 
 
+4.6 (2026-08-29)
+~~~~~~~~~~~~~~~~
+
+- Added support for Zig labeled continue optimization.
+  (`#580 <https://github.com/skvadrik/re2c/pull/580>`_).
+
+- Updated C/C++ examples to use re2c features available in version 4.0 or higher.
+
+
 4.5.1 (2026-03-27)
 ~~~~~~~~~~~~~~~~~~
 
