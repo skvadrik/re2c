@@ -1,0 +1,7 @@
+Release 1.0.2
+=============
+
+This is another minor bug-fix release.
+It addresses some documentation issues (thanks to Ziris85 for the bug report).
+See the changelog :ref:`releases/changelog/changelog:1.0.2 (2017-08-26)` for details.
+

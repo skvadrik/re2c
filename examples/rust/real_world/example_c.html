@@ -1,0 +1,588 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>C lexer in Rust &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="c-lexer-in-rust">
+<h1>C lexer in Rust<a class="headerlink" href="#c-lexer-in-rust" title="Permalink to this heading">¶</a></h1>
+<p>This is an example of a C lexer written in Rust.
+Compile as <code class="docutils literal notranslate"><span class="pre">re2rust</span> <span class="pre">-o</span> <span class="pre">c.rs</span> <span class="pre">c.re</span> <span class="pre">--no-unsafe</span></code>.</p>
+<p><a class="reference download internal" download="" href="../../../_downloads/08f2fd251d8b692858b7d494b031d32e/c.re"><code class="xref download docutils literal notranslate"><span class="pre">[c.re]</span></code></a></p>
+<div class="highlight-rust notranslate"><div class="highlight"><pre><span></span><span class="c1">// re2rust -W $INPUT -o $OUTPUT --no-unsafe</span>
+
+<span class="c1">// This example is based on a public domain C lex grammar originally</span>
+<span class="c1">// hosted at http://www.quut.com/c/ANSI-C-grammar-l.html</span>
+<span class="c1">// It has, however, been significantly modified.</span>
+
+<span class="c1">// A real C lexer in a modern compiler typically postprocesses a tokenization</span>
+<span class="c1">// step performed by the preprocessor. This example isn&#39;t actually practically</span>
+<span class="c1">// usable as-is, and would require significant work to turn into part of a real</span>
+<span class="c1">// C compiler.</span>
+
+<span class="c1">// As with the original from quut.com, this grammar presupposes translation for</span>
+<span class="c1">// phases 1 to 5 have already been performed, though it also still handles</span>
+<span class="c1">// comments. It does handle string concatenation though in a sort of</span>
+<span class="c1">// half-hearted manner.</span>
+
+<span class="c1">// We specify unicode here to make the code in this example more interesting.</span>
+<span class="c1">// We use the &quot;ignore&quot; Unicode encoding policy (which is the default anyway)</span>
+<span class="c1">// because the Rust input routine we use is already checking for surrogates.</span>
+<span class="sd">/*!re2c</span>
+<span class="sd">    re2c:encoding:utf8 = 1;</span>
+<span class="sd">    re2c:encoding-policy = ignore;</span>
+<span class="sd"> */</span>
+
+<span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">fmt</span><span class="p">;</span>
+
+<span class="c1">// Errors type</span>
+<span class="cp">#[derive(Debug, Clone)]</span>
+<span class="k">struct</span> <span class="nc">LexError</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">message</span>: <span class="nb">String</span><span class="p">,</span>
+<span class="w">    </span><span class="n">token_text</span>: <span class="nb">String</span><span class="p">,</span>
+<span class="w">    </span><span class="n">line</span>: <span class="kt">usize</span><span class="p">,</span>
+<span class="w">    </span><span class="n">column</span>: <span class="kt">usize</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">fmt</span>::<span class="n">Display</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">LexError</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span> <span class="nf">fmt</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">f</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="n">fmt</span>::<span class="n">Formatter</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="p">(),</span><span class="w"> </span><span class="n">fmt</span>::<span class="n">Error</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">write!</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{}: {} ({}:{})&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="bp">self</span><span class="p">.</span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">token_text</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">line</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">column</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// The default definitions for the Error methods are fine.</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">std</span>::<span class="n">error</span>::<span class="n">Error</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">LexError</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+
+<span class="cp">#[derive(Debug, Clone)]</span>
+<span class="cp">#[allow(dead_code)]</span><span class="w"> </span><span class="c1">// silence &#39;field in not used&#39; warnings</span>
+<span class="k">struct</span> <span class="nc">Position</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// What line are we on? (starts on line 0.)</span>
+<span class="w">    </span><span class="n">line_num</span>: <span class="kt">usize</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// What is the index of the first character on the line?</span>
+<span class="w">    </span><span class="n">bol</span>: <span class="kt">usize</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// What is the index of the current token?</span>
+<span class="w">    </span><span class="n">start</span>: <span class="kt">usize</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// What is the index of the end of the current token?</span>
+<span class="w">    </span><span class="n">end</span>: <span class="kt">usize</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">// All the different kinds of tokens.</span>
+<span class="cp">#[derive(Debug, Clone, Eq, PartialEq)]</span>
+<span class="k">enum</span> <span class="nc">TName</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// General</span>
+<span class="w">    </span><span class="c1">//Error(String),</span>
+<span class="w">    </span><span class="n">Comment</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Whitespace</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Newline</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Ids.</span>
+<span class="w">    </span><span class="n">Id</span><span class="p">,</span>
+<span class="w">    </span><span class="n">TypeId</span><span class="p">,</span>
+<span class="w">    </span><span class="n">EnumId</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Constants</span>
+<span class="w">    </span><span class="n">IntConst</span><span class="p">,</span>
+<span class="w">    </span><span class="n">FloatConst</span><span class="p">,</span>
+<span class="w">    </span><span class="n">StringLiteral</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Keywords</span>
+<span class="w">    </span><span class="n">Alignas</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Alignof</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Atomic</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Bool</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Complex</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Generic</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Imaginary</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Noreturn</span><span class="p">,</span>
+<span class="w">    </span><span class="n">StaticAssert</span><span class="p">,</span>
+<span class="w">    </span><span class="n">ThreadLocal</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Auto</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Break</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Case</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Char</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Const</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Continue</span><span class="p">,</span>
+<span class="w">    </span><span class="nb">Default</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Do</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Double</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Else</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Enum</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Extern</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Float</span><span class="p">,</span>
+<span class="w">    </span><span class="n">For</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Goto</span><span class="p">,</span>
+<span class="w">    </span><span class="n">If</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Inline</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Int</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Long</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Register</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Restrict</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Return</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Short</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Signed</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Sizeof</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Static</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Struct</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Switch</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Typedef</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Union</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Unsigned</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Void</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Volatile</span><span class="p">,</span>
+<span class="w">    </span><span class="n">While</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Punctuators</span>
+<span class="w">    </span><span class="n">Ellipsis</span><span class="p">,</span>
+<span class="w">    </span><span class="n">RSAsgn</span><span class="p">,</span>
+<span class="w">    </span><span class="n">LSAsgn</span><span class="p">,</span>
+<span class="w">    </span><span class="n">AddAsgn</span><span class="p">,</span>
+<span class="w">    </span><span class="n">SubAsgn</span><span class="p">,</span>
+<span class="w">    </span><span class="n">MulAsgn</span><span class="p">,</span>
+<span class="w">    </span><span class="n">DivAsgn</span><span class="p">,</span>
+<span class="w">    </span><span class="n">ModAsgn</span><span class="p">,</span>
+<span class="w">    </span><span class="n">BAndAsgn</span><span class="p">,</span>
+<span class="w">    </span><span class="n">BXorAsgn</span><span class="p">,</span>
+<span class="w">    </span><span class="n">BOrAsgn</span><span class="p">,</span>
+<span class="w">    </span><span class="n">RShift</span><span class="p">,</span>
+<span class="w">    </span><span class="n">LShift</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Incr</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Decr</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Arrow</span><span class="p">,</span>
+<span class="w">    </span><span class="n">LAnd</span><span class="p">,</span>
+<span class="w">    </span><span class="n">LOr</span><span class="p">,</span>
+<span class="w">    </span><span class="n">LE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">GE</span><span class="p">,</span>
+<span class="w">    </span><span class="nb">Eq</span><span class="p">,</span>
+<span class="w">    </span><span class="n">NEq</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Semi</span><span class="p">,</span>
+<span class="w">    </span><span class="n">OBrace</span><span class="p">,</span>
+<span class="w">    </span><span class="n">CBrace</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Comma</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Colon</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Asgn</span><span class="p">,</span>
+<span class="w">    </span><span class="n">OParen</span><span class="p">,</span>
+<span class="w">    </span><span class="n">CParen</span><span class="p">,</span>
+<span class="w">    </span><span class="n">OBrack</span><span class="p">,</span>
+<span class="w">    </span><span class="n">CBrack</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Dot</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Amper</span><span class="p">,</span>
+<span class="w">    </span><span class="n">LNot</span><span class="p">,</span>
+<span class="w">    </span><span class="n">BNot</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Sub</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Add</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Aster</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Div</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Mod</span><span class="p">,</span>
+<span class="w">    </span><span class="n">LT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">GT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">BXor</span><span class="p">,</span>
+<span class="w">    </span><span class="n">BOr</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Ques</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="cp">#[derive(Debug, Clone)]</span>
+<span class="cp">#[allow(dead_code)]</span><span class="w"> </span><span class="c1">// silence &#39;field in not used&#39; warnings</span>
+<span class="k">struct</span> <span class="nc">Token</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">tname</span>: <span class="nc">TName</span><span class="p">,</span>
+<span class="w">    </span><span class="n">text</span>: <span class="nb">String</span><span class="p">,</span>
+<span class="w">    </span><span class="n">position</span>: <span class="nc">Position</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="cp">#[derive(Debug, Clone)]</span>
+<span class="k">enum</span> <span class="nc">SymType</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cp">#[allow(dead_code)]</span><span class="w"> </span><span class="c1">// silence &#39;variant is never constructed&#39; warning</span>
+<span class="w">    </span><span class="n">TypeName</span><span class="p">,</span>
+<span class="w">    </span><span class="cp">#[allow(dead_code)]</span><span class="w"> </span><span class="c1">// silence &#39;variant is never constructed&#39; warning</span>
+<span class="w">    </span><span class="n">EnumConst</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Identifier</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">// C lexers (unfortunately) need information from the symbol table to return</span>
+<span class="c1">// the correct token type, because an identifier could be a type name. (This</span>
+<span class="c1">// ambiguity is a big source of trouble in C.) This is a fake &quot;sym_type&quot; that</span>
+<span class="c1">// always returns Identifier. It needs to be fixed to actually hook into the</span>
+<span class="c1">// parser&#39;s symbol table if this lexer is used in the real world.</span>
+<span class="k">fn</span> <span class="nf">sym_type</span><span class="p">(</span><span class="n">_ident</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">SymType</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">SymType</span>::<span class="n">Identifier</span>
+<span class="p">}</span>
+
+<span class="cp">#[derive(Debug, Clone)]</span>
+<span class="k">struct</span> <span class="nc">Input</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">u8</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">cursor</span>: <span class="kt">usize</span><span class="p">,</span>
+<span class="w">    </span><span class="n">token</span>: <span class="kt">usize</span><span class="p">,</span>
+<span class="w">    </span><span class="n">marker</span>: <span class="kt">usize</span><span class="p">,</span>
+<span class="w">    </span><span class="n">line</span>: <span class="kt">usize</span><span class="p">,</span>
+<span class="w">    </span><span class="n">bol</span>: <span class="kt">usize</span><span class="p">,</span>
+<span class="w">    </span><span class="n">eof</span>: <span class="kt">bool</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">Input</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">s</span>: <span class="nb">String</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">Input</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">into_bytes</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Input</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">data</span>: <span class="nc">data</span><span class="p">,</span>
+<span class="w">            </span><span class="n">cursor</span>: <span class="mi">0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">token</span>: <span class="mi">0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">marker</span>: <span class="mi">0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">line</span>: <span class="mi">0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">bol</span>: <span class="mi">0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">eof</span>: <span class="nc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// text of the current token</span>
+<span class="w">    </span><span class="k">fn</span> <span class="nf">current_ttext</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">String</span> <span class="p">{</span>
+<span class="w">        </span><span class="c1">// for maximum performance, this should actually be from_utf8_unchecked</span>
+<span class="w">        </span><span class="nb">String</span>::<span class="n">from_utf8</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">token</span><span class="o">..</span><span class="bp">self</span><span class="p">.</span><span class="n">cursor</span><span class="p">].</span><span class="n">to_vec</span><span class="p">()).</span><span class="n">unwrap</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">fn</span> <span class="nf">token</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">tname</span>: <span class="nc">TName</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="nb">Option</span><span class="o">&lt;</span><span class="n">Token</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">LexError</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">current_ttext</span><span class="p">();</span>
+
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Position</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">line_num</span>: <span class="nc">self</span><span class="p">.</span><span class="n">line</span><span class="p">,</span>
+<span class="w">            </span><span class="n">bol</span>: <span class="nc">self</span><span class="p">.</span><span class="n">bol</span><span class="p">,</span>
+<span class="w">            </span><span class="n">start</span>: <span class="nc">self</span><span class="p">.</span><span class="n">token</span><span class="p">,</span>
+<span class="w">            </span><span class="n">end</span>: <span class="nc">self</span><span class="p">.</span><span class="n">cursor</span><span class="p">,</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">lines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">match</span><span class="w"> </span><span class="n">tname</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">TName</span>::<span class="n">Comment</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">text</span><span class="p">.</span><span class="n">lines</span><span class="p">().</span><span class="n">count</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">            </span><span class="c1">// We may have multiple string literals separated by</span>
+<span class="w">            </span><span class="c1">// newlines or the like to fuse.</span>
+<span class="w">            </span><span class="n">TName</span>::<span class="n">StringLiteral</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">text</span><span class="p">.</span><span class="n">lines</span><span class="p">().</span><span class="n">count</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">            </span><span class="n">TName</span>::<span class="n">Newline</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">            </span><span class="n">_</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">tname</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">TName</span>::<span class="n">Newline</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="bp">self</span><span class="p">.</span><span class="n">bol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">cursor</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">lines</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// the unwrap should only fail if we have a bad bug.</span>
+<span class="w">            </span><span class="bp">self</span><span class="p">.</span><span class="n">bol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="o">..</span><span class="bp">self</span><span class="p">.</span><span class="n">cursor</span><span class="p">]</span>
+<span class="w">                </span><span class="p">.</span><span class="n">iter</span><span class="p">().</span><span class="n">rposition</span><span class="p">(</span><span class="o">|</span><span class="n">bytes</span><span class="o">|</span><span class="w"> </span><span class="o">*</span><span class="n">bytes</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">b&#39;\n&#39;</span><span class="p">)</span>
+<span class="w">                </span><span class="p">.</span><span class="n">unwrap</span><span class="p">();</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="p">.</span><span class="n">line</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">lines</span><span class="p">;</span>
+
+<span class="w">        </span><span class="nb">Ok</span><span class="p">(</span><span class="nb">Some</span><span class="p">(</span><span class="n">Token</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">tname</span><span class="p">,</span>
+<span class="w">            </span><span class="n">text</span><span class="p">,</span>
+<span class="w">            </span><span class="n">position</span><span class="p">,</span>
+<span class="w">        </span><span class="p">}))</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">fn</span> <span class="nf">error</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">s</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="nb">Option</span><span class="o">&lt;</span><span class="n">Token</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">LexError</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">Err</span><span class="p">(</span><span class="n">LexError</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">message</span>: <span class="nc">s</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span>
+<span class="w">            </span><span class="n">token_text</span>: <span class="nc">self</span><span class="p">.</span><span class="n">current_ttext</span><span class="p">(),</span>
+<span class="w">            </span><span class="n">line</span>: <span class="nc">self</span><span class="p">.</span><span class="n">line</span><span class="p">,</span>
+<span class="w">            </span><span class="n">column</span>: <span class="nc">self</span><span class="p">.</span><span class="n">cursor</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">bol</span><span class="p">,</span>
+<span class="w">        </span><span class="p">})</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Tells us whether an identifier is a type name, an enum constant, or an</span>
+<span class="w">    </span><span class="c1">// ordinary identifier.</span>
+<span class="w">    </span><span class="k">fn</span> <span class="nf">check_type</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="nb">Option</span><span class="o">&lt;</span><span class="n">Token</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">LexError</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">current_ttext</span><span class="p">();</span>
+<span class="w">        </span><span class="k">match</span><span class="w"> </span><span class="n">sym_type</span><span class="p">(</span><span class="o">&amp;</span><span class="n">text</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">SymType</span>::<span class="n">TypeName</span><span class="w">   </span><span class="o">=&gt;</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">token</span><span class="p">(</span><span class="n">TName</span>::<span class="n">TypeId</span><span class="p">),</span>
+<span class="w">            </span><span class="n">SymType</span>::<span class="n">EnumConst</span><span class="w">  </span><span class="o">=&gt;</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">token</span><span class="p">(</span><span class="n">TName</span>::<span class="n">EnumId</span><span class="p">),</span>
+<span class="w">            </span><span class="n">SymType</span>::<span class="n">Identifier</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">token</span><span class="p">(</span><span class="n">TName</span>::<span class="n">Id</span><span class="p">),</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Some of this lexer was taken from the C lex grammar at</span>
+<span class="c1">// http://www.quut.com/c/ANSI-C-grammar-l.html</span>
+<span class="k">fn</span> <span class="nf">next_token</span><span class="p">(</span><span class="n">input</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="n">Input</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="nb">Option</span><span class="o">&lt;</span><span class="n">Token</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">LexError</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// The input must be null-terminated, otherwise the function has UB.</span>
+<span class="w">    </span><span class="fm">assert_eq!</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">last</span><span class="p">(),</span><span class="w"> </span><span class="nb">Some</span><span class="p">(</span><span class="o">&amp;</span><span class="mi">0</span><span class="p">));</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="n">eof</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">Ok</span><span class="p">(</span><span class="nb">None</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">input</span><span class="p">.</span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="n">cursor</span><span class="p">;</span>
+<span class="w">    </span><span class="sd">/*!re2c</span>
+<span class="sd">    re2c:yyfill:enable = 0;</span>
+<span class="sd">    re2c:YYCTYPE      = &quot;u8&quot;;</span>
+<span class="sd">    re2c:YYPEEK       = &quot;input.data[input.cursor]&quot;;</span>
+<span class="sd">    re2c:YYSKIP       = &quot;input.cursor += 1;&quot;;</span>
+<span class="sd">    re2c:YYBACKUP     = &quot;input.marker = input.cursor;&quot;;</span>
+<span class="sd">    re2c:YYRESTORE    = &quot;input.cursor = input.marker;&quot;;</span>
+<span class="sd">    re2c:YYRESTORETAG = &quot;input.cursor = ${tag};&quot;;</span>
+<span class="sd">    re2c:YYSTAGP      = &quot;@@{tag} = input.cursor;&quot;;</span>
+<span class="sd">    re2c:YYSTAGN      = &quot;@@{tag} = -1;&quot;;</span>
+<span class="sd">    re2c:YYSHIFT      = &quot;input.cursor += @@{shift};&quot;;</span>
+<span class="sd">    re2c:YYSHIFTSTAG  = &quot;@@{tag} += @@{shift};&quot;;</span>
+
+<span class="sd">    O  = [0-7];</span>
+<span class="sd">    D  = [0-9];</span>
+<span class="sd">    NZ = [1-9];</span>
+<span class="sd">    L  = [a-zA-Z_];</span>
+<span class="sd">    A  = [a-zA-Z_0-9];</span>
+<span class="sd">    H  = [a-fA-F0-9];</span>
+<span class="sd">    HP = (&quot;0&quot;[xX]);</span>
+<span class="sd">    E  = ([Ee][+-]?D+);</span>
+<span class="sd">    P  = ([Pp][+-]?D+);</span>
+<span class="sd">    FS = [fFlL];</span>
+<span class="sd">    IS = (([uU](&quot;l&quot;|&quot;L&quot;|&quot;ll&quot;|&quot;LL&quot;)?)|((&quot;l&quot;|&quot;L&quot;|&quot;ll&quot;|&quot;LL&quot;)[uU]?));</span>
+<span class="sd">    CP = (&quot;u&quot;|&quot;U&quot;|&quot;L&quot;);</span>
+<span class="sd">    SP = (&quot;u8&quot;|&quot;u&quot;|&quot;U&quot;|&quot;L&quot;);</span>
+<span class="sd">    ES = (&quot;\\&quot;([&#39;&quot;?\\abfnrtv]|[0-7]{1,3}|&quot;x&quot;[a-fA-F0-9]+));</span>
+<span class="sd">    LWS = [ \t\v\f];</span>
+<span class="sd">    WS = [ \t\v\n\f];</span>
+
+<span class="sd">    // For efficiency, block comments should probably be handled by a special</span>
+<span class="sd">    // function that tracks newlines etc. We&#39;re punting on that.</span>
+<span class="sd">    &quot;/&quot; &quot;*&quot; ([^\x00*]|&quot;*&quot;+[^\x00/])* &quot;*&quot;+ &quot;/&quot; {</span>
+<span class="sd">        return input.token(TName::Comment)</span>
+<span class="sd">    }</span>
+<span class="sd">    // A small rule to catch and error on unterminated comments.</span>
+<span class="sd">    &quot;/&quot; &quot;*&quot; ([^\x00*]|&quot;*&quot;+[^\x00/])* {</span>
+<span class="sd">        return input.error(&quot;unterminated comment&quot;)</span>
+<span class="sd">    }</span>
+<span class="sd">    // Line comments</span>
+<span class="sd">    &quot;//&quot;[^\x00\n]* { return input.token(TName::Comment) }</span>
+
+<span class="sd">    &quot;_Alignas&quot;       { return input.token(TName::Alignas) }</span>
+<span class="sd">    &quot;_Alignof&quot;       { return input.token(TName::Alignof) }</span>
+<span class="sd">    &quot;_Atomic&quot;        { return input.token(TName::Atomic) }</span>
+<span class="sd">    &quot;_Bool&quot;          { return input.token(TName::Bool) }</span>
+<span class="sd">    &quot;_Complex&quot;       { return input.token(TName::Complex) }</span>
+<span class="sd">    &quot;_Generic&quot;       { return input.token(TName::Generic) }</span>
+<span class="sd">    // _Imaginary is reserved but not used in C</span>
+<span class="sd">    &quot;_Imaginary&quot;     { return input.token(TName::Imaginary) }</span>
+<span class="sd">    &quot;_Noreturn&quot;      { return input.token(TName::Noreturn) }</span>
+<span class="sd">    &quot;_Static_assert&quot; { return input.token(TName::StaticAssert) }</span>
+<span class="sd">    &quot;_Thread_local&quot;  { return input.token(TName::ThreadLocal) }</span>
+
+<span class="sd">    &quot;auto&quot;     { return input.token(TName::Auto) }</span>
+<span class="sd">    &quot;break&quot;    { return input.token(TName::Break) }</span>
+<span class="sd">    &quot;case&quot;     { return input.token(TName::Case) }</span>
+<span class="sd">    &quot;char&quot;     { return input.token(TName::Char) }</span>
+<span class="sd">    &quot;const&quot;    { return input.token(TName::Const) }</span>
+<span class="sd">    &quot;continue&quot; { return input.token(TName::Continue) }</span>
+<span class="sd">    &quot;default&quot;  { return input.token(TName::Default) }</span>
+<span class="sd">    &quot;do&quot;       { return input.token(TName::Do) }</span>
+<span class="sd">    &quot;double&quot;   { return input.token(TName::Double) }</span>
+<span class="sd">    &quot;else&quot;     { return input.token(TName::Else) }</span>
+<span class="sd">    &quot;enum&quot;     { return input.token(TName::Enum) }</span>
+<span class="sd">    &quot;extern&quot;   { return input.token(TName::Extern) }</span>
+<span class="sd">    &quot;float&quot;    { return input.token(TName::Float) }</span>
+<span class="sd">    &quot;for&quot;      { return input.token(TName::For) }</span>
+<span class="sd">    &quot;goto&quot;     { return input.token(TName::Goto) }</span>
+<span class="sd">    &quot;if&quot;       { return input.token(TName::If) }</span>
+<span class="sd">    &quot;inline&quot;   { return input.token(TName::Inline) }</span>
+<span class="sd">    &quot;int&quot;      { return input.token(TName::Int) }</span>
+<span class="sd">    &quot;long&quot;     { return input.token(TName::Long) }</span>
+<span class="sd">    &quot;register&quot; { return input.token(TName::Register) }</span>
+<span class="sd">    &quot;restrict&quot; { return input.token(TName::Restrict) }</span>
+<span class="sd">    &quot;return&quot;   { return input.token(TName::Return) }</span>
+<span class="sd">    &quot;short&quot;    { return input.token(TName::Short) }</span>
+<span class="sd">    &quot;signed&quot;   { return input.token(TName::Signed) }</span>
+<span class="sd">    &quot;sizeof&quot;   { return input.token(TName::Sizeof) }</span>
+<span class="sd">    &quot;static&quot;   { return input.token(TName::Static) }</span>
+<span class="sd">    &quot;struct&quot;   { return input.token(TName::Struct) }</span>
+<span class="sd">    &quot;switch&quot;   { return input.token(TName::Switch) }</span>
+<span class="sd">    &quot;typedef&quot;  { return input.token(TName::Typedef) }</span>
+<span class="sd">    &quot;union&quot;    { return input.token(TName::Union) }</span>
+<span class="sd">    &quot;unsigned&quot; { return input.token(TName::Unsigned) }</span>
+<span class="sd">    &quot;void&quot;     { return input.token(TName::Void) }</span>
+<span class="sd">    &quot;volatile&quot; { return input.token(TName::Volatile) }</span>
+<span class="sd">    &quot;while&quot;    { return input.token(TName::While) }</span>
+
+<span class="sd">    // In C, identifiers cannot actually be assigned a token type without</span>
+<span class="sd">    // cooperation with the parser. We call a function that tells us what kind</span>
+<span class="sd">    // of token this really is.</span>
+<span class="sd">    L A*       { return input.check_type() }</span>
+
+<span class="sd">    HP H+ IS?  { return input.token(TName::IntConst) }</span>
+<span class="sd">    NZ D* IS?  { return input.token(TName::IntConst) }</span>
+<span class="sd">    &quot;0&quot; O* IS? { return input.token(TName::IntConst) }</span>
+
+<span class="sd">    // Character constants</span>
+<span class="sd">    CP? &quot;&#39;&quot; ([^\x00&#39;\\\n]|ES)+ &quot;&#39;&quot; { return input.token(TName::IntConst) }</span>
+
+<span class="sd">    // A rule to catch unterminated character constants</span>
+<span class="sd">    CP? &quot;&#39;&quot; ([^\x00&#39;\\\n]|ES)+ {</span>
+<span class="sd">        return input.error(&quot;unterminated character constant&quot;)</span>
+<span class="sd">    }</span>
+
+<span class="sd">    D+ E FS?            { return input.token(TName::FloatConst) }</span>
+<span class="sd">    D* &quot;.&quot; D+ E? FS?    { return input.token(TName::FloatConst) }</span>
+<span class="sd">    D+ &quot;.&quot; E? FS?       { return input.token(TName::FloatConst) }</span>
+<span class="sd">    HP H+ P FS?         { return input.token(TName::FloatConst) }</span>
+<span class="sd">    HP H* &quot;.&quot; H+ P FS?  { return input.token(TName::FloatConst) }</span>
+<span class="sd">    HP H+ &quot;.&quot; P FS?     { return input.token(TName::FloatConst) }</span>
+
+<span class="sd">    // adjacent string literals get fused</span>
+<span class="sd">    (SP? &quot;\&quot;&quot; ([^\x00&quot;\\\n]|ES)* &quot;\&quot;&quot; WS*)+ {</span>
+<span class="sd">        return input.token(TName::StringLiteral)</span>
+<span class="sd">    }</span>
+
+<span class="sd">    // A rule to catch unterminated strings.</span>
+<span class="sd">    (SP? &quot;\&quot;&quot; ([^\x00&quot;\\\n]|ES)*) {</span>
+<span class="sd">        return input.error(&quot;unterminated string&quot;)</span>
+<span class="sd">    }</span>
+
+<span class="sd">    &quot;...&quot;    { return input.token(TName::Ellipsis) }</span>
+<span class="sd">    &quot;&gt;&gt;=&quot;    { return input.token(TName::RSAsgn) }</span>
+<span class="sd">    &quot;&lt;&lt;=&quot;    { return input.token(TName::LSAsgn) }</span>
+<span class="sd">    &quot;+=&quot;     { return input.token(TName::AddAsgn) }</span>
+<span class="sd">    &quot;-=&quot;     { return input.token(TName::SubAsgn) }</span>
+<span class="sd">    &quot;*=&quot;     { return input.token(TName::MulAsgn) }</span>
+<span class="sd">    &quot;/=&quot;     { return input.token(TName::DivAsgn) }</span>
+<span class="sd">    &quot;%=&quot;     { return input.token(TName::ModAsgn) }</span>
+<span class="sd">    &quot;&amp;=&quot;     { return input.token(TName::BAndAsgn) }</span>
+<span class="sd">    &quot;^=&quot;     { return input.token(TName::BXorAsgn) }</span>
+<span class="sd">    &quot;|=&quot;     { return input.token(TName::BOrAsgn) }</span>
+<span class="sd">    &quot;&gt;&gt;&quot;     { return input.token(TName::RShift) }</span>
+<span class="sd">    &quot;&lt;&lt;&quot;     { return input.token(TName::LShift) }</span>
+<span class="sd">    &quot;++&quot;     { return input.token(TName::Incr) }</span>
+<span class="sd">    &quot;--&quot;     { return input.token(TName::Decr) }</span>
+<span class="sd">    &quot;-&gt;&quot;     { return input.token(TName::Arrow) }</span>
+<span class="sd">    &quot;&amp;&amp;&quot;     { return input.token(TName::LAnd) }</span>
+<span class="sd">    &quot;||&quot;     { return input.token(TName::LOr) }</span>
+<span class="sd">    &quot;&lt;=&quot;     { return input.token(TName::LE) }</span>
+<span class="sd">    &quot;&gt;=&quot;     { return input.token(TName::GE) }</span>
+<span class="sd">    &quot;==&quot;     { return input.token(TName::Eq) }</span>
+<span class="sd">    &quot;!=&quot;     { return input.token(TName::NEq) }</span>
+<span class="sd">    &quot;;&quot;      { return input.token(TName::Semi) }</span>
+<span class="sd">    &quot;{&quot;      { return input.token(TName::OBrace) }</span>
+<span class="sd">    &quot;}&quot;      { return input.token(TName::CBrace) }</span>
+<span class="sd">    &quot;,&quot;      { return input.token(TName::Comma) }</span>
+<span class="sd">    &quot;:&quot;      { return input.token(TName::Colon) }</span>
+<span class="sd">    &quot;=&quot;      { return input.token(TName::Asgn) }</span>
+<span class="sd">    &quot;(&quot;      { return input.token(TName::OParen) }</span>
+<span class="sd">    &quot;)&quot;      { return input.token(TName::CParen) }</span>
+<span class="sd">    &quot;[&quot;      { return input.token(TName::OBrack) }</span>
+<span class="sd">    &quot;]&quot;      { return input.token(TName::CBrack) }</span>
+<span class="sd">    &quot;.&quot;      { return input.token(TName::Dot) }</span>
+<span class="sd">    &quot;&amp;&quot;      { return input.token(TName::Amper) }</span>
+<span class="sd">    &quot;!&quot;      { return input.token(TName::LNot) }</span>
+<span class="sd">    &quot;~&quot;      { return input.token(TName::BNot) }</span>
+<span class="sd">    &quot;-&quot;      { return input.token(TName::Sub) }</span>
+<span class="sd">    &quot;+&quot;      { return input.token(TName::Add) }</span>
+<span class="sd">    &quot;*&quot;      { return input.token(TName::Aster) }</span>
+<span class="sd">    &quot;/&quot;      { return input.token(TName::Div) }</span>
+<span class="sd">    &quot;%&quot;      { return input.token(TName::Mod) }</span>
+<span class="sd">    &quot;&lt;&quot;      { return input.token(TName::LT) }</span>
+<span class="sd">    &quot;&gt;&quot;      { return input.token(TName::GT) }</span>
+<span class="sd">    &quot;^&quot;      { return input.token(TName::BXor) }</span>
+<span class="sd">    &quot;|&quot;      { return input.token(TName::BOr) }</span>
+<span class="sd">    &quot;?&quot;      { return input.token(TName::Ques) }</span>
+
+<span class="sd">    // Whitespace separates tokens. In general, most parsers are not going to</span>
+<span class="sd">    // want to deal with these. In this example we&#39;re returning them as actual</span>
+<span class="sd">    // tokens though. For no particularly deep or good reason, we&#39;ve made</span>
+<span class="sd">    // Newline its own token, though it does simplify some processing.</span>
+<span class="sd">    LWS+   { return input.token(TName::Whitespace) }</span>
+<span class="sd">    &quot;\n&quot;   { return input.token(TName::Newline) }</span>
+
+<span class="sd">    // Bad characters generate an error.</span>
+<span class="sd">    *      { return input.error(&quot;bad character&quot;) }</span>
+
+<span class="sd">    // XXX shouldn&#39;t need return!</span>
+<span class="sd">    [\x00] { input.eof = true; return Ok(None); }</span>
+<span class="sd">    */</span>
+
+<span class="p">}</span>
+
+<span class="k">const</span><span class="w"> </span><span class="n">DEBUG</span>: <span class="kt">bool</span> <span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="fm">macro_rules!</span><span class="w"> </span><span class="n">log</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">(</span><span class="cp">$($fmt</span>:<span class="nc">expr</span><span class="p">)</span><span class="o">?</span><span class="w"> </span><span class="cp">$(,</span><span class="w"> </span><span class="cp">$args</span>:<span class="nc">expr</span><span class="p">)</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">DEBUG</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="fm">println!</span><span class="p">(</span><span class="cp">$($fmt</span><span class="p">)</span><span class="o">?</span><span class="w"> </span><span class="cp">$(,</span><span class="w"> </span><span class="cp">$args</span><span class="p">)</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span>-&gt; <span class="nc">std</span>::<span class="n">io</span>::<span class="nb">Result</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">env</span><span class="p">;</span>
+<span class="w">    </span><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">fs</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Treats the first command line argument as a filename and returns file</span>
+<span class="w">    </span><span class="c1">// contents as a string. If there is no filename, returns a pre-defined</span>
+<span class="w">    </span><span class="c1">// example string (this is used for testing).</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">args</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">env</span>::<span class="n">args</span><span class="p">().</span><span class="n">collect</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// We append a &#39;\0&#39; at the end of the string to act as a sentinel.</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="kt">str</span>: <span class="nb">String</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;int main() { return 0; }</span><span class="se">\0</span><span class="s">&quot;</span><span class="p">.</span><span class="n">to_string</span><span class="p">();</span><span class="w"> </span><span class="c1">// example C program</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fs</span>::<span class="n">read_to_string</span><span class="p">(</span><span class="o">&amp;</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">?</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">str</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="sc">&#39;\0&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Input</span>::<span class="n">new</span><span class="p">(</span><span class="kt">str</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">loop</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">match</span><span class="w"> </span><span class="n">next_token</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">input</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nb">Ok</span><span class="p">(</span><span class="nb">Some</span><span class="p">(</span><span class="n">token</span><span class="p">))</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">log</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;{:#?}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="p">),</span>
+<span class="w">            </span><span class="nb">Ok</span><span class="p">(</span><span class="nb">None</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">log</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;EOF&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nb">Err</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">log</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;error: {:#?}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="nb">Ok</span><span class="p">(())</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

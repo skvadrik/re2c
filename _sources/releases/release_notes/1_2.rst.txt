@@ -1,0 +1,126 @@
+Release 1.2
+===========
+
+This release adds a handful of useful features and finalizes two-year
+research effort on POSIX disambiguation.
+
+First and foremost, :ref:`end of input rule <manual/manual_c:sentinel with bounds checks>`
+has been added to re2c. It is a new method of checking for the end of input,
+which aims at being both generic and simple to use. Historically re2c has a
+:ref:`number of ways <manual/manual_c:handling the end of input>` to handle
+EOF situation. The simplest and the most efficient method is
+:ref:`using a sentinel symbol <manual/manual_c:sentinel>`, but it
+has limited applicability. The most widely used and generic method is
+:ref:`bounds checking with padding <manual/manual_c:bounds checks with padding>`,
+but it is rather complex and requires input buffering.
+Finally, it is possible to define custom EOF handling methods
+by :ref:`using the generic API <manual/manual_c:custom checks>`. However,
+such methods are not necessarily correct and are likely to be slower than other
+methods. The new method, EOF rule, tries to combine the simplicity and
+efficiency of the sentinel symbol and the generality of bounds checking.
+Essentially, all the user is required to do is to specify an arbitrary "fake"
+sentinel using ``re2c:eof`` configuration (zero is usually a good choice), to
+define a special EOF rule ``$``, and to make sure that the fake sentinel is
+always the last symbol in the input buffer. The lexer will then run without end
+of input checks until it hits the branch corresponding to the fake sentinel, at
+which point it will perform additional bounds checking. If indeed it is the end,
+the lexer will try to get more input. If this attempt fails, the lexer will
+either rollback to the last matched rule (or the default rule, if it has
+consumed some input but did not match), or else it will go to EOF rule.
+Depending on each particular case and the choice of sentinel, the performance of
+EOF rule may be slightly better or worse than bounds checking with padding.
+See the user manual for more details and examples.
+
+Another important new feature is the possibility to :ref:`include other files
+<manual/manual_c:include files>`. Re2c provides a directive
+``/*!include:re2c "file.re" */``, where ``file.re`` is the name of the included
+file.
+Re2c looks for included files in the directory of the including file and in the
+include locations, which can be specified with ``-I`` option. Include files
+may have further includes of their own. Re2c provides some predefined include
+files that can be found in the ``include/`` sub-directory of the project. These
+files contain useful definitions and form something like a standard library
+for re2c. Currently there is one available include, ``unicode_categories.re``.
+
+Re2c now allows to :ref:`generate header file <manual/manual_c:header files>`
+from the input file using option ``-t --type-header`` or
+``re2c:flags:t`` and ``re2c:flags:type-header`` configurations and the newly
+added directives ``/*!header:re2c:on*/`` and ``/*!header:re2c:off*/``.
+Header files may be needed in cases when re2c is used to generate definitions
+of constants, variables and structs that must be visible from other translation
+units.
+
+Re2c can now understand UTF8-encoded string literals and character classes in
+regular expressions. By default, re2c parses regular expressions like
+``"∀x ∃y"`` as a sequence of 1-byte ASCII code points
+``e2 88 80 78 20 e2 88 83 79`` (hexadecimal), and the users have to escape
+Unicode symbols manually: ``"\u2200x \u2203y"``. This is not what most users
+would expect, as demonstrated by multiple issues on the bugtracker. The new
+option ``--input-encoding <ascii | utf8>`` allows to change the default
+behavior and parse ``"∀x ∃y"`` as a sequence of 4-byte Unicode code points
+``2200 78 20 2203 79`` (hexadecimal). Note that the new option affects only
+parsing, and not the code generation.
+
+Re2c now allows to mix :ref:`reusable blocks <manual/manual_c:reusable blocks>`
+with normal blocks when ``-r --reuse`` option is used. This is very useful in
+cases when the input file contains many re2c blocks, and only some of them need
+to be reused (a good example is re2c own lexer, which has to use certain rules
+twice in order to generate ASCII and UTF8 lexer variants for
+``--input-encoding <ascii | utf8>`` option).
+
+It is now possible to specify location format in re2c-generated messages with
+``--location-format <gnu | msvc>`` option. As one might guess, possible
+arguments are GNU location format ``filename:line:column:`` (the default) and
+MSVC format ``filename(line,column)``. This option might help IDE users.
+Another new option is ``--verbose`` --- it prints a short "success" message in
+case re2c exits successfully.
+
+Flex compatibility mode (enabled with ``-F --flex-support`` option) has been
+improved: parsing errors and incorrect operator precedence in some rare cases
+have been fixed. Historically re2c allows to mix flex-style code with re2c-style
+code, which creates certain difficulties for the parser. Such difficulties can
+be resolved by passing parts of the parser context to the lexer.
+
+The difference operator ``/`` is now applied to its operands before encoding
+expansion. Re2c supports difference only for character classes, and encoding
+expansion in case of a variable-length encoding may transform even a simple
+character class into a complex graph (see
+`the graph <../../_images/utf8_any.png>`_ for ``[^]`` in UTF8 for example).
+Applying expansion after difference makes ``/`` applicable in more cases.
+
+Re2c now generates the output file atomically: it first creates a temporary file
+and writes the generated output into it, and then renames the temporary file to
+the output file.
+
+Documentation has been rearranged and updated, and the website has been
+fixed to look somewhat better on mobile devices (hopefully).
+
+From developers standpoint, re2c now has better debugging capabilities. Debug
+code has been moved in a separate subsystem and is no longer built in release
+binaries (debug builds are enabled with ``--enable-debug`` configure option).
+New debug options and passes have been added.
+
+This release has taken almost a year, mostly because of the time needed to
+formalize the extended algorithm for POSIX disambiguation and write a formal
+paper `Efficient POSIX Submatch Extraction on NFA
+<../../2019_borsotti_trofimovich_efficient_posix_submatch_extraction_on_nfa.pdf>`_.
+The algorithms described in the paper are implemented in an experimental
+library ``libre2c``. The library is intended as a playground for experiments
+and research, not a replacement for existing libraries like RE2. Having re2c
+as a library is convenient for benchmarking, testing and creating bindings to
+other languages.
+To build the library and benchmarks, configure re2c with ``--enable-libs`` option.
+
+Many people have contributed to this release.
+Angelo Borsotti co-authored the paper; his hard work has revealed multiple
+shortcomings and deficiencies in the algorithms used in re2c.
+Henri Salo helped with fuzz-testing re2c using the American Fuzzy Lop.
+Denis Naumov helped with Windows portability issues.
+Sergei Trofimovich fixed a number of bugs;
+he and Serghei Iakovlev helped with the Travis CI infrastructure.
+Wesley Terpstra used re2c in the open-source
+`wake build tool <https://github.com/sifive/wake>`_.
+Many thanks to them and all the others who contributed to this release!
+
+A lot of bugs have been fixed.
+See the changelog :ref:`releases/changelog/changelog:1.2 (2019-08-02)` for details.

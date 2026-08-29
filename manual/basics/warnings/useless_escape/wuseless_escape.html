@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>-Wuseless-escape &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="wuseless-escape">
+<h1>-Wuseless-escape<a class="headerlink" href="#wuseless-escape" title="Permalink to this heading">¶</a></h1>
+<p>Sometimes people escape characters that don’t need to be escaped — either
+because they (mistakenly) think that the character is special and must be
+escaped in the given context, or because they think that this escape sequence
+means something (when it actually doesn’t), or just by pure accident. With
+<code class="docutils literal notranslate"><span class="pre">-Wuseless-escape</span></code> option re2c warns about ignored escapes. Consider this
+example (escapes.re):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    *                        {}</span>
+<span class="cm">    &quot;\a\A\&quot;\&#39;\[\]\-\x5d\377&quot; {}</span>
+<span class="cm">    &#39;\a\A\&quot;\&#39;\[\]\-\x5d\377&#39; {}</span>
+<span class="cm">    [\a\A\&quot;\&#39;\[\]\-\x5d\377] {}</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>re2c reports a bunch of warnings:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wuseless-escape escapes.re -o escapes.c
+escapes.re:3:7: warning: escape has no effect: &#39;\A&#39; [-Wuseless-escape]
+escapes.re:3:11: warning: escape has no effect: &#39;\&#39;&#39; [-Wuseless-escape]
+escapes.re:3:13: warning: escape has no effect: &#39;\[&#39; [-Wuseless-escape]
+escapes.re:3:15: warning: escape has no effect: &#39;\]&#39; [-Wuseless-escape]
+escapes.re:3:17: warning: escape has no effect: &#39;\-&#39; [-Wuseless-escape]
+escapes.re:4:7: warning: escape has no effect: &#39;\A&#39; [-Wuseless-escape]
+escapes.re:4:9: warning: escape has no effect: &#39;\&quot;&#39; [-Wuseless-escape]
+escapes.re:4:13: warning: escape has no effect: &#39;\[&#39; [-Wuseless-escape]
+escapes.re:4:15: warning: escape has no effect: &#39;\]&#39; [-Wuseless-escape]
+escapes.re:4:17: warning: escape has no effect: &#39;\-&#39; [-Wuseless-escape]
+escapes.re:5:7: warning: escape has no effect: &#39;\A&#39; [-Wuseless-escape]
+escapes.re:5:9: warning: escape has no effect: &#39;\&quot;&#39; [-Wuseless-escape]
+escapes.re:5:11: warning: escape has no effect: &#39;\&#39;&#39; [-Wuseless-escape]
+escapes.re:5:13: warning: escape has no effect: &#39;\[&#39; [-Wuseless-escape]
+</pre></div>
+</div>
+<p>This is because the <code class="docutils literal notranslate"><span class="pre">\A</span></code> and <code class="docutils literal notranslate"><span class="pre">\[</span></code> escapes are meaningless in all rules,
+<code class="docutils literal notranslate"><span class="pre">\-</span></code> makes sense only in a character class,
+and each type of closing quotes (<code class="docutils literal notranslate"><span class="pre">&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">'</span></code> and <code class="docutils literal notranslate"><span class="pre">]</span></code>) should only be escaped inside of a string delimited with the same quotes.
+Useless escapes are ignored: the escaped symbol is treated as not escaped (<code class="docutils literal notranslate"><span class="pre">\A</span></code> becomes <code class="docutils literal notranslate"><span class="pre">A</span></code>, etc.).
+The above example should be fixed as follows:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    *                    {}</span>
+<span class="cm">    &quot;\aA\&quot;&#39;[]-\x5d\377&quot;  {}</span>
+<span class="cm">    &#39;\aA&quot;\&#39;[]-\x5d\377&#39;  {}</span>
+<span class="cm">    [\aA&quot;&#39;[\]\-\x5d\377] {}</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>More generally, re2c recognizes escapes in the following lexemes:</p>
+<ul class="simple">
+<li><p>double-quoted strings <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">...</span> <span class="pre">&quot;</span></code></p></li>
+<li><p>single-quoted strings <code class="docutils literal notranslate"><span class="pre">'</span> <span class="pre">...</span> <span class="pre">'</span></code></p></li>
+<li><p>character classes <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">...</span> <span class="pre">]</span></code> and <code class="docutils literal notranslate"><span class="pre">[^</span> <span class="pre">...</span> <span class="pre">]</span></code></p></li>
+</ul>
+<p>The following escapes are recognized:</p>
+<ul class="simple">
+<li><p>Closing quotes (<code class="docutils literal notranslate"><span class="pre">\&quot;</span></code> for double-quoted strings, <code class="docutils literal notranslate"><span class="pre">\'</span></code> for single-quoted strings, and <code class="docutils literal notranslate"><span class="pre">\]</span></code> for character classes).</p></li>
+<li><p>Dash <code class="docutils literal notranslate"><span class="pre">\-</span></code> in character classes.</p></li>
+<li><p>Octal escapes: <code class="docutils literal notranslate"><span class="pre">\ooo</span></code>, where <code class="docutils literal notranslate"><span class="pre">o</span></code> is in range <code class="docutils literal notranslate"><span class="pre">[0</span> <span class="pre">-</span> <span class="pre">7]</span></code>
+(the largest octal escape is <code class="docutils literal notranslate"><span class="pre">\377</span></code>, which equals <code class="docutils literal notranslate"><span class="pre">0xFF</span></code>).</p></li>
+<li><p>Hexadecimal escapes: <code class="docutils literal notranslate"><span class="pre">\xhh</span></code>, <code class="docutils literal notranslate"><span class="pre">\Xhhhh</span></code>, <code class="docutils literal notranslate"><span class="pre">\uhhhh</span></code>, and <code class="docutils literal notranslate"><span class="pre">\Uhhhhhhhh</span></code>,
+where <code class="docutils literal notranslate"><span class="pre">h</span></code> is in range <code class="docutils literal notranslate"><span class="pre">[0</span> <span class="pre">-</span> <span class="pre">9]</span></code>, <code class="docutils literal notranslate"><span class="pre">[a</span> <span class="pre">-</span> <span class="pre">f]</span></code>, or <code class="docutils literal notranslate"><span class="pre">[A</span> <span class="pre">-</span> <span class="pre">F]</span></code>.</p></li>
+<li><p>Miscellaneous escapes: <code class="docutils literal notranslate"><span class="pre">\a</span></code>, <code class="docutils literal notranslate"><span class="pre">\b</span></code>, <code class="docutils literal notranslate"><span class="pre">\f</span></code>, <code class="docutils literal notranslate"><span class="pre">\n</span></code>, <code class="docutils literal notranslate"><span class="pre">\r</span></code>, <code class="docutils literal notranslate"><span class="pre">\t</span></code>, <code class="docutils literal notranslate"><span class="pre">\v</span></code>, <code class="docutils literal notranslate"><span class="pre">\\</span></code>.</p></li>
+</ul>
+<p>Ill-formed octal and hexadecimal escapes are treated as errors.
+An escape followed by a newline is also an error: multiline strings and character classes are not allowed.
+Any other ill-formed escapes are ignored.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>-Wcondition-order &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="wcondition-order">
+<h1>-Wcondition-order<a class="headerlink" href="#wcondition-order" title="Permalink to this heading">¶</a></h1>
+<p>Some older re2c programs that use <code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">--conditions</span></code> option rely on a fixed
+condition order instead of using <code class="docutils literal notranslate"><span class="pre">/*!types:re2c*/</span></code> directive or the
+<code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">--type-header</span></code> option. This is incorrect and dangerous, as demonstrated by
+the following example <a class="reference download internal" download="" href="../../../../_downloads/6fa07134ad07c72bd6ea2b7e3de62b2d/fixorder.re.txt"><code class="xref download docutils literal notranslate"><span class="pre">[fixorder.re]</span></code></a>. In this example
+the lexer has two conditions: <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code>. It starts in condition <code class="docutils literal notranslate"><span class="pre">a</span></code>,
+which expects a sequence of letters <code class="docutils literal notranslate"><span class="pre">a</span></code> followed by a comma. The comma causes
+transition to condition <code class="docutils literal notranslate"><span class="pre">b</span></code>, which expects a sequence of letters <code class="docutils literal notranslate"><span class="pre">b</span></code>
+followed by an exclamation mark. Anything other input is an error. Nothing
+special, except that condition numbers are hardcoded manually (the mapping of
+conditions to numbers is toggled by <code class="docutils literal notranslate"><span class="pre">REVERSED_CONDITION_ORDER</span></code> define).</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="cp">#ifdef REVERSED_CONDITION_ORDER</span>
+<span class="cp">#    define yyca 1</span>
+<span class="cp">#    define yycb 0</span>
+<span class="cp">#else</span>
+<span class="cp">#    define yyca 0</span>
+<span class="cp">#    define yycb 1</span>
+<span class="cp">#endif</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">YYCURSOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;aaaa,bbb!&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">yyca</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/*!re2c</span>
+<span class="cm">        re2c:define:YYCTYPE = char;</span>
+<span class="cm">        re2c:yyfill:enable = 0;</span>
+<span class="cm">        re2c:define:YYSETCONDITION = &quot;c = @@;&quot;;</span>
+<span class="cm">        re2c:define:YYSETCONDITION:naked = 1;</span>
+<span class="cm">        re2c:define:YYGETCONDITION = c;</span>
+<span class="cm">        re2c:define:YYGETCONDITION:naked = 1;</span>
+
+<span class="cm">        &lt;*&gt; * { printf (&quot;error\n&quot;); break; }</span>
+
+<span class="cm">        &lt;a&gt; &quot;a&quot;      { printf (&quot;a&quot;); continue; }</span>
+<span class="cm">        &lt;a&gt; &quot;,&quot; =&gt; b { printf (&quot;,&quot;); continue; }</span>
+
+<span class="cm">        &lt;b&gt; &quot;!&quot; { printf (&quot;!\n&quot;); break; }</span>
+<span class="cm">        &lt;b&gt; &quot;b&quot; { printf (&quot;b&quot;); continue; }</span>
+<span class="cm">    */</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Let’s compile and run it.
+Everything works fine: we get <code class="docutils literal notranslate"><span class="pre">aaaa,bbb!</span></code> in both cases.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -c -o fixorder.c -Wcondition-order fixorder.re
+$
+$ c++ -o fixorder fixorder.c &amp;&amp; ./fixorder
+aaaa,bbb!
+$
+$ c++ -o fixorder fixorder.c -DREVERSED_CONDITION_ORDER &amp;&amp; ./fixorder
+aaaa,bbb!
+</pre></div>
+</div>
+<p>However, if we use the <code class="docutils literal notranslate"><span class="pre">-s</span></code> re2c option, the lexer becomes sensitive to condition order:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -cs -o fixorder.c -Wcondition-order fixorder.re
+fixorder.re:31:6: warning: looks like you use hardcoded numbers instead of autogenerated condition names:
+better add &#39;/*!types:re2c*/&#39; directive or &#39;-t, --type-header&#39; option and don&#39;t rely on fixed condition order. [-Wcondition-order]
+$
+$ c++ -o fixorder fixorder.c &amp;&amp; ./fixorder
+aaaa,bbb!
+$
+$ c++ -o fixorder fixorder.c -DREVERSED_CONDITION_ORDER &amp;&amp; ./fixorder
+error
+</pre></div>
+</div>
+<p>And we get a warning from re2c. The same behavior remains if we use <code class="docutils literal notranslate"><span class="pre">-g</span></code> or
+<code class="docutils literal notranslate"><span class="pre">-b</span></code> option. Why is that? A look at the generated code explains everything.
+By default the initial dispatch on conditions is a <code class="docutils literal notranslate"><span class="pre">switch</span></code> statement:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="k">case</span><span class="w"> </span><span class="no">yyca</span><span class="p">:</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="n">yyc_a</span><span class="p">;</span>
+<span class="k">case</span><span class="w"> </span><span class="no">yycb</span><span class="p">:</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="n">yyc_b</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Dispatch uses explicit condition names and works no matter what numbers are assigned to them.
+However, with the <code class="docutils literal notranslate"><span class="pre">-s</span></code> option, re2c generates an <code class="docutils literal notranslate"><span class="pre">if</span></code> statement instead of a <code class="docutils literal notranslate"><span class="pre">switch</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">yyc_a</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">yyc_b</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>And with the <code class="docutils literal notranslate"><span class="pre">-g</span></code> option, it uses a jump table (computed <code class="docutils literal notranslate"><span class="pre">goto</span></code>):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">yyctable</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="o">&amp;&amp;</span><span class="n">yyc_a</span><span class="p">,</span>
+<span class="w">        </span><span class="o">&amp;&amp;</span><span class="n">yyc_b</span><span class="p">,</span>
+<span class="p">};</span>
+<span class="k">goto</span><span class="w"> </span><span class="o">*</span><span class="n">yyctable</span><span class="p">[</span><span class="n">c</span><span class="p">];</span>
+</pre></div>
+</div>
+<p>The last two cases are sensitive to condition order. The fix is easy: as the
+warning suggests, use the <code class="docutils literal notranslate"><span class="pre">/*!types:re2c*/</span></code> directive or the
+<code class="docutils literal notranslate"><span class="pre">-t,</span> <span class="pre">--type-header</span></code> option.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

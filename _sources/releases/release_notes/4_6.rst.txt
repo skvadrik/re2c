@@ -1,0 +1,7 @@
+Release 4.6
+===========
+
+This release improves Zig backend: it adds support for the `labeled continue optimization <https://github.com/ziglang/zig/issues/8220>`_,
+thanks to `Pong <https://github.com/PongPong>`_ who contributed the implementation.
+
+See the changelog: :ref:`releases/changelog/changelog:4.6 (2026-08-29)`.

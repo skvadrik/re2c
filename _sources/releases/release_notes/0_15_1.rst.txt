@@ -1,0 +1,7 @@
+Release 0.15.1
+==============
+
+This release fixes an error in the testing script
+(thanks to Sergei Trofimovich who reported the bug and suggested a quick fix).
+See the changelog :ref:`releases/changelog/changelog:0.15.1 (2015-11-22)` for details.
+

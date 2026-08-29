@@ -1,0 +1,9 @@
+Release 2.0.2
+=============
+
+This is a minor bugfix release.
+It makes two changes.
+First, re2go is now built by default (can be turned off with
+``--disable-golang`` for Autotools and ``-DRE2C_BUILD_RE2GO=no`` for CMake).
+Second, CMake build files are now packaged into release tarball.
+See the changelog :ref:`releases/changelog/changelog:2.0.2 (2020-08-08)` for details.

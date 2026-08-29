@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>-Wunreachable-rules &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="wunreachable-rules">
+<h1>-Wunreachable-rules<a class="headerlink" href="#wunreachable-rules" title="Permalink to this heading">¶</a></h1>
+<p>Sometimes the input grammar contains rules that will never match. This can
+happen for two reasons. First, some rules may be shadowed by other rules that
+match the same input, but have higher priority. Second, the rule itself may be
+infinitely greedy: it may consume as many input characters as it can get and
+never stop, and as a result never match. Both cases indicate a problem with
+the grammar, and <code class="docutils literal notranslate"><span class="pre">-Wunreachable-rules</span></code> detects and reports such rules.</p>
+<p>Let’s see an example of the first kind: shadowed rules (shadowed.re).</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    &quot;&quot;          { return &quot;&quot;; }</span>
+<span class="cm">    *           { return &quot;*&quot;; }</span>
+<span class="cm">    &quot;a&quot; | &quot;b&quot;   { return &quot;a | b&quot;; }</span>
+<span class="cm">    &quot;a&quot;         { return &quot;a&quot;; }</span>
+<span class="cm">    [\x00-\xFF] { return &quot;[0 - 0xFF]&quot;; }</span>
+<span class="cm">    [^]         { return &quot;[^]&quot;; }</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>In this example the empty rule <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> never matches, because any single code
+unit is matched by other rules, which take precedence due to the longerst match.
+Rule <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code> is shadowed by rule <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span> <span class="pre">|</span> <span class="pre">&quot;b&quot;</span></code>, which also matches <code class="docutils literal notranslate"><span class="pre">a</span></code>, but
+takes precedence because it comes first. Similarly, rule <code class="docutils literal notranslate"><span class="pre">[^]</span></code> is shadowed by
+rule <code class="docutils literal notranslate"><span class="pre">[\x00-\xFF]</span></code>. Default rule <code class="docutils literal notranslate"><span class="pre">*</span></code> is also shadowed, but it’s an exception
+that is not reported (default case should always be handled). Shadowed rules
+normally do not appear in the generated code: re2c removes them during its dead
+code elimination pass.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wunreachable-rules shadowed.re -o shadowed.c
+shadowed.re:2:16: warning: unreachable rule (shadowed by rules at lines 4, 6) [-Wunreachable-rules]
+shadowed.re:5:16: warning: unreachable rule (shadowed by rule at line 4) [-Wunreachable-rules]
+shadowed.re:7:16: warning: unreachable rule (shadowed by rules at lines 4, 6) [-Wunreachable-rules]
+</pre></div>
+</div>
+<p>Now let’s see an example of second kind: infinitely greedy rule (greedy.re).</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    [^]* { return &quot;greeedy&quot;; }</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>This rule will continue eating input characters until <code class="docutils literal notranslate"><span class="pre">YYFILL</span></code> fails, or until
+it reads past the end of buffer and causes memory access violation.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wunreachable-rules greedy.re -o greedy.c
+greedy.re:2:9: warning: unreachable rule  [-Wunreachable-rules]
+</pre></div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

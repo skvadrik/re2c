@@ -1,0 +1,7 @@
+Release 2.1.1
+=============
+
+This is a minor release that adds a missing file to the release tarballs
+(thanks to `david_david  <https://github.com/david-geiger>`_ for the bug report).
+See the changelog :ref:`releases/changelog/changelog:2.1.1 (2021-03-27)` for details.
+

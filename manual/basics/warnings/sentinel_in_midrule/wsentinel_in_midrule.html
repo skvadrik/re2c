@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>-Wsentinel-in-midrule &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="wsentinel-in-midrule">
+<h1>-Wsentinel-in-midrule<a class="headerlink" href="#wsentinel-in-midrule" title="Permalink to this heading">¶</a></h1>
+<p>When using sentinel method of checking for the end of input, it is easy to
+forget that the sentinel symbol must not be allowed in the middle of the rule.
+For example, the following code tries to match single-quoted strings. It allows
+any character except the single quote to occur in the string, including
+terminating <code class="docutils literal notranslate"><span class="pre">NULL</span></code>. As a result, the generated lexer works as expected on
+well-formed input like <code class="docutils literal notranslate"><span class="pre">'aaa'\0</span></code>, but things go wrong on ill-formed input like
+<code class="docutils literal notranslate"><span class="pre">'aaa\0</span></code> (where the closing single quote is missing). Lexer reaches the
+terminating <code class="docutils literal notranslate"><span class="pre">NULL</span></code> and assumes it is a part of the single-quoted string, so
+it continues reading bytes from memory. Eventually the lexer terminates due to
+memory access violation, or worse — it accidentally hits a single quote and
+assumes this to be the end of the string.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;assert.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">lex</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="cm">/*!re2c</span>
+<span class="cm">    re2c:define:YYCTYPE = char;</span>
+<span class="cm">    re2c:yyfill:enable = 0;</span>
+<span class="cm">    [&#39;] [^&#39;]* [&#39;] { return 0; }</span>
+<span class="cm">    *             { return 1; }</span>
+<span class="cm">    */</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">lex</span><span class="p">(</span><span class="s">&quot;&#39;good&#39;&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">lex</span><span class="p">(</span><span class="s">&quot;&#39;bad&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>On this code re2c reports a warning. It cannot be certain that <code class="docutils literal notranslate"><span class="pre">NULL</span></code> is the sentinel
+symbol, but this is by far the most common case.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wsentinel-in-midrule example.re -oexample.c
+example.re:9:18: warning: sentinel symbol 0 occurs in the middle of the rule
+    (note: if a different sentinel symbol is used, specify it with &#39;re2c:sentinel&#39; configuration) [-Wsentinel-in-midrule]
+</pre></div>
+</div>
+<p>However, re2c suggests us to define the sentinel symbol using <code class="docutils literal notranslate"><span class="pre">re2c:sentinel</span></code>
+configuration. Let’s do it.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;assert.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">lex</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="cm">/*!re2c</span>
+<span class="cm">    re2c:define:YYCTYPE = char;</span>
+<span class="cm">    re2c:yyfill:enable = 0;</span>
+<span class="cm">    re2c:sentinel = 0;</span>
+<span class="cm">    [&#39;] [^&#39;]* [&#39;] { return 0; }</span>
+<span class="cm">    *             { return 1; }</span>
+<span class="cm">    */</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">lex</span><span class="p">(</span><span class="s">&quot;&#39;good&#39;&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">lex</span><span class="p">(</span><span class="s">&quot;&#39;bad&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The warning has turned into an error, as re2c is now certain that the code
+contains an error.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wsentinel-in-midrule example.re -oexample.c
+example.re:10:18: error: sentinel symbol 0 occurs in the middle of the rule [-Werror-sentinel-in-midrule]
+</pre></div>
+</div>
+<p>The code can be fixed by excluding <code class="docutils literal notranslate"><span class="pre">NULL</span></code> from the set of symbols allowed in
+the middle of the string: <code class="docutils literal notranslate"><span class="pre">[']</span> <span class="pre">[^'\x00]*</span> <span class="pre">[']</span></code>. If it is necessary to allow
+all symbols, a more powerful EOF handling method should be used.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

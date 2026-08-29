@@ -1,0 +1,20 @@
+Release 4.5
+===========
+
+This release improves Unicode support in re2c.
+
+The internal generator for Unicode include files and tests is now based directly
+on the `official files <https://unicode.org/Public/UCD/latest/ucd>`_ from
+unicode.org (previously it was based on the Haskell
+`charset <https://hackage.haskell.org/package/charset>`_ library). It has
+been updated to the latest Unicode 17.0.0 standard.
+
+New include files have been added for Unicode properties
+(`include/unicode_properties.re <https://github.com/skvadrik/re2c/blob/master/include/unicode_properties.re>`_)
+and blocks
+(`include/unicode_blocks.re <https://github.com/skvadrik/re2c/blob/master/include/unicode_blocks.re>`_).
+
+Case-insensitive string literals now use Unicode case mapping for UTF8, UTF16,
+UTF32 and UCS2 encodings.
+
+See the full changelog for details: :ref:`releases/changelog/changelog:4.5 (2026-03-23)`.

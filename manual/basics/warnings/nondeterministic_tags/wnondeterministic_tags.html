@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>-Wnondeterministic-tags &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="wnondeterministic-tags">
+<h1>-Wnondeterministic-tags<a class="headerlink" href="#wnondeterministic-tags" title="Permalink to this heading">¶</a></h1>
+<p>Consider the following example, in which symbol <code class="docutils literal notranslate"><span class="pre">a</span></code> is repeated a few times,
+followed by a tag <code class="docutils literal notranslate"><span class="pre">t</span></code>, followed by three or more repetitions of <code class="docutils literal notranslate"><span class="pre">a</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    [a]* @t [a]{3,} {}</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>Because the repetition is greedy, it should consume as many symbols <code class="docutils literal notranslate"><span class="pre">a</span></code>
+before the tag as possible, leaving only the last three <code class="docutils literal notranslate"><span class="pre">a</span></code> after the tag.
+With <code class="docutils literal notranslate"><span class="pre">-Wnondeterministic-tags</span></code> re2c gives a warning:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c --tags -Wnondeterministic-tags example.re -o/dev/null
+example.re:2:24: warning: tag &#39;t&#39; has 4th degree of nondeterminism [-Wnondeterministic-tags]
+</pre></div>
+</div>
+<p>Nondeterminism degree means the maximum number of different versions of a tag
+that must be tracked simultaneously during matching. Higher degrees require
+more tag variables and operations on DFA transitions. Generally it is fine if
+some tags have degrees 2 or 3, but higher degrees may be a point of concern, as
+the transitions get cluttered with operations and the execution gets slower.</p>
+<p>To explain nondeterminism degrees in depth, let’s have a look at the generated
+NFA, its determinization process and the resulting DFA.
+NFA can be visualized with
+<code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--dump-nfa</span> <span class="pre">--tags</span> <span class="pre">example.re</span> <span class="pre">2&gt;&amp;1</span> <span class="pre">1&gt;/dev/null</span> <span class="pre">|</span> <span class="pre">dot</span> <span class="pre">-Tsvg</span> <span class="pre">-o</span> <span class="pre">nfa.svg</span></code>
+(note that debug options <code class="docutils literal notranslate"><span class="pre">--dump-&lt;xxx&gt;</span></code> only work if re2c was built in debug
+mode). Some of the NFA transitions are labeled with <code class="docutils literal notranslate"><span class="pre">97</span></code> (ASCII code for
+<code class="docutils literal notranslate"><span class="pre">a</span></code>); other are epsilon-transitions (they do not consume any symbols).
+Epsilon-transition from state 5 to state 4 is tagged.</p>
+<a class="reference internal image-reference" href="../../../../_images/nfa.svg"><img alt="../../../../_images/nfa.svg" src="../../../../_images/nfa.svg" width="50%" /></a>
+<p>Determinization process can be visualized with
+<code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--dump-dfa-raw</span> <span class="pre">--tags</span> <span class="pre">example.re</span> <span class="pre">2&gt;&amp;1</span> <span class="pre">1&gt;/dev/null</span> <span class="pre">|</span> <span class="pre">dot</span> <span class="pre">-Tsvg</span> <span class="pre">-o</span> <span class="pre">determinization.svg</span></code>.
+It shows all possible paths through the NFA when matching a string of <code class="docutils literal notranslate"><span class="pre">a</span></code>
+symbols. Transitions are labeled with <code class="docutils literal notranslate"><span class="pre">1</span></code>, which means the first character
+class (in this case  just the symbol <code class="docutils literal notranslate"><span class="pre">a</span></code> — there would be more classes if
+the regular expression contained other symbols). Some transitions have tag
+operations: for example, <code class="docutils literal notranslate"><span class="pre">3↑</span></code> on transition from state 4 to state 3 means that
+the version of tag <code class="docutils literal notranslate"><span class="pre">t</span></code> changes from 1 to 3 (upper arrow means that version 3
+is set to the current input position). Boxes in-between transitions show subsets
+of NFA states at each step of determinization (after consuming one more <code class="docutils literal notranslate"><span class="pre">a</span></code>).
+Each NFA state is paired with a tag version. Exploring state sets at each step,
+we can see that the maximum number of different tag versions is 4 (<code class="docutils literal notranslate"><span class="pre">t1</span></code>,
+<code class="docutils literal notranslate"><span class="pre">t5</span></code>, <code class="docutils literal notranslate"><span class="pre">t4</span></code>, <code class="docutils literal notranslate"><span class="pre">t3</span></code>). Therefore tag <code class="docutils literal notranslate"><span class="pre">t</span></code> has 4th degree of nondeterminism.</p>
+<a class="reference internal image-reference" href="../../../../_images/determinization.svg"><img alt="../../../../_images/determinization.svg" src="../../../../_images/determinization.svg" width="70%" /></a>
+<p>The resulting DFA (before optimizations) can be visualized with
+<code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--dump-dfa-det</span> <span class="pre">--tags</span> <span class="pre">example.re</span> <span class="pre">2&gt;&amp;1</span> <span class="pre">1&gt;/dev/null</span> <span class="pre">|</span> <span class="pre">dot</span> <span class="pre">-Tsvg</span> <span class="pre">-o</span> <span class="pre">dfa.svg</span></code>.
+4Th degree of nondeterminism causes the relatively high number of copy
+operations on the looping transition in state 3.</p>
+<a class="reference internal image-reference" href="../../../../_images/dfa.svg"><img alt="../../../../_images/dfa.svg" src="../../../../_images/dfa.svg" width="40%" /></a>
+<p>In this case it is sufficient to move tag <code class="docutils literal notranslate"><span class="pre">t</span></code> past the counted repetition
+(as in <code class="docutils literal notranslate"><span class="pre">[a]*[a]{3}</span> <span class="pre">&#64;t</span> <span class="pre">[a]*</span></code> or introduce another tag <code class="docutils literal notranslate"><span class="pre">u</span></code> on which <code class="docutils literal notranslate"><span class="pre">t</span></code>
+can be fixed (as in <code class="docutils literal notranslate"><span class="pre">[a]*</span> <span class="pre">&#64;t</span> <span class="pre">[a]{3}</span> <span class="pre">&#64;u</span> <span class="pre">[a]*</span></code>) in order to decrease
+nondeterminism degree to 1 (in the latter case <code class="docutils literal notranslate"><span class="pre">t</span></code> will not require any
+tag operations at all, because it will be computed from <code class="docutils literal notranslate"><span class="pre">u</span></code> by subtracting a
+fixed offset).</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>re2c — Regular Expressions to Code &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/theme-re2c.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3>Documentation</h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+<h3>Home</h3>
+<div class="re2c-toc-local">
+    <ul>
+<li><a class="reference internal" href="#">re2c   —   Regular Expressions to Code</a><ul>
+<li><a class="reference internal" href="#download">Download</a></li>
+<li><a class="reference internal" href="#bugs-patches">Bugs &amp; patches</a></li>
+<li><a class="reference internal" href="#papers">Papers</a></li>
+<li><a class="reference internal" href="#authors">Authors</a></li>
+<li><a class="reference internal" href="#license">License</a></li>
+<li><a class="reference internal" href="#version">Version</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="re2c-nbsp-nbsp-regular-expressions-to-code">
+<h1>re2c   —   Regular Expressions to Code<a class="headerlink" href="#re2c-nbsp-nbsp-regular-expressions-to-code" title="Permalink to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p><em>re2c</em> stands for <em>Regular Expressions to Code</em>.
+It is a free and open-source lexer generator that supports C/C++, D, Go,
+Haskell, Java, JavaScript, OCaml, Python, Rust, Swift, V, Zig, and can be extended to
+other languages by implementing a single <a class="reference internal" href="manual/manual_c.html#syntax-files"><span class="std std-ref">syntax file</span></a>.
+The primary focus of re2c is on generating <em>fast</em> code: it compiles regular
+expressions to deterministic finite automata and translates them into
+direct-coded lexers in the target language (such lexers are generally faster
+and easier to debug than their table-driven analogues).
+Secondary re2c focus is on <em>flexibility</em>: it does not assume a fixed program
+template; instead, it allows the user to embed lexers anywhere in the source
+code and configure them to avoid unnecessary buffering and bounds checks.
+Internal algorithm used by re2c is based on a special kind of deterministic
+finite automata: <a class="reference external" href="2022_borsotti_trofimovich_a_closer_look_at_tdfa.pdf">lookahead TDFA</a>.
+These automata are as fast as ordinary DFA, but they are also capable of
+performing submatch extraction with minimal overhead.
+re2c is used in other open-source projects, such as
+<a class="reference external" href="http://php.net/">php</a>,
+<a class="reference external" href="https://ninja-build.org/">ninja</a>,
+<a class="reference external" href="http://yasm.tortall.net/">yasm</a>,
+<a class="reference external" href="https://spamassassin.apache.org/">spamassassin</a>,
+<a class="reference external" href="http://brlcad.org/">BRL-CAD</a>,
+<a class="reference external" href="https://github.com/sifive/wake">wake</a>,
+etc.</p>
+<p><a class="reference external" href="manual/manual.html"><img alt="man" class="feed" src="_images/manual.png" style="width: 2em;" /></a>   Read the manual for
+<a class="reference external" href="manual/manual_c.html">C/C++</a>,
+<a class="reference external" href="manual/manual_d.html">D</a>,
+<a class="reference external" href="manual/manual_go.html">Go</a>,
+<a class="reference external" href="manual/manual_hs.html">Haskell</a>,
+<a class="reference external" href="manual/manual_java.html">Java</a>,
+<a class="reference external" href="manual/manual_js.html">JS</a>,
+<a class="reference external" href="manual/manual_ocaml.html">OCaml</a>,
+<a class="reference external" href="manual/manual_py.html">Python</a>,
+<a class="reference external" href="manual/manual_rust.html">Rust</a>,
+<a class="reference external" href="manual/manual_swift.html">Swift</a>,
+<a class="reference external" href="manual/manual_v.html">V</a>,
+<a class="reference external" href="manual/manual_zig.html">Zig</a>.</p>
+<p><a class="reference external" href="../playground"><img alt="play" class="feed" src="_images/play.png" style="width: 2em;" /></a>   Run examples in the <a class="reference external" href="../playground">playground</a>.</p>
+<p><a class="reference external" href="feed/atom.xml"><img alt="feed" class="feed" src="_images/feed.png" style="width: 2em;" /></a>   <a class="reference external" href="feed/atom.xml">Subscribe</a> to receive release notes.</p>
+<section id="download">
+<h2>Download<a class="headerlink" href="#download" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Packages</strong>.
+Many systems provide their own packages that can be installed via package
+managers. See the full list <a class="reference external" href="https://repology.org/project/re2c/versions">on Repology</a>.</p></li>
+<li><p><strong>Release tarballs</strong>.
+You can get the <a class="reference external" href="https://github.com/skvadrik/re2c/releases/latest">latest release</a>
+on GitHub, as well as the <a class="reference external" href="https://github.com/skvadrik/re2c/releases">older releases</a>.</p></li>
+<li><p><strong>Source code</strong>.
+The main repository is on GitHub: <a class="reference external" href="https://github.com/skvadrik/re2c">https://github.com/skvadrik/re2c</a>.
+There is a mirror on SourceForge: <a class="reference external" href="https://sourceforge.net/p/re2c">https://sourceforge.net/p/re2c</a>, but it
+may be out of date.</p></li>
+</ul>
+</section>
+<section id="bugs-patches">
+<h2>Bugs &amp; patches<a class="headerlink" href="#bugs-patches" title="Permalink to this heading">¶</a></h2>
+<p>Please send bugs reports, patches and other feedback to
+<a class="reference external" href="https://github.com/skvadrik/re2c">GitHub issue tracker</a> or
+<a class="reference external" href="https://github.com/skvadrik/re2c/discussions">GitHub discussions</a>,
+or else send an email to <a class="reference external" href="mailto:skvadrik&#37;&#52;&#48;gmail&#46;com">skvadrik<span>&#64;</span>gmail<span>&#46;</span>com</a>,
+<a class="reference external" href="mailto:re2c-devel&#37;&#52;&#48;lists&#46;sourceforge&#46;net">re2c-devel<span>&#64;</span>lists<span>&#46;</span>sourceforge<span>&#46;</span>net</a> or
+<a class="reference external" href="mailto:re2c-general&#37;&#52;&#48;lists&#46;sourceforge&#46;net">re2c-general<span>&#64;</span>lists<span>&#46;</span>sourceforge<span>&#46;</span>net</a>
+mailing lists. There is an IRC channel <code class="docutils literal notranslate"><span class="pre">#re2c</span></code> on
+<a class="reference external" href="https://libera.chat">irc.libera.chat</a> and
+<a class="reference external" href="https://www.oftc.net/">irc.oftc.net</a>. Questions and contributions are
+welcome!</p>
+</section>
+<section id="papers">
+<h2>Papers<a class="headerlink" href="#papers" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>2022
+<a class="reference external" href="https://arxiv.org/abs/2206.01398">A closer look at TDFA</a>
+by Angelo Borsotti and Ulya Trofimovich.
+arXiv:2206.01398
+<a class="reference external" href="2022_borsotti_trofimovich_a_closer_look_at_tdfa.pdf">[pdf 2022]</a></p></li>
+<li><p>2020
+<a class="reference external" href="https://doi.org/10.1016/j.simpa.2020.100027">RE2C: A lexer generator based on lookahead-TDFA</a>
+by Ulya Trofimovich.
+Software Impacts 6 (2020) 100027,
+<a class="reference external" href="2020_trofimovich_re2c_a_lexer_generator_based_on_lookahead_tdfa.pdf">[pdf 2021]</a></p></li>
+<li><p>2019
+<a class="reference external" href="https://doi.org/10.1002/spe.2881">Efficient POSIX submatch extraction on NFA</a>
+by Angelo Borsotti and Ulya Trofimovich.
+Software: Practice and Experience 51, 2, pp. 159–192
+<a class="reference external" href="2019_borsotti_trofimovich_efficient_posix_submatch_extraction_on_nfa.pdf">[pdf 2019]</a></p></li>
+<li><p>2017
+<a class="reference external" href="https://arxiv.org/abs/1907.08837">Tagged Deterministic Finite Automata with Lookahead</a>
+by Ulya Trofimovich.
+arXiv:1907.08837,
+<a class="reference external" href="2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf">[pdf 2017]</a></p></li>
+<li><p>1994
+<a class="reference external" href="https://dl.acm.org/doi/abs/10.1145/176454.176487">RE2C: a more versatile scanner generator</a>
+by Peter Bumbulis and  Donald D. Cowan.
+ACM Letters on Programming Languages and Systems (LOPLAS)
+<a class="reference external" href="1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.ps">[ps 1994]</a></p></li>
+</ul>
+</section>
+<section id="authors">
+<h2>Authors<a class="headerlink" href="#authors" title="Permalink to this heading">¶</a></h2>
+<p>re2c was originally written by Peter Bumbulis (<a class="reference external" href="mailto:peter&#37;&#52;&#48;csg&#46;uwaterloo&#46;ca">peter<span>&#64;</span>csg<span>&#46;</span>uwaterloo<span>&#46;</span>ca</a>) in 1993.
+Marcus Boerger and Dan Nuffer spent several years to turn the original idea into
+a production ready code generator. Since then it has been maintained and
+developed by multiple volunteers, most notably,
+Brian Young (<a class="reference external" href="mailto:bayoung&#37;&#52;&#48;acm&#46;org">bayoung<span>&#64;</span>acm<span>&#46;</span>org</a>),
+<a class="reference external" href="https://github.com/helly25">Marcus Boerger</a>,
+Dan Nuffer (<a class="reference external" href="mailto:nuffer&#37;&#52;&#48;users&#46;sourceforge&#46;net">nuffer<span>&#64;</span>users<span>&#46;</span>sourceforge<span>&#46;</span>net</a>),
+<a class="reference external" href="https://github.com/skvadrik">Ulya Trofimovich</a> (<a class="reference external" href="mailto:skvadrik&#37;&#52;&#48;gmail&#46;com">skvadrik<span>&#64;</span>gmail<span>&#46;</span>com</a>),
+<a class="reference external" href="https://github.com/sergeyklay">Serghei Iakovlev</a>,
+<a class="reference external" href="https://github.com/trofi">Sergei Trofimovich</a>,
+<a class="reference external" href="https://github.com/pskocik">Petr Skocik</a>,
+<a class="reference external" href="https://github.com/ligfx">ligfx</a>
+and <a class="reference external" href="https://github.com/raekye">raekye</a>.
+Many thanks to all other contributors!</p>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this heading">¶</a></h2>
+<p>re2c is distributed with no warranty whatever. The code is certain to contain
+errors. Neither authors nor contributors take any responsibility for the
+consequences of its use.</p>
+<p>re2c is in the public domain. Data structures and algorithms used in re2c
+are all either taken from documents available to the general public or are
+inventions of the authors. Programs generated by re2c may be distributed freely.
+re2c itself may be distributed freely, in source or binary, unchanged or
+modified. Distributors may charge whatever fees they can obtain for re2c.</p>
+<p>If you do make use of re2c, or incorporate it into a larger project an
+acknowledgement somewhere (documentation, research report, etc.) would be
+appreciated.</p>
+</section>
+<section id="version">
+<h2>Version<a class="headerlink" href="#version" title="Permalink to this heading">¶</a></h2>
+<p>This website describes re2c version 4.1.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

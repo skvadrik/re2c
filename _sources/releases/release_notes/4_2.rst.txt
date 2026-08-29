@@ -1,0 +1,44 @@
+Release 4.2
+===========
+
+This release adds a new backend for Swift,
+a relative form of computed ``goto`` for C/C++,
+exception specifications for recursive functions
+and some new benchmarks.
+
+**Swift backend.**
+Code generation into Swift is now supported using the recently added
+:ref:`syntax files <manual/manual_c:syntax files>`. It can be enabled via
+``re2swift`` binary or the new option ``--lang swift``. See
+`Swift examples <../playground/?example=swift/01_basic.re>`_ on the playground
+and the full `Swift manual <../manual/manual_swift.html>`_ for details.
+
+**Relative computed goto.**
+Computed ``goto`` is a feature that is currently supported only by the C/C++
+backend. This release adds (`#533 <https://github.com/skvadrik/re2c/pull/533>`_)
+a new form of computed ``goto`` which computes jump targets using offsets
+relative to a base label rather than absolute label. This makes the generated
+code easier to use in shared libraries, as it reduces the number of dynamic
+relocations, and by consequence, allows the data stored in computed ``goto``
+table to be read-only.
+See https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html for details.
+The new behaviour can be enabled with option ``--computed-gotos-relative``
+or configuration ``re2c:computed-gotos:relative`` (or an alias
+``re2c:cgoto:relative``). Beware of a related
+`GCC bug <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=119158>`_.
+
+**Exception specifications.**
+A new configuration ``re2c:yyfn:throw`` allows the user to specify
+exceptions thrown by the ``YYFN`` function. By default it's an empty string,
+meaning no exception specification. The new configuration is available in syntax
+files in the form of ``.yyfn.throw`` conditional and ``throw`` variable in the
+function code templates ``code:fndecl`` and ``code:fndef``.
+The primary motivation for this was the use in the Swift backend
+(`#540 <https://github.com/skvadrik/re2c/pull/540>`_).
+
+For a full list of changes and bug fixes see the changelog
+:ref:`releases/changelog/changelog:4.2 (2025-04-23)`.
+As always, thanks to all contributors, especially
+`ScrelliCopter <https://github.com/ScrelliCopter>`_ who implemented the Swift
+backend and `caffe3 <https://github.com/caffe3>`_ who whorked on computed
+``goto``!
