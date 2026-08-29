@@ -1748,7 +1748,7 @@ A list of supported codegen targets with possible elements \fBcode\fP,
 .B \fBsupported_features\fP
 A list of supported features with possible elements \fBnested\-ifs\fP,
 \fBbitmaps\fP, \fBcomputed\-gotos\fP, \fBcase\-ranges\fP, \fBmonadic\fP, \fBunsafe\fP,
-\fBtags\fP, \fBcaptures\fP, \fBcaptvars\fP\&.
+\fBtags\fP, \fBcaptures\fP, \fBcaptvars\fP, \fBcomputed\-continue\fP\&.
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -2328,15 +2328,15 @@ True if case ranges feature is enabled (\fB\-\-case\-ranges\fP or
 True if the relative form of computed \fBgoto\fP is used
 (\fB\-\-computed\-gotos\-relative\fP or \fBre2c:cgoto:relative = 1\fP).
 .TP
+.B \fB\&.computed_continue\fP
+True if loop/switch model uses labeled\-switch transitions
+(\fB\-\-computed\-continue\fP).
+.TP
 .B \fB\&.code_model.goto_label\fP
 True if  code model based on goto/label is used (\fB\-\-goto\-label\fP).
 .TP
 .B \fB\&.code_model.loop_switch\fP
 True if code model based on loop/switch is used (\fB\-\-loop\-switch\fP).
-.TP
-.B \fB\&.computed_continue\fP
-True if loop/switch model uses labeled\-switch transitions
-(\fB\-\-computed\-continue\fP).
 .TP
 .B \fB\&.code_model.recursive_functions\fP
 True if code model based on recursive functions is used
