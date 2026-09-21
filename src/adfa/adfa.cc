@@ -463,6 +463,117 @@ void Adfa::prepare(const opt_t* opts) {
     }
 }
 
+// note [broadword multi-character fast path]
+//
+// A "linear chain" is a sequence of states s0 -> s1 -> ... -> sK where every transition is a
+// single-character transition with no TDFA tags. Such chains are typical for fixed keywords, e.g.
+// "SELECT": after the first character the DFA deterministically follows one character at a time.
+//
+// For such a chain it is safe to add a fast path at s0: read K code units at once, combine them
+// into an integer with shifts (no unaligned access), and if the combined value equals the packed
+// literal, skip K code units and jump straight to sK. Otherwise the ordinary single-character
+// dispatch of s0 runs unchanged. Because the fallback path is untouched, this transformation does
+// not change the recognized language or the cursor semantics -- it only avoids the intermediate
+// branches on the common path.
+//
+// The chain is broken at the first state that is not a plain MATCH state: a state with a rule,
+// a save action (YYMARKER), an end-of-input link, a YYFILL point or a non-empty tag command. The
+// optimization is restricted to one-byte code unit encodings (ASCII), where the raw input bytes
+// are the DFA character codes.
+
+namespace {
+
+bool mchar_chainable(const State* s, bool head) {
+    if (s->kind != StateKind::MATCH) return false;
+    if (s->rule != Rule::NONE) return false;
+    if (s->fill != 0) return false;
+    if (s->eof_state != nullptr) return false;
+    if (s->go.skip) return false;
+    if (s->go.tags != TCID0) return false;
+    if (!head && s->save != NOSAVE) return false;
+    if (!head && s->mchar_n != 0) return false;
+    return true;
+}
+
+// Find the unique single-character transition that leads to another chainable state.
+// `ch` receives the character code (byte value for one-byte encodings).
+const Span* mchar_progress(const State* s, uint32_t* ch) {
+    const Span* res = nullptr;
+    uint32_t count = 0;
+    uint32_t lb = 0;
+
+    for (uint32_t i = 0; i < s->go.span_count; ++i) {
+        const Span& sp = s->go.span[i];
+        if (sp.ub == lb + 1 && sp.tags == TCID0 && sp.to != nullptr && sp.to != s
+                && mchar_chainable(sp.to, /*head*/ false)) {
+            res = &sp;
+            *ch = lb;
+            ++count;
+        }
+        lb = sp.ub;
+    }
+
+    return count == 1 ? res : nullptr;
+}
+
+} // anonymous namespace
+
+void Adfa::coalesce_multichar(const opt_t* opts) {
+    if (!opts->vectorize_linear) return;
+    // Only one-byte code unit encodings can be read as raw bytes.
+    if (opts->target != Target::CODE) return;
+    if (opts->input_encoding != Enc::Type::ASCII) return;
+    if (opts->code_yypeekn == nullptr || is_undefined(opts->code_yypeekn)) return;
+    if (opts->code_yyskipn == nullptr || is_undefined(opts->code_yyskipn)) return;
+
+    for (State* s = head; s; s = s->next) {
+        if (s->mchar_n != 0 || !mchar_chainable(s, /*head*/ true)) continue;
+
+        // Extend the chain up to 8 characters, rejecting cycles.
+        State* path[9];
+        uint32_t path_len = 0;
+        path[path_len++] = s;
+
+        State* node = s;
+        uint64_t value = 0;
+        State* best_to = nullptr;
+        uint32_t best_n = 0;
+        uint64_t best_value = 0;
+
+        for (uint32_t k = 0; k < 8; ++k) {
+            if (node != s && !mchar_chainable(node, /*head*/ false)) break;
+
+            uint32_t ch = 0;
+            const Span* sp = mchar_progress(node, &ch);
+            if (sp == nullptr) break;
+
+            State* to = sp->to;
+            bool cycle = false;
+            for (uint32_t i = 0; i < path_len; ++i) {
+                cycle |= path[i] == to;
+            }
+            if (cycle) break;
+
+            value |= static_cast<uint64_t>(ch) << (8 * k);
+            node = to;
+            path[path_len++] = node;
+
+            const uint32_t len = k + 1;
+            if (len == 2 || len == 4 || len == 8) {
+                best_to = node;
+                best_n = len;
+                best_value = value;
+            }
+        }
+
+        if (best_n >= 2) {
+            s->mchar_n = best_n;
+            s->mchar_value = best_value;
+            s->mchar_to = best_to;
+        }
+    }
+}
+
 Ret Adfa::calc_stats(OutputBlock& out) {
     const opt_t* opts = out.opts;
 

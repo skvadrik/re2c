@@ -66,6 +66,14 @@ struct State {
     bool is_base;
     bool linked;
 
+    // Multi-character (broadword) fast path added by Adfa::coalesce_multichar().
+    // If `mchar_n` is nonzero, the state first reads `mchar_n` code units at once and, if they
+    // match the packed literal, skips `mchar_n` (minus the already generated skip) and jumps to
+    // `mchar_to`. Otherwise it falls through to the ordinary single-character dispatch.
+    uint32_t mchar_n;
+    uint64_t mchar_value; // packed little-endian: code unit i occupies bits [8*i, 8*i+8)
+    State* mchar_to;
+
     CodeGo go;
 
     State();
@@ -139,6 +147,7 @@ struct Adfa {
     ~Adfa();
     void reorder();
     void prepare(const opt_t* opts);
+    void coalesce_multichar(const opt_t* opts);
     Ret calc_stats(OutputBlock& out) NODISCARD;
 
   private:
@@ -172,6 +181,9 @@ inline State::State()
         , fallthru(false)
         , is_base(false)
         , linked(false)
+        , mchar_n(0)
+        , mchar_value(0)
+        , mchar_to(nullptr)
         , go() {
     init_go(&go);
 }

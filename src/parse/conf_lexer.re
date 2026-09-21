@@ -280,6 +280,7 @@ Ret Input::lex_conf(Opt& opts) {
     "flags:"? "case-ranges"                   { RET_CONF_FEAT(case_ranges, "case-ranges"); }
     "flags:"? "unsafe"                        { RET_CONF_BOOL(unsafe); }
     "flags:"? "monadic"                       { RET_CONF_BOOL(monadic); }
+    "vectorize:linear" | "flags:"? "vectorize-linear" { RET_CONF_BOOL(vectorize_linear); }
 
     "encoding:ebcdic" | "flags:ecb"        | "flags:e" { RET_CONF_ENC(Enc::Type::EBCDIC); }
     "encoding:utf32"  | "flags:unicode"    | "flags:u" { RET_CONF_ENC(Enc::Type::UTF32); }
@@ -630,7 +631,9 @@ start:
     "code:abort"                  { RET_CODE(code_abort); }
     "code:yydebug"                { RET_CODE(code_yydebug); }
     "code:yypeek"                 { RET_CODE(code_yypeek); }
+    "code:yypeekn"                { RET_CODE(code_yypeekn); }
     "code:yyskip"                 { RET_CODE(code_yyskip); }
+    "code:yyskipn"                { RET_CODE(code_yyskipn); }
     "code:yybackup"               { RET_CODE(code_yybackup); }
     "code:yybackupctx"            { RET_CODE(code_yybackupctx); }
     "code:yyrestore"              { RET_CODE(code_yyrestore); }
@@ -690,6 +693,7 @@ start:
     "lhs"          { RET_VAR(StxVarId::LHS); }
     "line"         { RET_VAR(StxVarId::LINE); }
     "mask"         { RET_VAR(StxVarId::MASK); }
+    "n"            { RET_VAR(StxVarId::N); }
     "name"         { RET_VAR(StxVarId::NAME); }
     "neg"          { RET_VAR(StxVarId::NEG); }
     "need"         { RET_VAR(StxVarId::NEED); }

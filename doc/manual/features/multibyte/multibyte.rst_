@@ -1,0 +1,21 @@
+When matching fixed keywords or literal prefixes, conventional automata traverse
+transitions character-by-character, issuing multiple conditional jumps.
+
+The linear vectorization optimization (also referred to as *Broadword parsing* or
+*Multibyte coalescing*) compresses linear acyclic DFA paths of length 2, 4, or 8 characters
+into single machine-word comparisons. It is enabled via the ``--vectorize-linear``
+command-line option or the in-source ``re2c:vectorize:linear`` configuration directive.
+
+Multi-character loads are controlled by the ``code:yypeekn`` configuration (or the
+``YYPEEKN`` macro), while cursor advances are handled by ``code:yyskipn`` (or the
+``YYSKIPN`` macro/statement).
+
+Memory Safety and Endianness
+----------------------------
+
+To ensure strict memory safety across all architectures, multi-byte loads are emitted
+using canonical shift patterns or fixed-size copies. Compilers lower these idioms
+directly to single machine instructions without unaligned access penalties.
+
+If an intermediate state on the linear chain requires a submatch tag action, the
+coalescing pass splits the chain around the tag to guarantee bit-exact capture positions.

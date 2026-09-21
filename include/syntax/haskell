@@ -425,3 +425,14 @@ code:yybm_filter = "(" yych " .&. complement 0xFF) /= 0";
 code:yybm_match = "(" yybm " ! (" offset " + fromIntegral " yych ") .&. " mask ") /= 0";
 
 code:yytarget_filter = <undefined>;
+
+// multi-character (broadword) primitives --------------------------------------
+
+code:yypeekn = "YYPEEKN(" YYCURSOR ", " n ")";
+
+code:yyskipn = topindent (.api.record
+    ? (.monadic
+        ? YYCURSOR " <- return $ " YYCURSOR " + " n
+        : "let __ = " YYCURSOR " + " n " in let " YYCURSOR " = __ in")
+    : "YYSKIPN(" YYCURSOR ", " n ")"
+) nl;

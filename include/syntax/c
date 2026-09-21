@@ -461,3 +461,9 @@ code:yybm_filter = yych " & ~0xFF";
 code:yybm_match = yybm "[" offset "+" yych "] & " mask;
 
 code:yytarget_filter = yych " & ~0xFF";
+
+// multi-character (broadword) primitives --------------------------------------
+
+code:yypeekn = "YYPEEKN(" YYCURSOR ", " n ")";
+
+code:yyskipn = topindent "YYSKIPN(" YYCURSOR ", " n ");" nl;

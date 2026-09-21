@@ -118,6 +118,10 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
     adfa->prepare(opts);
     DDUMP_ADFA(opts, *adfa);
 
+    // Coalesce linear character chains into multi-character (broadword) fast paths. This must run
+    // after prepare() (fill points, tunneling and tags are finalized) and before codegen_analyze().
+    adfa->coalesce_multichar(opts);
+
     // gather overall DFA statistics and add it to the output block
     CHECK_RET(adfa->calc_stats(block));
     block.max_fill = std::max(block.max_fill, adfa->max_fill);

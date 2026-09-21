@@ -534,6 +534,11 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
         }
     }
 
+    // A multi-character fast path jumps directly to the state after the coalesced chain.
+    if (from->mchar_n > 0 && from->mchar_to != nullptr) {
+        from->mchar_to->label->used = true;
+    }
+
     CodeGo* go = &from->go;
     Span* span = go->span;
 

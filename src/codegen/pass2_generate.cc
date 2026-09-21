@@ -185,6 +185,26 @@ class GenEnd : public RenderCallback {
     FORBID_COPY(GenEnd);
 };
 
+class GenPeekN : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+    uint32_t n;
+
+  public:
+    GenPeekN(std::ostringstream& os, const opt_t* opts, uint32_t n)
+        : os(os), opts(opts), n(n) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::N: os << n; break;
+        case StxVarId::CURSOR: os << opts->api_cursor; break;
+        default: UNREACHABLE(); break;
+        }
+    }
+
+    FORBID_COPY(GenPeekN);
+};
+
 class GenEnumElem : public RenderCallback {
     std::ostream& os;
     const std::string& type;
@@ -1164,6 +1184,37 @@ static void emit_state(
     case CodeGo::Kind::EMPTY:
         break;
     }
+
+    // Multi-character (broadword) fast path: read several code units at once and, if they match
+    // the packed literal, jump straight to the state after the coalesced chain. On mismatch fall
+    // through to the ordinary dispatch above, so the recognized language is unchanged.
+    if (s->mchar_n > 0 && s->mchar_to != nullptr) {
+        const bool mchar_is_start = s == dfa.start_state;
+        const bool mchar_omit_start = mchar_is_start && !s->label->used;
+        const bool mchar_skip_emitted = !opts->eager_skip && !mchar_omit_start;
+        const uint32_t mchar_nskip = s->mchar_n - (mchar_skip_emitted ? 1u : 0u);
+
+        CodeList* fast = code_list(alc);
+        if (mchar_nskip > 0) {
+            append(fast, code_skipn(alc, static_cast<int32_t>(mchar_nskip)));
+        }
+        const CodeJump mchar_jump = {s->mchar_to, TCID0, false, false, false};
+        gen_goto(output, dfa, fast, s, mchar_jump);
+
+        std::ostringstream lit_os;
+        lit_os << "0x" << std::hex << s->mchar_value;
+        const char* lit = copystr(lit_os.str().c_str(), alc);
+
+        GenPeekN peekcb(buf.stream(), opts, s->mchar_n);
+        const char* peekexpr = opts->gen_code_yypeekn(buf, peekcb);
+
+        CodeCases* mchar_cases = code_cases(alc);
+        append(mchar_cases, code_case_string(alc, fast, lit));
+        append(mchar_cases, code_case_default(alc, transitions));
+        transitions = code_list(alc);
+        append(transitions, code_switch(alc, peekexpr, mchar_cases));
+    }
+
     append(transitions, continuation);
 
     switch (s->kind) {

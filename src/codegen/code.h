@@ -519,6 +519,14 @@ inline Code* code_skip(OutAllocator& alc) {
     return new_code(alc, CodeKind::SKIP);
 }
 
+inline Code* code_skipn(OutAllocator& alc, int32_t n) {
+    Code* x = new_code(alc, CodeKind::SKIPN);
+    x->tag.tag1 = nullptr;
+    x->tag.tag2 = nullptr;
+    x->tag.dist = n;
+    return x;
+}
+
 inline Code* code_peek(OutAllocator& alc) {
     return new_code(alc, CodeKind::PEEK);
 }

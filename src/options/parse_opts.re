@@ -163,6 +163,7 @@ opt_long: /*!local:re2c
     "computed-gotos"          end { opts.set_computed_gotos(true);          goto opt; }
     "computed-gotos-relative" end { opts.set_computed_gotos_relative(true); goto opt; }
     "nested-ifs"              end { opts.set_nested_ifs(true);              goto opt; }
+    "vectorize-linear"        end { opts.set_vectorize_linear(true);        goto opt; }
     "case-insensitive"        end { opts.set_case_insensitive(true);        goto opt; }
     "case-inverted"           end { opts.set_case_inverted(true);           goto opt; }
     "tags"                    end { opts.set_tags(true);                    goto opt; }

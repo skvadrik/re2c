@@ -42,6 +42,8 @@
 <default syntax file>:1:0: warning: syntax configuration `code:yydebug` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:yypeek` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:yyskip` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
+<default syntax file>:1:0: warning: syntax configuration `code:yypeekn` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
+<default syntax file>:1:0: warning: syntax configuration `code:yyskipn` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:yybackup` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:yybackupctx` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:yyskip_yypeek` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]

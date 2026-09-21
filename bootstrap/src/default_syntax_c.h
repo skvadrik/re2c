@@ -462,4 +462,10 @@ static constexpr const char* DEFAULT_SYNTAX_C =
     "code:yybm_match = yybm \"[\" offset \"+\" yych \"] & \" mask;\n"
     "\n"
     "code:yytarget_filter = yych \" & ~0xFF\";\n"
+    "\n"
+    "// multi-character (broadword) primitives --------------------------------------\n"
+    "\n"
+    "code:yypeekn = \"YYPEEKN(\" YYCURSOR \", \" n \")\";\n"
+    "\n"
+    "code:yyskipn = topindent \"YYSKIPN(\" YYCURSOR \", \" n \");\" nl;\n"
     ;

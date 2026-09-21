@@ -227,6 +227,10 @@ Header file
     :literal:
     :code: RE2C_LANG
 
+Linear vectorization (broadword parsing)
+-----------------------------------------
+.. include:: @top_srcdir@/doc/manual/features/multibyte/multibyte.rst_
+
 Skeleton programs
 -----------------
 .. include:: @top_srcdir@/doc/manual/features/skeleton/skeleton.rst_
