@@ -5,3 +5,116 @@ license (together with the data generators):
 - apache_log
 - datetime_to_json
 - email
+
+Benchmarks for --vectorize-loops (vec_*)
+----------------------------------------
+
+See REPRODUCIBLE.md for the fixed-length, periodic-escape, end-of-buffer and
+repository-source regimes, their oracle checks, and short reproduction commands
+for both google/benchmark and Go testing.B.
+
+The vec_* benchmarks compare scalar and vectorized lexers generated from the
+same rules (src/re2c/vec_strings_rules.re, included by vec_00__strings.re;
+driver in src/re2c/vec_base.re). The variants differ only in the input model
+and in re2c:vectorize:loops:
+
+- sentinel: whole file in memory, NUL sentinel, no bounds checks (fastest
+  scalar lexer; it cannot be vectorized, as vectorization needs bounds checks)
+- bounded-scalar / bounded-vector: whole file in memory with bounds checks
+- buffered-scalar / buffered-vector: fixed-size buffer refilled with YYFILL
+
+- bounded-vector-fixed / buffered-vector-fixed: the same as bounded-vector /
+  buffered-vector, but generated from vec_01__strings_fixed.re with
+  `re2c --syntax src/re2c/vec_fixed.syntax`, which overrides code:vector_loop
+  with a vector loop that tests the class itself (one range check per range of
+  the class, `range` list) and moves the cursor to the first byte that leaves
+  the loop by counting the trailing zeros of the inverted mask. The default
+  template tests the complement of the class instead (one equality comparison
+  per byte that leaves the loop, `xrange` list); both advance the cursor to the
+  exit byte
+
+Reference implementations that do not come from re2c (src/ref/):
+
+- ref-libc: hand-written lexer for the same rules that skips string and
+  comment bodies with glibc strcspn/strstr/strspn (which have SSE2/SSE4.2/AVX2
+  versions selected at run time), sentinel input model
+- ref-switch: plain hand-written byte-at-a-time switch lexer, sentinel input
+  model
+
+In-memory benchmarks read the file once outside of the timed loop; buffered
+benchmarks include reading the file in chunks. The test binary checks that all
+variants, including ref-libc and ref-switch, produce identical token streams (a
+digest of all rule/length pairs).
+
+Optional third-party references (off by default, not vendored, found with
+pkg-config). They perform DIFFERENT tasks and do not produce the same token
+stream, so they are only an indication of what SIMD code can achieve on the
+same bytes:
+
+- -DRE2C_BENCH_SIMDJSON=ON (simdjson >= 3, C++17): on the json data set only
+  (a sequence of 256 JSON documents), simdjson-dom is a full DOM parse
+  (parse_many), simdjson-ondemand is an On-Demand parse that visits every value
+  and unescapes every string (iterate_many), simdjson-stage1 is only the SIMD
+  structural indexing (stage 1) of the whole file. JSON validation and parsing
+  is a different task from tokenization with the rules above. Threaded
+  document streams are disabled.
+- -DRE2C_BENCH_HYPERSCAN=ON (Hyperscan or Vectorscan, pkg-config name libhs):
+  hyperscan-block scans each data set in block mode with the seven token
+  regular expressions (all rules except the default one) and counts matches.
+  Hyperscan reports the end offset of every match of every pattern (every
+  prefix of an identifier matches, the default rule does not exist), so it
+  neither selects the longest match nor restarts after a token; the number of
+  matches (reported as a counter) is not the number of tokens.
+
+On Debian/Ubuntu they are available as packages (libsimdjson-dev,
+libhyperscan-dev); otherwise install them into a prefix and add
+$PREFIX/lib/pkgconfig to PKG_CONFIG_PATH. For example (not vendored in the
+repository, use any directory outside of it):
+
+    git clone --depth 1 --branch v3.6.4 https://github.com/simdjson/simdjson \
+        /path/to/simdjson-src
+    cmake -S /path/to/simdjson-src -B /path/to/simdjson-build \
+        -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON \
+        -DCMAKE_INSTALL_PREFIX=/path/to/refs-prefix
+    cmake --build /path/to/simdjson-build --target install
+
+Vectorscan (https://github.com/VectorCamp/vectorscan) builds the same way
+(it needs Boost headers, Ragel 6 and Python 3).
+
+Data sets (benchmarks/_data/{strshort,strmedium,strlong,strescape,json,csource},
+regenerated deterministically by benchmarks/_data/gen_strings.py): string
+literals of 0-24 bytes (below the 33-byte guard of the vector loop), 32-128
+bytes, 256-4096 bytes, 32-256 bytes with ~15% escape sequences, pretty-printed
+JSON-like records, and C++ source code from re2c 4.6.
+
+The generated code uses AVX2 intrinsics, so vec_* objects (and only them) are
+compiled with -mavx2. They are built only on x86; the benchmark and test
+binaries skip them at run time if the CPU does not support AVX2.
+
+To reproduce (google/benchmark installed in $GBENCH_PREFIX; drop the two
+RE2C_BENCH_* options to build without the third-party references):
+
+    PKG_CONFIG_PATH=$GBENCH_PREFIX/lib/pkgconfig cmake -S . -B .build-bench \
+        -G Ninja -DCMAKE_BUILD_TYPE=Release -DRE2C_BUILD_BENCHMARKS=ON \
+        -DRE2C_BUILD_TESTS=OFF \
+        -DRE2C_BENCH_SIMDJSON=ON -DRE2C_BENCH_HYPERSCAN=ON
+    cmake --build .build-bench --target bench_submatch_aot
+    cd .build-bench/benchmarks/c
+    ./test
+    taskset -c 8 ./bench-gcc --benchmark_filter='^vec-' \
+        --benchmark_repetitions=5 --benchmark_report_aggregates_only=true
+    taskset -c 8 ./bench-clang --benchmark_filter='^vec-' \
+        --benchmark_repetitions=5 --benchmark_report_aggregates_only=true
+
+To measure cycles per byte of one benchmark, run it twice with a fixed number
+of iterations and divide the difference of cycles by the difference of bytes
+(this cancels the start-up cost, e.g. reading the input file):
+
+    for n in 20 220; do
+        taskset -c 8 perf stat -x, -e cycles:u,instructions:u ./bench-gcc \
+            --benchmark_filter='^vec-json-gcc_re2c-bounded-vector-fixed$' \
+            --benchmark_min_time=${n}x 2>&1 >/dev/null | grep cycles
+    done
+    # cycles/byte = (cycles(220) - cycles(20)) / (200 * size of data/json/big)
+
+(on hybrid Intel CPUs, use cpu_core/cycles/u and cpu_core/instructions/u).
