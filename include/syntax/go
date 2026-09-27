@@ -4,7 +4,7 @@ supported_apis = ["simple", "generic", "record"];
 supported_api_styles = ["free-form", "functions"];
 supported_code_models = ["goto-label", "loop-switch", "recursive-functions"];
 supported_targets = ["code", "dot"];
-supported_features = ["nested-ifs", "bitmaps", "tags", "captures", "captvars"];
+supported_features = ["nested-ifs", "bitmaps", "tags", "captures", "captvars", "vectorize-loops"];
 
 
 // language-specific options ---------------------------------------------------
@@ -94,6 +94,7 @@ re2c:case-inverted = 0;
 re2c:case-ranges = 0;
 re2c:unsafe = 0;
 re2c:monadic = 0;
+re2c:vectorize:loops = 0;
 re2c:encoding:ebcdic = 0;
 re2c:encoding:utf32 = 0;
 re2c:encoding:ucs2 = 0;
@@ -416,3 +417,57 @@ code:yybm_filter = yych " & ~0xFF";
 code:yybm_match = "(" yybm "[" offset "+" yych "] & " mask ") != 0";
 
 code:yytarget_filter = <undefined>;
+
+// The vector loop tests the complement of the loop class (the `xrange` list): a single exit
+// code unit is found with one equality comparison, a range of exit code units with an unsigned
+// range check (subtract the lower bound, then compare with the minimum of the result and the
+// range width). The cursor is advanced to the first exit code unit in the block, so the generated
+// code must import "math/bits" as well as "simd/archsimd". If the complement is empty (the class
+// contains all code units), the loop only skips whole blocks while the length guard holds.
+// After the loop, `archsimd.ClearAVXUpperBits()` (VZEROUPPER) avoids the AVX-SSE transition
+// penalty in legacy SSE code that runs later (e.g. the hash functions of the Go runtime).
+// The length guard is `lessthan` (see `code:yylessthan`), as in the C template, so that a user
+// definition of `code:yylessthan` is honored. The Go compiler
+// does not prove the bounds of the block slice with either form of the guard, so writing it as
+// `YYCURSOR + need <= YYLIMIT` would not remove a bounds check.
+// YYINPUT must be a byte slice. For string input, configure YYINPUT to name a read-only
+// unsafe.Slice(unsafe.StringData(input), len(input)) view created before entering the lexer.
+// Do not convert each block to []byte: that copies string data and may call the runtime
+// with dirty AVX state. Advance with untyped constants to support signed and unsigned cursors.
+code:vector_loop =
+    topindent "if !(" lessthan ") {" nl
+    indent
+    [xrange{0:-1}: (.xrange.many
+        ? topindent "yyxl" xrange_lo " := archsimd.BroadcastUint8x" size "(" xrange_lo ")" nl
+          topindent "yyxs" xrange_lo " := archsimd.BroadcastUint8x" size "(" xrange_hi " - " xrange_lo ")" nl
+        : topindent "yyxe" xrange_lo " := archsimd.BroadcastUint8x" size "(" xrange_lo ")" nl)]
+    topindent "for {" nl
+        indent
+        [xrange{0}: topindent "yysimd0 := archsimd.LoadUint8x" size "(" YYINPUT "[" YYCURSOR ":" YYCURSOR " + " size "])" nl
+            (.xrange.many
+            ? topindent "yyt" xrange_lo " := yysimd0.Sub(yyxl" xrange_lo ")" nl
+              topindent "yysimd1 := yyt" xrange_lo ".Min(yyxs" xrange_lo ").Equal(yyt" xrange_lo ")" nl
+            : topindent "yysimd1 := yysimd0.Equal(yyxe" xrange_lo ")" nl)]
+        [xrange{1:-1}: (.xrange.many
+            ? topindent "yyt" xrange_lo " := yysimd0.Sub(yyxl" xrange_lo ")" nl
+              topindent "yysimd1 = yysimd1.Or(yyt" xrange_lo ".Min(yyxs" xrange_lo ").Equal(yyt" xrange_lo "))" nl
+            : topindent "yysimd1 = yysimd1.Or(yysimd0.Equal(yyxe" xrange_lo "))" nl)]
+        [xrange{0}: topindent "if yym := yysimd1.ToBits(); yym != 0 {" nl
+            indent
+            topindent "yyn := bits.TrailingZeros32(yym)" nl
+            topindent "if yyn & 16 != 0 { " YYCURSOR " += 16 }" nl
+            topindent "if yyn & 8 != 0 { " YYCURSOR " += 8 }" nl
+            topindent "if yyn & 4 != 0 { " YYCURSOR " += 4 }" nl
+            topindent "if yyn & 2 != 0 { " YYCURSOR " += 2 }" nl
+            topindent "if yyn & 1 != 0 { " YYCURSOR " += 1 }" nl
+            topindent "break" nl dedent
+        topindent "}" nl]
+        topindent YYCURSOR " += " size nl
+        topindent "if " lessthan " {" nl
+            indent topindent "break" nl dedent
+        topindent "}" nl
+        dedent
+    topindent "}" nl
+    topindent "archsimd.ClearAVXUpperBits()" nl
+    dedent
+    topindent "}" nl;

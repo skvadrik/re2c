@@ -318,6 +318,22 @@ struct CodeDebug {
     uint32_t state;
 };
 
+struct CodeVectorRange {
+    uint32_t lo;
+    uint32_t hi;
+    CodeVectorRange* next;
+};
+
+using CodeVectorRanges = list_t<CodeVectorRange>;
+
+struct CodeVectorLoop {
+    uint32_t size;
+    uint32_t need;
+    const char* lessthan;
+    const CodeVectorRanges* ranges;  // ranges of code units inside the reflexive class
+    const CodeVectorRanges* xranges; // ranges of code units outside of it (the complement)
+};
+
 struct CodeTag {
     const char* tag1;
     const char* tag2;
@@ -348,6 +364,7 @@ struct Code {
         CodeDebug debug;
         CodeTag tag;
         CodeLoop loop;
+        CodeVectorLoop vector_loop;
         CodeList* rfuncs;
         loc_t loc;
         size_t accept;
@@ -411,6 +428,22 @@ inline Code* code_loop(
     x->loop.init = init;
     x->loop.cases = cases;
     x->loop.body = body;
+    return x;
+}
+
+inline Code* code_vector_loop(
+        OutAllocator& alc,
+        uint32_t size,
+        uint32_t need,
+        const char* lessthan,
+        const CodeVectorRanges* ranges,
+        const CodeVectorRanges* xranges) {
+    Code* x = new_code(alc, CodeKind::VECTOR_LOOP);
+    x->vector_loop.size = size;
+    x->vector_loop.need = need;
+    x->vector_loop.lessthan = lessthan;
+    x->vector_loop.ranges = ranges;
+    x->vector_loop.xranges = xranges;
     return x;
 }
 

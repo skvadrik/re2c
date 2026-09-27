@@ -280,6 +280,7 @@ Ret Input::lex_conf(Opt& opts) {
     "flags:"? "case-ranges"                   { RET_CONF_FEAT(case_ranges, "case-ranges"); }
     "flags:"? "unsafe"                        { RET_CONF_BOOL(unsafe); }
     "flags:"? "monadic"                       { RET_CONF_BOOL(monadic); }
+    "flags:"? "vectorize:loops"               { RET_CONF_FEAT(vectorize_loops, "vectorize-loops"); }
 
     "encoding:ebcdic" | "flags:ecb"        | "flags:e" { RET_CONF_ENC(Enc::Type::EBCDIC); }
     "encoding:utf32"  | "flags:unicode"    | "flags:u" { RET_CONF_ENC(Enc::Type::UTF32); }
@@ -663,6 +664,7 @@ start:
     "code:yybm_filter"            { RET_CODE(code_yybm_filter); }
     "code:yybm_match"             { RET_CODE(code_yybm_match); }
     "code:yytarget_filter"        { RET_CODE(code_yytarget_filter); }
+    "code:vector_loop"            { RET_CODE(code_vector_loop); }
 
     "code:" [a-z0-9_]+ {
         RET_FAIL(error_at_tok("unknown code template: '%.*s'", int(cur - tok), tok));
@@ -687,6 +689,7 @@ start:
     "index"        { RET_VAR(StxVarId::INDEX); }
     "init"         { RET_VAR(StxVarId::INIT); }
     "label"        { RET_VAR(StxVarId::LABEL); }
+    "lessthan"     { RET_VAR(StxVarId::LESSTHAN_EXPR); }
     "lhs"          { RET_VAR(StxVarId::LHS); }
     "line"         { RET_VAR(StxVarId::LINE); }
     "mask"         { RET_VAR(StxVarId::MASK); }
@@ -694,6 +697,9 @@ start:
     "neg"          { RET_VAR(StxVarId::NEG); }
     "need"         { RET_VAR(StxVarId::NEED); }
     "offset"       { RET_VAR(StxVarId::OFFSET); }
+    "range"        { RET_VAR(StxVarId::RANGE); }
+    "range_hi"     { RET_VAR(StxVarId::RANGE_HI); }
+    "range_lo"     { RET_VAR(StxVarId::RANGE_LO); }
     "retval"       { RET_VAR(StxVarId::RETVAL); }
     "rhs"          { RET_VAR(StxVarId::RHS); }
     "row"          { RET_VAR(StxVarId::ROW); }
@@ -707,6 +713,9 @@ start:
     "val"          { RET_VAR(StxVarId::VAL); }
     "var"          { RET_VAR(StxVarId::VAR); }
     "version"      { RET_VAR(StxVarId::VER); }
+    "xrange"       { RET_VAR(StxVarId::XRANGE); }
+    "xrange_hi"    { RET_VAR(StxVarId::XRANGE_HI); }
+    "xrange_lo"    { RET_VAR(StxVarId::XRANGE_LO); }
     // local variables for API primitives
     "YYBACKUP"     { RET_VAR(StxVarId::BACKUP); }
     "YYBACKUPCTX"  { RET_VAR(StxVarId::BACKUPCTX); }
@@ -803,6 +812,8 @@ start:
     ".retval"              { RET_LOPT(StxLOpt::RETVAL); }
     ".type"                { RET_LOPT(StxLOpt::TYPE); }
     ".many"                { RET_LOPT(StxLOpt::MANY); }
+    ".range.many"          { RET_LOPT(StxLOpt::RANGE_MANY); }
+    ".xrange.many"         { RET_LOPT(StxLOpt::XRANGE_MANY); }
     ".nested"              { RET_LOPT(StxLOpt::NESTED); }
 
     "." [a-z0-9_.]+ {

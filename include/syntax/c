@@ -5,7 +5,7 @@ supported_api_styles = ["functions", "free-form"];
 supported_code_models = ["goto-label", "loop-switch", "recursive-functions"];
 supported_targets = ["code", "dot", "skeleton"];
 supported_features = ["nested-ifs", "bitmaps", "computed-gotos", "case-ranges",
-    "tags", "captures", "captvars"];
+    "tags", "captures", "captvars", "vectorize-loops"];
 
 
 // language-specific options ---------------------------------------------------
@@ -95,6 +95,7 @@ re2c:case-inverted = 0;
 re2c:case-ranges = 0;
 re2c:unsafe = 0;
 re2c:monadic = 0;
+re2c:vectorize:loops = 0;
 re2c:encoding:ebcdic = 0;
 re2c:encoding:utf32 = 0;
 re2c:encoding:ucs2 = 0;
@@ -461,3 +462,57 @@ code:yybm_filter = yych " & ~0xFF";
 code:yybm_match = yybm "[" offset "+" yych "] & " mask;
 
 code:yytarget_filter = yych " & ~0xFF";
+
+// The vector loop uses AVX2 intrinsics from <immintrin.h> and tests the complement of the loop
+// class (the `xrange` list): a single exit code unit is found with one equality comparison, a range
+// of exit code units with an unsigned range check (subtract the lower bound, then saturating
+// subtract the range width and compare with zero). The cursor is advanced to the first exit code
+// unit in the block with `__builtin_ctz`, so the generated code requires GCC or Clang (MSVC users
+// may redefine `code:vector_loop` with `_BitScanForward` or `_tzcnt_u32`). The `(char)` casts
+// avoid narrowing warnings for code units above 0x7F. If the complement is empty (the class
+// contains all code units), the loop only skips whole blocks while the length guard holds.
+// The cursor is advanced to the exit code unit after the loop rather than inside it: otherwise
+// clang may merge both increments into a conditional move, which makes the next load depend on
+// the comparison of the current block.
+// The vector block is entered only if the current code unit is in the class: a run that ends
+// right away (e.g. a one-byte identifier or a closing quote) is left to the scalar dispatcher
+// instead. The scalar test is placed after the length guard,
+// so that it costs nothing near the end of the buffer. It only selects the path: the vector
+// block finds the exact exit position by itself.
+// Explicitly clear the upper AVX bits before returning to scalar code: compilers do not
+// insert this cleanup at every optimization level.
+// Make broadcasts depend on an opaque scalar zero inside the guard. Otherwise GCC may
+// hoist vector constants before the guard (even before YYFILL), bypassing the cleanup.
+code:vector_loop =
+    topindent "if (!(" lessthan ")"
+    [xrange{0:-1}: " && " (.xrange.many
+        ? "(unsigned char)(*(" YYCURSOR ") - " xrange_lo ") > " xrange_hi " - " xrange_lo
+        : "(unsigned char)*(" YYCURSOR ") != " xrange_lo)]
+    ") {" nl
+    indent
+    [xrange{0}: topindent "unsigned int yysimdz = 0;" nl
+        topindent "__asm__ volatile (\"\" : \"+r\" (yysimdz));" nl]
+    [xrange{0:-1}: (.xrange.many
+        ? topindent "const __m256i yyxl" xrange_lo " = _mm256_set1_epi8((char)(yysimdz + " xrange_lo "));" nl
+          topindent "const __m256i yyxs" xrange_lo " = _mm256_set1_epi8((char)(yysimdz + " xrange_hi " - " xrange_lo "));" nl
+        : topindent "const __m256i yyxe" xrange_lo " = _mm256_set1_epi8((char)(yysimdz + " xrange_lo "));" nl)]
+    [xrange{0}: topindent "unsigned int yysimdm = 0;" nl]
+    topindent "for (;;) {" nl
+        indent
+        [xrange{0}: topindent "const __m256i yysimd0 = _mm256_loadu_si256((const __m256i*)(" YYCURSOR "));" nl
+            (.xrange.many
+            ? topindent "__m256i yysimd1 = _mm256_cmpeq_epi8(_mm256_subs_epu8(_mm256_sub_epi8(yysimd0, yyxl" xrange_lo "), yyxs" xrange_lo "), _mm256_setzero_si256());" nl
+            : topindent "__m256i yysimd1 = _mm256_cmpeq_epi8(yysimd0, yyxe" xrange_lo ");" nl)]
+        [xrange{1:-1}: (.xrange.many
+            ? topindent "yysimd1 = _mm256_or_si256(yysimd1, _mm256_cmpeq_epi8(_mm256_subs_epu8(_mm256_sub_epi8(yysimd0, yyxl" xrange_lo "), yyxs" xrange_lo "), _mm256_setzero_si256()));" nl
+            : topindent "yysimd1 = _mm256_or_si256(yysimd1, _mm256_cmpeq_epi8(yysimd0, yyxe" xrange_lo "));" nl)]
+        [xrange{0}: topindent "yysimdm = (unsigned int)_mm256_movemask_epi8(yysimd1);" nl
+        topindent "if (yysimdm != 0) break;" nl]
+        topindent YYCURSOR " += " size ";" nl
+        topindent "if (" lessthan ") break;" nl
+        dedent
+    topindent "}" nl
+    [xrange{0}: topindent "if (yysimdm != 0) " YYCURSOR " += __builtin_ctz(yysimdm);" nl]
+    topindent "_mm256_zeroupper();" nl
+    dedent
+    topindent "}" nl;

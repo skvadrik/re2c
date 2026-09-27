@@ -308,6 +308,9 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (!is_default.monadic && !glob.supported_features_contains("monadic")) {
         RET_FAIL(error("`monadic` feature is not supported for this backend"));
     }
+    if (!is_default.vectorize_loops && !glob.supported_features_contains("vectorize-loops")) {
+        RET_FAIL(error("`vectorize-loops` feature is not supported for this backend"));
+    }
     if (!is_default.tags && !glob.supported_features_contains("tags")) {
         RET_FAIL(error("`tags` feature is not supported for this backend"));
     }
@@ -585,6 +588,15 @@ const char* Opt::var_name(StxVarId id) {
 
 // is this a known configuration-specific conditional?
 Ret Opt::check_cond(StxLOpt opt, const char* conf, const std::unordered_set<StxLOpt>& conds) const {
+    if (opt == StxLOpt::RANGE_MANY || opt == StxLOpt::XRANGE_MANY) {
+        const StxVarId list = opt == StxLOpt::RANGE_MANY ? StxVarId::RANGE : StxVarId::XRANGE;
+        if (std::find_if(stack_code_list.begin(), stack_code_list.end(),
+                [list](const StxCode* x) { return list == x->list.var; })
+                == stack_code_list.end()) {
+            RET_FAIL(error("conditional `.%s.many` outside of its list in configuration `%s`",
+                           var_name(list), conf));
+        }
+    }
     if (conds.find(opt) != conds.end()) return Ret::OK;
     RET_FAIL(error("unknown conditional in configuration `%s`", conf));
 }
@@ -603,13 +615,16 @@ Ret Opt::check_var(
     if (global_vars.find(var) != global_vars.end()) return Ret::OK;
 
     // this may be a list var; in that case it must be on the list stack
+    StxVarId list = var;
+    if (var == StxVarId::RANGE_LO || var == StxVarId::RANGE_HI) list = StxVarId::RANGE;
+    if (var == StxVarId::XRANGE_LO || var == StxVarId::XRANGE_HI) list = StxVarId::XRANGE;
     bool is_list_var = std::find_if(stack_code_list.begin(), stack_code_list.end(),
-            [var](const StxCode* x) { return var == x->list.var; })
+            [list](const StxCode* x) { return list == x->list.var; })
         != stack_code_list.end();
 
     // is this a known configuration-specific variable?
     const std::unordered_set<StxVarId>& v = is_list_var ? list_vars : vars;
-    if (std::find(v.begin(), v.end(), var) != v.end()) return Ret::OK;
+    if (v.find(is_list_var ? list : var) != v.end()) return Ret::OK;
 
     RET_FAIL(error("unknown variable `%s` in configuration `%s`", var_name(var), conf));
 }
@@ -647,6 +662,10 @@ Ret Opt::validate_conf_code(
             // no option names to check here
             break;
         case StxCodeType::VAR:
+            if (x->var == StxVarId::RANGE || x->var == StxVarId::XRANGE) {
+                RET_FAIL(error("list `%s` used as a variable in configuration `%s`",
+                               var_name(x->var), conf));
+            }
             if (oneline && x->var == StxVarId::NEWLINE && ++newlines > 1) {
                 RET_FAIL(error("`%s` should be a one-line configuration", conf));
             }
@@ -670,6 +689,17 @@ Ret Opt::validate_conf_code(
             break;
         case StxCodeType::LIST:
             if (n == 0) { // recurse into list body
+                if (list_vars.find(x->list.var) == list_vars.end()) {
+                    RET_FAIL(error("unknown list `%s` in configuration `%s`",
+                                   var_name(x->list.var), conf));
+                }
+                if ((x->list.var == StxVarId::RANGE || x->list.var == StxVarId::XRANGE)
+                        && std::find_if(stack_code_list.begin(), stack_code_list.end(),
+                            [x](const StxCode* y) { return x->list.var == y->list.var; })
+                            != stack_code_list.end()) {
+                    RET_FAIL(error("nested list `%s` in configuration `%s`",
+                                   var_name(x->list.var), conf));
+                }
                 stack_code_list.push_back(x);
                 CHECK_RET(check_var(x->list.var, conf, vars, list_vars));
                 stack.push_back({x, 1});
@@ -884,6 +914,10 @@ static bool eval_cond(
 static inline bool eval_list_bounds(size_t size, int32_t& lbound, int32_t& rbound) {
     lbound = lbound >= 0 ? lbound : (std::max(0, static_cast<int32_t>(size) + lbound));
     rbound = rbound >= 0 ? rbound : (static_cast<int32_t>(size) + rbound);
+    // Clip the right bound to the list size, so that an empty list (e.g. an empty complement of a
+    // vectorized character class) renders nothing even if the template refers to its elements by
+    // explicit indices.
+    rbound = std::min(rbound, static_cast<int32_t>(size) - 1);
     return lbound <= rbound && rbound >= 0;
 }
 
