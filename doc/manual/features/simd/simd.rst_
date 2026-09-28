@@ -49,13 +49,12 @@ When enabled with ``--vectorize-loops`` or ``re2c:vectorize:loops = 1;``:
   does not detect CPU capabilities or select a scalar implementation on CPUs
   without AVX2; applications that need this must check support before calling
   the vectorized lexer. Go requires ``GOEXPERIMENT=simd`` when building.
-- The default C template enters the vector block only if the current code unit is in the class
-  (a scalar test against the complement, placed after the length guard). Runs that end right
+- The default C and Go templates enter the vector block only if the current code unit is in the
+  class (a scalar test against the complement, placed after the length guard). Runs that end right
   away, such as one-character identifiers or empty string literals, are thus left to the scalar
   dispatcher and do not pay for the vector block. The test only selects the path: the vector
-  block itself finds the exact exit position, so the result does not depend on it. The default
-  Go template does not have this scalar pretest. Neither form guarantees a speedup
-  for short runs or near the end of the buffer.
+  block itself finds the exact exit position, so the result does not depend on it. Neither form
+  guarantees a speedup for short runs or near the end of the buffer.
 - The default C template explicitly calls ``_mm256_zeroupper()`` after the vector
   loop, and the Go template calls ``archsimd.ClearAVXUpperBits()``. These clear
   the upper AVX register bits before returning to scalar code, avoiding penalties
