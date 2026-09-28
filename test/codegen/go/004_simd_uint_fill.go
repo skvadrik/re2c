@@ -83,7 +83,7 @@ yy3:
 	if (yyrecord.yylimit <= yyrecord.yycursor) {
 		if r := fill(yyrecord, 1); r != 0 { return r }
 	}
-	if !((yyrecord.yylimit - yyrecord.yycursor) < 33) {
+	if !((yyrecord.yylimit - yyrecord.yycursor) < 33) && uint8(yyrecord.yyinput[yyrecord.yycursor]) - 0 > 31 - 0 && uint8(yyrecord.yyinput[yyrecord.yycursor]) - 33 > 255 - 33 {
 		yyxl0 := archsimd.BroadcastUint8x32(0)
 		yyxs0 := archsimd.BroadcastUint8x32(31 - 0)
 		yyxl33 := archsimd.BroadcastUint8x32(33)
@@ -126,7 +126,7 @@ yy5:
 	if (yyrecord.yylimit <= yyrecord.yycursor) {
 		if r := fill(yyrecord, 1); r != 0 { return r }
 	}
-	if !((yyrecord.yylimit - yyrecord.yycursor) < 33) {
+	if !((yyrecord.yylimit - yyrecord.yycursor) < 33) && uint8(yyrecord.yyinput[yyrecord.yycursor]) - 0 > 96 - 0 && uint8(yyrecord.yyinput[yyrecord.yycursor]) - 123 > 255 - 123 {
 		yyxl0 := archsimd.BroadcastUint8x32(0)
 		yyxs0 := archsimd.BroadcastUint8x32(96 - 0)
 		yyxl123 := archsimd.BroadcastUint8x32(123)

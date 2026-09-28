@@ -481,17 +481,23 @@ code:yytarget_filter = yych " & ~0xFF";
 // block finds the exact exit position by itself.
 // Explicitly clear the upper AVX bits before returning to scalar code: compilers do not
 // insert this cleanup at every optimization level.
-// Make broadcasts depend on an opaque scalar zero inside the guard. Otherwise GCC may
-// hoist vector constants before the guard (even before YYFILL), bypassing the cleanup.
+// Make broadcasts, including the zero vector of range checks, depend on an opaque scalar zero
+// inside the guard. Otherwise GCC may hoist vector constants before the guard (even before
+// YYFILL), bypassing the cleanup.
+// The vector block reads code units as bytes, so it is entered only if a code unit is one
+// byte wide: with a wider YYCTYPE (e.g. `unsigned int` with an 8-bit encoding) the constant
+// `sizeof` test removes the block and the scalar loop handles the input.
 code:vector_loop =
-    topindent "if (!(" lessthan ")"
+    topindent "if (sizeof(*(" YYCURSOR ")) == 1 && !(" lessthan ")"
     [xrange{0:-1}: " && " (.xrange.many
         ? "(unsigned char)(*(" YYCURSOR ") - " xrange_lo ") > " xrange_hi " - " xrange_lo
         : "(unsigned char)*(" YYCURSOR ") != " xrange_lo)]
     ") {" nl
     indent
     [xrange{0}: topindent "unsigned int yysimdz = 0;" nl
-        topindent "__asm__ volatile (\"\" : \"+r\" (yysimdz));" nl]
+        topindent "__asm__ volatile (\"\" : \"+r\" (yysimdz));" nl
+        topindent "const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);" nl
+        topindent "(void)yysimdzero;" nl]
     [xrange{0:-1}: (.xrange.many
         ? topindent "const __m256i yyxl" xrange_lo " = _mm256_set1_epi8((char)(yysimdz + " xrange_lo "));" nl
           topindent "const __m256i yyxs" xrange_lo " = _mm256_set1_epi8((char)(yysimdz + " xrange_hi " - " xrange_lo "));" nl
@@ -501,10 +507,10 @@ code:vector_loop =
         indent
         [xrange{0}: topindent "const __m256i yysimd0 = _mm256_loadu_si256((const __m256i*)(" YYCURSOR "));" nl
             (.xrange.many
-            ? topindent "__m256i yysimd1 = _mm256_cmpeq_epi8(_mm256_subs_epu8(_mm256_sub_epi8(yysimd0, yyxl" xrange_lo "), yyxs" xrange_lo "), _mm256_setzero_si256());" nl
+            ? topindent "__m256i yysimd1 = _mm256_cmpeq_epi8(_mm256_subs_epu8(_mm256_sub_epi8(yysimd0, yyxl" xrange_lo "), yyxs" xrange_lo "), yysimdzero);" nl
             : topindent "__m256i yysimd1 = _mm256_cmpeq_epi8(yysimd0, yyxe" xrange_lo ");" nl)]
         [xrange{1:-1}: (.xrange.many
-            ? topindent "yysimd1 = _mm256_or_si256(yysimd1, _mm256_cmpeq_epi8(_mm256_subs_epu8(_mm256_sub_epi8(yysimd0, yyxl" xrange_lo "), yyxs" xrange_lo "), _mm256_setzero_si256()));" nl
+            ? topindent "yysimd1 = _mm256_or_si256(yysimd1, _mm256_cmpeq_epi8(_mm256_subs_epu8(_mm256_sub_epi8(yysimd0, yyxl" xrange_lo "), yyxs" xrange_lo "), yysimdzero));" nl
             : topindent "yysimd1 = _mm256_or_si256(yysimd1, _mm256_cmpeq_epi8(yysimd0, yyxe" xrange_lo "));" nl)]
         [xrange{0}: topindent "yysimdm = (unsigned int)_mm256_movemask_epi8(yysimd1);" nl
         topindent "if (yysimdm != 0) break;" nl]

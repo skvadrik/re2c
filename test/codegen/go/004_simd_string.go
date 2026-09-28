@@ -39,7 +39,7 @@ yy2:
 	if (yylimit <= yycursor) {
 		return -2, yycursor
 	}
-	if !((yylimit - yycursor) < 33) {
+	if !((yylimit - yycursor) < 33) && uint8(input[yycursor]) - 0 > 96 - 0 && uint8(input[yycursor]) - 123 > 255 - 123 {
 		yyxl0 := archsimd.BroadcastUint8x32(0)
 		yyxs0 := archsimd.BroadcastUint8x32(96 - 0)
 		yyxl123 := archsimd.BroadcastUint8x32(123)
@@ -109,7 +109,7 @@ yy6:
 	if (yylimit <= yycursor) {
 		return -2, yycursor
 	}
-	if !((yylimit - yycursor) < 33) {
+	if !((yylimit - yycursor) < 33) && uint8(input[yycursor]) - 0 > 96 - 0 && uint8(input[yycursor]) - 123 > 255 - 123 {
 		yyxl0 := archsimd.BroadcastUint8x32(0)
 		yyxs0 := archsimd.BroadcastUint8x32(96 - 0)
 		yyxl123 := archsimd.BroadcastUint8x32(123)

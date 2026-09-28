@@ -1,4 +1,6 @@
 //go:generate re2go --vectorize-loops -i $INPUT -o $OUTPUT
+//go:build goexperiment.simd && amd64
+
 package main
 
 import (
@@ -73,6 +75,10 @@ func lexAll(lex func() int, data []byte) (tokens []int, spans []int) {
 }
 
 func main() {
+	if !archsimd.X86.AVX2() {
+		fmt.Println("AVX2 is not available, skipping")
+		return
+	}
 	alphabet := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_ \t"
 	rng := rand.New(rand.NewSource(411))
 	check := func(b []byte) {

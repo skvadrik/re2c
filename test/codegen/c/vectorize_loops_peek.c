@@ -259,9 +259,11 @@ yy1:
 yy2:
 	++cur;
 	if (lim <= cur) { ret = E_FILL; goto done; }
-	if (!((lim - cur) < 33) && (unsigned char)*(cur) != 0 && (unsigned char)*(cur) != 34 && (unsigned char)(*(cur) - 127) > 159 - 127 && (unsigned char)*(cur) != 255) {
+	if (sizeof(*(cur)) == 1 && !((lim - cur) < 33) && (unsigned char)*(cur) != 0 && (unsigned char)*(cur) != 34 && (unsigned char)(*(cur) - 127) > 159 - 127 && (unsigned char)*(cur) != 255) {
 		unsigned int yysimdz = 0;
 		__asm__ volatile ("" : "+r" (yysimdz));
+		const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);
+		(void)yysimdzero;
 		const __m256i yyxe0 = _mm256_set1_epi8((char)(yysimdz + 0));
 		const __m256i yyxe34 = _mm256_set1_epi8((char)(yysimdz + 34));
 		const __m256i yyxl127 = _mm256_set1_epi8((char)(yysimdz + 127));
@@ -272,7 +274,7 @@ yy2:
 			const __m256i yysimd0 = _mm256_loadu_si256((const __m256i*)(cur));
 			__m256i yysimd1 = _mm256_cmpeq_epi8(yysimd0, yyxe0);
 			yysimd1 = _mm256_or_si256(yysimd1, _mm256_cmpeq_epi8(yysimd0, yyxe34));
-			yysimd1 = _mm256_or_si256(yysimd1, _mm256_cmpeq_epi8(_mm256_subs_epu8(_mm256_sub_epi8(yysimd0, yyxl127), yyxs127), _mm256_setzero_si256()));
+			yysimd1 = _mm256_or_si256(yysimd1, _mm256_cmpeq_epi8(_mm256_subs_epu8(_mm256_sub_epi8(yysimd0, yyxl127), yyxs127), yysimdzero));
 			yysimd1 = _mm256_or_si256(yysimd1, _mm256_cmpeq_epi8(yysimd0, yyxe255));
 			yysimdm = (unsigned int)_mm256_movemask_epi8(yysimd1);
 			if (yysimdm != 0) break;
@@ -1239,9 +1241,11 @@ yy12:
 	YYDEBUG(12, yych);
 	++cur;
 	if (lim <= cur) { ret = E_FILL; goto done; }
-	if (!((lim - cur) < 33) && (unsigned char)*(cur) != 0 && (unsigned char)*(cur) != 34 && (unsigned char)(*(cur) - 127) > 159 - 127 && (unsigned char)*(cur) != 255) {
+	if (sizeof(*(cur)) == 1 && !((lim - cur) < 33) && (unsigned char)*(cur) != 0 && (unsigned char)*(cur) != 34 && (unsigned char)(*(cur) - 127) > 159 - 127 && (unsigned char)*(cur) != 255) {
 		unsigned int yysimdz = 0;
 		__asm__ volatile ("" : "+r" (yysimdz));
+		const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);
+		(void)yysimdzero;
 		const __m256i yyxe0 = _mm256_set1_epi8((char)(yysimdz + 0));
 		const __m256i yyxe34 = _mm256_set1_epi8((char)(yysimdz + 34));
 		const __m256i yyxl127 = _mm256_set1_epi8((char)(yysimdz + 127));
@@ -1252,7 +1256,7 @@ yy12:
 			const __m256i yysimd0 = _mm256_loadu_si256((const __m256i*)(cur));
 			__m256i yysimd1 = _mm256_cmpeq_epi8(yysimd0, yyxe0);
 			yysimd1 = _mm256_or_si256(yysimd1, _mm256_cmpeq_epi8(yysimd0, yyxe34));
-			yysimd1 = _mm256_or_si256(yysimd1, _mm256_cmpeq_epi8(_mm256_subs_epu8(_mm256_sub_epi8(yysimd0, yyxl127), yyxs127), _mm256_setzero_si256()));
+			yysimd1 = _mm256_or_si256(yysimd1, _mm256_cmpeq_epi8(_mm256_subs_epu8(_mm256_sub_epi8(yysimd0, yyxl127), yyxs127), yysimdzero));
 			yysimd1 = _mm256_or_si256(yysimd1, _mm256_cmpeq_epi8(yysimd0, yyxe255));
 			yysimdm = (unsigned int)_mm256_movemask_epi8(yysimd1);
 			if (yysimdm != 0) break;

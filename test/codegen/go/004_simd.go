@@ -61,7 +61,7 @@ yy3:
 	if (limit <= cursor) {
 		fill(0)
 	}
-	if !((limit - cursor) < 33) {
+	if !((limit - cursor) < 33) && uint8(input[cursor]) - 0 > 8 - 0 && uint8(input[cursor]) - 10 > 31 - 10 && uint8(input[cursor]) - 33 > 255 - 33 {
 		yyxl0 := archsimd.BroadcastUint8x32(0)
 		yyxs0 := archsimd.BroadcastUint8x32(8 - 0)
 		yyxl10 := archsimd.BroadcastUint8x32(10)
@@ -110,7 +110,7 @@ yy5:
 	if (limit <= cursor) {
 		fill(0)
 	}
-	if !((limit - cursor) < 33) {
+	if !((limit - cursor) < 33) && uint8(input[cursor]) - 0 > 47 - 0 && uint8(input[cursor]) - 58 > 255 - 58 {
 		yyxl0 := archsimd.BroadcastUint8x32(0)
 		yyxs0 := archsimd.BroadcastUint8x32(47 - 0)
 		yyxl58 := archsimd.BroadcastUint8x32(58)
@@ -153,7 +153,7 @@ yy7:
 	if (limit <= cursor) {
 		fill(0)
 	}
-	if !((limit - cursor) < 33) {
+	if !((limit - cursor) < 33) && uint8(input[cursor]) - 0 > 47 - 0 && uint8(input[cursor]) - 58 > 64 - 58 && uint8(input[cursor]) - 91 > 94 - 91 && uint8(input[cursor]) != 96 && uint8(input[cursor]) - 123 > 255 - 123 {
 		yyxl0 := archsimd.BroadcastUint8x32(0)
 		yyxs0 := archsimd.BroadcastUint8x32(47 - 0)
 		yyxl58 := archsimd.BroadcastUint8x32(58)

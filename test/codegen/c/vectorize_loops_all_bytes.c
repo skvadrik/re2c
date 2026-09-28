@@ -30,7 +30,7 @@ yy1:
 yy2:
 	++cur;
 	if (lim <= cur) { ret = 1; goto done; }
-	if (!((lim - cur) < 33)) {
+	if (sizeof(*(cur)) == 1 && !((lim - cur) < 33)) {
 		for (;;) {
 			cur += 32;
 			if ((lim - cur) < 33) break;

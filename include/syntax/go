@@ -434,8 +434,15 @@ code:yytarget_filter = <undefined>;
 // unsafe.Slice(unsafe.StringData(input), len(input)) view created before entering the lexer.
 // Do not convert each block to []byte: that copies string data and may call the runtime
 // with dirty AVX state. Advance with untyped constants to support signed and unsigned cursors.
+// As in the C template, the vector block is entered only if the current code unit is in the
+// class, so that a run that ends right away (e.g. a one-byte identifier) is left to the scalar
+// dispatcher. The scalar test follows the length guard, which proves that the index is valid.
 code:vector_loop =
-    topindent "if !(" lessthan ") {" nl
+    topindent "if !(" lessthan ")"
+    [xrange{0:-1}: " && " (.xrange.many
+        ? "uint8(" YYINPUT "[" YYCURSOR "]) - " xrange_lo " > " xrange_hi " - " xrange_lo
+        : "uint8(" YYINPUT "[" YYCURSOR "]) != " xrange_lo)]
+    " {" nl
     indent
     [xrange{0:-1}: (.xrange.many
         ? topindent "yyxl" xrange_lo " := archsimd.BroadcastUint8x" size "(" xrange_lo ")" nl

@@ -61,7 +61,7 @@ yy2:
 	if (yylimit <= yycursor) {
 		return -1
 	}
-	if !((yylimit - yycursor) < 33) {
+	if !((yylimit - yycursor) < 33) && uint8(yyinput[yycursor]) != 0 && uint8(yyinput[yycursor]) != 10 && uint8(yyinput[yycursor]) != 13 && uint8(yyinput[yycursor]) != 34 && uint8(yyinput[yycursor]) != 92 {
 		yyxe0 := archsimd.BroadcastUint8x32(0)
 		yyxe10 := archsimd.BroadcastUint8x32(10)
 		yyxe13 := archsimd.BroadcastUint8x32(13)

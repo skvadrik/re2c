@@ -59,7 +59,7 @@ yy3:
 	if (lessThan(1)) {
 		return -2
 	}
-	if !(lessThan(33)) {
+	if !(lessThan(33)) && uint8(input[cursor]) - 0 > 96 - 0 && uint8(input[cursor]) - 123 > 255 - 123 {
 		yyxl0 := archsimd.BroadcastUint8x32(0)
 		yyxs0 := archsimd.BroadcastUint8x32(96 - 0)
 		yyxl123 := archsimd.BroadcastUint8x32(123)
