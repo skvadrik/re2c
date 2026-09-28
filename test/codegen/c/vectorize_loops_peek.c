@@ -260,8 +260,7 @@ yy2:
 	++cur;
 	if (lim <= cur) { ret = E_FILL; goto done; }
 	if (sizeof(*(cur)) == 1 && !((lim - cur) < 33) && (unsigned char)*(cur) != 0 && (unsigned char)*(cur) != 34 && (unsigned char)(*(cur) - 127) > 159 - 127 && (unsigned char)*(cur) != 255) {
-		unsigned int yysimdz = 0;
-		__asm__ volatile ("" : "+r" (yysimdz));
+		volatile unsigned int yysimdz = 0;
 		const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);
 		(void)yysimdzero;
 		const __m256i yyxe0 = _mm256_set1_epi8((char)(yysimdz + 0));
@@ -1242,8 +1241,7 @@ yy12:
 	++cur;
 	if (lim <= cur) { ret = E_FILL; goto done; }
 	if (sizeof(*(cur)) == 1 && !((lim - cur) < 33) && (unsigned char)*(cur) != 0 && (unsigned char)*(cur) != 34 && (unsigned char)(*(cur) - 127) > 159 - 127 && (unsigned char)*(cur) != 255) {
-		unsigned int yysimdz = 0;
-		__asm__ volatile ("" : "+r" (yysimdz));
+		volatile unsigned int yysimdz = 0;
 		const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);
 		(void)yysimdzero;
 		const __m256i yyxe0 = _mm256_set1_epi8((char)(yysimdz + 0));

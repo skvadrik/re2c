@@ -28,8 +28,7 @@ yy1:
 	++cur;
 	if (lim <= cur) { ret = 0; goto done; }
 	if (sizeof(*(cur)) == 1 && !((lim - cur) < 33) && (unsigned char)*(cur) != 32) {
-		unsigned int yysimdz = 0;
-		__asm__ volatile ("" : "+r" (yysimdz));
+		volatile unsigned int yysimdz = 0;
 		const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);
 		(void)yysimdzero;
 		const __m256i yyxe32 = _mm256_set1_epi8((char)(yysimdz + 32));

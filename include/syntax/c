@@ -494,8 +494,7 @@ code:vector_loop =
         : "(unsigned char)*(" YYCURSOR ") != " xrange_lo)]
     ") {" nl
     indent
-    [xrange{0}: topindent "unsigned int yysimdz = 0;" nl
-        topindent "__asm__ volatile (\"\" : \"+r\" (yysimdz));" nl
+    [xrange{0}: topindent "volatile unsigned int yysimdz = 0;" nl
         topindent "const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);" nl
         topindent "(void)yysimdzero;" nl]
     [xrange{0:-1}: (.xrange.many

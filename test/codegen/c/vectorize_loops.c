@@ -207,8 +207,7 @@ yy4:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return ERR_FILL;
 	if (sizeof(*(in->cur)) == 1 && !((in->lim - in->cur) < 33) && (unsigned char)(*(in->cur) - 0) > 8 - 0 && (unsigned char)(*(in->cur) - 10) > 31 - 10 && (unsigned char)(*(in->cur) - 33) > 255 - 33) {
-		unsigned int yysimdz = 0;
-		__asm__ volatile ("" : "+r" (yysimdz));
+		volatile unsigned int yysimdz = 0;
 		const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);
 		(void)yysimdzero;
 		const __m256i yyxl0 = _mm256_set1_epi8((char)(yysimdz + 0));
@@ -247,8 +246,7 @@ yy7:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return ERR_FILL;
 	if (sizeof(*(in->cur)) == 1 && !((in->lim - in->cur) < 33) && (unsigned char)(*(in->cur) - 0) > 47 - 0 && (unsigned char)(*(in->cur) - 58) > 255 - 58) {
-		unsigned int yysimdz = 0;
-		__asm__ volatile ("" : "+r" (yysimdz));
+		volatile unsigned int yysimdz = 0;
 		const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);
 		(void)yysimdzero;
 		const __m256i yyxl0 = _mm256_set1_epi8((char)(yysimdz + 0));
@@ -288,8 +286,7 @@ yy9:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return ERR_FILL;
 	if (sizeof(*(in->cur)) == 1 && !((in->lim - in->cur) < 33) && (unsigned char)(*(in->cur) - 0) > 47 - 0 && (unsigned char)(*(in->cur) - 58) > 64 - 58 && (unsigned char)(*(in->cur) - 91) > 94 - 91 && (unsigned char)*(in->cur) != 96 && (unsigned char)(*(in->cur) - 123) > 255 - 123) {
-		unsigned int yysimdz = 0;
-		__asm__ volatile ("" : "+r" (yysimdz));
+		volatile unsigned int yysimdz = 0;
 		const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);
 		(void)yysimdzero;
 		const __m256i yyxl0 = _mm256_set1_epi8((char)(yysimdz + 0));
@@ -390,8 +387,7 @@ yy11:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return ERR_FILL;
 	if (sizeof(*(in->cur)) == 1 && !((in->lim - in->cur) < 33) && (unsigned char)*(in->cur) != 0 && (unsigned char)*(in->cur) != 34 && (unsigned char)*(in->cur) != 92) {
-		unsigned int yysimdz = 0;
-		__asm__ volatile ("" : "+r" (yysimdz));
+		volatile unsigned int yysimdz = 0;
 		const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);
 		(void)yysimdzero;
 		const __m256i yyxe0 = _mm256_set1_epi8((char)(yysimdz + 0));
