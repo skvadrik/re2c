@@ -651,6 +651,86 @@ class RenderLoop : public RenderCallback {
     FORBID_COPY(RenderLoop);
 };
 
+class RenderVectorLoop : public RenderCallback {
+    RenderContext& rctx;
+    const CodeVectorLoop* code;
+    const CodeVectorRange* curr_range;
+    const CodeVectorRange* last_range;
+    size_t nranges;
+
+  public:
+    RenderVectorLoop(RenderContext& rctx, const CodeVectorLoop* code)
+            : rctx(rctx)
+            , code(code)
+            , curr_range(nullptr)
+            , last_range(nullptr)
+            , nranges(0) {
+        if (code->ranges) {
+            for (const CodeVectorRange* r = code->ranges->head; r; r = r->next) ++nranges;
+        }
+    }
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::SIZE:
+            rctx.os << code->size;
+            break;
+        case StxVarId::LESSTHAN_EXPR:
+            rctx.os << code->lessthan;
+            break;
+        case StxVarId::MASK:
+            rctx.os << code->mask;
+            break;
+        case StxVarId::INPUT:
+            rctx.os << rctx.opts->api_input;
+            break;
+        case StxVarId::CURSOR:
+            rctx.os << rctx.opts->api_cursor;
+            break;
+        case StxVarId::RANGE_LO:
+            DCHECK(curr_range != nullptr);
+            rctx.os << curr_range->lo;
+            break;
+        case StxVarId::RANGE_HI:
+            DCHECK(curr_range != nullptr);
+            rctx.os << curr_range->hi;
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    size_t get_list_size(StxVarId var) const override {
+        if (var == StxVarId::RANGE) {
+            return nranges;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        if (var == StxVarId::RANGE) {
+            DCHECK(code->ranges);
+            DCHECK(rbound < nranges);
+            find_list_bounds(code->ranges->head, lbound, rbound, &curr_range, &last_range);
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(StxVarId var) override {
+        if (var == StxVarId::RANGE) {
+            curr_range = curr_range->next;
+            return curr_range != last_range;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderVectorLoop);
+};
+
 class RenderJmp : public RenderCallback {
     RenderContext& rctx;
     const char* label;
@@ -1747,6 +1827,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::LABEL:
         render_label(rctx, code->label);
         break;
+    case CodeKind::VECTOR_LOOP: {
+        RenderVectorLoop callback(rctx, &code->vector_loop);
+        rctx.opts->render_code_vector_loop(rctx.os, callback);
+        break;
+    }
     case CodeKind::STAGS:
     case CodeKind::MTAGS:
     case CodeKind::SVARS:

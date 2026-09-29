@@ -534,6 +534,16 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
         }
     }
 
+    // The SIMD fast-forward loop generated for a base state is a fallthrough prelude: on exit
+    // from the class it continues into the state's own dispatch. It only refers to a label if
+    // the transition body is not emitted immediately after the state (which can happen if the
+    // state order changes); mark that label used so the reference never dangles. In the common
+    // case the body is adjacent (`body == from->next`) and no label is needed.
+    if (from->simd && from->simd_body != nullptr && from->simd_body != from
+            && from->simd_body != from->next) {
+        from->simd_body->label->used = true;
+    }
+
     CodeGo* go = &from->go;
     Span* span = go->span;
 

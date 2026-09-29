@@ -66,6 +66,12 @@ struct State {
     bool is_base;
     bool linked;
 
+    // SIMD fast-forward: this state starts with a vectorized loop that skips runs of characters
+    // belonging to the reflexive transition class. `simd_body` is the state that carries the
+    // conditional transitions (the state itself, or its MOVE part after tunneling).
+    bool simd;
+    State* simd_body;
+
     CodeGo go;
 
     State();
@@ -172,6 +178,8 @@ inline State::State()
         , fallthru(false)
         , is_base(false)
         , linked(false)
+        , simd(false)
+        , simd_body(nullptr)
         , go() {
     init_go(&go);
 }

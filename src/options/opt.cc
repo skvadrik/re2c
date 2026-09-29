@@ -308,6 +308,9 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (!is_default.monadic && !glob.supported_features_contains("monadic")) {
         RET_FAIL(error("`monadic` feature is not supported for this backend"));
     }
+    if (!is_default.vectorize_loops && !glob.supported_features_contains("vectorize-loops")) {
+        RET_FAIL(error("`vectorize-loops` feature is not supported for this backend"));
+    }
     if (!is_default.tags && !glob.supported_features_contains("tags")) {
         RET_FAIL(error("`tags` feature is not supported for this backend"));
     }

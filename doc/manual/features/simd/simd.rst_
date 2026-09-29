@@ -1,0 +1,24 @@
+|re2c| can accelerate hot greedy loops in regular expressions using SIMD
+hardware vectorization via declarative syntax templates (Go 1.27 ``simd/archsimd``
+and C AVX2 intrinsics).
+
+In lexical analysis, a significant percentage of CPU cycles is spent
+consuming long homogeneous byte sequences (such as string literals,
+identifiers, or whitespace).
+
+Instead of processing these loops byte-by-byte with scalar branch dispatches,
+the vectorization engine emits a fast-forward loop that loads and evaluates
+blocks of 32 bytes simultaneously using parallel range checks and bitmask extraction.
+
+When enabled with ``--vectorize-loops`` or ``re2c:vectorize:loops = 1;``:
+
+- The compiler verifies that the state is an absorbing reflexive loop with no
+  conflicting tag actions, no backtrack recording, and up to 8 disjoint character ranges.
+- Bounds checking (``YYFILL``) must be enabled to ensure the fast-forward vector loop
+  stops before the end-of-buffer boundary.
+- Loop code is emitted through the declarative language syntax template ``code:vector_loop``,
+  supporting Go 1.27 (``simd/archsimd``) and C (AVX2), while remaining extensible to other
+  targets without compiler modification.
+- Once a delimiter byte outside the reflexive class is detected or buffer bounds are approached,
+  execution falls back seamlessly to the scalar DFA dispatcher.
+

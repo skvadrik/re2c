@@ -1130,6 +1130,53 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
     }
 }
 
+// Width (in bytes) of the vectorized fast-forward step.
+static constexpr uint32_t VECTOR_SIZE = 32;
+
+// Generate a vector fast-forward loop for a base state with a reflexive character class.
+// The loop skips whole blocks of input that stay within the class, then falls through to the
+// scalar dispatcher which handles the first byte outside of the class (or the tail shorter than
+// a full vector). Control transfer targets are ordinary fallthrough, so no extra labels are
+// needed; labels of states reachable from the kernel are nonetheless marked used in the analyze
+// pass. The length guard is emitted through the generic `YYLESSTHAN` abstraction and does not
+// change `YYMAXFILL`.
+static void gen_vector_loop(Output& output, const State* s, CodeList* stmts) {
+    if (!s->simd || s->simd_body == nullptr) return;
+
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
+
+    // Collect the reflexive class as a list of inclusive ranges [lo, hi].
+    CodeVectorRanges* ranges = alc.alloct<CodeVectorRanges>(1);
+    ranges->head = nullptr;
+    CodeVectorRange** pnext = &ranges->head;
+
+    const Span* span = s->simd_body->go.span;
+    uint32_t ub = 0;
+    for (uint32_t i = 0; i < s->simd_body->go.span_count; ++i) {
+        if (span[i].to == s) {
+            CodeVectorRange* r = alc.alloct<CodeVectorRange>(1);
+            r->lo = ub;
+            r->hi = span[i].ub - 1;
+            r->next = nullptr;
+            *pnext = r;
+            pnext = &r->next;
+        }
+        ub = span[i].ub;
+    }
+    DCHECK(ranges->head != nullptr);
+
+    // Build the length guard via the generic abstraction (`YYLESSTHAN(VECTOR_SIZE + reserve)`),
+    // ensuring that after skipping VECTOR_SIZE bytes, at least `reserve` bytes remain in the
+    // buffer for the subsequent scalar peek without exceeding the buffer boundary.
+    const uint32_t reserve = static_cast<uint32_t>(std::max<size_t>(1, s->fill));
+    GenLessThan callback(o.stream(), opts, VECTOR_SIZE + reserve);
+    const char* less_than = opts->gen_code_yylessthan(o, callback);
+
+    append(stmts, code_vector_loop(alc, VECTOR_SIZE, copystr(less_than, alc), "0xFFFFFFFF", ranges));
+}
+
 static void emit_state(
         Output& output, const Adfa& dfa, const State* s, CodeList* stmts, CodeList* continuation) {
     const opt_t* opts = output.block().opts;
@@ -1193,6 +1240,9 @@ static void emit_state(
         // All code from YYFILL up to transitions belongs to the ELSE branch of YYEND.
         CodeList* tail = code_list(alc);
         gen_fill_and_label(output, tail, dfa, s);
+        // Vectorized fast-forward runs after YYFILL (so that the input window is refilled) and
+        // before the scalar peek.
+        gen_vector_loop(output, s, tail);
         gen_peek(alc, s, tail);
         if (is_start && dfa.custom_start_label && opts->debug) {
             append(tail, code_debug(alc, dfa.custom_start_label->index));

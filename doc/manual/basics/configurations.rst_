@@ -183,6 +183,10 @@ Here is a full list of configurations supported by |re2c|:
     Same as the ``--nested-ifs`` option, but can be configured on per-block
     basis.
 
+``re2c:vectorize:loops``, ``re2c:flags:vectorize:loops``
+    Same as the ``--vectorize-loops`` option, but can be configured on per-block
+    basis.
+
 ``re2c:posix-captures``, ``re2c:flags:posix-captures``, ``re2c:flags:P``
     Same as the ``--posix-captures`` option, but can be configured on per-block
     basis.

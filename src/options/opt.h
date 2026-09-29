@@ -66,7 +66,7 @@ using StxCodes = list_t<StxCode>;
             ({"code", "dot", "skeleton"})) \
     CHECKED_LIST(supported_features, \
             ({"nested-ifs", "bitmaps", "computed-gotos", "case-ranges", "unsafe", "monadic", \
-                "tags", "captures", "captvars", "computed-continue"}))
+                "tags", "captures", "captvars", "computed-continue", "vectorize-loops"}))
 
 #define RE2C_STX_OPTS \
     STX_OPT(bool, semicolons, false) \
@@ -321,6 +321,11 @@ using StxCodes = list_t<StxCode>;
     ) \
     CODE_TEMPLATE(yytarget_filter, \
         ({StxVarId::CHAR}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vector_loop, \
+        ({StxVarId::SIZE, StxVarId::LESSTHAN_EXPR, StxVarId::MASK, StxVarId::INPUT, StxVarId::CURSOR, \
+            StxVarId::RANGE_LO, StxVarId::RANGE_HI}), \
+        ({StxVarId::RANGE}), ({}) \
     )
 
 #define RE2C_ONELINE_CODES \
@@ -349,6 +354,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(INDEX, "index") \
     STX_LOCAL_VAR(INIT, "init") \
     STX_LOCAL_VAR(LABEL, "label") \
+    STX_LOCAL_VAR(LESSTHAN_EXPR, "lessthan") \
     STX_LOCAL_VAR(LHS, "lhs") \
     STX_LOCAL_VAR(LINE, "line") \
     STX_LOCAL_VAR(MASK, "mask") \
@@ -356,6 +362,9 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(NEED, "need") \
     STX_LOCAL_VAR(NEG, "neg") \
     STX_LOCAL_VAR(OFFSET, "offset") \
+    STX_LOCAL_VAR(RANGE, "range") \
+    STX_LOCAL_VAR(RANGE_HI, "range_hi") \
+    STX_LOCAL_VAR(RANGE_LO, "range_lo") \
     STX_LOCAL_VAR(RETVAL, "retval") \
     STX_LOCAL_VAR(RHS, "rhs") \
     STX_LOCAL_VAR(ROW, "row") \
@@ -496,6 +505,7 @@ enum class StxVarId : uint32_t {
     MUTOPT(bool, nested_ifs, false) \
     MUTOPT(bool, unsafe, true) \
     MUTOPT(bool, monadic, false) \
+    MUTOPT(bool, vectorize_loops, false) \
     /* YYFILL */ \
     MUTOPT(uint32_t, fill_eof, NOEOF) \
     MUTOPT(uint32_t, fill_sentinel, NOEOF) \

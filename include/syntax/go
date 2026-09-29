@@ -4,7 +4,7 @@ supported_apis = ["simple", "generic", "record"];
 supported_api_styles = ["free-form", "functions"];
 supported_code_models = ["goto-label", "loop-switch", "recursive-functions"];
 supported_targets = ["code", "dot"];
-supported_features = ["nested-ifs", "bitmaps", "tags", "captures", "captvars"];
+supported_features = ["nested-ifs", "bitmaps", "tags", "captures", "captvars", "vectorize-loops"];
 
 
 // language-specific options ---------------------------------------------------
@@ -94,6 +94,7 @@ re2c:case-inverted = 0;
 re2c:case-ranges = 0;
 re2c:unsafe = 0;
 re2c:monadic = 0;
+re2c:vectorize:loops = 0;
 re2c:encoding:ebcdic = 0;
 re2c:encoding:utf32 = 0;
 re2c:encoding:ucs2 = 0;
@@ -416,3 +417,16 @@ code:yybm_filter = yych " & ~0xFF";
 code:yybm_match = "(" yybm "[" offset "+" yych "] & " mask ") != 0";
 
 code:yytarget_filter = <undefined>;
+ 
+code:vector_loop =
+    topindent "for !(" lessthan ") {" nl
+        indent
+        topindent "yysimd0 := archsimd.LoadUint8x" size "(" YYINPUT "[" YYCURSOR ":])" nl
+        [range{0}: topindent "yysimd1 := yysimd0.GreaterEqual(archsimd.BroadcastUint8x" size "(" range_lo ")).And(yysimd0.LessEqual(archsimd.BroadcastUint8x" size "(" range_hi ")))" nl]
+        [range{1:-1}: topindent "yysimd1 = yysimd1.Or(yysimd0.GreaterEqual(archsimd.BroadcastUint8x" size "(" range_lo ")).And(yysimd0.LessEqual(archsimd.BroadcastUint8x" size "(" range_hi "))))" nl]
+        topindent "if yysimd1.ToBits() != " mask " {" nl
+            indent topindent "break" nl dedent
+        topindent "}" nl
+        topindent YYCURSOR " += " size nl
+        dedent
+    topindent "}" nl;

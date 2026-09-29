@@ -313,6 +313,78 @@ void Adfa::find_base_state(const opt_t* opts) {
     operator delete(span);
 }
 
+// A base state has a reflexive transition on a character class: either directly (if the state was
+// not split) or through the immediately following MOVE part (if it was split by tunneling).
+static State* simd_reflexive_body(State* s) {
+    for (uint32_t i = 0; i < s->go.span_count; ++i) {
+        if (s->go.span[i].to == s) return s;
+    }
+    State* b = s->next;
+    if (b && b->kind == StateKind::MOVE) {
+        for (uint32_t i = 0; i < b->go.span_count; ++i) {
+            if (b->go.span[i].to == s) return b;
+        }
+    }
+    return nullptr;
+}
+
+// Preconditions for vectorization of a reflexive character class. Anything that may observe
+// intermediate positions or side effects (YYMARKER saves, positional tags, mtags, EOF
+// transitions, state restoration) forbids the fast-forward loop. Accepting states are fine as
+// long as they are save- and tag-free: the rule action runs on the transition that leaves the
+// class, which the scalar dispatcher still processes. The length guard emitted by codegen relies
+// on bounds checking, so YYFILL must stay enabled.
+static bool simd_is_eligible(State* s, const opt_t* opts, bool tag_free, State** pbody) {
+    // Tags (positional or history) must be completely absent from the DFA: the vector loop
+    // cannot observe or update them at intermediate positions.
+    if (!tag_free) return false;
+    if (!opts->vectorize_loops
+            || opts->target != Target::CODE
+            || opts->code_model != CodeModel::GOTO_LABEL
+            || opts->eager_skip
+            || opts->storable_state
+            || !opts->fill_enable
+            || !opts->fill_check
+            || opts->fill_eof != NOEOF
+            || opts->encoding.cunit_size() != 1) {
+        return false;
+    }
+    if (!s->is_base || s->fill == 0) return false;
+
+    State* body = simd_reflexive_body(s);
+    if (body == nullptr) return false;
+
+    if (s->save != NOSAVE || body->save != NOSAVE) return false;
+    if (s->go.tags != TCID0 || body->go.tags != TCID0) return false;
+    if (s->go.skip || body->go.skip) return false;
+    if (s->eof_state != nullptr || body->eof_state != nullptr) return false;
+
+    uint32_t nclass = 0;
+    for (uint32_t i = 0; i < body->go.span_count; ++i) {
+        if (body->go.span[i].to == s) {
+            if (body->go.span[i].tags != TCID0) return false;
+            ++nclass;
+        }
+    }
+    if (nclass == 0 || nclass > 8) return false;
+
+    *pbody = body;
+    return true;
+}
+
+static void find_simd_states(State* head, const opt_t* opts, bool tag_free) {
+    for (State* s = head; s; s = s->next) {
+        State* body = nullptr;
+        if (simd_is_eligible(s, opts, tag_free, &body)) {
+            s->simd = true;
+            s->simd_body = body;
+        } else {
+            s->simd = false;
+            s->simd_body = nullptr;
+        }
+    }
+}
+
 // note [tag hoisting, skip hoisting and tunneling]
 //
 // Tag hoisting is simple: if all transitions have the same commands, they can be hoisted out of
@@ -456,6 +528,9 @@ void Adfa::prepare(const opt_t* opts) {
     }
     // find ``base'' state, if possible
     find_base_state(opts);
+
+    // find base states that can start with a SIMD fast-forward loop over their reflexive class
+    find_simd_states(head, opts, maxtagver == 0);
 
     // see note [tag hoisting, skip hoisting and tunneling]
     if (opts->eager_skip) {

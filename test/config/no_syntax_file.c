@@ -74,4 +74,5 @@
 <default syntax file>:1:0: warning: syntax configuration `code:yybm_filter` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:yybm_match` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:yytarget_filter` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
+<default syntax file>:1:0: warning: syntax configuration `code:vector_loop` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 re2c: error: code model is not supported for this backend

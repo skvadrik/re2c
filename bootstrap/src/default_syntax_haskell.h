@@ -95,6 +95,7 @@ static constexpr const char* DEFAULT_SYNTAX_HASKELL =
     "re2c:case-ranges = 0;\n"
     "re2c:unsafe = 0;\n"
     "re2c:monadic = 0;\n"
+    "re2c:vectorize:loops = 0;\n"
     "re2c:encoding:ebcdic = 0;\n"
     "re2c:encoding:utf32 = 0;\n"
     "re2c:encoding:ucs2 = 0;\n"
@@ -426,4 +427,6 @@ static constexpr const char* DEFAULT_SYNTAX_HASKELL =
     "code:yybm_match = \"(\" yybm \" ! (\" offset \" + fromIntegral \" yych \") .&. \" mask \") /= 0\";\n"
     "\n"
     "code:yytarget_filter = <undefined>;\n"
+    "\n"
+    "code:vector_loop = <undefined>;\n"
     ;
