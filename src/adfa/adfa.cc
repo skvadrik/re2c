@@ -328,30 +328,24 @@ static State* simd_reflexive_body(State* s) {
     return nullptr;
 }
 
-// Preconditions for vectorization of a reflexive character class. Anything that may observe
-// intermediate positions or side effects (YYMARKER saves, positional tags, mtags, EOF
-// transitions, state restoration) forbids the fast-forward loop. Accepting states are fine as
-// long as they are save- and tag-free: the rule action runs on the transition that leaves the
-// class, which the scalar dispatcher still processes. The length guard emitted by codegen relies
-// on bounds checking, so YYFILL must stay enabled. The vector loop reads input directly through
-// the cursor, so the generic API (where input is accessed via YYPEEK/YYSKIP and the cursor need
-// not be a pointer) is not supported.
-static bool simd_is_eligible(State* s, const opt_t* opts, bool tag_free, State** pbody) {
-    // Tags (positional or history) must be completely absent from the DFA: the vector loop
-    // cannot observe or update them at intermediate positions.
-    if (!tag_free) return false;
-    if (!opts->vectorize_loops
-            || opts->target != Target::CODE
-            || opts->code_model != CodeModel::GOTO_LABEL
-            || opts->api == Api::GENERIC
-            || opts->eager_skip
-            || opts->storable_state
-            || !opts->fill_enable
-            || !opts->fill_check
-            || opts->fill_eof != NOEOF
-            || opts->encoding.cunit_size() != 1) {
-        return false;
-    }
+// Per-state preconditions for vectorization of a reflexive character class. Anything that may
+// observe intermediate positions or side effects (YYMARKER saves, tag operations, EOF
+// transitions) forbids the fast-forward loop. Accepting states are fine as long as they are
+// save- and tag-free: the rule action runs on the transition that leaves the class, which the
+// scalar dispatcher still processes. Tags are checked on the loop state and its body only: tags
+// elsewhere in the DFA are set and read by scalar code at positions the loop never skips.
+// Option combinations that the loop does not support (code model, generic API, eager skip,
+// storable state, YYFILL and bounds checking, EOF rule, code unit size) are rejected as errors
+// when options are fixed (see `opt.cc`), so they are only asserted here.
+static bool simd_is_eligible(State* s, const opt_t* opts, State** pbody) {
+    if (!opts->vectorize_loops) return false;
+    DCHECK(opts->target == Target::CODE);
+    DCHECK(opts->code_model == CodeModel::GOTO_LABEL);
+    // The generic API is reported as an error by `calc_stats`, which runs after `prepare`.
+    if (opts->api == Api::GENERIC) return false;
+    DCHECK(!opts->eager_skip && !opts->storable_state);
+    DCHECK(opts->fill_enable && opts->fill_check && opts->fill_eof == NOEOF);
+    DCHECK(opts->encoding.cunit_size() == 1);
     if (!s->is_base || s->fill == 0) return false;
 
     State* body = simd_reflexive_body(s);
@@ -359,6 +353,9 @@ static bool simd_is_eligible(State* s, const opt_t* opts, bool tag_free, State**
 
     if (s->save != NOSAVE || body->save != NOSAVE) return false;
     if (s->go.tags != TCID0 || body->go.tags != TCID0) return false;
+    if (s->rule_tags != TCID0 || body->rule_tags != TCID0) return false;
+    if (s->fall_tags != TCID0 || body->fall_tags != TCID0) return false;
+    if (s->eof_tags != TCID0 || body->eof_tags != TCID0) return false;
     if (s->go.skip || body->go.skip) return false;
     if (s->eof_state != nullptr || body->eof_state != nullptr) return false;
 
@@ -375,10 +372,10 @@ static bool simd_is_eligible(State* s, const opt_t* opts, bool tag_free, State**
     return true;
 }
 
-static void find_simd_states(State* head, const opt_t* opts, bool tag_free) {
+static void find_simd_states(State* head, const opt_t* opts) {
     for (State* s = head; s; s = s->next) {
         State* body = nullptr;
-        if (simd_is_eligible(s, opts, tag_free, &body)) {
+        if (simd_is_eligible(s, opts, &body)) {
             s->simd = true;
             s->simd_body = body;
         } else {
@@ -533,7 +530,7 @@ void Adfa::prepare(const opt_t* opts) {
     find_base_state(opts);
 
     // find base states that can start with a SIMD fast-forward loop over their reflexive class
-    find_simd_states(head, opts, maxtagver == 0);
+    find_simd_states(head, opts);
 
     // see note [tag hoisting, skip hoisting and tunneling]
     if (opts->eager_skip) {
@@ -543,6 +540,13 @@ void Adfa::prepare(const opt_t* opts) {
 
 Ret Adfa::calc_stats(OutputBlock& out) {
     const opt_t* opts = out.opts;
+
+    // The vector loop reads input through the cursor and cannot use the generic API. This is
+    // checked here rather than with the other option combinations in `opt.cc`, because the
+    // backend default API may be generic (Go) while the block overrides it.
+    if (opts->vectorize_loops && opts->api == Api::GENERIC) {
+        RET_FAIL(error("`vectorize:loops` is not supported with the generic API"));
+    }
 
     // calculate `YYMAXFILL`
     max_fill = 0;

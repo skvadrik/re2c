@@ -311,6 +311,40 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (!is_default.vectorize_loops && !glob.supported_features_contains("vectorize-loops")) {
         RET_FAIL(error("`vectorize-loops` feature is not supported for this backend"));
     }
+    if (real.vectorize_loops && glob.target != Target::CODE) {
+        // Skeleton and DOT targets do not generate vector loops; the option is reset in the same
+        // way as storable state (see `fix_conopt`), so that the test suite can run every source
+        // with `--skeleton`.
+        real.vectorize_loops = false;
+    }
+    if (real.vectorize_loops) {
+        // The vector loop reads input through the cursor, relies on the length guard of bounds
+        // checking and advances the cursor past positions that the scalar code never observes.
+        // Every unsupported combination is an error rather than a silent fallback to scalar code.
+        if (glob.code_model != CodeModel::GOTO_LABEL) {
+            RET_FAIL(error("`vectorize:loops` requires the goto/label code model"));
+        }
+        // The API is checked per block when its options are final (`Adfa::calc_stats`): the
+        // backend default may be the generic API (Go), and a block may override it after the
+        // option has been set on the command line.
+        if (glob.eager_skip) {
+            RET_FAIL(error("`vectorize:loops` is not supported with --eager-skip"));
+        }
+        if (glob.storable_state) {
+            RET_FAIL(error("`vectorize:loops` is not supported with storable state"));
+        }
+        if (!real.fill_enable || !real.fill_check) {
+            RET_FAIL(error("`vectorize:loops` requires YYFILL with bounds checking "
+                           "(`re2c:yyfill:enable` and `re2c:yyfill:check`)"));
+        }
+        if (real.fill_eof != NOEOF) {
+            RET_FAIL(error("`vectorize:loops` is not supported with the end-of-input rule "
+                           "(`re2c:eof`)"));
+        }
+        if (real.encoding.cunit_size() != 1) {
+            RET_FAIL(error("`vectorize:loops` requires single-byte code units"));
+        }
+    }
     if (!is_default.tags && !glob.supported_features_contains("tags")) {
         RET_FAIL(error("`tags` feature is not supported for this backend"));
     }
