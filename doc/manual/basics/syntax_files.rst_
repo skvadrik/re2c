@@ -307,6 +307,13 @@ language configurations, inplace configurations and code templates.
       range contains more than one code unit (its upper bound exceeds its
       lower bound). They are valid only inside ``range`` and ``xrange`` lists,
       respectively, and can select a range test instead of an equality test.
+      ``.range.first`` and ``.xrange.first`` are true if the current range
+      contains more than one code unit and starts at code unit 0, so that a
+      single comparison with the upper bound tests it. ``.range.last`` and
+      ``.xrange.last`` are true if the current range contains more than one
+      code unit, ends at the largest code unit of the encoding and does not
+      start at 0, so that a single comparison with the lower bound tests it.
+      The four are valid only inside their lists.
 
   ``code:continue``
       Continue statement. Supported variables: ``label`` (label from which to

@@ -326,7 +326,8 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::SIZE, StxVarId::NEED, StxVarId::LESSTHAN_EXPR, \
             StxVarId::INPUT, StxVarId::CURSOR, StxVarId::LIMIT}), \
         ({StxVarId::RANGE, StxVarId::XRANGE}), \
-        ({StxLOpt::MANY, StxLOpt::RANGE_MANY, StxLOpt::XRANGE_MANY}) \
+        ({StxLOpt::MANY, StxLOpt::RANGE_MANY, StxLOpt::XRANGE_MANY, StxLOpt::RANGE_FIRST, \
+          StxLOpt::RANGE_LAST, StxLOpt::XRANGE_FIRST, StxLOpt::XRANGE_LAST}) \
     )
 
 #define RE2C_ONELINE_CODES \

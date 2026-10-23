@@ -622,13 +622,18 @@ const char* Opt::var_name(StxVarId id) {
 
 // is this a known configuration-specific conditional?
 Ret Opt::check_cond(StxLOpt opt, const char* conf, const std::unordered_set<StxLOpt>& conds) const {
-    if (opt == StxLOpt::RANGE_MANY || opt == StxLOpt::XRANGE_MANY) {
-        const StxVarId list = opt == StxLOpt::RANGE_MANY ? StxVarId::RANGE : StxVarId::XRANGE;
+    const bool range_cond = opt == StxLOpt::RANGE_MANY || opt == StxLOpt::RANGE_FIRST
+            || opt == StxLOpt::RANGE_LAST;
+    const bool xrange_cond = opt == StxLOpt::XRANGE_MANY || opt == StxLOpt::XRANGE_FIRST
+            || opt == StxLOpt::XRANGE_LAST;
+    if (range_cond || xrange_cond) {
+        const StxVarId list = range_cond ? StxVarId::RANGE : StxVarId::XRANGE;
         if (std::find_if(stack_code_list.begin(), stack_code_list.end(),
                 [list](const StxCode* x) { return list == x->list.var; })
                 == stack_code_list.end()) {
-            RET_FAIL(error("conditional `.%s.many` outside of its list in configuration `%s`",
-                           var_name(list), conf));
+            RET_FAIL(error("conditional `.%s.many`, `.%s.first` or `.%s.last` outside of its "
+                           "list in configuration `%s`",
+                           var_name(list), var_name(list), var_name(list), conf));
         }
     }
     if (conds.find(opt) != conds.end()) return Ret::OK;

@@ -12,23 +12,27 @@ blocks of 32 bytes simultaneously using parallel range checks and bitmask extrac
 
 When enabled with ``--vectorize-loops`` or ``re2c:vectorize:loops = 1;``:
 
-- Vectorization applies only to normal code generation with the goto/label code
-  model and single-byte code units. It is disabled with ``--eager-skip``, storable
-  state, or an end-of-input rule (``re2c:eof``).
+- Vectorization requires the goto/label code model, the simple or record API,
+  single-byte code units, ``YYFILL`` with bounds checking, and no ``--eager-skip``,
+  storable state or end-of-input rule (``re2c:eof``). Any other combination is a
+  configuration error, not a silent fallback. With ``--skeleton`` and
+  ``--emit-dot`` the option is reset, as storable state is for these targets.
 - The compiler selects base states with a nonzero refill requirement and a
   reflexive character class of at most 8 disjoint ranges. The loop must not record
   backtracking positions, perform tag actions or have hoisted cursor increments
-  or end-of-input transitions. Tags must be absent from the entire DFA, not just
-  from the loop.
+  or end-of-input transitions, and neither the loop state nor its body may carry
+  final, fallback or end-of-input tags. Tags elsewhere in the DFA do not block
+  the loop: they are set and read by scalar code at positions the loop never
+  skips.
 - Both ``re2c:yyfill:enable`` and ``re2c:yyfill:check`` must be enabled to ensure
   the vector loop stops before the end-of-buffer boundary. It reserves enough
   lookahead for the scalar dispatcher and does not increase ``YYMAXFILL``.
 - The generic API is not supported, because the vector loop reads input directly
   through ``YYCURSOR`` rather than via ``YYPEEK`` and ``YYSKIP``; use the simple or
   record API.
-- States that do not meet these requirements retain scalar code without a
-  diagnostic. Enabling the option for a backend without the ``vectorize-loops``
-  feature is an error, rather than a silent fallback.
+- States that do not meet these per-state requirements retain scalar code
+  without a diagnostic. Enabling the option for a backend without the
+  ``vectorize-loops`` feature is an error.
 - Loop code is emitted through the declarative language syntax template ``code:vector_loop``,
   supporting Go 1.27 (``simd/archsimd``) and C (AVX2), while remaining extensible to other
   targets without compiler modification.
@@ -53,8 +57,11 @@ When enabled with ``--vectorize-loops`` or ``re2c:vectorize:loops = 1;``:
   class (a scalar test against the complement, placed after the length guard). Runs that end right
   away, such as one-character identifiers or empty string literals, are thus left to the scalar
   dispatcher and do not pay for the vector block. The test only selects the path: the vector
-  block itself finds the exact exit position, so the result does not depend on it. Neither form
-  guarantees a speedup for short runs or near the end of the buffer.
+  block itself finds the exact exit position, so the result does not depend on it. Each range of
+  the complement is tested in its simplest form (``> hi`` for a range starting at code unit 0,
+  ``< lo`` for a range ending at the largest code unit, ``!=`` for a single code unit, an unsigned
+  wrap-around check otherwise). Neither form guarantees a speedup for short runs or near the end
+  of the buffer; see the next section.
 - The default C template explicitly calls ``_mm256_zeroupper()`` after the vector
   loop, and the Go template calls ``archsimd.ClearAVXUpperBits()``. These clear
   the upper AVX register bits before returning to scalar code, avoiding penalties
@@ -78,6 +85,28 @@ section. It provides both the character class and its complement as lists of
 inclusive ranges. Testing the complement can be cheaper for classes such as
 string bodies, where a few exit code units are compared for equality and the
 first match gives the exact exit position.
+
+When vectorization pays off
+---------------------------
+
+The vector block has a fixed entry cost, paid once per run of the class that
+is at least two code units long, and a per-block cost that is small compared
+to one scalar step per code unit. The scalar dispatcher has a small fixed
+cost per run and a cost per code unit. Vectorization therefore wins only when
+runs are longer than a break-even length, and loses below it. Measured on one
+x86-64 machine with the default C template, GCC and an identifier class, the
+break-even is near 9 code units: runs of 2 to 8 code units cost more than
+scalar code, runs of a few hundred code units are an order of magnitude
+cheaper. On corpora where most runs are short (identifiers, numbers, short
+words), the vectorized lexer is slower than the scalar one; on corpora with
+long runs (string bodies, whitespace, comments, URL and log fields) it is
+faster.
+
+The generator cannot know the run lengths of the input, so the option is off
+by default and applies per block. Enable it for blocks whose hot loops are
+long, and decide from a measurement on the target corpus rather than from the
+class alone; the generated code is larger with the option, which also costs
+on the scalar paths of the same lexer.
 
 Go string input
 ---------------

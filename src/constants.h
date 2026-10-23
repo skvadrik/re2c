@@ -223,6 +223,10 @@ enum class StxLOpt {
     MANY,
     RANGE_MANY,
     XRANGE_MANY,
+    RANGE_FIRST,
+    RANGE_LAST,
+    XRANGE_FIRST,
+    XRANGE_LAST,
     NESTED
 };
 

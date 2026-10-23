@@ -814,6 +814,10 @@ start:
     ".many"                { RET_LOPT(StxLOpt::MANY); }
     ".range.many"          { RET_LOPT(StxLOpt::RANGE_MANY); }
     ".xrange.many"         { RET_LOPT(StxLOpt::XRANGE_MANY); }
+    ".range.first"         { RET_LOPT(StxLOpt::RANGE_FIRST); }
+    ".range.last"          { RET_LOPT(StxLOpt::RANGE_LAST); }
+    ".xrange.first"        { RET_LOPT(StxLOpt::XRANGE_FIRST); }
+    ".xrange.last"         { RET_LOPT(StxLOpt::XRANGE_LAST); }
     ".nested"              { RET_LOPT(StxLOpt::NESTED); }
 
     "." [a-z0-9_.]+ {

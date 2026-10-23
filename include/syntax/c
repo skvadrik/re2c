@@ -484,16 +484,26 @@ code:yytarget_filter = yych " & ~0xFF";
 // Make broadcasts, including the zero vector of range checks, depend on an opaque scalar zero
 // inside the guard. Otherwise GCC may hoist vector constants before the guard (even before
 // YYFILL), bypassing the cleanup.
-// The vector block reads code units as bytes, so it is entered only if a code unit is one
-// byte wide: with a wider YYCTYPE (e.g. `unsigned int` with an 8-bit encoding) the constant
-// `sizeof` test removes the block and the scalar loop handles the input.
+// The scalar test uses the simplest form for each range of the complement: a comparison with
+// the upper bound for a range that starts at code unit 0, with the lower bound for a range that
+// ends at the largest code unit, an equality test for a single code unit, and otherwise an
+// unsigned wrap-around check: the cast makes `*YYCURSOR - lo` wrap modulo 256, so the result
+// exceeds `hi - lo` exactly for code units outside of [lo, hi]. Code units must be one byte
+// wide: re2c rejects encodings with wider code units, and since it cannot see the width of a
+// user-defined YYCTYPE, the block starts with a compile-time check (an array type of negative
+// size fails to compile) that costs nothing at run time.
 code:vector_loop =
-    topindent "if (sizeof(*(" YYCURSOR ")) == 1 && !(" lessthan ")"
-    [xrange{0:-1}: " && " (.xrange.many
+    topindent "if (!(" lessthan ")"
+    [xrange{0:-1}: " && " (.xrange.first
+        ? "(unsigned char)*(" YYCURSOR ") > " xrange_hi
+        : (.xrange.last
+        ? "(unsigned char)*(" YYCURSOR ") < " xrange_lo
+        : (.xrange.many
         ? "(unsigned char)(*(" YYCURSOR ") - " xrange_lo ") > " xrange_hi " - " xrange_lo
-        : "(unsigned char)*(" YYCURSOR ") != " xrange_lo)]
+        : "(unsigned char)*(" YYCURSOR ") != " xrange_lo)))]
     ") {" nl
     indent
+    topindent "(void)sizeof(char[sizeof(*(" YYCURSOR ")) == 1 ? 1 : -1]); /* code units must be one byte wide */" nl
     [xrange{0}: topindent "volatile unsigned int yysimdz = 0;" nl
         topindent "const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);" nl
         topindent "(void)yysimdzero;" nl]

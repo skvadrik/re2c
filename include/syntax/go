@@ -437,11 +437,18 @@ code:yytarget_filter = <undefined>;
 // As in the C template, the vector block is entered only if the current code unit is in the
 // class, so that a run that ends right away (e.g. a one-byte identifier) is left to the scalar
 // dispatcher. The scalar test follows the length guard, which proves that the index is valid.
+// It uses the simplest form for each range of the complement (see the C syntax file): `> hi`
+// for a range starting at 0, `< lo` for a range ending at the largest code unit, `!=` for a
+// single code unit, and an unsigned wrap-around check otherwise.
 code:vector_loop =
     topindent "if !(" lessthan ")"
-    [xrange{0:-1}: " && " (.xrange.many
+    [xrange{0:-1}: " && " (.xrange.first
+        ? "uint8(" YYINPUT "[" YYCURSOR "]) > " xrange_hi
+        : (.xrange.last
+        ? "uint8(" YYINPUT "[" YYCURSOR "]) < " xrange_lo
+        : (.xrange.many
         ? "uint8(" YYINPUT "[" YYCURSOR "]) - " xrange_lo " > " xrange_hi " - " xrange_lo
-        : "uint8(" YYINPUT "[" YYCURSOR "]) != " xrange_lo)]
+        : "uint8(" YYINPUT "[" YYCURSOR "]) != " xrange_lo)))]
     " {" nl
     indent
     [xrange{0:-1}: (.xrange.many

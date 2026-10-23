@@ -1,10 +1,10 @@
 // re2c $INPUT -o $OUTPUT -i --vectorize-loops -Wno-unreachable-rules
 // With an 8-bit encoding and a code unit wider than one byte (`unsigned int`), the
 // vector block would compare the bytes of each code unit and advance the cursor by
-// 32 code units (128 bytes) per block. The loop class contains the zero byte, so
-// the upper bytes of every code unit are in the class and the block would skip past
-// the end of the run. The `sizeof` test in the entry condition removes the block,
-// and the scalar code must find the same token length as the scalar lexer.
+// 32 code units (128 bytes) per block. re2c cannot see the width of a user-defined
+// YYCTYPE, so the block starts with a compile-time check: this generated file must
+// not compile (`size of unnamed array is negative` with GCC and Clang). The width of
+// the encoding's code units is checked by re2c itself (see vectorize_loops_utf32).
 #include <immintrin.h>
 #include <stdio.h>
 

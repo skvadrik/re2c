@@ -329,6 +329,7 @@ using CodeVectorRanges = list_t<CodeVectorRange>;
 struct CodeVectorLoop {
     uint32_t size;
     uint32_t need;
+    uint32_t cunit_max; // largest code unit value of the encoding
     const char* lessthan;
     const CodeVectorRanges* ranges;  // ranges of code units inside the reflexive class
     const CodeVectorRanges* xranges; // ranges of code units outside of it (the complement)
@@ -435,12 +436,14 @@ inline Code* code_vector_loop(
         OutAllocator& alc,
         uint32_t size,
         uint32_t need,
+        uint32_t cunit_max,
         const char* lessthan,
         const CodeVectorRanges* ranges,
         const CodeVectorRanges* xranges) {
     Code* x = new_code(alc, CodeKind::VECTOR_LOOP);
     x->vector_loop.size = size;
     x->vector_loop.need = need;
+    x->vector_loop.cunit_max = cunit_max;
     x->vector_loop.lessthan = lessthan;
     x->vector_loop.ranges = ranges;
     x->vector_loop.xranges = xranges;

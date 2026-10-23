@@ -1197,7 +1197,8 @@ static void gen_vector_loop(Output& output, const State* s, CodeList* stmts) {
     const char* less_than = opts->gen_code_yylessthan(o, callback);
 
     append(stmts, code_vector_loop(
-            alc, VECTOR_SIZE, need, copystr(less_than, alc), ranges, xranges));
+            alc, VECTOR_SIZE, need, opts->encoding.cunit_count() - 1, copystr(less_than, alc),
+            ranges, xranges));
 }
 
 static void emit_state(

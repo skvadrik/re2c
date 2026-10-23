@@ -776,6 +776,20 @@ class RenderVectorLoop : public RenderCallback {
         case StxLOpt::XRANGE_MANY:
             DCHECK(curr_xrange != nullptr);
             return curr_xrange->hi > curr_xrange->lo;
+        case StxLOpt::RANGE_FIRST:
+            DCHECK(curr_range != nullptr);
+            return curr_range->lo == 0 && curr_range->hi > curr_range->lo;
+        case StxLOpt::RANGE_LAST:
+            DCHECK(curr_range != nullptr);
+            return curr_range->hi == code->cunit_max && curr_range->lo > 0
+                    && curr_range->hi > curr_range->lo;
+        case StxLOpt::XRANGE_FIRST:
+            DCHECK(curr_xrange != nullptr);
+            return curr_xrange->lo == 0 && curr_xrange->hi > curr_xrange->lo;
+        case StxLOpt::XRANGE_LAST:
+            DCHECK(curr_xrange != nullptr);
+            return curr_xrange->hi == code->cunit_max && curr_xrange->lo > 0
+                    && curr_xrange->hi > curr_xrange->lo;
         default:
             UNREACHABLE();
             return false;

@@ -206,7 +206,8 @@ yy3:
 yy4:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return ERR_FILL;
-	if (sizeof(*(in->cur)) == 1 && !((in->lim - in->cur) < 33) && (unsigned char)(*(in->cur) - 0) > 8 - 0 && (unsigned char)(*(in->cur) - 10) > 31 - 10 && (unsigned char)(*(in->cur) - 33) > 255 - 33) {
+	if (!((in->lim - in->cur) < 33) && (unsigned char)*(in->cur) > 8 && (unsigned char)(*(in->cur) - 10) > 31 - 10 && (unsigned char)*(in->cur) < 33) {
+		(void)sizeof(char[sizeof(*(in->cur)) == 1 ? 1 : -1]); /* code units must be one byte wide */
 		volatile unsigned int yysimdz = 0;
 		const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);
 		(void)yysimdzero;
@@ -245,7 +246,8 @@ yy6:
 yy7:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return ERR_FILL;
-	if (sizeof(*(in->cur)) == 1 && !((in->lim - in->cur) < 33) && (unsigned char)(*(in->cur) - 0) > 47 - 0 && (unsigned char)(*(in->cur) - 58) > 255 - 58) {
+	if (!((in->lim - in->cur) < 33) && (unsigned char)*(in->cur) > 47 && (unsigned char)*(in->cur) < 58) {
+		(void)sizeof(char[sizeof(*(in->cur)) == 1 ? 1 : -1]); /* code units must be one byte wide */
 		volatile unsigned int yysimdz = 0;
 		const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);
 		(void)yysimdzero;
@@ -285,7 +287,8 @@ yy8:
 yy9:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return ERR_FILL;
-	if (sizeof(*(in->cur)) == 1 && !((in->lim - in->cur) < 33) && (unsigned char)(*(in->cur) - 0) > 47 - 0 && (unsigned char)(*(in->cur) - 58) > 64 - 58 && (unsigned char)(*(in->cur) - 91) > 94 - 91 && (unsigned char)*(in->cur) != 96 && (unsigned char)(*(in->cur) - 123) > 255 - 123) {
+	if (!((in->lim - in->cur) < 33) && (unsigned char)*(in->cur) > 47 && (unsigned char)(*(in->cur) - 58) > 64 - 58 && (unsigned char)(*(in->cur) - 91) > 94 - 91 && (unsigned char)*(in->cur) != 96 && (unsigned char)*(in->cur) < 123) {
+		(void)sizeof(char[sizeof(*(in->cur)) == 1 ? 1 : -1]); /* code units must be one byte wide */
 		volatile unsigned int yysimdz = 0;
 		const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);
 		(void)yysimdzero;
@@ -386,7 +389,8 @@ yy10:
 yy11:
 	++in->cur;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return ERR_FILL;
-	if (sizeof(*(in->cur)) == 1 && !((in->lim - in->cur) < 33) && (unsigned char)*(in->cur) != 0 && (unsigned char)*(in->cur) != 34 && (unsigned char)*(in->cur) != 92) {
+	if (!((in->lim - in->cur) < 33) && (unsigned char)*(in->cur) != 0 && (unsigned char)*(in->cur) != 34 && (unsigned char)*(in->cur) != 92) {
+		(void)sizeof(char[sizeof(*(in->cur)) == 1 ? 1 : -1]); /* code units must be one byte wide */
 		volatile unsigned int yysimdz = 0;
 		const __m256i yysimdzero = _mm256_set1_epi8((char)yysimdz);
 		(void)yysimdzero;
