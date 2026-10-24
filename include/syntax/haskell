@@ -94,6 +94,7 @@ re2c:case-inverted = 0;
 re2c:case-ranges = 0;
 re2c:unsafe = 0;
 re2c:monadic = 0;
+re2c:vectorize:loops = 0;
 re2c:encoding:ebcdic = 0;
 re2c:encoding:utf32 = 0;
 re2c:encoding:ucs2 = 0;
@@ -425,3 +426,5 @@ code:yybm_filter = "(" yych " .&. complement 0xFF) /= 0";
 code:yybm_match = "(" yybm " ! (" offset " + fromIntegral " yych ") .&. " mask ") /= 0";
 
 code:yytarget_filter = <undefined>;
+
+code:vector_loop = <undefined>;

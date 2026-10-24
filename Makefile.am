@@ -265,6 +265,7 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/features/headers/headers.rst_ \
 	doc/manual/features/includes/includes.rst_ \
 	doc/manual/features/reuse/reuse.rst_ \
+	doc/manual/features/simd/simd.rst_ \
 	doc/manual/features/skeleton/skeleton.rst_ \
 	doc/manual/features/state/state.rst_ \
 	doc/manual/features/submatch/submatch_example_mtags.rst_ \
@@ -350,6 +351,8 @@ re2c_SRC_DOC_EXT = \
 	examples/go/includes/include.re \
 	examples/go/reuse/reuse.re \
 	examples/go/reuse/usedir.re \
+	examples/go/simd/simd.re \
+	examples/go/simd/string_lexer/string_lexer.re \
 	examples/go/state/push.re \
 	examples/go/submatch/01_stags_fill.re \
 	examples/go/submatch/01_stags.re \

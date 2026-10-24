@@ -1,0 +1,33 @@
+// Syntax file override for the C backend (used with `re2c --syntax`), applied on top of the
+// default include/syntax/c for the vec_01__strings_fixed benchmark.
+//
+// This version tests the class itself: one unsigned range check per range of the class (`range`
+// list), then it advances the cursor to the first byte outside of the class (count trailing zeros
+// of the inverted in-range mask) before leaving the loop. The default `code:vector_loop` tests the
+// complement of the class instead (`xrange` list); this override is kept for comparison.
+// The (char) casts avoid narrowing warnings for range bounds above 0x7F.
+// Keep broadcasts behind the length guard and clear AVX state on every loop exit,
+// just like the default template: compiler-inserted cleanup is not sufficient.
+code:vector_loop =
+    topindent "if (!(" lessthan ")) {" nl
+    indent
+    topindent "unsigned int yysimdz = 0;" nl
+    topindent "__asm__ volatile (\"\" : \"+r\" (yysimdz));" nl
+    topindent "while (!(" lessthan ")) {" nl
+        indent
+        topindent "__m256i yysimd0 = _mm256_loadu_si256((const __m256i*)(" YYCURSOR "));" nl
+        [range{0}: topindent "__m256i yysimd1 = _mm256_cmpeq_epi8(_mm256_or_si256(_mm256_subs_epu8(yysimd0, _mm256_set1_epi8((char)(yysimdz + " range_hi "))), _mm256_subs_epu8(_mm256_set1_epi8((char)(yysimdz + " range_lo ")), yysimd0)), _mm256_setzero_si256());" nl]
+        [range{1:-1}: topindent "yysimd1 = _mm256_or_si256(yysimd1, _mm256_cmpeq_epi8(_mm256_or_si256(_mm256_subs_epu8(yysimd0, _mm256_set1_epi8((char)(yysimdz + " range_hi "))), _mm256_subs_epu8(_mm256_set1_epi8((char)(yysimdz + " range_lo ")), yysimd0)), _mm256_setzero_si256()));" nl]
+        topindent "unsigned int yysimdm = ~(unsigned int)_mm256_movemask_epi8(yysimd1);" nl
+        topindent "if (yysimdm != 0) {" nl
+            indent
+            topindent YYCURSOR " += __builtin_ctz(yysimdm);" nl
+            topindent "break;" nl
+            dedent
+        topindent "}" nl
+        topindent YYCURSOR " += " size ";" nl
+        dedent
+    topindent "}" nl
+    topindent "_mm256_zeroupper();" nl
+    dedent
+    topindent "}" nl;

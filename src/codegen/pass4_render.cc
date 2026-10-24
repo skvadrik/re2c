@@ -651,6 +651,154 @@ class RenderLoop : public RenderCallback {
     FORBID_COPY(RenderLoop);
 };
 
+class RenderVectorLoop : public RenderCallback {
+    RenderContext& rctx;
+    const CodeVectorLoop* code;
+    const CodeVectorRange* curr_range;
+    const CodeVectorRange* last_range;
+    const CodeVectorRange* curr_xrange;
+    const CodeVectorRange* last_xrange;
+    size_t nranges;
+    size_t nxranges;
+
+    static size_t count(const CodeVectorRanges* ranges) {
+        size_t n = 0;
+        if (ranges) {
+            for (const CodeVectorRange* r = ranges->head; r; r = r->next) ++n;
+        }
+        return n;
+    }
+
+  public:
+    RenderVectorLoop(RenderContext& rctx, const CodeVectorLoop* code)
+            : rctx(rctx)
+            , code(code)
+            , curr_range(nullptr)
+            , last_range(nullptr)
+            , curr_xrange(nullptr)
+            , last_xrange(nullptr)
+            , nranges(count(code->ranges))
+            , nxranges(count(code->xranges)) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::SIZE:
+            rctx.os << code->size;
+            break;
+        case StxVarId::NEED:
+            rctx.os << code->need;
+            break;
+        case StxVarId::LESSTHAN_EXPR:
+            rctx.os << code->lessthan;
+            break;
+        case StxVarId::INPUT:
+            rctx.os << rctx.opts->api_input;
+            break;
+        case StxVarId::CURSOR:
+            rctx.os << rctx.opts->api_cursor;
+            break;
+        case StxVarId::LIMIT:
+            rctx.os << rctx.opts->api_limit;
+            break;
+        case StxVarId::RANGE_LO:
+            DCHECK(curr_range != nullptr);
+            rctx.os << curr_range->lo;
+            break;
+        case StxVarId::RANGE_HI:
+            DCHECK(curr_range != nullptr);
+            rctx.os << curr_range->hi;
+            break;
+        case StxVarId::XRANGE_LO:
+            DCHECK(curr_xrange != nullptr);
+            rctx.os << curr_xrange->lo;
+            break;
+        case StxVarId::XRANGE_HI:
+            DCHECK(curr_xrange != nullptr);
+            rctx.os << curr_xrange->hi;
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    size_t get_list_size(StxVarId var) const override {
+        switch (var) {
+        case StxVarId::RANGE:
+            return nranges;
+        case StxVarId::XRANGE:
+            return nxranges;
+        default:
+            UNREACHABLE();
+            return 0;
+        }
+    }
+
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        switch (var) {
+        case StxVarId::RANGE:
+            DCHECK(code->ranges);
+            DCHECK(rbound < nranges);
+            find_list_bounds(code->ranges->head, lbound, rbound, &curr_range, &last_range);
+            break;
+        case StxVarId::XRANGE:
+            DCHECK(code->xranges);
+            DCHECK(rbound < nxranges);
+            find_list_bounds(code->xranges->head, lbound, rbound, &curr_xrange, &last_xrange);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+        }
+    }
+
+    bool next_in_list(StxVarId var) override {
+        switch (var) {
+        case StxVarId::RANGE:
+            curr_range = curr_range->next;
+            return curr_range != last_range;
+        case StxVarId::XRANGE:
+            curr_xrange = curr_xrange->next;
+            return curr_xrange != last_xrange;
+        default:
+            UNREACHABLE();
+            return false;
+        }
+    }
+
+    bool eval_cond(StxLOpt opt) override {
+        switch (opt) {
+        case StxLOpt::MANY:
+            return nranges > 1;
+        case StxLOpt::RANGE_MANY:
+            DCHECK(curr_range != nullptr);
+            return curr_range->hi > curr_range->lo;
+        case StxLOpt::XRANGE_MANY:
+            DCHECK(curr_xrange != nullptr);
+            return curr_xrange->hi > curr_xrange->lo;
+        case StxLOpt::RANGE_FIRST:
+            DCHECK(curr_range != nullptr);
+            return curr_range->lo == 0 && curr_range->hi > curr_range->lo;
+        case StxLOpt::RANGE_LAST:
+            DCHECK(curr_range != nullptr);
+            return curr_range->hi == code->cunit_max && curr_range->lo > 0
+                    && curr_range->hi > curr_range->lo;
+        case StxLOpt::XRANGE_FIRST:
+            DCHECK(curr_xrange != nullptr);
+            return curr_xrange->lo == 0 && curr_xrange->hi > curr_xrange->lo;
+        case StxLOpt::XRANGE_LAST:
+            DCHECK(curr_xrange != nullptr);
+            return curr_xrange->hi == code->cunit_max && curr_xrange->lo > 0
+                    && curr_xrange->hi > curr_xrange->lo;
+        default:
+            UNREACHABLE();
+            return false;
+        }
+    }
+
+    FORBID_COPY(RenderVectorLoop);
+};
+
 class RenderJmp : public RenderCallback {
     RenderContext& rctx;
     const char* label;
@@ -1747,6 +1895,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::LABEL:
         render_label(rctx, code->label);
         break;
+    case CodeKind::VECTOR_LOOP: {
+        RenderVectorLoop callback(rctx, &code->vector_loop);
+        rctx.opts->render_code_vector_loop(rctx.os, callback);
+        break;
+    }
     case CodeKind::STAGS:
     case CodeKind::MTAGS:
     case CodeKind::SVARS:

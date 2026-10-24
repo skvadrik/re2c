@@ -227,6 +227,10 @@ Header file
     :literal:
     :code: RE2C_LANG
 
+SIMD acceleration
+-----------------
+.. include:: @top_srcdir@/doc/manual/features/simd/simd.rst_
+
 Skeleton programs
 -----------------
 .. include:: @top_srcdir@/doc/manual/features/skeleton/skeleton.rst_

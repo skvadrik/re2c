@@ -65,6 +65,8 @@ def bench_size():
 
     for f in sorted(os.listdir(os.path.join(builddir, "gen", "re2c"))):
         if not f.endswith("-gcc.o"): continue
+        # vec_* benchmarks have different variants (see src/re2c/vec_base.re), skip them
+        if f.startswith("vec_"): continue
 
         for compiler in ["gcc", "clang"]:
             fname = re.search("([^/]+)-gcc.o$", f).group(1) + "-" + compiler + ".o"

@@ -1,5 +1,8 @@
 #include "ragel/base.h"
 #include "re2c/base.h"
+#ifdef RE2C_BENCH_VECTORIZE
+#include "ref/vec_ref.h"
+#endif
 
 enum Engine {
     E_RE2C = 0x1u,
@@ -31,6 +34,32 @@ bool verbose = false;
     ok &= ragel_##name::test_##suffix("data/" #data "/small", count1); \
     if (!quick) ok &= ragel_##name::test_##suffix("data/" #data "/big", count2); \
 } while (0)
+
+// Check that scalar and vectorized lexers (generated with the default and the fixed syntax file)
+// and the hand-written reference lexers produce identical tokens (see re2c/vec_base.re and
+// ref/vec_strings_ref.cc).
+#define TEST_VEC(name, data, count1, count2) do { \
+    fprintf(stderr, "checking %s on %s...\n", #name, #data); \
+    long d1 = 0, d2 = 0; \
+    ok &= re2c_##name::test("data/" #data "/small", count1, &d1); \
+    ok &= re2c_vec_01__strings_fixed::test("data/" #data "/small", count1, &d1); \
+    ok &= ref_vec_strings::test("data/" #data "/small", count1, &d1); \
+    if (!quick) { \
+        ok &= re2c_##name::test("data/" #data "/big", count2, &d2); \
+        ok &= re2c_vec_01__strings_fixed::test("data/" #data "/big", count2, &d2); \
+        ok &= ref_vec_strings::test("data/" #data "/big", count2, &d2); \
+    } \
+    TEST_VEC_HYPERSCAN(data); \
+} while (0)
+
+#ifdef RE2C_BENCH_HYPERSCAN
+#define TEST_VEC_HYPERSCAN(data) do { \
+    ok &= ref_hyperscan::test("data/" #data "/small"); \
+    if (!quick) ok &= ref_hyperscan::test("data/" #data "/big"); \
+} while (0)
+#else
+#define TEST_VEC_HYPERSCAN(data)
+#endif
 
 int main(int argc, char** argv) {
     for (int i = 1; i < argc; ++i) {
@@ -90,6 +119,24 @@ int main(int argc, char** argv) {
     TEST(submatch_36__rep_5_rep_3_rep_2, rep, 18290, 16790220, 0);
     TEST(submatch_37__rep_13_rep_11_rep_7, rep, 18290, 16790220, 0);
     TEST(submatch_38__rep_23_rep_19_rep_17, rep, 18290, 16790220, E_RAGEL);
+
+#ifdef RE2C_BENCH_VECTORIZE
+    if (__builtin_cpu_supports("avx2")) {
+        TEST_VEC(vec_00__strings, strshort, 110687, 28335872);
+        TEST_VEC(vec_00__strings, strmedium, 73941, 18928896);
+        TEST_VEC(vec_00__strings, strlong, 67135, 16918020);
+        TEST_VEC(vec_00__strings, strescape, 69709, 17845504);
+        TEST_VEC(vec_00__strings, json, 136981, 35067136);
+        TEST_VEC(vec_00__strings, csource, 314902, 89747070);
+#ifdef RE2C_BENCH_SIMDJSON
+        fprintf(stderr, "checking simdjson on json...\n");
+        ok &= ref_simdjson::test("data/json/small", 1);
+        if (!quick) ok &= ref_simdjson::test("data/json/big", 256);
+#endif
+    } else {
+        fprintf(stderr, "AVX2 is not supported by this CPU, skipping vec_* tests\n");
+    }
+#endif
 
     // Test that Ragel lexers still fail in the same way.
     TEST_RAGEL_ERROR(simple, submatch_30__rep_cat_5_3_2, rep, 18290, 16791137);
