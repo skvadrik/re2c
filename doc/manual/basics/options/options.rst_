@@ -168,6 +168,16 @@
     code without a diagnostic. The vector block pays off only for runs longer
     than a break-even length (near 9 code units with the default C template on
     x86-64), so enable it for blocks whose hot loops are long. Off by default.
+``--vectorize-linear``
+    Supported only for C and Go with the simple and record APIs; the generic
+    API is rejected. Go requires ``re2c:YYCTYPE`` to be ``byte`` or ``uint8``,
+    and the generated code asks the Go compiler to reject a wider resolution
+    of those names. Compare parts of long fixed strings 2, 4 or 8 bytes at a
+    time. This can help when matching known names, but keyword lexers
+    with an identifier rule may remain unchanged. Performance depends on the
+    compiler, input and buffer handling; a speedup is not guaranteed. See the
+    section about linear vectorization for requirements and limitations.
+    This option is off by default.
 
 ``--no-debug-info -i``
     Do not output line directives. This may be useful when the generated code is

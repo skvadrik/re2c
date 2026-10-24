@@ -95,6 +95,7 @@ enum class CodeKind: uint32_t {
     FNDEF,
     FNCALL,
     SKIP,
+    SKIPN,
     PEEK,
     BACKUP,
     BACKUPCTX,

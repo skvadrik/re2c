@@ -407,3 +407,6 @@ code:yybm_match = "(" yybm ".(" offset " + Char.code " yych ") land " mask ") !=
 code:yytarget_filter = <undefined>;
 
 code:vector_loop = <undefined>;
+code:yypeekn = <undefined>;
+code:yypeekn_guard = <undefined>;
+code:yyskipn = <undefined>;

@@ -421,4 +421,7 @@ static constexpr const char* DEFAULT_SYNTAX_RUST =
     "code:yytarget_filter = <undefined>;\n"
     "\n"
     "code:vector_loop = <undefined>;\n"
+    "code:yypeekn = <undefined>;\n"
+    "code:yypeekn_guard = <undefined>;\n"
+    "code:yyskipn = <undefined>;\n"
     ;

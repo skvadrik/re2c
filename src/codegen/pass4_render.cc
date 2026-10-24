@@ -1176,6 +1176,26 @@ class RenderSkipPeekBackupRestore : public RenderCallback {
     }
 };
 
+class RenderSkipN : public RenderCallback {
+    RenderContext& rctx;
+    int32_t n;
+
+  public:
+    RenderSkipN(RenderContext& rctx, int32_t n): rctx(rctx), n(n) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::N: rctx.os << n; break;
+        case StxVarId::INPUT: rctx.os << rctx.opts->api_input; break;
+        case StxVarId::CURSOR: rctx.os << rctx.opts->api_cursor; break;
+        case StxVarId::RECORD: rctx.os << rctx.opts->var_record; break;
+        default: render_global_var(rctx, var); break;
+        }
+    }
+
+    FORBID_COPY(RenderSkipN);
+};
+
 class RenderBackupRestoreCtx : public RenderCallback {
     RenderContext& rctx;
 
@@ -1714,6 +1734,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::SKIP: {
         RenderSkipPeekBackupRestore callback(rctx);
         rctx.opts->render_code_yyskip(rctx.os, callback);
+        break;
+    }
+    case CodeKind::SKIPN: {
+        RenderSkipN callback(rctx, code->tag.dist);
+        rctx.opts->render_code_yyskipn(rctx.os, callback);
         break;
     }
     case CodeKind::PEEK: {

@@ -264,6 +264,7 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/features/encodings/encodings.rst_ \
 	doc/manual/features/headers/headers.rst_ \
 	doc/manual/features/includes/includes.rst_ \
+	doc/manual/features/linear_vectorization/linear_vectorization.rst_ \
 	doc/manual/features/reuse/reuse.rst_ \
 	doc/manual/features/simd/simd.rst_ \
 	doc/manual/features/skeleton/skeleton.rst_ \
@@ -349,6 +350,7 @@ re2c_SRC_DOC_EXT = \
 	examples/go/headers/lexer/state.go \
 	examples/go/includes/definitions.go \
 	examples/go/includes/include.re \
+	examples/go/linear_vectorization/01_headers.re \
 	examples/go/reuse/reuse.re \
 	examples/go/reuse/usedir.re \
 	examples/go/simd/simd.re \

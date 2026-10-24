@@ -538,6 +538,179 @@ void Adfa::prepare(const opt_t* opts) {
     }
 }
 
+// note [broadword multi-character fast path]
+//
+// A "linear chain" is a sequence of states s0 -> s1 -> ... -> sK where every transition is a
+// single-character transition with no TDFA tags. Such chains are typical for fixed strings, e.g.
+// "Content-Length:": after a few characters the DFA deterministically follows one character at a
+// time. For such a chain the generator adds a fast path at s0: read K code units at once and, if
+// they are the characters on the chain, skip them and jump straight to sK. Otherwise the ordinary
+// single-character dispatch of s0 runs unchanged. The fast path is taken only when the ordinary
+// dispatch would follow the chain transition by transition, so the recognized language, the rule
+// and the cursor are the same.
+//
+// The fast path jumps over the code of the intermediate states s1 .. s(K-1), so they must not do
+// anything on entry besides consuming a character and reading the next one: no rule, no save
+// action (YYMARKER, yyaccept), no YYFILL, no end-of-input check and no tag or skip hoisted into
+// the state. The last state sK is entered normally, so it can be any consuming state, in particular
+// the accepting state of a literal: its skip, save action, YYFILL and dispatch run as usual. The
+// first state s0 runs its own entry code before the fast path, so it only needs a dispatch without
+// hoisted tags or skip.
+//
+// Chains are followed while each state has exactly one single-character transition to a state
+// that the chain can pass through; the last transition may instead be the only one to a consuming
+// state. Chains are selected in breadth-first order from the start state, and the intermediate
+// states of a selected chain are not used as heads of other chains: otherwise, after a failed
+// wide comparison, the ordinary dispatch would enter the next state and start another wide
+// comparison shifted by one character.
+//
+// The reads cover 2, 4 or 8 code units. The C and Go syntax files guard them with a bounds check
+// (code:yypeekn_guard) both with and without YYFILL: the YYFILL check that dominates the chain
+// reserves enough input for the longest path only if YYFILL honors its contract, and a no-op
+// YYFILL in a sentinel lexer without YYMAXFILL padding does not. With the
+// re2c:eof configuration YYFILL does not reserve input in advance, so the optimization is disabled.
+// It is also restricted to one-byte target code unit encodings, where the raw input bytes are the
+// DFA character codes.
+
+namespace {
+
+bool mchar_passable(const State* s, const opt_t* opts) {
+    return s->kind == StateKind::MATCH
+        && s->rule == Rule::NONE
+        && s->save == NOSAVE
+        && (!opts->fill_enable || s->fill == 0)
+        && s->eof_state == nullptr
+        && !s->go.skip
+        && s->go.tags == TCID0;
+}
+
+bool mchar_head(const State* s) {
+    return s->kind == StateKind::MATCH
+        && s->eof_state == nullptr
+        && !s->go.skip
+        && s->go.tags == TCID0;
+}
+
+// Find the next state on a chain from state `s` (see note [broadword multi-character fast path]).
+// `ch` receives the character code, `last` is set if the chain cannot continue past the state.
+State* mchar_next(const State* s, const opt_t* opts, uint32_t* ch, bool* last) {
+    State* pass = nullptr, *stop = nullptr;
+    uint32_t npass = 0, nstop = 0, cpass = 0, cstop = 0;
+    uint32_t lb = 0;
+
+    for (uint32_t i = 0; i < s->go.span_count; ++i) {
+        const Span& sp = s->go.span[i];
+        if (sp.ub == lb + 1 && sp.tags == TCID0 && sp.to != nullptr && sp.to != s
+                && sp.to->kind == StateKind::MATCH) {
+            if (mchar_passable(sp.to, opts)) {
+                pass = sp.to;
+                cpass = lb;
+                ++npass;
+            } else {
+                stop = sp.to;
+                cstop = lb;
+                ++nstop;
+            }
+        }
+        lb = sp.ub;
+    }
+
+    if (npass == 1) {
+        *ch = cpass;
+        *last = false;
+        return pass;
+    } else if (npass == 0 && nstop == 1) {
+        *ch = cstop;
+        *last = true;
+        return stop;
+    }
+    return nullptr;
+}
+
+} // anonymous namespace
+
+void Adfa::coalesce_multichar(const opt_t* opts) {
+    // The option is cleared by `fix_mutopt` for the configurations where a multi-character read
+    // is not possible (multi-byte code units, re2c:eof, no explicit limit in C), see
+    // `vectorize_linear_disabled_reason` in opt.cc.
+    if (!opts->vectorize_linear) return;
+    if (opts->target != Target::CODE) return;
+    if (opts->code_yypeekn == nullptr || is_undefined(opts->code_yypeekn)) return;
+    if (opts->code_yyskipn == nullptr || is_undefined(opts->code_yyskipn)) return;
+
+    // Order states breadth-first from the initial state, so that a chain is found from its first
+    // state before any of its intermediate states is considered as a head.
+    std::vector<State*> order;
+    std::set<const State*> seen;
+    std::queue<State*> todo;
+    todo.push(head);
+    seen.insert(head);
+    while (!todo.empty()) {
+        State* s = todo.front();
+        todo.pop();
+        order.push_back(s);
+        for (uint32_t i = 0; i < s->go.span_count; ++i) {
+            State* t = s->go.span[i].to;
+            if (t != nullptr && seen.insert(t).second) todo.push(t);
+        }
+    }
+    for (State* s = head; s; s = s->next) {
+        if (seen.insert(s).second) order.push_back(s);
+    }
+
+    std::set<const State*> inner; // intermediate states of the selected chains
+    for (State* s : order) {
+        if (inner.count(s) != 0 || !mchar_head(s)) continue;
+
+        // Extend the chain up to 8 characters, rejecting cycles.
+        State* path[9];
+        uint32_t path_len = 0;
+        path[path_len++] = s;
+
+        State* node = s;
+        uint64_t value = 0;
+        State* best_to = nullptr;
+        uint32_t best_n = 0;
+        uint64_t best_value = 0;
+
+        for (uint32_t k = 0; k < 8; ++k) {
+            uint32_t ch = 0;
+            bool last = false;
+            State* to = mchar_next(node, opts, &ch, &last);
+            if (to == nullptr) break;
+
+            bool cycle = false;
+            for (uint32_t i = 0; i < path_len; ++i) {
+                cycle |= path[i] == to;
+            }
+            if (cycle) break;
+
+            value |= static_cast<uint64_t>(ch) << (8 * k);
+            node = to;
+            path[path_len++] = node;
+
+            const uint32_t len = k + 1;
+            if (len == 2 || len == 4 || len == 8) {
+                best_to = node;
+                best_n = len;
+                best_value = value;
+            }
+            if (last) break;
+        }
+
+        // A zero value is excluded, so that a generic YYPEEKN can return zero when fewer than n
+        // code units are available.
+        if (best_n >= 2 && best_value != 0) {
+            s->mchar_n = best_n;
+            s->mchar_value = best_value;
+            s->mchar_to = best_to;
+            for (uint32_t i = 1; i < best_n; ++i) {
+                inner.insert(path[i]);
+            }
+        }
+    }
+}
+
 Ret Adfa::calc_stats(OutputBlock& out) {
     const opt_t* opts = out.opts;
 

@@ -67,6 +67,32 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
     return Ret::OK;
 }
 
+// Why `re2c:vectorize:linear` has no effect with the current options, or nullptr if it applies.
+// This is the single source of the policy: `fix_mutopt` clears the real option when a reason
+// exists, and `Opt::check_vectorize_linear` reports the same reason to the user. (The generic API
+// and the Go character type are errors rather than reasons, see `Opt::check_vectorize_linear`.)
+static const char* vectorize_linear_disabled_reason(
+        const conopt_t& glob, const mutopt_t& real, const mutdef_t& is_default) {
+    if (real.encoding.cunit_size() != 1) {
+        // Only one-byte code unit encodings can be read as raw bytes.
+        return "target encoding has multi-byte code units";
+    } else if (real.fill_eof != NOEOF) {
+        // With re2c:eof, YYFILL does not reserve input for the whole chain in advance, so a
+        // multi-character read may go past the end of the buffer.
+        return "re2c:eof is configured";
+    } else if (glob.lang == Lang::C && real.api != Api::GENERIC && is_default.api_limit) {
+        // The C guard for wide reads always checks YYLIMIT, but lexers that never check YYFILL
+        // (sentinel-only lexers, or YYFILL without the check) need not declare it. Require an
+        // explicit limit for wide reads in that case.
+        if (!real.fill_enable) {
+            return "YYFILL is disabled and YYLIMIT is not explicitly configured";
+        } else if (!real.fill_check) {
+            return "YYFILL check is disabled and YYLIMIT is not explicitly configured";
+        }
+    }
+    return nullptr;
+}
+
 // This function should only change real mutable options (based on the global options, default
 // mutable options and default flags). User-defined options are intentionally not passed to prevent
 // accidental change, and default flags are passed as read-only.
@@ -279,7 +305,16 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.cond_goto_param = defaults.cond_goto_param;
     }
 
+    // Linear vectorization is silently ineffective for some option combinations; the reason is
+    // reported by `Opt::check_vectorize_linear` when the user asked for the option.
+    if (vectorize_linear_disabled_reason(glob, real, is_default) != nullptr) {
+        real.vectorize_linear = false;
+    }
+
     // errors
+    if (real.vectorize_linear && glob.lang != Lang::C && glob.lang != Lang::GO) {
+        RET_FAIL(error("`re2c:vectorize:linear` is only supported for C and Go"));
+    }
     if (real.api == Api::SIMPLE && !glob.supported_apis_contains("simple")) {
         RET_FAIL(error("simple API is not supported for this backend"));
     }
@@ -447,6 +482,25 @@ Ret Opt::sync() {
 Ret Opt::snapshot(const opt_t** opts) {
     CHECK_RET(sync());
     *opts = new opt_t(glob, real, is_default, symtab);
+    return Ret::OK;
+}
+
+Ret Opt::check_vectorize_linear(const opt_t* opts, const loc_t& loc) {
+    if (glob.target == Target::CODE && user.vectorize_linear) {
+        if (real.api == Api::GENERIC) {
+            RET_FAIL(msg.error(loc, "--vectorize-linear is not supported with the generic API"));
+        }
+        // Only the predeclared one-byte types are accepted by name. A type parameter or a local
+        // type that shadows `byte` or `uint8` is rejected by the Go compiler: see the comment on
+        // code:yypeekn_guard in the Go syntax file.
+        if (glob.lang == Lang::GO && real.encoding.cunit_size() == 1
+                && opts->api_char_type != "byte" && opts->api_char_type != "uint8") {
+            RET_FAIL(msg.error(loc,
+                    "--vectorize-linear requires re2c:YYCTYPE to be byte or uint8 in Go"));
+        }
+        const char* reason = vectorize_linear_disabled_reason(glob, real, is_default);
+        if (reason) msg.warn.vectorize_linear_disabled(loc, reason);
+    }
     return Ret::OK;
 }
 

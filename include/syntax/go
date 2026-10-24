@@ -485,3 +485,30 @@ code:vector_loop =
     topindent "archsimd.ClearAVXUpperBits()" nl
     dedent
     topindent "}" nl;
+
+// multi-character primitives (linear vectorization) ---------------------------
+
+// The value of `n` code units at the cursor, the code unit at offset `k` in bits [8*k, 8*k+8).
+// For the simple and record APIs the value is assembled from single bytes of a subslice, which the
+// compiler may combine into one load depending on optimization and surrounding code; this is not
+// guaranteed. The byte at the highest offset comes first: its bounds check covers the other bytes.
+code:yypeekn = [offset{-1}:   "uint64(uint8(" YYINPUT "[" YYCURSOR ":][" offset "]))<<(8*" offset ")"]
+      [offset{0}:    " | uint64(uint8(" YYINPUT "[" YYCURSOR ":][" offset "]))"]
+      [offset{1:-2}: " | uint64(uint8(" YYINPUT "[" YYCURSOR ":][" offset "]))<<(8*" offset ")"];
+
+// The guard is a Go constant expression that the compiler folds away for a one-byte YYCTYPE.
+// The array length int(^uint8(0))>>8+int(^YYCTYPE(0))>>8 must be a non-negative constant: it is 0
+// for the predeclared one-byte types, negative for a signed type and 255 for a wider unsigned type,
+// which then indexes past the one-element array. A generic type parameter (including one named
+// byte or uint8) makes the conversion non-constant. In each of these cases the generated file does
+// not compile, so no instantiation can reach the wide read with a non-byte element, and no import
+// is required. The slice element is not measured: a wider element still compiles when byte and
+// uint8 are one byte wide, and code:yypeekn truncates it with uint8.
+// The length check is unconditional: a YYFILL that does not provide the requested input would
+// otherwise let the wide read index past the end of the slice and panic.
+code:yypeekn_guard =
+    "/* re2c: one-byte YYCTYPE */ "
+    "[1]struct{}{}[len([int(^uint8(0))>>8+int(^" YYCTYPE "(0))>>8]struct{}{})] == struct{}{}"
+    (.yyfill.enable ? " && " YYLIMIT " - " YYCURSOR " >= " n : " && len(" YYINPUT ")-" YYCURSOR " >= " n);
+
+code:yyskipn = topindent YYCURSOR " += " n nl;

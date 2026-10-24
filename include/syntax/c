@@ -531,3 +531,22 @@ code:vector_loop =
     topindent "_mm256_zeroupper();" nl
     dedent
     topindent "}" nl;
+
+// multi-character primitives (linear vectorization) ---------------------------
+
+// The value of `n` code units at the cursor, the code unit at offset `k` in bits [8*k, 8*k+8).
+// For the simple and record APIs the value is assembled from single bytes, which does not depend on
+// the host byte order and does not assume alignment. Combining the reads into one load depends on
+// the compiler, optimization flags and surrounding code; it is not guaranteed.
+code:yypeekn = "("
+        [offset{0}:    "(unsigned long long)(unsigned char)(" YYCURSOR ")[" offset "]"]
+        [offset{1:-1}: " | (unsigned long long)(unsigned char)(" YYCURSOR ")[" offset "] << 8 * " offset]
+    ")";
+
+// Byte packing requires one-byte code units. The limit is checked even with YYFILL: a YYFILL that
+// does not provide the requested input (e.g. a no-op YYFILL in a sentinel lexer without YYMAXFILL
+// padding) would otherwise let the wide read go past the end of the buffer. Lexers without a
+// configured limit and without a YYFILL check have linear vectorization disabled.
+code:yypeekn_guard = "sizeof(*(" YYCURSOR ")) == 1 && ((" YYLIMIT ") - (" YYCURSOR ")) >= " n;
+
+code:yyskipn = topindent "(" YYCURSOR ") += " n ";" nl;

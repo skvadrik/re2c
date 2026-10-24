@@ -400,6 +400,26 @@ language configurations, inplace configurations and code templates.
       Supported variables: ``YYSKIP``, ``YYCURSOR``, ``yyrecord`` (map to the
       corresponding ``re2c:`` configurations).
 
+  ``code:yypeekn``
+      Multi-character read used by ``--vectorize-linear``: an expression that
+      yields the value of ``n`` code units at the cursor, with the code unit at
+      offset ``k`` in bits ``8*k`` to ``8*k+7``. Supported variables: ``n``,
+      ``YYINPUT``, ``YYCURSOR``, ``yyrecord`` (map to the corresponding
+      ``re2c:`` configurations). List variables: ``offset`` (code unit offsets
+      from ``0`` to ``n-1``).
+
+  ``code:yypeekn_guard``
+      A condition checked before ``code:yypeekn``, or an empty string if no
+      check is needed. Supported variables: ``n``, ``YYCTYPE``, ``YYINPUT``,
+      ``YYCURSOR``, ``YYLIMIT``, ``yyrecord`` (map to the corresponding ``re2c:``
+      configurations).
+
+  ``code:yyskipn``
+      A statement that advances the cursor by ``n`` code units, used by
+      ``--vectorize-linear``. Supported variables: ``n``, ``YYINPUT``,
+      ``YYCURSOR``, ``yyrecord`` (map to the corresponding ``re2c:``
+      configurations).
+
   ``code:yybackup``
       ``YYBACKUP`` statement, possibly specialized for different APIs.
       Supported variables: ``YYBACKUP``, ``YYCURSOR``, ``YYMARKER``,

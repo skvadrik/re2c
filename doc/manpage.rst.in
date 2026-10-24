@@ -231,6 +231,10 @@ SIMD acceleration
 -----------------
 .. include:: @top_srcdir@/doc/manual/features/simd/simd.rst_
 
+Linear vectorization
+--------------------
+.. include:: @top_srcdir@/doc/manual/features/linear_vectorization/linear_vectorization.rst_
+
 Skeleton programs
 -----------------
 .. include:: @top_srcdir@/doc/manual/features/skeleton/skeleton.rst_
