@@ -92,6 +92,15 @@ void Warn::empty_class(const loc_t& loc) {
     }
 }
 
+void Warn::vectorize_linear_disabled(const loc_t& loc, const char* reason) {
+    if (mask[VECTORIZE_LINEAR_DISABLED] & WARNING) {
+        const bool e = mask[VECTORIZE_LINEAR_DISABLED] & ERROR;
+        error_accuml |= e;
+        msg.warning(names[VECTORIZE_LINEAR_DISABLED], loc, e,
+                    "--vectorize-linear is disabled: %s", reason);
+    }
+}
+
 void Warn::match_empty_string(const loc_t& loc, const std::string& cond) {
     if (mask[MATCH_EMPTY_STRING] & WARNING) {
         const bool e = mask[MATCH_EMPTY_STRING] & ERROR;

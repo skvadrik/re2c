@@ -118,6 +118,10 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
     adfa->prepare(opts);
     DDUMP_ADFA(opts, *adfa);
 
+    // Coalesce linear character chains into multi-character (broadword) fast paths. This must run
+    // after prepare() (fill points, tunneling and tags are finalized) and before codegen_analyze().
+    adfa->coalesce_multichar(opts);
+
     // gather overall DFA statistics and add it to the output block
     CHECK_RET(adfa->calc_stats(block));
     block.max_fill = std::max(block.max_fill, adfa->max_fill);
@@ -184,6 +188,9 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
         } else {
             // Convert AST to a DFA for each condition.
             CHECK_RET(check_and_merge_special_rules(grams, b.opts, output.msg, ast));
+            if (!grams.empty()) {
+                CHECK_RET(opts.check_vectorize_linear(b.opts, block_loc));
+            }
             for (const AstGram& gram : grams) {
                 CHECK_RET(ast_to_dfa(gram, output, b.dfas, dfa_alc));
             }

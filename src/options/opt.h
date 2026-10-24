@@ -39,6 +39,7 @@ class Msg;
 class Warn;
 class RenderCallback;
 class Scratchbuf;
+struct loc_t;
 struct StxCode;
 using StxCodes = list_t<StxCode>;
 
@@ -66,7 +67,7 @@ using StxCodes = list_t<StxCode>;
             ({"code", "dot", "skeleton"})) \
     CHECKED_LIST(supported_features, \
             ({"nested-ifs", "bitmaps", "computed-gotos", "case-ranges", "unsafe", "monadic", \
-                "tags", "captures", "captvars", "computed-continue"}))
+                "tags", "captures", "captvars", "computed-continue", "vectorize-loops"}))
 
 #define RE2C_STX_OPTS \
     STX_OPT(bool, semicolons, false) \
@@ -217,6 +218,18 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(yyskip, \
         ({StxVarId::SKIP, StxVarId::CURSOR, StxVarId::RECORD}), ({}), ({}) \
     ) \
+    CODE_TEMPLATE(yypeekn, \
+        ({StxVarId::N, StxVarId::OFFSET, StxVarId::INPUT, StxVarId::CURSOR, StxVarId::RECORD}), \
+        ({StxVarId::OFFSET}), ({}) \
+    ) \
+    CODE_TEMPLATE(yypeekn_guard, \
+        ({StxVarId::N, StxVarId::CTYPE, StxVarId::INPUT, StxVarId::CURSOR, StxVarId::LIMIT, \
+            StxVarId::RECORD}), \
+        ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(yyskipn, \
+        ({StxVarId::N, StxVarId::INPUT, StxVarId::CURSOR, StxVarId::RECORD}), ({}), ({}) \
+    ) \
     CODE_TEMPLATE(yybackup, \
         ({StxVarId::BACKUP, StxVarId::CURSOR, StxVarId::MARKER, StxVarId::RECORD}), ({}), ({}) \
     ) \
@@ -321,6 +334,13 @@ using StxCodes = list_t<StxCode>;
     ) \
     CODE_TEMPLATE(yytarget_filter, \
         ({StxVarId::CHAR}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vector_loop, \
+        ({StxVarId::SIZE, StxVarId::NEED, StxVarId::LESSTHAN_EXPR, \
+            StxVarId::INPUT, StxVarId::CURSOR, StxVarId::LIMIT}), \
+        ({StxVarId::RANGE, StxVarId::XRANGE}), \
+        ({StxLOpt::MANY, StxLOpt::RANGE_MANY, StxLOpt::XRANGE_MANY, StxLOpt::RANGE_FIRST, \
+          StxLOpt::RANGE_LAST, StxLOpt::XRANGE_FIRST, StxLOpt::XRANGE_LAST}) \
     )
 
 #define RE2C_ONELINE_CODES \
@@ -349,13 +369,18 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(INDEX, "index") \
     STX_LOCAL_VAR(INIT, "init") \
     STX_LOCAL_VAR(LABEL, "label") \
+    STX_LOCAL_VAR(LESSTHAN_EXPR, "lessthan") \
     STX_LOCAL_VAR(LHS, "lhs") \
     STX_LOCAL_VAR(LINE, "line") \
     STX_LOCAL_VAR(MASK, "mask") \
+    STX_LOCAL_VAR(N, "n") \
     STX_LOCAL_VAR(NAME, "name") \
     STX_LOCAL_VAR(NEED, "need") \
     STX_LOCAL_VAR(NEG, "neg") \
     STX_LOCAL_VAR(OFFSET, "offset") \
+    STX_LOCAL_VAR(RANGE, "range") \
+    STX_LOCAL_VAR(RANGE_HI, "range_hi") \
+    STX_LOCAL_VAR(RANGE_LO, "range_lo") \
     STX_LOCAL_VAR(RETVAL, "retval") \
     STX_LOCAL_VAR(RHS, "rhs") \
     STX_LOCAL_VAR(ROW, "row") \
@@ -369,6 +394,9 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(VAL, "val") \
     STX_LOCAL_VAR(VAR, "var") \
     STX_LOCAL_VAR(VER, "version") \
+    STX_LOCAL_VAR(XRANGE, "xrange") \
+    STX_LOCAL_VAR(XRANGE_HI, "xrange_hi") \
+    STX_LOCAL_VAR(XRANGE_LO, "xrange_lo") \
     /* vars for API primitives */ \
     STX_LOCAL_VAR(BACKUP, "YYBACKUP") \
     STX_LOCAL_VAR(BACKUPCTX, "YYBACKUPCTX") \
@@ -441,6 +469,7 @@ enum class StxVarId : uint32_t {
     CONSTOPT(std::string, syntax_file, "") \
     CONSTOPT(std::vector<std::string>, include_paths, std::vector<std::string>()) \
     /* internals */ \
+    CONSTOPT(Lang, lang, Lang::NONE) \
     CONSTOPT(Minimization, minimization, Minimization::MOORE) \
     CONSTOPT(PosixPrectable, posix_prectable, PosixPrectable::COMPLEX) \
     CONSTOPT(FixedTags, fixed_tags, FixedTags::ALL) \
@@ -494,8 +523,10 @@ enum class StxVarId : uint32_t {
     MUTOPT(bool, computed_gotos_relative, false) \
     MUTOPT(uint32_t, computed_gotos_threshold, 9) \
     MUTOPT(bool, nested_ifs, false) \
+    MUTOPT(bool, vectorize_linear, false) \
     MUTOPT(bool, unsafe, true) \
     MUTOPT(bool, monadic, false) \
+    MUTOPT(bool, vectorize_loops, false) \
     /* YYFILL */ \
     MUTOPT(uint32_t, fill_eof, NOEOF) \
     MUTOPT(uint32_t, fill_sentinel, NOEOF) \
@@ -899,6 +930,7 @@ struct Opt {
     const conopt_t& global() const { return glob; }
     Ret parse(char** argv, Input& input, Lang lang);
     Ret snapshot(const opt_t** opts) NODISCARD;
+    Ret check_vectorize_linear(const opt_t* opts, const loc_t& loc) NODISCARD;
     Ret fix_global_and_defaults() NODISCARD;
     Ret restore(const opt_t* opts) NODISCARD;
     Ret merge(const opt_t* opts, Input& input) NODISCARD;

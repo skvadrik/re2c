@@ -4,7 +4,7 @@ supported_apis = ["simple", "generic", "record"];
 supported_api_styles = ["free-form", "functions"];
 supported_code_models = ["goto-label", "loop-switch", "recursive-functions"];
 supported_targets = ["code", "dot"];
-supported_features = ["nested-ifs", "bitmaps", "tags", "captures", "captvars"];
+supported_features = ["nested-ifs", "bitmaps", "tags", "captures", "captvars", "vectorize-loops"];
 
 
 // language-specific options ---------------------------------------------------
@@ -94,6 +94,7 @@ re2c:case-inverted = 0;
 re2c:case-ranges = 0;
 re2c:unsafe = 0;
 re2c:monadic = 0;
+re2c:vectorize:loops = 0;
 re2c:encoding:ebcdic = 0;
 re2c:encoding:utf32 = 0;
 re2c:encoding:ucs2 = 0;
@@ -416,3 +417,98 @@ code:yybm_filter = yych " & ~0xFF";
 code:yybm_match = "(" yybm "[" offset "+" yych "] & " mask ") != 0";
 
 code:yytarget_filter = <undefined>;
+
+// The vector loop tests the complement of the loop class (the `xrange` list): a single exit
+// code unit is found with one equality comparison, a range of exit code units with an unsigned
+// range check (subtract the lower bound, then compare with the minimum of the result and the
+// range width). The cursor is advanced to the first exit code unit in the block, so the generated
+// code must import "math/bits" as well as "simd/archsimd". If the complement is empty (the class
+// contains all code units), the loop only skips whole blocks while the length guard holds.
+// After the loop, `archsimd.ClearAVXUpperBits()` (VZEROUPPER) avoids the AVX-SSE transition
+// penalty in legacy SSE code that runs later (e.g. the hash functions of the Go runtime).
+// The length guard is `lessthan` (see `code:yylessthan`), as in the C template, so that a user
+// definition of `code:yylessthan` is honored. The Go compiler
+// does not prove the bounds of the block slice with either form of the guard, so writing it as
+// `YYCURSOR + need <= YYLIMIT` would not remove a bounds check.
+// YYINPUT must be a byte slice. For string input, configure YYINPUT to name a read-only
+// unsafe.Slice(unsafe.StringData(input), len(input)) view created before entering the lexer.
+// Do not convert each block to []byte: that copies string data and may call the runtime
+// with dirty AVX state. Advance with untyped constants to support signed and unsigned cursors.
+// As in the C template, the vector block is entered only if the current code unit is in the
+// class, so that a run that ends right away (e.g. a one-byte identifier) is left to the scalar
+// dispatcher. The scalar test follows the length guard, which proves that the index is valid.
+// It uses the simplest form for each range of the complement (see the C syntax file): `> hi`
+// for a range starting at 0, `< lo` for a range ending at the largest code unit, `!=` for a
+// single code unit, and an unsigned wrap-around check otherwise.
+code:vector_loop =
+    topindent "if !(" lessthan ")"
+    [xrange{0:-1}: " && " (.xrange.first
+        ? "uint8(" YYINPUT "[" YYCURSOR "]) > " xrange_hi
+        : (.xrange.last
+        ? "uint8(" YYINPUT "[" YYCURSOR "]) < " xrange_lo
+        : (.xrange.many
+        ? "uint8(" YYINPUT "[" YYCURSOR "]) - " xrange_lo " > " xrange_hi " - " xrange_lo
+        : "uint8(" YYINPUT "[" YYCURSOR "]) != " xrange_lo)))]
+    " {" nl
+    indent
+    [xrange{0:-1}: (.xrange.many
+        ? topindent "yyxl" xrange_lo " := archsimd.BroadcastUint8x" size "(" xrange_lo ")" nl
+          topindent "yyxs" xrange_lo " := archsimd.BroadcastUint8x" size "(" xrange_hi " - " xrange_lo ")" nl
+        : topindent "yyxe" xrange_lo " := archsimd.BroadcastUint8x" size "(" xrange_lo ")" nl)]
+    topindent "for {" nl
+        indent
+        [xrange{0}: topindent "yysimd0 := archsimd.LoadUint8x" size "(" YYINPUT "[" YYCURSOR ":" YYCURSOR " + " size "])" nl
+            (.xrange.many
+            ? topindent "yyt" xrange_lo " := yysimd0.Sub(yyxl" xrange_lo ")" nl
+              topindent "yysimd1 := yyt" xrange_lo ".Min(yyxs" xrange_lo ").Equal(yyt" xrange_lo ")" nl
+            : topindent "yysimd1 := yysimd0.Equal(yyxe" xrange_lo ")" nl)]
+        [xrange{1:-1}: (.xrange.many
+            ? topindent "yyt" xrange_lo " := yysimd0.Sub(yyxl" xrange_lo ")" nl
+              topindent "yysimd1 = yysimd1.Or(yyt" xrange_lo ".Min(yyxs" xrange_lo ").Equal(yyt" xrange_lo "))" nl
+            : topindent "yysimd1 = yysimd1.Or(yysimd0.Equal(yyxe" xrange_lo "))" nl)]
+        [xrange{0}: topindent "if yym := yysimd1.ToBits(); yym != 0 {" nl
+            indent
+            topindent "yyn := bits.TrailingZeros32(yym)" nl
+            topindent "if yyn & 16 != 0 { " YYCURSOR " += 16 }" nl
+            topindent "if yyn & 8 != 0 { " YYCURSOR " += 8 }" nl
+            topindent "if yyn & 4 != 0 { " YYCURSOR " += 4 }" nl
+            topindent "if yyn & 2 != 0 { " YYCURSOR " += 2 }" nl
+            topindent "if yyn & 1 != 0 { " YYCURSOR " += 1 }" nl
+            topindent "break" nl dedent
+        topindent "}" nl]
+        topindent YYCURSOR " += " size nl
+        topindent "if " lessthan " {" nl
+            indent topindent "break" nl dedent
+        topindent "}" nl
+        dedent
+    topindent "}" nl
+    topindent "archsimd.ClearAVXUpperBits()" nl
+    dedent
+    topindent "}" nl;
+
+// multi-character primitives (linear vectorization) ---------------------------
+
+// The value of `n` code units at the cursor, the code unit at offset `k` in bits [8*k, 8*k+8).
+// For the simple and record APIs the value is assembled from single bytes of a subslice, which the
+// compiler may combine into one load depending on optimization and surrounding code; this is not
+// guaranteed. The byte at the highest offset comes first: its bounds check covers the other bytes.
+code:yypeekn = [offset{-1}:   "uint64(uint8(" YYINPUT "[" YYCURSOR ":][" offset "]))<<(8*" offset ")"]
+      [offset{0}:    " | uint64(uint8(" YYINPUT "[" YYCURSOR ":][" offset "]))"]
+      [offset{1:-2}: " | uint64(uint8(" YYINPUT "[" YYCURSOR ":][" offset "]))<<(8*" offset ")"];
+
+// The guard is a Go constant expression that the compiler folds away for a one-byte YYCTYPE.
+// The array length int(^uint8(0))>>8+int(^YYCTYPE(0))>>8 must be a non-negative constant: it is 0
+// for the predeclared one-byte types, negative for a signed type and 255 for a wider unsigned type,
+// which then indexes past the one-element array. A generic type parameter (including one named
+// byte or uint8) makes the conversion non-constant. In each of these cases the generated file does
+// not compile, so no instantiation can reach the wide read with a non-byte element, and no import
+// is required. The slice element is not measured: a wider element still compiles when byte and
+// uint8 are one byte wide, and code:yypeekn truncates it with uint8.
+// The length check is unconditional: a YYFILL that does not provide the requested input would
+// otherwise let the wide read index past the end of the slice and panic.
+code:yypeekn_guard =
+    "/* re2c: one-byte YYCTYPE */ "
+    "[1]struct{}{}[len([int(^uint8(0))>>8+int(^" YYCTYPE "(0))>>8]struct{}{})] == struct{}{}"
+    (.yyfill.enable ? " && " YYLIMIT " - " YYCURSOR " >= " n : " && len(" YYINPUT ")-" YYCURSOR " >= " n);
+
+code:yyskipn = topindent YYCURSOR " += " n nl;

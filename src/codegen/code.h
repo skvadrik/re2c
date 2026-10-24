@@ -318,6 +318,23 @@ struct CodeDebug {
     uint32_t state;
 };
 
+struct CodeVectorRange {
+    uint32_t lo;
+    uint32_t hi;
+    CodeVectorRange* next;
+};
+
+using CodeVectorRanges = list_t<CodeVectorRange>;
+
+struct CodeVectorLoop {
+    uint32_t size;
+    uint32_t need;
+    uint32_t cunit_max; // largest code unit value of the encoding
+    const char* lessthan;
+    const CodeVectorRanges* ranges;  // ranges of code units inside the reflexive class
+    const CodeVectorRanges* xranges; // ranges of code units outside of it (the complement)
+};
+
 struct CodeTag {
     const char* tag1;
     const char* tag2;
@@ -348,6 +365,7 @@ struct Code {
         CodeDebug debug;
         CodeTag tag;
         CodeLoop loop;
+        CodeVectorLoop vector_loop;
         CodeList* rfuncs;
         loc_t loc;
         size_t accept;
@@ -411,6 +429,24 @@ inline Code* code_loop(
     x->loop.init = init;
     x->loop.cases = cases;
     x->loop.body = body;
+    return x;
+}
+
+inline Code* code_vector_loop(
+        OutAllocator& alc,
+        uint32_t size,
+        uint32_t need,
+        uint32_t cunit_max,
+        const char* lessthan,
+        const CodeVectorRanges* ranges,
+        const CodeVectorRanges* xranges) {
+    Code* x = new_code(alc, CodeKind::VECTOR_LOOP);
+    x->vector_loop.size = size;
+    x->vector_loop.need = need;
+    x->vector_loop.cunit_max = cunit_max;
+    x->vector_loop.lessthan = lessthan;
+    x->vector_loop.ranges = ranges;
+    x->vector_loop.xranges = xranges;
     return x;
 }
 
@@ -517,6 +553,14 @@ inline Code* code_debug(OutAllocator& alc, uint32_t state) {
 
 inline Code* code_skip(OutAllocator& alc) {
     return new_code(alc, CodeKind::SKIP);
+}
+
+inline Code* code_skipn(OutAllocator& alc, int32_t n) {
+    Code* x = new_code(alc, CodeKind::SKIPN);
+    x->tag.tag1 = nullptr;
+    x->tag.tag2 = nullptr;
+    x->tag.dist = n;
+    return x;
 }
 
 inline Code* code_peek(OutAllocator& alc) {

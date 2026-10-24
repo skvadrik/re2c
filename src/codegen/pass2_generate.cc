@@ -185,6 +185,60 @@ class GenEnd : public RenderCallback {
     FORBID_COPY(GenEnd);
 };
 
+class GenPeekN : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+    uint32_t n;
+    uint32_t offset;
+    uint32_t last;
+
+  public:
+    GenPeekN(std::ostringstream& os, const opt_t* opts, uint32_t n)
+        : os(os), opts(opts), n(n), offset(0), last(0) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::N: os << n; break;
+        case StxVarId::OFFSET: os << offset; break;
+        case StxVarId::CTYPE: os << opts->api_char_type; break;
+        case StxVarId::INPUT: os << opts->api_input; break;
+        case StxVarId::CURSOR: os << opts->api_cursor; break;
+        case StxVarId::LIMIT: os << opts->api_limit; break;
+        case StxVarId::RECORD: os << opts->var_record; break;
+        // Global variables are allowed in any template. The result is an inline expression that is
+        // rendered on one line, so layout variables have no effect and a newline becomes a space
+        // (a real newline would shift the line numbers of the following line directives).
+        case StxVarId::NEWLINE: os << ' '; break;
+        case StxVarId::INDENT:
+        case StxVarId::DEDENT:
+        case StxVarId::TOPINDENT: break;
+        default: UNREACHABLE(); break;
+        }
+    }
+
+    // The list variable `offset` enumerates code unit offsets 0 .. n-1 from the cursor.
+    size_t get_list_size(StxVarId var) const override {
+        DCHECK(var == StxVarId::OFFSET);
+        (void)var;
+        return n;
+    }
+
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        DCHECK(var == StxVarId::OFFSET && lbound <= rbound && rbound < n);
+        (void)var;
+        offset = static_cast<uint32_t>(lbound);
+        last = static_cast<uint32_t>(rbound);
+    }
+
+    bool next_in_list(StxVarId var) override {
+        DCHECK(var == StxVarId::OFFSET);
+        (void)var;
+        return offset++ < last;
+    }
+
+    FORBID_COPY(GenPeekN);
+};
+
 class GenEnumElem : public RenderCallback {
     std::ostream& os;
     const std::string& type;
@@ -1130,11 +1184,81 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
     }
 }
 
-static void emit_state(
-        Output& output, const Adfa& dfa, const State* s, CodeList* stmts, CodeList* continuation) {
+// Width (in bytes) of the vectorized fast-forward step.
+static constexpr uint32_t VECTOR_SIZE = 32;
+
+// Append code unit range [lo, hi] to a list of vector ranges whose last element is `last`,
+// merging it with the last range if they are adjacent.
+static void add_vector_range(OutAllocator& alc,
+                             CodeVectorRanges* ranges,
+                             CodeVectorRange*& last,
+                             uint32_t lo,
+                             uint32_t hi) {
+    if (last != nullptr && last->hi + 1 == lo) {
+        last->hi = hi;
+        return;
+    }
+    last = alc.alloct<CodeVectorRange>(1);
+    last->lo = lo;
+    last->hi = hi;
+    last->next = nullptr;
+    append(ranges, last);
+}
+
+// Generate a vector fast-forward loop for a base state with a reflexive character class.
+// The loop skips whole blocks of input that stay within the class, then falls through to the
+// scalar dispatcher which handles the first byte outside of the class (or the tail shorter than
+// a full vector). Control transfer targets are ordinary fallthrough, so no extra labels are
+// needed; labels of states reachable from the kernel are nonetheless marked used in the analyze
+// pass. The length guard is emitted through the generic `YYLESSTHAN` abstraction and does not
+// change `YYMAXFILL`.
+//
+// The class is passed to the template in two equivalent forms: as a list of ranges inside of the
+// class (`range`) and as a list of ranges outside of it (`xrange`), so that the template can
+// choose the cheaper test (e.g. a few equality comparisons against the exit bytes, instead of
+// many range checks for a class with a small complement).
+static void gen_vector_loop(Output& output, const State* s, CodeList* stmts) {
+    if (!s->simd || s->simd_body == nullptr) return;
+
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
-    Scratchbuf& buf = output.scratchbuf;
+    Scratchbuf& o = output.scratchbuf;
+
+    // Collect the reflexive class and its complement as lists of inclusive ranges [lo, hi].
+    CodeVectorRanges* ranges = new_list<CodeVectorRange>(alc);
+    CodeVectorRanges* xranges = new_list<CodeVectorRange>(alc);
+    CodeVectorRange* last = nullptr;
+    CodeVectorRange* xlast = nullptr;
+    const Span* span = s->simd_body->go.span;
+    uint32_t lb = 0;
+    for (uint32_t i = 0; i < s->simd_body->go.span_count; ++i) {
+        const uint32_t ub = span[i].ub;
+        if (span[i].to == s) {
+            add_vector_range(alc, ranges, last, lb, ub - 1);
+        } else {
+            add_vector_range(alc, xranges, xlast, lb, ub - 1);
+        }
+        lb = ub;
+    }
+    DCHECK(ranges->head != nullptr);
+
+    // Build the length guard via the generic abstraction (`YYLESSTHAN(VECTOR_SIZE + reserve)`),
+    // ensuring that after skipping VECTOR_SIZE bytes, at least `reserve` bytes remain in the
+    // buffer for the subsequent scalar peek without exceeding the buffer boundary.
+    const uint32_t reserve = static_cast<uint32_t>(std::max<size_t>(1, s->fill));
+    const uint32_t need = VECTOR_SIZE + reserve;
+    GenLessThan callback(o.stream(), opts, need);
+    const char* less_than = opts->gen_code_yylessthan(o, callback);
+
+    append(stmts, code_vector_loop(
+            alc, VECTOR_SIZE, need, opts->encoding.cunit_count() - 1, copystr(less_than, alc),
+            ranges, xranges));
+}
+
+// Generate the ordinary single-character dispatch of a state (see `emit_state`).
+static CodeList* gen_transitions(Output& output, const Adfa& dfa, const State* s) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
 
     const CodeGo& go = s->go;
     CodeList* transitions = code_list(alc);
@@ -1164,6 +1288,108 @@ static void emit_state(
     case CodeGo::Kind::EMPTY:
         break;
     }
+    return transitions;
+}
+
+// Multi-character fast path for the head of a linear chain
+// (see note [broadword multi-character fast path]):
+//
+//     if (<yypeekn_guard>) {                 // only if the syntax file defines a guard
+//         if (<yypeekn> == <literal>) {
+//             <yyskipn>
+//             goto <last state of the chain>
+//         }
+//     }
+//     <ordinary dispatch>
+//
+// The fast path is taken only if the next `mchar_n` code units are exactly the characters on the
+// chain, in which case the ordinary dispatch would follow the chain transition by transition, so
+// the recognized language and the cursor are unchanged. In rec/func mode an IF statement must have
+// an ELSE branch, so the ordinary dispatch is generated in every ELSE branch.
+//
+// In goto/label mode the fast path is emitted before the scalar peek of the state (like the vector
+// loop), not after it: when the first code unit of the chain has just been loaded into `yych`,
+// clang 18 reuses that value instead of reloading it and then fails to combine the remaining byte
+// loads into one word load (eight `movzbl` and a chain of shifts and ors instead of one `cmpq`);
+// with the fast path first, both gcc and clang emit one word load and one comparison.
+static CodeList* gen_mchar_fast_path(Output& output, const Adfa& dfa, const State* s) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+    const uint32_t n = s->mchar_n;
+
+    DCHECK(n > 1 && s->mchar_to != nullptr && consume(s->mchar_to));
+
+    // The last state of the chain consumes a character on entry, unless the skip is generated on
+    // transitions (--eager-skip), so the fast path skips one character less. This does not depend
+    // on whether the first state has a skip of its own: the cursor points at the first character of
+    // the chain in any case.
+    CodeList* fast = code_list(alc);
+    const uint32_t nskip = opts->eager_skip ? n : n - 1;
+    append(fast, code_skipn(alc, static_cast<int32_t>(nskip)));
+    const CodeJump jump = {s->mchar_to, TCID0, false, false, false};
+    gen_goto(output, dfa, fast, s, jump);
+
+    GenPeekN peek_cb(buf.stream(), opts, n);
+    const char* peek = opts->gen_code_yypeekn(buf, peek_cb);
+    buf.str(peek).cstr(" ").cstr(output.block().binops[OP_CMP_EQ]).cstr(" 0x");
+    buf.stream() << std::hex << s->mchar_value << std::dec;
+    const char* match = buf.flush();
+
+    const char* guard = nullptr;
+    if (!is_undefined(opts->code_yypeekn_guard)) {
+        GenPeekN guard_cb(buf.stream(), opts, n);
+        guard = opts->gen_code_yypeekn_guard(buf, guard_cb);
+        if (*guard == 0) guard = nullptr;
+    }
+
+    CodeList* stmts = code_list(alc);
+    if (opts->code_model == CodeModel::REC_FUNC) {
+        CodeList* inner = code_list(alc);
+        append(inner, code_if_then_else(alc, match, fast, gen_transitions(output, dfa, s)));
+        if (guard != nullptr) {
+            append(stmts, code_if_then_else(alc, guard, inner, gen_transitions(output, dfa, s)));
+        } else {
+            append(stmts, inner);
+        }
+    } else {
+        CodeList* inner = code_list(alc);
+        append(inner, code_if_then_else(alc, match, fast, nullptr));
+        if (guard != nullptr) {
+            append(stmts, code_if_then_else(alc, guard, inner, nullptr));
+        } else {
+            append(stmts, inner);
+        }
+    }
+    return stmts;
+}
+
+// In rec/func mode the fast path and the ordinary dispatch are one nested IF statement; in
+// goto/label mode the fast path is emitted earlier (before the peek, so that the compiler can fuse
+// the byte loads) and the dispatch alone here. With debug output the fast path stays after the
+// peek and the YYDEBUG statement of the state, so that the trace is the same as without the option.
+static bool mchar_before_peek(const opt_t* opts, const State* s) {
+    return s->mchar_n > 0 && opts->code_model != CodeModel::REC_FUNC && !opts->debug;
+}
+
+static void emit_state(
+        Output& output, const Adfa& dfa, const State* s, CodeList* stmts, CodeList* continuation) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    CodeList* transitions;
+    if (s->mchar_n > 0 && !mchar_before_peek(opts, s)) {
+        transitions = gen_mchar_fast_path(output, dfa, s);
+        // In rec/func mode the ordinary dispatch is nested in the fast path (see
+        // `gen_mchar_fast_path`); in goto/label mode it follows the fast path.
+        if (opts->code_model != CodeModel::REC_FUNC) {
+            append(transitions, gen_transitions(output, dfa, s));
+        }
+    } else {
+        transitions = gen_transitions(output, dfa, s);
+    }
+
     append(transitions, continuation);
 
     switch (s->kind) {
@@ -1193,6 +1419,13 @@ static void emit_state(
         // All code from YYFILL up to transitions belongs to the ELSE branch of YYEND.
         CodeList* tail = code_list(alc);
         gen_fill_and_label(output, tail, dfa, s);
+        // Vectorized fast-forward runs after YYFILL (so that the input window is refilled) and
+        // before the scalar peek.
+        gen_vector_loop(output, s, tail);
+        // The multi-character fast path also runs before the peek, see `gen_mchar_fast_path`.
+        if (mchar_before_peek(opts, s)) {
+            append(tail, gen_mchar_fast_path(output, dfa, s));
+        }
         gen_peek(alc, s, tail);
         if (is_start && dfa.custom_start_label && opts->debug) {
             append(tail, code_debug(alc, dfa.custom_start_label->index));

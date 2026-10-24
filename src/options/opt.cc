@@ -67,6 +67,32 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
     return Ret::OK;
 }
 
+// Why `re2c:vectorize:linear` has no effect with the current options, or nullptr if it applies.
+// This is the single source of the policy: `fix_mutopt` clears the real option when a reason
+// exists, and `Opt::check_vectorize_linear` reports the same reason to the user. (The generic API
+// and the Go character type are errors rather than reasons, see `Opt::check_vectorize_linear`.)
+static const char* vectorize_linear_disabled_reason(
+        const conopt_t& glob, const mutopt_t& real, const mutdef_t& is_default) {
+    if (real.encoding.cunit_size() != 1) {
+        // Only one-byte code unit encodings can be read as raw bytes.
+        return "target encoding has multi-byte code units";
+    } else if (real.fill_eof != NOEOF) {
+        // With re2c:eof, YYFILL does not reserve input for the whole chain in advance, so a
+        // multi-character read may go past the end of the buffer.
+        return "re2c:eof is configured";
+    } else if (glob.lang == Lang::C && real.api != Api::GENERIC && is_default.api_limit) {
+        // The C guard for wide reads always checks YYLIMIT, but lexers that never check YYFILL
+        // (sentinel-only lexers, or YYFILL without the check) need not declare it. Require an
+        // explicit limit for wide reads in that case.
+        if (!real.fill_enable) {
+            return "YYFILL is disabled and YYLIMIT is not explicitly configured";
+        } else if (!real.fill_check) {
+            return "YYFILL check is disabled and YYLIMIT is not explicitly configured";
+        }
+    }
+    return nullptr;
+}
+
 // This function should only change real mutable options (based on the global options, default
 // mutable options and default flags). User-defined options are intentionally not passed to prevent
 // accidental change, and default flags are passed as read-only.
@@ -279,7 +305,16 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.cond_goto_param = defaults.cond_goto_param;
     }
 
+    // Linear vectorization is silently ineffective for some option combinations; the reason is
+    // reported by `Opt::check_vectorize_linear` when the user asked for the option.
+    if (vectorize_linear_disabled_reason(glob, real, is_default) != nullptr) {
+        real.vectorize_linear = false;
+    }
+
     // errors
+    if (real.vectorize_linear && glob.lang != Lang::C && glob.lang != Lang::GO) {
+        RET_FAIL(error("`re2c:vectorize:linear` is only supported for C and Go"));
+    }
     if (real.api == Api::SIMPLE && !glob.supported_apis_contains("simple")) {
         RET_FAIL(error("simple API is not supported for this backend"));
     }
@@ -307,6 +342,43 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     }
     if (!is_default.monadic && !glob.supported_features_contains("monadic")) {
         RET_FAIL(error("`monadic` feature is not supported for this backend"));
+    }
+    if (!is_default.vectorize_loops && !glob.supported_features_contains("vectorize-loops")) {
+        RET_FAIL(error("`vectorize-loops` feature is not supported for this backend"));
+    }
+    if (real.vectorize_loops && glob.target != Target::CODE) {
+        // Skeleton and DOT targets do not generate vector loops; the option is reset in the same
+        // way as storable state (see `fix_conopt`), so that the test suite can run every source
+        // with `--skeleton`.
+        real.vectorize_loops = false;
+    }
+    if (real.vectorize_loops) {
+        // The vector loop reads input through the cursor, relies on the length guard of bounds
+        // checking and advances the cursor past positions that the scalar code never observes.
+        // Every unsupported combination is an error rather than a silent fallback to scalar code.
+        if (glob.code_model != CodeModel::GOTO_LABEL) {
+            RET_FAIL(error("`vectorize:loops` requires the goto/label code model"));
+        }
+        // The API is checked per block when its options are final (`Adfa::calc_stats`): the
+        // backend default may be the generic API (Go), and a block may override it after the
+        // option has been set on the command line.
+        if (glob.eager_skip) {
+            RET_FAIL(error("`vectorize:loops` is not supported with --eager-skip"));
+        }
+        if (glob.storable_state) {
+            RET_FAIL(error("`vectorize:loops` is not supported with storable state"));
+        }
+        if (!real.fill_enable || !real.fill_check) {
+            RET_FAIL(error("`vectorize:loops` requires YYFILL with bounds checking "
+                           "(`re2c:yyfill:enable` and `re2c:yyfill:check`)"));
+        }
+        if (real.fill_eof != NOEOF) {
+            RET_FAIL(error("`vectorize:loops` is not supported with the end-of-input rule "
+                           "(`re2c:eof`)"));
+        }
+        if (real.encoding.cunit_size() != 1) {
+            RET_FAIL(error("`vectorize:loops` requires single-byte code units"));
+        }
     }
     if (!is_default.tags && !glob.supported_features_contains("tags")) {
         RET_FAIL(error("`tags` feature is not supported for this backend"));
@@ -410,6 +482,25 @@ Ret Opt::sync() {
 Ret Opt::snapshot(const opt_t** opts) {
     CHECK_RET(sync());
     *opts = new opt_t(glob, real, is_default, symtab);
+    return Ret::OK;
+}
+
+Ret Opt::check_vectorize_linear(const opt_t* opts, const loc_t& loc) {
+    if (glob.target == Target::CODE && user.vectorize_linear) {
+        if (real.api == Api::GENERIC) {
+            RET_FAIL(msg.error(loc, "--vectorize-linear is not supported with the generic API"));
+        }
+        // Only the predeclared one-byte types are accepted by name. A type parameter or a local
+        // type that shadows `byte` or `uint8` is rejected by the Go compiler: see the comment on
+        // code:yypeekn_guard in the Go syntax file.
+        if (glob.lang == Lang::GO && real.encoding.cunit_size() == 1
+                && opts->api_char_type != "byte" && opts->api_char_type != "uint8") {
+            RET_FAIL(msg.error(loc,
+                    "--vectorize-linear requires re2c:YYCTYPE to be byte or uint8 in Go"));
+        }
+        const char* reason = vectorize_linear_disabled_reason(glob, real, is_default);
+        if (reason) msg.warn.vectorize_linear_disabled(loc, reason);
+    }
     return Ret::OK;
 }
 
@@ -585,6 +676,20 @@ const char* Opt::var_name(StxVarId id) {
 
 // is this a known configuration-specific conditional?
 Ret Opt::check_cond(StxLOpt opt, const char* conf, const std::unordered_set<StxLOpt>& conds) const {
+    const bool range_cond = opt == StxLOpt::RANGE_MANY || opt == StxLOpt::RANGE_FIRST
+            || opt == StxLOpt::RANGE_LAST;
+    const bool xrange_cond = opt == StxLOpt::XRANGE_MANY || opt == StxLOpt::XRANGE_FIRST
+            || opt == StxLOpt::XRANGE_LAST;
+    if (range_cond || xrange_cond) {
+        const StxVarId list = range_cond ? StxVarId::RANGE : StxVarId::XRANGE;
+        if (std::find_if(stack_code_list.begin(), stack_code_list.end(),
+                [list](const StxCode* x) { return list == x->list.var; })
+                == stack_code_list.end()) {
+            RET_FAIL(error("conditional `.%s.many`, `.%s.first` or `.%s.last` outside of its "
+                           "list in configuration `%s`",
+                           var_name(list), var_name(list), var_name(list), conf));
+        }
+    }
     if (conds.find(opt) != conds.end()) return Ret::OK;
     RET_FAIL(error("unknown conditional in configuration `%s`", conf));
 }
@@ -603,13 +708,16 @@ Ret Opt::check_var(
     if (global_vars.find(var) != global_vars.end()) return Ret::OK;
 
     // this may be a list var; in that case it must be on the list stack
+    StxVarId list = var;
+    if (var == StxVarId::RANGE_LO || var == StxVarId::RANGE_HI) list = StxVarId::RANGE;
+    if (var == StxVarId::XRANGE_LO || var == StxVarId::XRANGE_HI) list = StxVarId::XRANGE;
     bool is_list_var = std::find_if(stack_code_list.begin(), stack_code_list.end(),
-            [var](const StxCode* x) { return var == x->list.var; })
+            [list](const StxCode* x) { return list == x->list.var; })
         != stack_code_list.end();
 
     // is this a known configuration-specific variable?
     const std::unordered_set<StxVarId>& v = is_list_var ? list_vars : vars;
-    if (std::find(v.begin(), v.end(), var) != v.end()) return Ret::OK;
+    if (v.find(is_list_var ? list : var) != v.end()) return Ret::OK;
 
     RET_FAIL(error("unknown variable `%s` in configuration `%s`", var_name(var), conf));
 }
@@ -647,6 +755,10 @@ Ret Opt::validate_conf_code(
             // no option names to check here
             break;
         case StxCodeType::VAR:
+            if (x->var == StxVarId::RANGE || x->var == StxVarId::XRANGE) {
+                RET_FAIL(error("list `%s` used as a variable in configuration `%s`",
+                               var_name(x->var), conf));
+            }
             if (oneline && x->var == StxVarId::NEWLINE && ++newlines > 1) {
                 RET_FAIL(error("`%s` should be a one-line configuration", conf));
             }
@@ -670,6 +782,17 @@ Ret Opt::validate_conf_code(
             break;
         case StxCodeType::LIST:
             if (n == 0) { // recurse into list body
+                if (list_vars.find(x->list.var) == list_vars.end()) {
+                    RET_FAIL(error("unknown list `%s` in configuration `%s`",
+                                   var_name(x->list.var), conf));
+                }
+                if ((x->list.var == StxVarId::RANGE || x->list.var == StxVarId::XRANGE)
+                        && std::find_if(stack_code_list.begin(), stack_code_list.end(),
+                            [x](const StxCode* y) { return x->list.var == y->list.var; })
+                            != stack_code_list.end()) {
+                    RET_FAIL(error("nested list `%s` in configuration `%s`",
+                                   var_name(x->list.var), conf));
+                }
                 stack_code_list.push_back(x);
                 CHECK_RET(check_var(x->list.var, conf, vars, list_vars));
                 stack.push_back({x, 1});
@@ -884,6 +1007,10 @@ static bool eval_cond(
 static inline bool eval_list_bounds(size_t size, int32_t& lbound, int32_t& rbound) {
     lbound = lbound >= 0 ? lbound : (std::max(0, static_cast<int32_t>(size) + lbound));
     rbound = rbound >= 0 ? rbound : (static_cast<int32_t>(size) + rbound);
+    // Clip the right bound to the list size, so that an empty list (e.g. an empty complement of a
+    // vectorized character class) renders nothing even if the template refers to its elements by
+    // explicit indices.
+    rbound = std::min(rbound, static_cast<int32_t>(size) - 1);
     return lbound <= rbound && rbound >= 0;
 }
 

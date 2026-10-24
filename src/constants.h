@@ -95,6 +95,7 @@ enum class CodeKind: uint32_t {
     FNDEF,
     FNCALL,
     SKIP,
+    SKIPN,
     PEEK,
     BACKUP,
     BACKUPCTX,
@@ -148,7 +149,8 @@ enum class CodeKind: uint32_t {
     ABORT,
     DEBUG,
     REC_FUNCS,
-    ASSIGN
+    ASSIGN,
+    VECTOR_LOOP
 };
 
 // Types of variables in codegen (independent of the language language).
@@ -220,6 +222,12 @@ enum class StxLOpt {
     TYPE,
     RETVAL,
     MANY,
+    RANGE_MANY,
+    XRANGE_MANY,
+    RANGE_FIRST,
+    RANGE_LAST,
+    XRANGE_FIRST,
+    XRANGE_LAST,
     NESTED
 };
 

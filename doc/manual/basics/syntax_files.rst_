@@ -37,7 +37,8 @@ language configurations, inplace configurations and code templates.
   ``supported_features``
       A list of supported features with possible elements ``nested-ifs``,
       ``bitmaps``, ``computed-gotos``, ``case-ranges``, ``monadic``, ``unsafe``,
-      ``tags``, ``captures``, ``captvars``, ``computed-continue``.
+      ``tags``, ``captures``, ``captvars``, ``computed-continue``,
+      ``vectorize-loops``.
 
 **Language configurations**
 
@@ -103,7 +104,11 @@ language configurations, inplace configurations and code templates.
   |re2c| repeats expressions the right hand side of the column a few times, each
   time replacing occurrences of the list variable with a value specific to this
   repetition. Lists have optional bounds (negative values are counted from the
-  end, e.g. ``-1`` means the last element). Conditional names start with a dot.
+  end, e.g. ``-1`` means the last element). In all code templates, the right
+  bound is clipped to the last element, and a negative left bound that extends
+  before the list is clipped to zero. Empty lists and intervals with the left
+  bound past the right bound produce no iterations, even with explicit bounds.
+  Conditional names start with a dot.
   Both conditionals and variables may be either local (specific to the given
   code template) or global (allowed in all code templates). When |re2c| reads
   syntax file, it checks that each code template uses only the variables and
@@ -275,6 +280,41 @@ language configurations, inplace configurations and code templates.
       state names) and ``stmt`` (a list variable that expands to all statements
       in the loop body or the current state).
 
+  ``code:vector_loop``
+      A vectorized fast-forward loop for a reflexive character class, emitted
+      with ``--vectorize-loops``. It advances ``YYCURSOR`` over code units in
+      the class and falls through to the scalar dispatcher at the first code
+      unit outside the class or when too little input remains.
+      Supported variables: ``size`` (vector width in code units, currently 32),
+      ``need`` (``size`` plus the following scalar dispatcher's lookahead,
+      at least one extra code unit), ``lessthan`` (the expression rendered by
+      ``code:yylessthan`` for ``need``, true if insufficient input remains),
+      and ``YYINPUT``, ``YYCURSOR``, ``YYLIMIT`` (the
+      corresponding API expressions).
+
+      The list ``range`` expands over inclusive ranges inside the class, with
+      element variables ``range_lo`` and ``range_hi``. The list ``xrange``
+      expands over inclusive ranges outside the class (its complement), with
+      element variables ``xrange_lo`` and ``xrange_hi``. Each pair of element
+      variables is valid only inside its corresponding list. An empty
+      complement produces no ``xrange`` iterations, including bounded list
+      expressions such as ``[xrange{0}: ...]``.
+
+      Conditionals: ``.many`` is true if the class contains more than one
+      ``range`` element. It is a property of the whole class, valid throughout
+      the template, and does not depend on the current list element.
+      ``.range.many`` and ``.xrange.many`` are true if the current inclusive
+      range contains more than one code unit (its upper bound exceeds its
+      lower bound). They are valid only inside ``range`` and ``xrange`` lists,
+      respectively, and can select a range test instead of an equality test.
+      ``.range.first`` and ``.xrange.first`` are true if the current range
+      contains more than one code unit and starts at code unit 0, so that a
+      single comparison with the upper bound tests it. ``.range.last`` and
+      ``.xrange.last`` are true if the current range contains more than one
+      code unit, ends at the largest code unit of the encoding and does not
+      start at 0, so that a single comparison with the lower bound tests it.
+      The four are valid only inside their lists.
+
   ``code:continue``
       Continue statement. Supported variables: ``label`` (label from which to
       continue execution), ``val`` (value passed to a labeled switch) and ``var``
@@ -359,6 +399,26 @@ language configurations, inplace configurations and code templates.
       ``YYSKIP`` statement, possibly specialized for different APIs.
       Supported variables: ``YYSKIP``, ``YYCURSOR``, ``yyrecord`` (map to the
       corresponding ``re2c:`` configurations).
+
+  ``code:yypeekn``
+      Multi-character read used by ``--vectorize-linear``: an expression that
+      yields the value of ``n`` code units at the cursor, with the code unit at
+      offset ``k`` in bits ``8*k`` to ``8*k+7``. Supported variables: ``n``,
+      ``YYINPUT``, ``YYCURSOR``, ``yyrecord`` (map to the corresponding
+      ``re2c:`` configurations). List variables: ``offset`` (code unit offsets
+      from ``0`` to ``n-1``).
+
+  ``code:yypeekn_guard``
+      A condition checked before ``code:yypeekn``, or an empty string if no
+      check is needed. Supported variables: ``n``, ``YYCTYPE``, ``YYINPUT``,
+      ``YYCURSOR``, ``YYLIMIT``, ``yyrecord`` (map to the corresponding ``re2c:``
+      configurations).
+
+  ``code:yyskipn``
+      A statement that advances the cursor by ``n`` code units, used by
+      ``--vectorize-linear``. Supported variables: ``n``, ``YYINPUT``,
+      ``YYCURSOR``, ``yyrecord`` (map to the corresponding ``re2c:``
+      configurations).
 
   ``code:yybackup``
       ``YYBACKUP`` statement, possibly specialized for different APIs.

@@ -85,6 +85,7 @@ opt_warn: /*!local:re2c
     "deprecated-eof-rule"    end { msg.warn.set(Warn::DEPRECATED_EOF_RULE,    option); goto opt; }
     "useless-escape"         end { msg.warn.set(Warn::USELESS_ESCAPE,         option); goto opt; }
     "sentinel-in-midrule"    end { msg.warn.set(Warn::SENTINEL_IN_MIDRULE,    option); goto opt; }
+    "vectorize-linear-disabled" end { msg.warn.set(Warn::VECTORIZE_LINEAR_DISABLED, option); goto opt; }
 */
 
 opt_short: /*!local:re2c
@@ -163,10 +164,12 @@ opt_long: /*!local:re2c
     "computed-gotos"          end { opts.set_computed_gotos(true);          goto opt; }
     "computed-gotos-relative" end { opts.set_computed_gotos_relative(true); goto opt; }
     "nested-ifs"              end { opts.set_nested_ifs(true);              goto opt; }
+    "vectorize-linear"        end { opts.set_vectorize_linear(true);        goto opt; }
     "case-insensitive"        end { opts.set_case_insensitive(true);        goto opt; }
     "case-inverted"           end { opts.set_case_inverted(true);           goto opt; }
     "tags"                    end { opts.set_tags(true);                    goto opt; }
     "no-unsafe"               end { opts.set_unsafe(false);                 goto opt; }
+    "vectorize-loops"         end { opts.set_vectorize_loops(true);         goto opt; }
     "invert-captures"         end { opts.set_captures_invert(true);         goto opt; }
 
     "ebcdic" | "ecb"        end { opts.set_encoding(Enc::Type::EBCDIC, true); goto opt; }
@@ -354,6 +357,11 @@ end:
 
 Ret Opt::parse(char** argv, Input& input, Lang lang) {
     CHECK_RET(parse_opts(*this, const_cast<conopt_t&>(glob), argv, msg, &lang));
+    const_cast<conopt_t&>(glob).set_lang(lang);
+
+    if (user.vectorize_linear && lang != Lang::C && lang != Lang::GO) {
+        RET_FAIL(error("--vectorize-linear is only supported for C and Go"));
+    }
 
     // Load syntax file (it must have file index 0).
     CHECK_RET(input.load_syntax_config(*this, lang));

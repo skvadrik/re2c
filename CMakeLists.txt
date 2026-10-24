@@ -144,6 +144,15 @@ configure_file(doc/help.rst.in doc/help.rst @ONLY)
 
 if(RE2C_BUILD_TESTS)
     configure_file(run_tests.py.in run_tests.py @ONLY)
+    # Optional assembly-only test; see test/codegen/README.vectorize-avx.md.
+    add_custom_target(check_vectorize_avx
+        COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/test/codegen/c/check_vectorize_avx.py"
+            "$<TARGET_FILE:re2c>"
+        DEPENDS re2c
+        USES_TERMINAL
+        VERBATIM
+    )
     set(RE2C_RUN_TESTS "${CMAKE_CURRENT_BINARY_DIR}/run_tests.py")
     if(CMAKE_HOST_UNIX)
         execute_process(COMMAND chmod +x "${RE2C_RUN_TESTS}")
