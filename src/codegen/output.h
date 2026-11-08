@@ -75,6 +75,7 @@ class RenderCallback {
     virtual void start_list(StxVarId var, size_t lbound, size_t rbound);
     virtual bool next_in_list(StxVarId var);
     virtual bool eval_cond(StxLOpt opt);
+    virtual bool eval_glob_cond(StxGOpt opt, bool defval);
     virtual ~RenderCallback() = default;
 };
 

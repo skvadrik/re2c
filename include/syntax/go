@@ -4,7 +4,8 @@ supported_apis = ["simple", "generic", "record"];
 supported_api_styles = ["free-form", "functions"];
 supported_code_models = ["goto-label", "loop-switch", "recursive-functions"];
 supported_targets = ["code", "dot"];
-supported_features = ["nested-ifs", "bitmaps", "tags", "captures", "captvars"];
+supported_archs = ["x86"];
+supported_features = ["nested-ifs", "bitmaps", "tags", "captures", "captvars", "vectorize-loops"];
 
 
 // language-specific options ---------------------------------------------------
@@ -94,6 +95,9 @@ re2c:case-inverted = 0;
 re2c:case-ranges = 0;
 re2c:unsafe = 0;
 re2c:monadic = 0;
+re2c:arch = none;
+re2c:vectorize:loops = 0;
+re2c:vectorize:size = 32;
 re2c:encoding:ebcdic = 0;
 re2c:encoding:utf32 = 0;
 re2c:encoding:ucs2 = 0;
@@ -135,6 +139,8 @@ re2c:YYMAXNMATCH = "YYMAXNMATCH";
 re2c:YYMTAGN = "YYMTAGN";
 re2c:YYMTAGP = "YYMTAGP";
 re2c:YYPEEK = "YYPEEK";
+re2c:YYPEEK16 = "YYPEEK16";
+re2c:YYPEEK32 = "YYPEEK32";
 re2c:YYPTYPE = "int";
 re2c:YYRESTORE = "YYRESTORE";
 re2c:YYRESTORECTX = "YYRESTORECTX";
@@ -186,6 +192,10 @@ code:assign = topindent lhs " = " rhs nl;
 
 code:type_int = "int";
 code:type_uint = "uint";
+code:type_vec16 = "archsimd.Int8x16";
+code:type_vec32 = "archsimd.Int8x32";
+code:type_vec16_mask = "uint16";
+code:type_vec32_mask = "uint32";
 code:type_yybm = "byte";
 code:type_yytarget = <undefined>;
 code:type_yyctable = <undefined>;
@@ -321,8 +331,9 @@ code:yyrestoretag =
 
 code:yyshift =
     topindent (.api.generic
-        ? YYSHIFT (.api_style.functions ? "(-" offset ")")
-        : YYCURSOR " -= " (.yyshift.conversion ? YYPTYPE "(" offset ")" : offset)
+        ? YYSHIFT (.api_style.functions ? "(" (.backward ? "-" offset : offset) ")")
+        : YYCURSOR (.backward ? " -= " : " += ")
+            (.yyshift.conversion ? YYPTYPE "(" offset ")" : offset)
     ) nl;
 
 code:yyshiftstag =
@@ -417,3 +428,33 @@ code:yybm_filter = yych " & ~0xFF";
 code:yybm_match = "(" yybm "[" offset "+" yych "] & " mask ") != 0";
 
 code:yytarget_filter = <undefined>;
+
+
+// Atomic x86 vector primitives for Go `simd/archsimd` (16-byte XMM and 32-byte YMM).
+// Control flow (`if`, `switch`, `for`, cursor advance, `yypeek`) is emitted by the
+// standard IR passes. `YYINPUT` must be a byte slice when not using `--api generic`
+// (for string input, create a read-only `unsafe.Slice(unsafe.StringData(s), len(s))`
+// view before entering the lexer). `ClearAVXUpperBits()` is emitted only for 32-byte
+// YMM loops to avoid AVX-SSE transition penalties in legacy SSE runtime code.
+code:yypeek16 = (.api.generic
+    ? YYPEEK16 (.api_style.functions ? "()")
+    : "archsimd.LoadUint8x16(" YYINPUT "[" YYCURSOR ":" YYCURSOR " + 16]).BitsToInt8()");
+code:yypeek32 = (.api.generic
+    ? YYPEEK32 (.api_style.functions ? "()")
+    : "archsimd.LoadUint8x32(" YYINPUT "[" YYCURSOR ":" YYCURSOR " + 32]).BitsToInt8()");
+code:vec16_splat = "archsimd.BroadcastInt8x16(" val ")";
+code:vec32_splat = "archsimd.BroadcastInt8x32(" val ")";
+code:vec16_sub = lhs ".Sub(" rhs ")";
+code:vec32_sub = lhs ".Sub(" rhs ")";
+code:vec16_cmpeq = lhs ".Equal(" rhs ")";
+code:vec32_cmpeq = lhs ".Equal(" rhs ")";
+code:vec16_cmpgt = lhs ".Greater(" rhs ")";
+code:vec32_cmpgt = lhs ".Greater(" rhs ")";
+code:vec16_or = lhs ".Or(" rhs ")";
+code:vec32_or = lhs ".Or(" rhs ")";
+code:vec16_movemask = lhs ".ToBits()";
+code:vec32_movemask = lhs ".ToBits()";
+code:vec16_ctz = "bits.TrailingZeros16(" lhs ")";
+code:vec32_ctz = "bits.TrailingZeros32(" lhs ")";
+code:vec16_cleanup = "";
+code:vec32_cleanup = "archsimd.ClearAVXUpperBits()";

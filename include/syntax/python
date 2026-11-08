@@ -5,6 +5,7 @@ supported_api_styles = ["free-form"];
 // "recursive_functions" works syntactically, but causes stack overflows due to non-tail recursion
 supported_code_models = ["loop-switch"];
 supported_targets = ["code", "dot"];
+supported_archs = [];
 supported_features = ["nested-ifs", "bitmaps", "tags", "captures", "captvars"];
 
 
@@ -95,6 +96,9 @@ re2c:case-inverted = 0;
 re2c:case-ranges = 0;
 re2c:unsafe = 0;
 re2c:monadic = 0;
+re2c:arch = none;
+re2c:vectorize:loops = 0;
+re2c:vectorize:size = 32;
 re2c:encoding:ebcdic = 0;
 re2c:encoding:utf32 = 0;
 re2c:encoding:ucs2 = 0;
@@ -136,6 +140,8 @@ re2c:YYMAXNMATCH = "YYMAXNMATCH";
 re2c:YYMTAGN = "yymtagn";
 re2c:YYMTAGP = "yymtagp";
 re2c:YYPEEK = "yypeek";
+re2c:YYPEEK16 = "yypeek16";
+re2c:YYPEEK32 = "yypeek32";
 re2c:YYPTYPE = "int";
 re2c:YYRESTORE = "yyrestore";
 re2c:YYRESTORECTX = "yyrestorectx";
@@ -180,6 +186,10 @@ code:assign = topindent lhs " = " rhs nl;
 
 code:type_int = <undefined>;
 code:type_uint = <undefined>;
+code:type_vec16 = <undefined>;
+code:type_vec32 = <undefined>;
+code:type_vec16_mask = <undefined>;
+code:type_vec32_mask = <undefined>;
 code:type_yybm = <undefined>;
 code:type_yytarget = <undefined>;
 code:type_yyctable = <undefined>;
@@ -400,3 +410,22 @@ code:yybm_filter = yych " & ~0xFF";
 code:yybm_match = "(" yybm "[" offset "+" yych "] & " mask ") != 0";
 
 code:yytarget_filter = <undefined>;
+
+code:yypeek16 = <undefined>;
+code:yypeek32 = <undefined>;
+code:vec16_splat = <undefined>;
+code:vec32_splat = <undefined>;
+code:vec16_sub = <undefined>;
+code:vec32_sub = <undefined>;
+code:vec16_cmpeq = <undefined>;
+code:vec32_cmpeq = <undefined>;
+code:vec16_cmpgt = <undefined>;
+code:vec32_cmpgt = <undefined>;
+code:vec16_or = <undefined>;
+code:vec32_or = <undefined>;
+code:vec16_movemask = <undefined>;
+code:vec32_movemask = <undefined>;
+code:vec16_ctz = <undefined>;
+code:vec32_ctz = <undefined>;
+code:vec16_cleanup = <undefined>;
+code:vec32_cleanup = <undefined>;

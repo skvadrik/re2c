@@ -539,6 +539,14 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
 
     if (go->span_count == 0) return;
 
+    // Vectorized reflexive transitions jump back to `from` in goto/label mode, where the label sits
+    // right before the dispatch at zero fallthrough cost. In loop/switch and recursive-functions
+    // modes `opts->eager_skip` is always enabled and jumping to `from->simd_head` keeps the pair
+    // fused into a single switch case or function on the scalar path.
+    if (opts->code_model == CodeModel::GOTO_LABEL && from->is_simd_body && from->go.span_count > 1) {
+        from->label->used = true;
+    }
+
     // YYEND check may be needed if this state has a link to then end-of-input state, unless
     // all transitions also go to the end-of-input state and agree on tags.
     // The details depend on the end-of-input handling method:
@@ -621,6 +629,7 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
         go->godot = code_gosw(output, go->span, go->span_count, false, eof);
     } else if (opts->computed_gotos
                && !skip
+               && !from->is_simd_body
                && dspan_count >= opts->computed_gotos_threshold
                && !low_spans_have_tags) {
         go->kind = CodeGo::Kind::CGOTO;

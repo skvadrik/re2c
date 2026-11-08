@@ -4,8 +4,9 @@ supported_apis = ["simple", "generic", "record"];
 supported_api_styles = ["functions", "free-form"];
 supported_code_models = ["goto-label", "loop-switch", "recursive-functions"];
 supported_targets = ["code", "dot", "skeleton"];
+supported_archs = ["x86"];
 supported_features = ["nested-ifs", "bitmaps", "computed-gotos", "case-ranges",
-    "tags", "captures", "captvars"];
+    "tags", "captures", "captvars", "vectorize-loops"];
 
 
 // language-specific options ---------------------------------------------------
@@ -95,6 +96,9 @@ re2c:case-inverted = 0;
 re2c:case-ranges = 0;
 re2c:unsafe = 0;
 re2c:monadic = 0;
+re2c:arch = none;
+re2c:vectorize:loops = 0;
+re2c:vectorize:size = 32;
 re2c:encoding:ebcdic = 0;
 re2c:encoding:utf32 = 0;
 re2c:encoding:ucs2 = 0;
@@ -136,6 +140,8 @@ re2c:YYMAXNMATCH = "YYMAXNMATCH";
 re2c:YYMTAGN = "YYMTAGN";
 re2c:YYMTAGP = "YYMTAGP";
 re2c:YYPEEK = "YYPEEK";
+re2c:YYPEEK16 = "YYPEEK16";
+re2c:YYPEEK32 = "YYPEEK32";
 re2c:YYPTYPE = "YYPTYPE";
 re2c:YYRESTORE = "YYRESTORE";
 re2c:YYRESTORECTX = "YYRESTORECTX";
@@ -157,7 +163,7 @@ re2c:cond:goto = "goto " sigil ";";
 
 // code templates --------------------------------------------------------------
 
-code:var_local = topindent type " " name (.init ? " = " init) ";" nl;
+code:var_local = topindent (.const ? "const ") type " " name (.init ? " = " init) ";" nl;
 code:var_global = code:var_local;
 
 code:const_local = topindent type " " name " = " init ";" nl;
@@ -185,6 +191,10 @@ code:assign = topindent lhs " = " rhs ";" nl;
 
 code:type_int = "int";
 code:type_uint = "unsigned int";
+code:type_vec16 = "__m128i";
+code:type_vec32 = "__m256i";
+code:type_vec16_mask = "unsigned int";
+code:type_vec32_mask = "unsigned int";
 code:type_yybm = "unsigned char";
 code:type_yytarget = (.cgoto.relative ? "int" : "void*");
 code:type_yyctable = (.cgoto.relative ? "int" : "void*");
@@ -356,8 +366,8 @@ code:yyrestoretag =
 
 code:yyshift =
     topindent (.api.generic
-        ? YYSHIFT (.api_style.functions ? "(-" offset ");")
-        : YYCURSOR " -= " offset ";"
+        ? YYSHIFT (.api_style.functions ? "(" (.backward ? "-" offset : offset) ");")
+        : YYCURSOR (.backward ? " -= " : " += ") offset ";"
     ) nl;
 
 code:yyshiftstag =
@@ -462,3 +472,31 @@ code:yybm_filter = yych " & ~0xFF";
 code:yybm_match = yybm "[" offset "+" yych "] & " mask;
 
 code:yytarget_filter = yych " & ~0xFF";
+
+
+// Atomic x86 vector primitives (SSE2 for 16-byte width, AVX2 for 32-byte width).
+// Control flow (`if`, `switch`, `for`, cursor advance, `yypeek`) is emitted by the
+// standard IR passes; these templates only map vector types, unaligned loads, signed
+// byte arithmetic/comparisons, movemask, trailing-zero count, and optional cleanup.
+code:yypeek16 = (.api.generic
+    ? YYPEEK16 (.api_style.functions ? "()")
+    : "_mm_loadu_si128((const __m128i*)(" YYCURSOR "))");
+code:yypeek32 = (.api.generic
+    ? YYPEEK32 (.api_style.functions ? "()")
+    : "_mm256_loadu_si256((const __m256i*)(" YYCURSOR "))");
+code:vec16_splat = "_mm_set1_epi8((char)" val ")";
+code:vec32_splat = "_mm256_set1_epi8((char)" val ")";
+code:vec16_sub = "_mm_sub_epi8(" lhs ", " rhs ")";
+code:vec32_sub = "_mm256_sub_epi8(" lhs ", " rhs ")";
+code:vec16_cmpeq = "_mm_cmpeq_epi8(" lhs ", " rhs ")";
+code:vec32_cmpeq = "_mm256_cmpeq_epi8(" lhs ", " rhs ")";
+code:vec16_cmpgt = "_mm_cmpgt_epi8(" lhs ", " rhs ")";
+code:vec32_cmpgt = "_mm256_cmpgt_epi8(" lhs ", " rhs ")";
+code:vec16_or = "_mm_or_si128(" lhs ", " rhs ")";
+code:vec32_or = "_mm256_or_si256(" lhs ", " rhs ")";
+code:vec16_movemask = "(unsigned int)_mm_movemask_epi8(" lhs ")";
+code:vec32_movemask = "(unsigned int)_mm256_movemask_epi8(" lhs ")";
+code:vec16_ctz = "__builtin_ctz(" lhs ")";
+code:vec32_ctz = "__builtin_ctz(" lhs ")";
+code:vec16_cleanup = "";
+code:vec32_cleanup = "";

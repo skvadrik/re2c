@@ -1,0 +1,121 @@
+|re2c| can accelerate hot greedy loops in regular expressions using SIMD
+hardware vectorization in C (SSE2 / AVX2 intrinsics) and Go 1.27+
+(``simd/archsimd``).
+
+In lexical analysis, a significant percentage of CPU cycles is spent
+consuming long homogeneous byte sequences (such as string literals,
+identifiers, URL fields, or whitespace).
+
+Instead of processing these loops byte-by-byte with scalar branch dispatches,
+the vectorization pass emits a fast-forward loop that loads and evaluates
+blocks of 16 or 32 bytes simultaneously using parallel range checks and bitmask
+extraction, then hands off the first byte outside the class to the ordinary
+scalar DFA dispatcher.
+
+When enabled with ``--arch x86 --vectorize-loops`` (or ``re2c:arch = x86;
+re2c:vectorize:loops = 1;``):
+
+- Vectorization requires selecting a supported target architecture with
+  ``--arch <arch>`` / ``re2c:arch = <arch>`` (currently ``x86`` for the C and
+  Go backends). The vector width in bytes is controlled by
+  ``--vectorize-size <16 | 32>`` / ``re2c:vectorize:size`` (``32`` by default:
+  AVX2 ``__m256i`` / ``archsimd.Int8x32``; ``16`` selects SSE2 ``__m128i`` /
+  ``archsimd.Int8x16``).
+- Vectorization supports all code models (``--goto-label``, ``--loop-switch`` and
+  ``--recursive-functions``), all APIs (``simple``, ``record`` and ``generic``),
+  ``--eager-skip`` and ``--storable-state`` (``-f``). It requires single-byte code
+  units (``YYCTYPE`` must be an unsigned 1-byte code unit type), ``YYFILL`` with
+  bounds checking, and no end-of-input rule (``re2c:eof``) or ``--skeleton``. Any
+  unsupported combination is a configuration error, not a silent fallback. With
+  ``--emit-dot`` the option is reset.
+- The compiler selects base states with a nonzero refill requirement and a
+  reflexive character class of at most 8 disjoint ranges. The loop must not record
+  backtracking positions, perform tag actions or have end-of-input transitions,
+  the loop entry state must not have a hoisted cursor increment, and neither the
+  loop state nor its body may carry final, fallback or end-of-input tags. Tags
+  elsewhere in the DFA do not block the loop: they are set and read by scalar code
+  at positions the loop never skips.
+- Both ``re2c:yyfill:enable`` and ``re2c:yyfill:check`` must be enabled to ensure
+  the vector loop stops before the end-of-buffer boundary. It reserves enough
+  lookahead for the scalar dispatcher via ``code:yylessthan`` and does not
+  increase ``YYMAXFILL``.
+- With ``--api generic``, vector loads use the width-specific primitives
+  ``re2c:YYPEEK16`` (for width 16) and ``re2c:YYPEEK32`` (for width 32), cursor
+  advancement uses ``YYSHIFT``, bounds checks use ``YYLESSTHAN``, and reloading
+  ``yych`` uses ``YYPEEK``. No ``YYCURSOR``, ``YYLIMIT`` or ``YYINPUT`` identifier
+  is emitted in generic API output.
+- The vector block is emitted on the reflexive transition of the loop state rather
+  than at state entry. Control flow is emitted entirely through |re2c|'s existing
+  IR constructs (``code:if_then_else``, ``code:loop``, ``code:var_local``,
+  ``code:assign``, ``code:yyshift`` and ``code:yypeek``), combined with atomic
+  target expression templates (``code:type_vec{16,32}``,
+  ``code:type_vec{16,32}_mask``, ``code:yypeek{16,32}``, ``code:vec{16,32}_splat``,
+  ``code:vec{16,32}_{sub,cmpeq,cmpgt,or}``, ``code:vec{16,32}_{movemask,ctz}``
+  and ``code:vec{16,32}_cleanup``).
+- Exit ranges in the complement of the reflexive class are tested with equality
+  (``cmpeq``) for singletons and signed greater-than (``cmpgt``) with a
+  precomputed ``+128`` wrapping bias for byte intervals (a single ``cmpgt``
+  without ``sub`` when an exit range ends at ``0x7F`` or starts at ``0x80``),
+  avoiding the extra zero register required by saturating-subtraction range
+  tests.
+- In C, the generated code uses ``<immintrin.h>`` (compile with ``-mavx2`` for
+  width 32 or ``-msse2`` for width 16) and ``__builtin_ctz`` (GCC / Clang). No
+  explicit ``_mm256_zeroupper()`` is emitted in C: GCC at ``-O2`` and above and
+  Clang insert ``vzeroupper`` automatically; when compiling 32-byte AVX2 lexers
+  with GCC below ``-O2`` (e.g. ``-O0``, ``-O1`` or ``-Os``) alongside legacy
+  non-VEX SSE code, pass ``-mvzeroupper`` explicitly.
+- In Go, the generated code requires Go 1.27+ with ``GOEXPERIMENT=simd`` and
+  imports ``math/bits`` and ``simd/archsimd``. For width 32 (YMM), the Go
+  template emits ``archsimd.ClearAVXUpperBits()`` on normal loop exit; for
+  width 16 (XMM), no cleanup call is emitted. The caller must maintain
+  ``0 <= YYCURSOR <= YYLIMIT <= len(YYINPUT)`` and a sound length guard.
+- The default C vector output mixes declarations and statements inside blocks and
+  therefore requires C99 or later (or C++). Generated lexers do not check CPU
+  capabilities at run time.
+
+When vectorization pays off
+---------------------------
+
+The vector block has a fixed entry cost, paid once per run of the class that
+is at least two code units long, and a per-block cost that is small compared
+to one scalar step per code unit. Vectorization therefore wins only when runs
+are longer than a break-even length (near 9 code units on x86-64 C), and loses
+below it. On corpora where most runs are short (identifiers, numbers, short
+words), the vectorized lexer is slower than the scalar one; on corpora with
+long runs (string bodies, whitespace, comments, URL and log fields) it is
+faster. Enable it per block for grammars whose hot loops scan long runs, and
+verify on representative input.
+
+Go string input
+---------------
+
+In Go ``simple`` and ``record`` APIs, ``archsimd.LoadUint8x16`` /
+``LoadUint8x32`` require ``YYINPUT`` to be a byte slice rather than a
+``string``. For string input, construct a read-only byte view once before
+entering the lexer via ``unsafe.StringData`` and ``unsafe.Slice``:
+
+.. code-block:: go
+
+    func lex(text string) int {
+        input := unsafe.Slice(unsafe.StringData(text), len(text))
+        yycursor, yylimit := 0, len(input)
+        /*!re2c
+            re2c:arch = x86;
+            re2c:vectorize:loops = 1;
+            re2c:api = simple;
+            re2c:YYCTYPE = byte;
+            re2c:YYINPUT = input;
+            re2c:YYFILL = "return -2";
+            re2c:YYFILL:naked = 1;
+            [a-z]+ { return yycursor }
+            *      { return -1 }
+        */
+    }
+
+Do not put ``[]byte(text[...])`` inside the lexer: Go may copy every block and
+call into the runtime with dirty YMM registers.
+
+In Go, the variable cursor advancement by ``yyn`` on a vector match is of type
+``int`` (``yycursor += yyn``). For a cursor of another type, such as ``uint``,
+set ``re2c:yyshift:conversion = 1;`` and ``re2c:YYPTYPE = <type>;`` so that the
+shift is converted explicitly (``yycursor += uint(yyn)``).
