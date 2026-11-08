@@ -159,6 +159,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.tags_negative = defaults.tags_negative;
         real.char_emit = defaults.char_emit;
         real.char_conv = defaults.char_conv;
+        real.shift_conversion = defaults.shift_conversion;
         real.char_literals = defaults.char_literals;
         real.label_loop = defaults.label_loop;
         real.label_fill = defaults.label_fill;
@@ -876,6 +877,8 @@ static bool eval_cond(
             return opts->fill_enable;
         case StxGOpt::FN_THROW:
             return !opts->fn_throw.empty();
+        case StxGOpt::SHIFT_CONVERSION:
+            return opts->shift_conversion;
         }
     }
     UNREACHABLE();

@@ -323,7 +323,7 @@ static constexpr const char* DEFAULT_SYNTAX_GO =
     "code:yyshift =\n"
     "    topindent (.api.generic\n"
     "        ? YYSHIFT (.api_style.functions ? \"(-\" offset \")\")\n"
-    "        : YYCURSOR \" -= \" offset\n"
+    "        : YYCURSOR \" -= \" (.yyshift.conversion ? YYPTYPE \"(\" offset \")\" : offset)\n"
     "    ) nl;\n"
     "\n"
     "code:yyshiftstag =\n"

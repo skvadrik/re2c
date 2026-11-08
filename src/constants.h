@@ -207,7 +207,8 @@ enum class StxGOpt {
     LOOP_LABEL,
     CGOTO_RELATIVE,
     FILL_ENABLE,
-    FN_THROW
+    FN_THROW,
+    SHIFT_CONVERSION
 };
 
 enum class StxLOpt {

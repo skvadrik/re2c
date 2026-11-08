@@ -154,6 +154,8 @@ Ret Input::lex_conf(Opt& opts) {
     "yyfn:sep"   { RET_CONF_STR(fn_sep); }
     "yyfn:throw" { RET_CONF_STR(fn_throw); }
 
+    "yyshift:conversion" { RET_CONF_BOOL(shift_conversion); }
+
     "flags:"? "tags" | "flags:T" {
         RET_CONF_BOOL(tags);
     }
@@ -791,6 +793,7 @@ start:
     ".cgoto.relative"      { RET_GOPT(StxGOpt::CGOTO_RELATIVE); }
     ".yyfill.enable"       { RET_GOPT(StxGOpt::FILL_ENABLE); }
     ".yyfn.throw"          { RET_GOPT(StxGOpt::FN_THROW); }
+    ".yyshift.conversion"  { RET_GOPT(StxGOpt::SHIFT_CONVERSION); }
 
     // Local conditionals (specific to each code template in syntax file).
     //

@@ -324,7 +324,7 @@ static constexpr const char* DEFAULT_SYNTAX_RUST =
     "code:yyshift =\n"
     "    topindent (.api.generic\n"
     "        ? YYSHIFT\n"
-    "        : YYCURSOR \" -= \" offset \";\"\n"
+    "        : YYCURSOR \" -= \" (.yyshift.conversion ? offset \" as \" YYPTYPE : offset) \";\"\n"
     "    ) nl;\n"
     "\n"
     "code:yyshiftstag =\n"

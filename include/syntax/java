@@ -300,7 +300,7 @@ code:yyrestoretag =
 code:yyshift =
     topindent (.api.generic
         ? YYSHIFT
-        : YYCURSOR " -= " offset ";"
+        : YYCURSOR " -= " (.yyshift.conversion ? "(" YYPTYPE ") " offset : offset) ";"
     ) nl;
 
 code:yyshiftstag =

@@ -261,7 +261,8 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::RESTORETAG, StxVarId::CURSOR, StxVarId::TAG, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyshift, \
-        ({StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::OFFSET, StxVarId::RECORD}), ({}), ({}) \
+        ({StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::OFFSET, StxVarId::PTYPE, \
+            StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyshiftstag, \
         ({StxVarId::SHIFTSTAG, StxVarId::TAG, StxVarId::NEG, StxVarId::OFFSET, StxVarId::RECORD}), \
@@ -497,6 +498,7 @@ enum class StxVarId : uint32_t {
     MUTOPT(bool, nested_ifs, false) \
     MUTOPT(bool, unsafe, true) \
     MUTOPT(bool, monadic, false) \
+    MUTOPT(bool, shift_conversion, false) \
     /* YYFILL */ \
     MUTOPT(uint32_t, fill_eof, NOEOF) \
     MUTOPT(uint32_t, fill_sentinel, NOEOF) \
