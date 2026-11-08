@@ -365,9 +365,14 @@ static CodeGoIf* code_goif(Output& output, CodeGoIf::Kind kind, const Span* sp, 
 }
 
 static CodeGoSwIf* code_goswif(
-        Output& output, const Span* sp, uint32_t nsp, State* next, bool skip, uint32_t eof) {
+        Output& output, const State* from, const Span* sp, uint32_t nsp, State* next, bool skip,
+        uint32_t eof) {
     CodeGoSwIf* x = output.allocator.alloct<CodeGoSwIf>(1);
-    if ((!output.block().opts->nested_ifs && nsp > 2)
+    // Bitmaps and computed gotos implicitly enable nested IFs. Only an explicit request justifies
+    // replacing their dispatch with a switch that coalesces the vector block.
+    if ((from != nullptr && from->is_simd_body && output.block().opts->nested_ifs
+            && !output.block().opts->is_default_nested_ifs)
+            || (!output.block().opts->nested_ifs && nsp > 2)
             || (nsp > 8 && (sp[nsp - 2].ub - sp[0].ub <= 3 * (nsp - 2)))) {
         x->kind = CodeGoSwIf::Kind::SWITCH;
         x->gosw = code_gosw(output, sp, nsp, skip, eof);
@@ -425,7 +430,8 @@ static uint32_t unmap(const Span* span, uint32_t nspans, Span* other, const Stat
 }
 
 static CodeGoIfL* code_gobm(
-        Output& output, const Adfa& dfa, const Span* span, uint32_t nspans, const Span* hspan,
+        Output& output, const Adfa& dfa, const State* from, const Span* span, uint32_t nspans,
+        const Span* hspan,
         uint32_t hspans, const CodeBmState* bm, State* next, bool skip, uint32_t eof) {
     const opt_t* opts = output.block().opts;
     Scratchbuf& buf = output.scratchbuf;
@@ -446,7 +452,7 @@ static CodeGoIfL* code_gobm(
 
         // Have low spans => next state must be null to disallow transtion elision in linear IF.
         State* s = nother > 0 ? nullptr : next;
-        CodeGoSwIf* swif = code_goswif(output, hspan, hspans, s, skip, eof);
+        CodeGoSwIf* swif = code_goswif(output, from, hspan, hspans, s, skip, eof);
 
         add_branch_swif(x, cond, swif);
     }
@@ -458,7 +464,7 @@ static CodeGoIfL* code_gobm(
     if (nother > 0) {
         // Rec/func mode => next state must be null to disallow transtion elision in linear IF.
         State* s = opts->code_model == CodeModel::REC_FUNC ? nullptr : next;
-        CodeGoSwIf* swif = code_goswif(output, other, nother, s, skip, eof);
+        CodeGoSwIf* swif = code_goswif(output, from, other, nother, s, skip, eof);
 
         add_branch_swif(x, nullptr, swif);
     }
@@ -487,7 +493,7 @@ static CodeGoCgoto* code_cgoto(Output& output, const Span* span, uint32_t span_c
         const Span* hspan, uint32_t hspan_count, State* next, uint32_t eof) {
     CodeGoCgoto* x = output.allocator.alloct<CodeGoCgoto>(1);
     x->hgo = hspan_count == 0 ? nullptr
-            : code_goswif(output, hspan, hspan_count, next, false, eof);
+            : code_goswif(output, nullptr, hspan, hspan_count, next, false, eof);
     x->table = code_cgoto_table(output, span, span_count);
     return x;
 }
@@ -638,11 +644,12 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
     } else if (opts->bitmaps && bitmap_count > 0) {
         go->kind = CodeGo::Kind::LINEAR_IF;
         go->goifl = code_gobm(
-            output, dfa, go->span, go->span_count, hspan, hspan_count, bm, from->next, skip, eof);
+            output, dfa, from, go->span, go->span_count, hspan, hspan_count, bm, from->next, skip,
+            eof);
         dfa.bitmap->used = true;
     } else {
         go->kind = CodeGo::Kind::SWITCH_IF;
-        go->goswif = code_goswif(output, go->span, go->span_count, from->next, skip, eof);
+        go->goswif = code_goswif(output, from, go->span, go->span_count, from->next, skip, eof);
     }
 }
 
