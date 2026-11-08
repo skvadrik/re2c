@@ -137,6 +137,7 @@ static constexpr const char* DEFAULT_SYNTAX_RUST =
     "re2c:YYMTAGN = \"YYMTAGN\";\n"
     "re2c:YYMTAGP = \"YYMTAGP\";\n"
     "re2c:YYPEEK = (.api.generic ? \"YYPEEK\" : \"get_unchecked\");\n"
+    "re2c:YYPTYPE = \"usize\";\n"
     "re2c:YYRESTORE = \"YYRESTORE\";\n"
     "re2c:YYRESTORECTX = \"YYRESTORECTX\";\n"
     "re2c:YYRESTORETAG = \"YYRESTORETAG\";\n"

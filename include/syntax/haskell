@@ -135,6 +135,7 @@ re2c:YYMAXNMATCH = "yymaxnmatch";
 re2c:YYMTAGN = "yymtagn";
 re2c:YYMTAGP = "yymtagp";
 re2c:YYPEEK = (.api.record ? "index" : "yypeek");
+re2c:YYPTYPE = "Int";
 re2c:YYRESTORE = "yyrestore";
 re2c:YYRESTORECTX = "yyrestorectx";
 re2c:YYRESTORETAG = "yyrestoretag";

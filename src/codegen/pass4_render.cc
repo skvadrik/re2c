@@ -1073,6 +1073,9 @@ class RenderTagOps : public RenderCallback {
         case StxVarId::OFFSET:
             rctx.os << code->dist;
             break;
+        case StxVarId::PTYPE:
+            rctx.os << opts->api_ptr_type;
+            break;
         case StxVarId::RESTORETAG:
             argsubst(rctx.os, opts->api_restore_tag, opts->api_sigil, "tag", true, code->tag1);
             break;

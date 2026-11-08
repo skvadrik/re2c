@@ -90,6 +90,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.api_style = defaults.api_style;
         real.api_sigil = defaults.api_sigil;
         real.api_char_type = defaults.api_char_type;
+        real.api_ptr_type = defaults.api_ptr_type;
         real.api_input = defaults.api_input;
         real.api_cursor = defaults.api_cursor;
         real.api_marker = defaults.api_marker;

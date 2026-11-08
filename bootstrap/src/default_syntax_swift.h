@@ -137,6 +137,7 @@ static constexpr const char* DEFAULT_SYNTAX_SWIFT =
     "re2c:YYMTAGN = \"yymtagn\";\n"
     "re2c:YYMTAGP = \"yymtagp\";\n"
     "re2c:YYPEEK = \"yypeek\";\n"
+    "re2c:YYPTYPE = \"Int\";\n"
     "re2c:YYRESTORE = \"yyrestore\";\n"
     "re2c:YYRESTORECTX = \"yyrestorectx\";\n"
     "re2c:YYRESTORETAG = \"yyrestoretag\";\n"

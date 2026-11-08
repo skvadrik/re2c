@@ -391,6 +391,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(MTAGN, "YYMTAGN") \
     STX_LOCAL_VAR(MTAGP, "YYMTAGP") \
     STX_LOCAL_VAR(PEEK, "YYPEEK") \
+    STX_LOCAL_VAR(PTYPE, "YYPTYPE") \
     STX_LOCAL_VAR(RECORD, "yyrecord") \
     STX_LOCAL_VAR(RESTORE, "YYRESTORE") \
     STX_LOCAL_VAR(RESTORECTX, "YYRESTORECTX") \
@@ -556,6 +557,7 @@ enum class StxVarId : uint32_t {
 // allows one to set API defauls conditionally based on the chosen API, style, sigil etc.).
 #define RE2C_MUTCODES \
     MUTCODE(api_char_type) \
+    MUTCODE(api_ptr_type) \
     MUTCODE(api_cond_type) \
     MUTCODE(api_input) \
     MUTCODE(api_cursor) \

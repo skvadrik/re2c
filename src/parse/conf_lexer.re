@@ -215,6 +215,7 @@ Ret Input::lex_conf(Opt& opts) {
     "define:"? "YYMTAGN"                     { RET_CONF_CODE(api_mtag_neg); }
     "define:"? "YYMTAGP"                     { RET_CONF_CODE(api_mtag_pos); }
     "define:"? "YYPEEK"                      { RET_CONF_CODE(api_peek); }
+    "define:"? "YYPTYPE"                     { RET_CONF_CODE(api_ptr_type); }
     "define:"? "YYRESTORE"                   { RET_CONF_CODE(api_restore); }
     "define:"? "YYRESTORECTX"                { RET_CONF_CODE(api_restore_ctx); }
     "define:"? "YYRESTORETAG"                { RET_CONF_CODE(api_restore_tag); }
@@ -729,6 +730,7 @@ start:
     "YYMTAGN"      { RET_VAR(StxVarId::MTAGN); }
     "YYMTAGP"      { RET_VAR(StxVarId::MTAGP); }
     "YYPEEK"       { RET_VAR(StxVarId::PEEK); }
+    "YYPTYPE"      { RET_VAR(StxVarId::PTYPE); }
     "yyrecord"     { RET_VAR(StxVarId::RECORD); }
     "YYRESTORE"    { RET_VAR(StxVarId::RESTORE); }
     "YYRESTORECTX" { RET_VAR(StxVarId::RESTORECTX); }
