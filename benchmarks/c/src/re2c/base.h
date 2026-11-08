@@ -147,4 +147,34 @@ namespace re2c_vec_00__strings {
 
 #undef BENCH_VEC
 
+// Benchmarks for `--vectorize-linear` (see lin_base.re).
+#define BENCH_LIN(name) \
+namespace re2c_##name { \
+    struct bench_sentinel_scalar { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_sentinel_linear { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_bounded_scalar { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_bounded_linear { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_buffered_scalar { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_buffered_linear { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    bool test(const char* input, long expected); \
+    void register_regimes(); \
+    bool test_regimes(); \
+}
+
+BENCH_LIN(lin_00__http)
+
+#undef BENCH_LIN
+
 #endif // _RE2C_BENCHMARKS_C_RE2C_BASE_

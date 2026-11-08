@@ -246,4 +246,13 @@ void Warn::undefined_syntax_config(const loc_t& loc, const char* name) {
     }
 }
 
+void Warn::vectorize_linear_disabled(const loc_t& loc, const char* reason) {
+    if (mask[VECTORIZE_LINEAR_DISABLED] & WARNING) {
+        const bool e = mask[VECTORIZE_LINEAR_DISABLED] & ERROR;
+        error_accuml |= e;
+        msg.warning(names[VECTORIZE_LINEAR_DISABLED], loc, e,
+                "linear vectorization is disabled: %s", reason);
+    }
+}
+
 } // namespace re2c

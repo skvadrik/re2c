@@ -58,6 +58,10 @@ set(VEC_BENCHMARKS
     "vec_01__uri_rfc3986"
     "vec_02__uri_simple"
 )
+# Benchmarks for `--vectorize-linear` (portable C, see src/re2c/lin_base.re).
+set(LIN_BENCHMARKS
+    "lin_00__http"
+)
 # Optional third-party references for the vec_* benchmarks (off by default, found with pkg-config;
 # they must be installed separately, see README).
 option(RE2C_BENCH_SIMDJSON "Add simdjson reference benchmarks on the json data set" OFF)
@@ -148,6 +152,23 @@ foreach(bench ${VEC_BENCHMARKS})
     list(APPEND GEN "${gen_file}")
     list(APPEND VEC_GEN "${gen_file}")
 endforeach()
+set(LIN_GEN "")
+foreach(bench ${LIN_BENCHMARKS})
+    set(src_file "${SRC_DIR}/re2c/${bench}.re")
+    set(gen_file "${GEN_DIR}/re2c/${bench}.cc")
+    set(pregen_file "${PREGEN_DIR}/re2c/${bench}.cc")
+    file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
+    file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
+    add_custom_command(
+        OUTPUT "${gen_file}"
+        COMMAND "${RE2C}" ${RE2C_FLAGS} "${rel_src_file}" -o "${rel_gen_file}"
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${gen_file}" "${pregen_file}"
+        DEPENDS "${src_file}" "${SRC_DIR}/re2c/lin_base.re" "${SRC_DIR}/re2c/lin_http_rules.re"
+            "${RE2C}"
+    )
+    list(APPEND GEN "${gen_file}")
+    list(APPEND LIN_GEN "${gen_file}")
+endforeach()
 
 # binaries
 if("${GBENCHMARK_INCLUDE_DIR}" STREQUAL "")
@@ -192,6 +213,8 @@ foreach(compiler IN ZIP_LISTS COMPILERS COMPNAMES)
             list(APPEND obj_flags ${VEC_CXX_FLAGS})
             list(APPEND obj_deps "${SRC_DIR}/re2c/vec_regimes.h"
                 "${SRC_DIR}/re2c/base.h" "${SRC_DIR}/ref/vec_ref.h")
+        elseif("${gen_file}" IN_LIST LIN_GEN)
+            list(APPEND obj_deps "${SRC_DIR}/re2c/lin_regimes.h" "${SRC_DIR}/re2c/base.h")
         endif()
         add_custom_command(
             OUTPUT "${obj_file}"

@@ -231,7 +231,8 @@ enum class StxLOpt {
     RETVAL,
     MANY,
     BACKWARD,
-    NESTED
+    NESTED,
+    WIDE
 };
 
 extern const char* ZERO_COND;

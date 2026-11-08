@@ -1,4 +1,7 @@
 #include <benchmark/benchmark.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "re2c/base.h"
 #include "ragel/base.h"
@@ -35,6 +38,21 @@
         re2c_##qual::bench_buffered_vector_sse2(), "data/" #data "/big", count2); \
     benchmark::RegisterBenchmark(name "-" CXX "_re2c-buffered-vector", \
         re2c_##qual::bench_buffered_vector(), "data/" #data "/big", count2);
+
+// Benchmarks for `--vectorize-linear`: scalar and linear-vectorized lexers generated from the same rules.
+#define GROUP_LIN(qual, name, data, count2) \
+    benchmark::RegisterBenchmark(name "-" CXX "_re2c-sentinel-scalar", \
+        re2c_##qual::bench_sentinel_scalar(), "data/" #data "/big", count2); \
+    benchmark::RegisterBenchmark(name "-" CXX "_re2c-sentinel-linear", \
+        re2c_##qual::bench_sentinel_linear(), "data/" #data "/big", count2); \
+    benchmark::RegisterBenchmark(name "-" CXX "_re2c-bounded-scalar", \
+        re2c_##qual::bench_bounded_scalar(), "data/" #data "/big", count2); \
+    benchmark::RegisterBenchmark(name "-" CXX "_re2c-bounded-linear", \
+        re2c_##qual::bench_bounded_linear(), "data/" #data "/big", count2); \
+    benchmark::RegisterBenchmark(name "-" CXX "_re2c-buffered-scalar", \
+        re2c_##qual::bench_buffered_scalar(), "data/" #data "/big", count2); \
+    benchmark::RegisterBenchmark(name "-" CXX "_re2c-buffered-linear", \
+        re2c_##qual::bench_buffered_linear(), "data/" #data "/big", count2);
 
 // Hand-written reference lexers that produce the same token stream (see ref/vec_strings_ref.cc).
 #define GROUP_VEC_REF(name, data, count1, count2) \
@@ -101,6 +119,9 @@ int main(int argc, char** argv) {
     GROUP(submatch_36__rep_5_rep_3_rep_2, "rep-5-rep-3-rep-2", rep, 18290, 16790220);
     GROUP(submatch_37__rep_13_rep_11_rep_7, "rep-13-rep-11-rep-7", rep, 18290, 16790220);
     GROUP(submatch_38__rep_23_rep_19_rep_17, "rep-23-rep-19-rep-17", rep, 18290, 16790220);
+
+    re2c_lin_00__http::register_regimes();
+    GROUP_LIN(lin_00__http, "lin-http", http, 158455440);
 
 #ifdef RE2C_BENCH_VECTORIZE
     // Vectorized lexers are compiled with -mavx2 and cannot run on a CPU without AVX2.

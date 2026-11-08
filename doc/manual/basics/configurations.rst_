@@ -195,6 +195,10 @@ Here is a full list of configurations supported by |re2c|:
     Same as the ``--vectorize-size`` option, but can be configured on per-block
     basis. Supported values are ``16`` and ``32`` (the default).
 
+``re2c:vectorize:linear``, ``re2c:flags:vectorize:linear``, ``re2c:flags:vectorize-linear``
+    Same as the ``--vectorize-linear`` option, but can be configured on per-block
+    basis.
+
 ``re2c:posix-captures``, ``re2c:flags:posix-captures``, ``re2c:flags:P``
     Same as the ``--posix-captures`` option, but can be configured on per-block
     basis.
@@ -324,6 +328,18 @@ Here is a full list of configurations supported by |re2c|:
 
 ``re2c:YYPEEK``, ``re2c:define:YYPEEK``
     Defines generic API primitive ``YYPEEK``.
+
+``re2c:YYPEEK2``, ``re2c:define:YYPEEK2``
+    Defines generic API primitive ``YYPEEK2`` (loads a little-endian 2-byte
+    unsigned word at the current input position with ``--vectorize-linear``).
+
+``re2c:YYPEEK4``, ``re2c:define:YYPEEK4``
+    Defines generic API primitive ``YYPEEK4`` (loads a little-endian 4-byte
+    unsigned word at the current input position with ``--vectorize-linear``).
+
+``re2c:YYPEEK8``, ``re2c:define:YYPEEK8``
+    Defines generic API primitive ``YYPEEK8`` (loads a little-endian 8-byte
+    unsigned word at the current input position with ``--vectorize-linear``).
 
 ``re2c:YYPEEK16``, ``re2c:define:YYPEEK16``
     Defines generic API primitive ``YYPEEK16`` (loads a 16-byte vector at the

@@ -112,3 +112,15 @@ of iterations and divide the difference of cycles by the difference of bytes
     # cycles/byte = (cycles(220) - cycles(20)) / (200 * size of data/json/big)
 
 (on hybrid Intel CPUs, use cpu_core/cycles/u and cpu_core/instructions/u).
+
+Benchmarks for --vectorize-linear (lin_*)
+-----------------------------------------
+
+The lin_00__http benchmark (src/re2c/lin_00__http.re, rules in
+src/re2c/lin_http_rules.re, driver in src/re2c/lin_base.re, synthetic HTTP
+regimes in src/re2c/lin_regimes.h) compares scalar and linear-vectorized lexers
+generated from the same HTTP header rules on the `http` corpus and on the
+`lin-regime-http_*` workloads (known and unknown header names in isolated,
+concatenated-names and header-with-values layouts). Go benchmarks for
+`--vectorize-linear` live in `benchmarks/go` and share the generator
+`benchmarks/_scripts/gen_linear.py`.

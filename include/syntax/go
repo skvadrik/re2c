@@ -5,7 +5,8 @@ supported_api_styles = ["free-form", "functions"];
 supported_code_models = ["goto-label", "loop-switch", "recursive-functions"];
 supported_targets = ["code", "dot"];
 supported_archs = ["x86"];
-supported_features = ["nested-ifs", "bitmaps", "tags", "captures", "captvars", "vectorize-loops"];
+supported_features = ["nested-ifs", "bitmaps", "tags", "captures", "captvars", "vectorize-loops",
+    "vectorize-linear"];
 
 
 // language-specific options ---------------------------------------------------
@@ -97,6 +98,7 @@ re2c:unsafe = 0;
 re2c:monadic = 0;
 re2c:arch = none;
 re2c:vectorize:loops = 0;
+re2c:vectorize:linear = 0;
 re2c:vectorize:size = 32;
 re2c:encoding:ebcdic = 0;
 re2c:encoding:utf32 = 0;
@@ -139,6 +141,9 @@ re2c:YYMAXNMATCH = "YYMAXNMATCH";
 re2c:YYMTAGN = "YYMTAGN";
 re2c:YYMTAGP = "YYMTAGP";
 re2c:YYPEEK = "YYPEEK";
+re2c:YYPEEK2 = "YYPEEK2";
+re2c:YYPEEK4 = "YYPEEK4";
+re2c:YYPEEK8 = "YYPEEK8";
 re2c:YYPEEK16 = "YYPEEK16";
 re2c:YYPEEK32 = "YYPEEK32";
 re2c:YYPTYPE = "int";
@@ -429,6 +434,32 @@ code:yybm_match = "(" yybm "[" offset "+" yych "] & " mask ") != 0";
 
 code:yytarget_filter = <undefined>;
 
+code:hex_literal = val;
+
+// Atomic wide-peek expressions for linear vectorization (2, 4, and 8 bytes).
+// Assembled from single bytes of a subslice (highest offset first so its bounds check covers
+// earlier offsets, and uint8(...) so signed byte slices zero-extend rather than sign-extend
+// (and wide element slices match re2c:yych:conversion = 1)).
+code:yypeek2 = (.api.generic
+    ? "(" YYPEEK2 (.api_style.functions ? "()") ")"
+    : "(uint16(uint8(" YYINPUT "[" YYCURSOR ":][1]))<<8"
+      " | uint16(uint8(" YYINPUT "[" YYCURSOR ":][0])))");
+code:yypeek4 = (.api.generic
+    ? "(" YYPEEK4 (.api_style.functions ? "()") ")"
+    : "(uint32(uint8(" YYINPUT "[" YYCURSOR ":][3]))<<24"
+      " | uint32(uint8(" YYINPUT "[" YYCURSOR ":][0]))"
+      " | uint32(uint8(" YYINPUT "[" YYCURSOR ":][1]))<<8"
+      " | uint32(uint8(" YYINPUT "[" YYCURSOR ":][2]))<<16)");
+code:yypeek8 = (.api.generic
+    ? "(" YYPEEK8 (.api_style.functions ? "()") ")"
+    : "(uint64(uint8(" YYINPUT "[" YYCURSOR ":][7]))<<56"
+      " | uint64(uint8(" YYINPUT "[" YYCURSOR ":][0]))"
+      " | uint64(uint8(" YYINPUT "[" YYCURSOR ":][1]))<<8"
+      " | uint64(uint8(" YYINPUT "[" YYCURSOR ":][2]))<<16"
+      " | uint64(uint8(" YYINPUT "[" YYCURSOR ":][3]))<<24"
+      " | uint64(uint8(" YYINPUT "[" YYCURSOR ":][4]))<<32"
+      " | uint64(uint8(" YYINPUT "[" YYCURSOR ":][5]))<<40"
+      " | uint64(uint8(" YYINPUT "[" YYCURSOR ":][6]))<<48)");
 
 // Atomic x86 vector primitives for Go `simd/archsimd` (16-byte XMM and 32-byte YMM).
 // Control flow (`if`, `switch`, `for`, cursor advance, `yypeek`) is emitted by the

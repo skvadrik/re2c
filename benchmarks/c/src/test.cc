@@ -126,6 +126,11 @@ int main(int argc, char** argv) {
     TEST(submatch_37__rep_13_rep_11_rep_7, rep, 18290, 16790220, 0);
     TEST(submatch_38__rep_23_rep_19_rep_17, rep, 18290, 16790220, E_RAGEL);
 
+    fprintf(stderr, "checking lin_00__http on http and synthetic regimes...\n");
+    ok &= re2c_lin_00__http::test("data/http/small", 35640);
+    if (!quick) ok &= re2c_lin_00__http::test("data/http/big", 158455440);
+    ok &= re2c_lin_00__http::test_regimes();
+
 #ifdef RE2C_BENCH_VECTORIZE
     if (__builtin_cpu_supports("avx2")) {
         TEST_VEC(vec_00__strings, strshort, 110687, 28335872);

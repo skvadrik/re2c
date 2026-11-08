@@ -81,6 +81,12 @@
     re2c:define:YYMTAGP = "";
     re2c:YYPEEK = "";
     re2c:define:YYPEEK = "";
+    re2c:YYPEEK2 = "";
+    re2c:define:YYPEEK2 = "";
+    re2c:YYPEEK4 = "";
+    re2c:define:YYPEEK4 = "";
+    re2c:YYPEEK8 = "";
+    re2c:define:YYPEEK8 = "";
     re2c:YYPEEK16 = "";
     re2c:define:YYPEEK16 = "";
     re2c:YYPEEK32 = "";
@@ -186,6 +192,9 @@
     re2c:vectorize:loops = 0;
     re2c:vectorize:size = 16;
     re2c:vectorize:size = 32;
+    re2c:vectorize:linear = 0;
+    re2c:flags:vectorize:linear = 0;
+    re2c:flags:vectorize-linear = 0;
     // re2c:unsafe = 0; // unsupported for C backend
     // re2c:monadic = 0; // unsupported for C backend
 

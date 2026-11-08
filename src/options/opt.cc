@@ -76,6 +76,75 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
     return Ret::OK;
 }
 
+// Why `re2c:vectorize:linear` has no effect with the current options, or nullptr if it applies.
+// This is the single source of the policy: `fix_mutopt` clears the real option when a reason
+// exists, and `opt_t::vectorize_linear_disabled_reason` reports the same reason to the user.
+static const char* vectorize_linear_disabled_reason(
+        const Enc& encoding,
+        uint32_t fill_eof,
+        Api api,
+        bool is_default_api_limit,
+        bool is_default_api_less_than,
+        bool fill_enable,
+        bool fill_check,
+        const StxCodes* code_yyshift,
+        const StxCodes* code_yylessthan,
+        const StxCodes* code_hex_literal,
+        const StxCodes* code_yypeek2,
+        const StxCodes* code_yypeek4,
+        const StxCodes* code_yypeek8) {
+    if (is_undefined(code_yyshift)) {
+        return "code:yyshift is undefined";
+    } else if (is_undefined(code_yylessthan)) {
+        return "code:yylessthan is undefined";
+    } else if (is_undefined(code_hex_literal)) {
+        return "code:hex_literal is undefined";
+    } else if (is_undefined(code_yypeek2) && is_undefined(code_yypeek4)
+            && is_undefined(code_yypeek8)) {
+        return "code:yypeek2, code:yypeek4 and code:yypeek8 are undefined";
+    } else if (encoding.cunit_size() != 1) {
+        // Only one-byte code unit encodings can be read as raw bytes.
+        return "target encoding has multi-byte code units";
+    } else if (fill_eof != NOEOF) {
+        // With re2c:eof, YYFILL does not reserve input for the whole chain in advance, so a
+        // multi-character read may go past the end of the buffer.
+        return "re2c:eof is configured";
+    } else if (api != Api::GENERIC && is_default_api_limit) {
+        // The bounds guard for wide reads checks YYLIMIT via `code:yylessthan`, so lexers that do
+        // not check YYFILL (sentinel-only lexers, or YYFILL without the check) must configure an
+        // explicit YYLIMIT.
+        if (!fill_enable) {
+            return "YYFILL is disabled and YYLIMIT is not explicitly configured";
+        } else if (!fill_check) {
+            return "YYFILL check is disabled and YYLIMIT is not explicitly configured";
+        }
+    } else if (api == Api::GENERIC && is_default_api_less_than) {
+        if (!fill_enable) {
+            return "YYFILL is disabled and YYLESSTHAN is not explicitly configured";
+        } else if (!fill_check) {
+            return "YYFILL check is disabled and YYLESSTHAN is not explicitly configured";
+        }
+    }
+    return nullptr;
+}
+
+const char* opt_t::vectorize_linear_disabled_reason() const {
+    return re2c::vectorize_linear_disabled_reason(
+            encoding,
+            fill_eof,
+            api,
+            is_default_api_limit,
+            is_default_api_less_than,
+            fill_enable,
+            fill_check,
+            code_yyshift,
+            code_yylessthan,
+            code_hex_literal,
+            code_yypeek2,
+            code_yypeek4,
+            code_yypeek8);
+}
+
 // This function should only change real mutable options (based on the global options, default
 // mutable options and default flags). User-defined options are intentionally not passed to prevent
 // accidental change, and default flags are passed as read-only.
@@ -106,6 +175,9 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.api_ctxmarker = defaults.api_ctxmarker;
         real.api_limit = defaults.api_limit;
         real.api_peek = defaults.api_peek;
+        real.api_peek2 = defaults.api_peek2;
+        real.api_peek4 = defaults.api_peek4;
+        real.api_peek8 = defaults.api_peek8;
         real.api_peek16 = defaults.api_peek16;
         real.api_peek32 = defaults.api_peek32;
         real.api_skip = defaults.api_skip;
@@ -356,6 +428,35 @@ LOCAL_NODISCARD(Ret fix_mutopt(
             RET_FAIL(error("`vectorize:loops` requires single-byte code units"));
         }
     }
+    if (!is_default.vectorize_linear && !glob.supported_features_contains("vectorize-linear")) {
+        RET_FAIL(error("`vectorize-linear` feature is not supported for this backend"));
+    }
+    if (real.vectorize_linear && glob.target == Target::DOT) {
+        // The DOT target only dumps the DFA graph and does not generate wide reads.
+        real.vectorize_linear = false;
+    }
+    if (real.vectorize_linear && glob.target == Target::SKELETON) {
+        RET_FAIL(error("`vectorize:linear` is not supported with --skeleton"));
+    }
+    // Linear vectorization is silently ineffective for some option combinations; the reason is
+    // reported via `opt_t::vectorize_linear_disabled_reason` when the user asked for the option.
+    if (real.vectorize_linear
+            && vectorize_linear_disabled_reason(
+                    real.encoding,
+                    real.fill_eof,
+                    real.api,
+                    is_default.api_limit,
+                    is_default.api_less_than,
+                    real.fill_enable,
+                    real.fill_check,
+                    glob.code_yyshift,
+                    glob.code_yylessthan,
+                    glob.code_hex_literal,
+                    glob.code_yypeek2,
+                    glob.code_yypeek4,
+                    glob.code_yypeek8) != nullptr) {
+        real.vectorize_linear = false;
+    }
     if (!is_default.tags && !glob.supported_features_contains("tags")) {
         RET_FAIL(error("`tags` feature is not supported for this backend"));
     }
@@ -457,7 +558,7 @@ Ret Opt::sync() {
 
 Ret Opt::snapshot(const opt_t** opts) {
     CHECK_RET(sync());
-    *opts = new opt_t(glob, real, is_default, symtab);
+    *opts = new opt_t(glob, real, is_default, user.vectorize_linear, symtab);
     return Ret::OK;
 }
 
@@ -472,6 +573,7 @@ Ret Opt::restore(const opt_t* opts) {
     is_default.name = opts->is_default_##name;
     RE2C_MUTCODES
 #undef MUTCODE
+    user.vectorize_linear = opts->user_vectorize_linear;
 
     symtab = opts->symtab;
 
@@ -494,6 +596,10 @@ Ret Opt::merge(const opt_t* opts, Input& input) {
     }
     RE2C_MUTCODES
 #undef MUTCODE
+    if (!opts->is_default_vectorize_linear) {
+        user.vectorize_linear = opts->user_vectorize_linear;
+        is_default.vectorize_linear = false;
+    }
 
     CHECK_RET(merge_symtab(symtab, opts->symtab, input));
 

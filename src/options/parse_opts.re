@@ -84,8 +84,9 @@ opt_warn: /*!local:re2c
     "undefined-control-flow" end { msg.warn.set(Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
     "unreachable-rules"      end { msg.warn.set(Warn::UNREACHABLE_RULES,      option); goto opt; }
     "deprecated-eof-rule"    end { msg.warn.set(Warn::DEPRECATED_EOF_RULE,    option); goto opt; }
-    "useless-escape"         end { msg.warn.set(Warn::USELESS_ESCAPE,         option); goto opt; }
-    "sentinel-in-midrule"    end { msg.warn.set(Warn::SENTINEL_IN_MIDRULE,    option); goto opt; }
+    "useless-escape"            end { msg.warn.set(Warn::USELESS_ESCAPE,            option); goto opt; }
+    "sentinel-in-midrule"       end { msg.warn.set(Warn::SENTINEL_IN_MIDRULE,       option); goto opt; }
+    "vectorize-linear-disabled" end { msg.warn.set(Warn::VECTORIZE_LINEAR_DISABLED, option); goto opt; }
 */
 
 opt_short: /*!local:re2c
@@ -169,6 +170,7 @@ opt_long: /*!local:re2c
     "tags"                    end { opts.set_tags(true);                    goto opt; }
     "no-unsafe"               end { opts.set_unsafe(false);                 goto opt; }
     "vectorize-loops"         end { opts.set_vectorize_loops(true);         goto opt; }
+    "vectorize-linear"        end { opts.set_vectorize_linear(true);        goto opt; }
     "invert-captures"         end { opts.set_captures_invert(true);         goto opt; }
 
     "ebcdic" | "ecb"        end { opts.set_encoding(Enc::Type::EBCDIC, true); goto opt; }

@@ -279,6 +279,15 @@ class GenVecPeek : public RenderCallback {
 
     void render_var(StxVarId var) override {
         switch (var) {
+        case StxVarId::PEEK2:
+            os << opts->api_peek2;
+            break;
+        case StxVarId::PEEK4:
+            os << opts->api_peek4;
+            break;
+        case StxVarId::PEEK8:
+            os << opts->api_peek8;
+            break;
         case StxVarId::PEEK16:
             os << opts->api_peek16;
             break;
@@ -388,6 +397,38 @@ class GenVecCleanup : public RenderCallback {
     }
 
     FORBID_COPY(GenVecCleanup);
+};
+
+class GenHexLiteral : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+    uint64_t value;
+    uint32_t width;
+
+  public:
+    GenHexLiteral(std::ostringstream& os, const opt_t* opts, uint64_t value, uint32_t width)
+        : os(os), opts(opts), value(value), width(width) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::VAL:
+            os << "0x" << std::hex << value << std::dec;
+            break;
+        default:
+            gen_global_var(os, opts, var);
+            break;
+        }
+    }
+
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::WIDE) {
+            return width == 8;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(GenHexLiteral);
 };
 
 } // anonymous namespace
@@ -1499,13 +1540,81 @@ static CodeList* gen_transitions(Output& output, const Adfa& dfa, const State* s
     return transitions;
 }
 
+// Generate the multi-character (broadword) fast path of state `s` (see `Adfa::coalesce_multichar`).
+// When the next `mchar_n` code units are available (`!(code:yylessthan)`) and equal the packed
+// literal `mchar_value`, advance the cursor via `code:yyshift` and jump to `mchar_to`; otherwise
+// execute the ordinary single-character dispatch.
+//
+// In goto/label mode (including loop/switch) this code is emitted before `gen_peek`, so that no
+// scalar byte load precedes the multi-byte expression and the compiler fuses the byte loads into
+// one word load. In recursive-functions mode every branch of the state function must end with a
+// tailcall, and the ordinary dispatch is emitted once by the caller, after `gen_peek`.
+static CodeList* gen_mchar_fast_path(Output& output, const Adfa& dfa, const State* s) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+    const uint32_t n = s->mchar_n;
+    DCHECK(n == 2 || n == 4 || n == 8);
+
+    // In the default (lazy-skip) mode the last character of the chain will be skipped on entry
+    // to `mchar_to` by its ordinary `code_skip`, so only `n - 1` characters are skipped here;
+    // with `--eager-skip` `mchar_to` has no entry skip and all `n` characters are skipped here.
+    CodeList* fast = code_list(alc);
+    const uint32_t nskip = opts->eager_skip ? n : n - 1;
+    if (nskip > 0) {
+        append(fast, code_shift(alc, -static_cast<int32_t>(nskip)));
+    }
+    const CodeJump jump = {s->mchar_to, TCID0, false, false, false};
+    gen_goto(output, dfa, fast, s, jump);
+
+    GenVecPeek peek_cb(buf.stream(), opts);
+    const char* peek = nullptr;
+    switch (n) {
+    case 2: peek = opts->gen_code_yypeek2(buf, peek_cb); break;
+    case 4: peek = opts->gen_code_yypeek4(buf, peek_cb); break;
+    case 8: peek = opts->gen_code_yypeek8(buf, peek_cb); break;
+    default: UNREACHABLE(); break;
+    }
+
+    GenHexLiteral hex_cb(buf.stream(), opts, s->mchar_value, n);
+    const char* literal = opts->gen_code_hex_literal(buf, hex_cb);
+    const char* match = buf.cstr(peek).cstr(" ")
+            .cstr(output.block().binops[OP_CMP_EQ]).cstr(" ").cstr(literal).flush();
+
+    GenLessThan lt_cb(buf.stream(), opts, n);
+    const char* less_than = opts->gen_code_yylessthan(buf, lt_cb);
+    const char* guard = buf.cstr("!(").cstr(less_than).cstr(")").flush();
+
+    CodeList* stmts = code_list(alc);
+    // The ordinary dispatch is appended by the caller, so it appears exactly once.
+    // In rec/func mode the fast path ends in a tailcall, and the guard's fallthrough reaches the
+    // same ordinary dispatch without duplicating it in both branches.
+    CodeList* inner = code_list(alc);
+    append(inner, code_if_then_else(alc, match, fast, nullptr));
+    append(stmts, code_if_then_else(alc, guard, inner, nullptr));
+    return stmts;
+}
+
+// In goto/label mode the fast path is emitted earlier (before the peek, so that the compiler can
+// fuse the byte loads) and the dispatch alone here. With debug output the fast path stays after the
+// peek so that the entry YYDEBUG statement of the head state runs before the fast path.
+static bool mchar_before_peek(const opt_t* opts, const State* s) {
+    return s->mchar_n > 0 && opts->code_model != CodeModel::REC_FUNC && !opts->debug;
+}
+
 static void emit_state(
         Output& output, const Adfa& dfa, const State* s, CodeList* stmts, CodeList* continuation) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
-    CodeList* transitions = gen_transitions(output, dfa, s);
+    CodeList* transitions;
+    if (s->mchar_n > 0 && !mchar_before_peek(opts, s)) {
+        transitions = gen_mchar_fast_path(output, dfa, s);
+        append(transitions, gen_transitions(output, dfa, s));
+    } else {
+        transitions = gen_transitions(output, dfa, s);
+    }
     append(transitions, continuation);
 
     switch (s->kind) {
@@ -1535,6 +1644,10 @@ static void emit_state(
         // All code from YYFILL up to transitions belongs to the ELSE branch of YYEND.
         CodeList* tail = code_list(alc);
         gen_fill_and_label(output, tail, dfa, s);
+        // The multi-character fast path runs before the peek, see `gen_mchar_fast_path`.
+        if (mchar_before_peek(opts, s)) {
+            append(tail, gen_mchar_fast_path(output, dfa, s));
+        }
         gen_peek(alc, s, tail);
         if (is_start && dfa.custom_start_label && opts->debug) {
             append(tail, code_debug(alc, dfa.custom_start_label->index));
