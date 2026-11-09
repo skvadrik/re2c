@@ -1610,7 +1610,7 @@ static void render(RenderContext& rctx, const Code* code) {
     }
     case CodeKind::SHIFTMTAG: {
         RenderTagOps callback(rctx, &code->tag);
-        rctx.opts->render_code_yyshiftstag(rctx.os, callback);
+        rctx.opts->render_code_yyshiftmtag(rctx.os, callback);
         break;
     }
     case CodeKind::STAGN: {
