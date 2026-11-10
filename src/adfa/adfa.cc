@@ -313,6 +313,79 @@ void Adfa::find_base_state(const opt_t* opts) {
     operator delete(span);
 }
 
+// A base state has a reflexive transition on a character class: either directly (if the state was
+// not split) or through the immediately following MOVE part (if it was split by tunneling).
+static State* simd_reflexive_body(State* s) {
+    for (uint32_t i = 0; i < s->go.span_count; ++i) {
+        if (s->go.span[i].to == s) return s;
+    }
+    State* b = s->next;
+    if (b && b->kind == StateKind::MOVE) {
+        for (uint32_t i = 0; i < b->go.span_count; ++i) {
+            if (b->go.span[i].to == s) return b;
+        }
+    }
+    return nullptr;
+}
+
+// Per-state preconditions for vectorization of a reflexive character class. Anything that may
+// observe intermediate positions or side effects (YYMARKER saves, tag operations, EOF
+// transitions) forbids the fast-forward loop. Accepting states are fine as long as they are
+// save- and tag-free: the rule action runs on the transition that leaves the class, which the
+// scalar dispatcher still processes. Tags are checked on the loop state and its body only: tags
+// elsewhere in the DFA are set and read by scalar code at positions the loop never skips.
+// Option combinations that the loop does not support (skeleton target, YYFILL and bounds
+// checking, EOF rule, code unit size) are rejected as errors when options are fixed (see `opt.cc`),
+// so they are only asserted here.
+static bool simd_is_eligible(State* s, const opt_t* opts, State** pbody) {
+    if (!opts->vectorize_loops) return false;
+    DCHECK(opts->target == Target::CODE);
+    DCHECK(opts->fill_enable && opts->fill_check && opts->fill_eof == NOEOF);
+    DCHECK(opts->encoding.cunit_size() == 1);
+    if (!s->is_base || s->fill == 0) return false;
+
+    State* body = simd_reflexive_body(s);
+    if (body == nullptr) return false;
+
+    if (s->save != NOSAVE || body->save != NOSAVE) return false;
+    if (s->go.tags != TCID0 || body->go.tags != TCID0) return false;
+    if (s->rule_tags != TCID0 || body->rule_tags != TCID0) return false;
+    if (s->fall_tags != TCID0 || body->fall_tags != TCID0) return false;
+    if (s->eof_tags != TCID0 || body->eof_tags != TCID0) return false;
+    DCHECK(!s->go.skip);
+    if (s->eof_state != nullptr || body->eof_state != nullptr) return false;
+
+    uint32_t nclass = 0;
+    for (uint32_t i = 0; i < body->go.span_count; ++i) {
+        if (body->go.span[i].to == s) {
+            if (body->go.span[i].tags != TCID0) return false;
+            ++nclass;
+        }
+    }
+    if (nclass == 0 || nclass > 8) return false;
+
+    *pbody = body;
+    return true;
+}
+
+static void find_simd_states(State* head, const opt_t* opts) {
+    for (State* s = head; s; s = s->next) {
+        s->simd = false;
+        s->simd_body = nullptr;
+        s->is_simd_body = false;
+        s->simd_head = nullptr;
+    }
+    for (State* s = head; s; s = s->next) {
+        State* body = nullptr;
+        if (simd_is_eligible(s, opts, &body)) {
+            s->simd = true;
+            s->simd_body = body;
+            body->is_simd_body = true;
+            body->simd_head = s;
+        }
+    }
+}
+
 // note [tag hoisting, skip hoisting and tunneling]
 //
 // Tag hoisting is simple: if all transitions have the same commands, they can be hoisted out of
@@ -460,6 +533,190 @@ void Adfa::prepare(const opt_t* opts) {
     // see note [tag hoisting, skip hoisting and tunneling]
     if (opts->eager_skip) {
         hoist_tags_and_skip(opts);
+    }
+
+    // find base states that can start with a SIMD fast-forward loop over their reflexive class
+    if (opts->vectorize_loops) {
+        find_simd_states(head, opts);
+    }
+}
+
+// note [broadword multi-character fast path]
+//
+// A "linear chain" is a sequence of states s0 -> s1 -> ... -> sK where every transition is a
+// single-character transition with no TDFA tags. Such chains are typical for fixed strings, e.g.
+// "Content-Length:": after a few characters the DFA deterministically follows one character at a
+// time. For such a chain the generator adds a fast path at s0: read K code units at once and, if
+// they are the characters on the chain, skip them and jump straight to sK. Otherwise the ordinary
+// single-character dispatch of s0 runs unchanged. The fast path is taken only when the ordinary
+// dispatch would follow the chain transition by transition, so the recognized language, the rule
+// and the cursor are the same.
+//
+// The fast path jumps over the code of the intermediate states s1 .. s(K-1), so they must not do
+// anything on entry besides consuming a character and reading the next one: no rule, no save
+// action (YYMARKER, yyaccept), no YYFILL, no end-of-input check and no tag or skip hoisted into
+// the state. The last state sK is entered normally, so it can be any consuming state, in particular
+// the accepting state of a literal: its skip, save action, YYFILL and dispatch run as usual. The
+// first state s0 runs its own entry code before the fast path, so it only needs a dispatch without
+// hoisted tags or skip.
+//
+// Chains are followed while each state has exactly one single-character transition to a state
+// that the chain can pass through; the last transition may instead be the only one to a consuming
+// state. Chains are selected in breadth-first order from the start state, and the intermediate
+// states of a selected chain are not used as heads of other chains: otherwise, after a failed
+// wide comparison, the ordinary dispatch would enter the next state and start another wide
+// comparison shifted by one character.
+//
+// The reads cover 2, 4 or 8 code units via `code:yypeek2`, `code:yypeek4` and `code:yypeek8`,
+// guarded by `code:yylessthan` and advancing the cursor via `code:yyshift`. With the `re2c:eof`
+// configuration YYFILL does not reserve input in advance, so the optimization is disabled. It is
+// also restricted to one-byte target code unit encodings, where the raw input bytes are the DFA
+// character codes.
+
+namespace {
+
+bool mchar_passable(const State* s, const opt_t* opts) {
+    return s->kind == StateKind::MATCH
+        && s->rule == Rule::NONE
+        && s->save == NOSAVE
+        && (!opts->fill_enable || s->fill == 0)
+        && s->eof_state == nullptr
+        && !s->go.skip
+        && s->go.tags == TCID0
+        && !s->simd
+        && !s->is_simd_body;
+}
+
+bool mchar_head(const State* s) {
+    return s->kind == StateKind::MATCH
+        && s->eof_state == nullptr
+        && !s->go.skip
+        && s->go.tags == TCID0
+        && !s->simd
+        && !s->is_simd_body;
+}
+
+// Find the next state on a chain from state `s` (see note [broadword multi-character fast path]).
+// `ch` receives the character code, `last` is set if the chain cannot continue past the state.
+State* mchar_next(const State* s, const opt_t* opts, uint32_t* ch, bool* last) {
+    State* pass = nullptr, *stop = nullptr;
+    uint32_t npass = 0, nstop = 0, cpass = 0, cstop = 0;
+    uint32_t lb = 0;
+
+    for (uint32_t i = 0; i < s->go.span_count; ++i) {
+        const Span& sp = s->go.span[i];
+        if (sp.ub == lb + 1 && sp.tags == TCID0 && sp.to != nullptr && sp.to != s
+                && sp.to->kind == StateKind::MATCH) {
+            if (mchar_passable(sp.to, opts)) {
+                pass = sp.to;
+                cpass = lb;
+                ++npass;
+            } else {
+                stop = sp.to;
+                cstop = lb;
+                ++nstop;
+            }
+        }
+        lb = sp.ub;
+    }
+
+    if (npass == 1) {
+        *ch = cpass;
+        *last = false;
+        return pass;
+    } else if (npass == 0 && nstop == 1) {
+        *ch = cstop;
+        *last = true;
+        return stop;
+    }
+    return nullptr;
+}
+
+} // anonymous namespace
+
+void Adfa::coalesce_multichar(const opt_t* opts) {
+    // The option is cleared by `fix_mutopt` for the configurations where a multi-character read
+    // is not possible (multi-byte code units, re2c:eof, no explicit bounds limit), see
+    // `vectorize_linear_disabled_reason` in opt.cc.
+    if (!opts->vectorize_linear) return;
+    if (opts->target != Target::CODE) return;
+    if (is_undefined(opts->code_yyshift) || is_undefined(opts->code_yylessthan)) return;
+    const bool has_peek2 = !is_undefined(opts->code_yypeek2);
+    const bool has_peek4 = !is_undefined(opts->code_yypeek4);
+    const bool has_peek8 = !is_undefined(opts->code_yypeek8);
+    if (!has_peek2 && !has_peek4 && !has_peek8) return;
+
+    // Order states breadth-first from the initial state so shallower chain heads are considered
+    // first; `inner` and `to->mchar_n` below still enforce strict non-overlap on general DAGs.
+    std::vector<State*> order;
+    std::set<const State*> seen;
+    std::queue<State*> todo;
+    todo.push(head);
+    seen.insert(head);
+    while (!todo.empty()) {
+        State* s = todo.front();
+        todo.pop();
+        order.push_back(s);
+        for (uint32_t i = 0; i < s->go.span_count; ++i) {
+            State* t = s->go.span[i].to;
+            if (t != nullptr && seen.insert(t).second) todo.push(t);
+        }
+    }
+    for (State* s = head; s; s = s->next) {
+        if (seen.insert(s).second) order.push_back(s);
+    }
+
+    std::set<const State*> inner; // intermediate states of the selected chains
+    for (State* s : order) {
+        if (inner.count(s) != 0 || !mchar_head(s)) continue;
+
+        // Extend the chain up to 8 characters, rejecting cycles.
+        State* path[9];
+        uint32_t path_len = 0;
+        path[path_len++] = s;
+
+        State* node = s;
+        uint64_t value = 0;
+        State* best_to = nullptr;
+        uint32_t best_n = 0;
+        uint64_t best_value = 0;
+
+        for (uint32_t k = 0; k < 8; ++k) {
+            uint32_t ch = 0;
+            bool last = false;
+            State* to = mchar_next(node, opts, &ch, &last);
+            if (to == nullptr || inner.count(to) != 0) break;
+            if (to->mchar_n != 0) last = true;
+
+            bool cycle = false;
+            for (uint32_t i = 0; i < path_len; ++i) {
+                cycle |= path[i] == to;
+            }
+            if (cycle) break;
+
+            value |= static_cast<uint64_t>(ch) << (8 * k);
+            node = to;
+            path[path_len++] = node;
+
+            const uint32_t len = k + 1;
+            if ((len == 2 && has_peek2) || (len == 4 && has_peek4) || (len == 8 && has_peek8)) {
+                best_to = node;
+                best_n = len;
+                best_value = value;
+            }
+            if (last) break;
+        }
+
+        // Exclude all-zero chains (0x00..00) so wide reads do not consume trailing NUL padding
+        // bytes at the end of a buffer.
+        if (best_n >= 2 && best_value != 0) {
+            s->mchar_n = best_n;
+            s->mchar_value = best_value;
+            s->mchar_to = best_to;
+            for (uint32_t i = 1; i < best_n; ++i) {
+                inner.insert(path[i]);
+            }
+        }
     }
 }
 

@@ -29,6 +29,7 @@ struct Skeleton;
     W(EMPTY_CHARACTER_CLASS, "empty-character-class", false) \
     W(MATCH_EMPTY_STRING, "match-empty-string", false) \
     W(NONDETERMINISTIC_TAGS, "nondeterministic-tags", false) \
+    W(VECTORIZE_LINEAR_DISABLED, "vectorize-linear-disabled", true) \
     /* end */
 
 class Warn {
@@ -80,6 +81,7 @@ class Warn {
     void useless_escape(const loc_t& loc, const uint8_t* str, const uint8_t* end);
     void sentinel_in_midrule(const loc_t& loc, const std::string& cond, uint32_t sentinel);
     void undefined_syntax_config(const loc_t& loc, const char* name);
+    void vectorize_linear_disabled(const loc_t& loc, const char* reason);
 };
 
 } // namespace re2c

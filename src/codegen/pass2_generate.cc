@@ -23,6 +23,8 @@ namespace re2c {
 
 static CodeList* gen_goswif(
         Output& output, const Adfa& dfa, const CodeGoSwIf* go, const State* from);
+static void gen_vector_loop(
+        Output& output, const State* s, CodeList* scalar_trans, CodeList* stmts);
 
 namespace {
 
@@ -249,6 +251,184 @@ class GenTargetFilter : public RenderCallback {
     }
 
     FORBID_COPY(GenTargetFilter);
+};
+
+static void gen_global_var(std::ostream& os, const opt_t* opts, StxVarId var) {
+    switch (var) {
+    case StxVarId::NEWLINE:
+        os << "\n";
+        break;
+    case StxVarId::TOPINDENT:
+        os << opts->indent_str;
+        break;
+    case StxVarId::INDENT:
+    case StxVarId::DEDENT:
+        break;
+    default:
+        UNREACHABLE();
+        break;
+    }
+}
+
+class GenVecPeek : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+
+  public:
+    GenVecPeek(std::ostringstream& os, const opt_t* opts): os(os), opts(opts) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::PEEK2:
+            os << opts->api_peek2;
+            break;
+        case StxVarId::PEEK4:
+            os << opts->api_peek4;
+            break;
+        case StxVarId::PEEK8:
+            os << opts->api_peek8;
+            break;
+        case StxVarId::PEEK16:
+            os << opts->api_peek16;
+            break;
+        case StxVarId::PEEK32:
+            os << opts->api_peek32;
+            break;
+        case StxVarId::CURSOR:
+            os << opts->api_cursor;
+            break;
+        case StxVarId::INPUT:
+            os << opts->api_input;
+            break;
+        case StxVarId::RECORD:
+            os << opts->var_record;
+            break;
+        default:
+            gen_global_var(os, opts, var);
+            break;
+        }
+    }
+
+    FORBID_COPY(GenVecPeek);
+};
+
+class GenVecVal : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+    int32_t val;
+
+  public:
+    GenVecVal(std::ostringstream& os, const opt_t* opts, int32_t val)
+        : os(os), opts(opts), val(val) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::VAL:
+            os << val;
+            break;
+        default:
+            gen_global_var(os, opts, var);
+            break;
+        }
+    }
+
+    FORBID_COPY(GenVecVal);
+};
+
+class GenVecUnary : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+    const char* expr;
+
+  public:
+    GenVecUnary(std::ostringstream& os, const opt_t* opts, const char* expr)
+        : os(os), opts(opts), expr(expr) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::LHS:
+            os << expr;
+            break;
+        default:
+            gen_global_var(os, opts, var);
+            break;
+        }
+    }
+
+    FORBID_COPY(GenVecUnary);
+};
+
+class GenVecBinary : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+    const char* lhs;
+    const char* rhs;
+
+  public:
+    GenVecBinary(std::ostringstream& os, const opt_t* opts, const char* lhs, const char* rhs)
+        : os(os), opts(opts), lhs(lhs), rhs(rhs) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::LHS:
+            os << lhs;
+            break;
+        case StxVarId::RHS:
+            os << rhs;
+            break;
+        default:
+            gen_global_var(os, opts, var);
+            break;
+        }
+    }
+
+    FORBID_COPY(GenVecBinary);
+};
+
+class GenVecCleanup : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+
+  public:
+    GenVecCleanup(std::ostringstream& os, const opt_t* opts): os(os), opts(opts) {}
+
+    void render_var(StxVarId var) override {
+        gen_global_var(os, opts, var);
+    }
+
+    FORBID_COPY(GenVecCleanup);
+};
+
+class GenHexLiteral : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+    uint64_t value;
+    uint32_t width;
+
+  public:
+    GenHexLiteral(std::ostringstream& os, const opt_t* opts, uint64_t value, uint32_t width)
+        : os(os), opts(opts), value(value), width(width) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::VAL:
+            os << "0x" << std::hex << value << std::dec;
+            break;
+        default:
+            gen_global_var(os, opts, var);
+            break;
+        }
+    }
+
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::WIDE) {
+            return width == 8;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(GenHexLiteral);
 };
 
 } // anonymous namespace
@@ -736,7 +916,10 @@ static void gen_goto(
         // Elision happens even in rec/func mode due to split states (tunneling optimization).
     }
 
-    if (jump.eof) {
+    if (from && from->is_simd_body && jump.to == from->simd_head) {
+        DCHECK(jump.tags == TCID0 && !jump.eof);
+        gen_vector_loop(output, from, transition, stmts);
+    } else if (jump.eof) {
         gen_fill(output, stmts, transition, dfa, from, &jump);
     } else {
         append(stmts, transition);
@@ -1130,12 +1313,202 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
     }
 }
 
-static void emit_state(
-        Output& output, const Adfa& dfa, const State* s, CodeList* stmts, CodeList* continuation) {
+// Generate a vector fast-forward loop for a base state with a reflexive character class,
+// Emit a vectorized fast-forward loop on the reflexive transition of `s` (`is_simd_body`),
+// decomposed into ordinary re2c IR nodes (`CodeKind::IF_THEN_ELSE`, `CodeKind::LOOP`,
+// `CodeKind::VAR`, `CodeKind::ASSIGN`, `CodeKind::SHIFT`, `CodeKind::PEEK`, `CodeKind::STMT`,
+// `CodeKind::GOTO` / `CodeKind::CONTINUE` / `CodeKind::FNCALL`) and atomic target expression
+// primitives (`yypeek{16,32}`, `vec{16,32}_splat`, `vec{16,32}_{sub,cmpeq,cmpgt,or}`,
+// `vec{16,32}_{movemask,ctz}`, `vec{16,32}_cleanup`).
+static void gen_vector_loop(
+        Output& output, const State* s, CodeList* scalar_trans, CodeList* stmts) {
+    if (!s->is_simd_body || s->simd_head == nullptr) return;
+
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
-    Scratchbuf& buf = output.scratchbuf;
+    Scratchbuf& o = output.scratchbuf;
 
+    const uint32_t vec_size = opts->vectorize_size;
+    DCHECK(vec_size == 16 || vec_size == 32);
+    const bool is16 = (vec_size == 16);
+    const VarType vec_type = is16 ? VarType::VEC16 : VarType::VEC32;
+    const VarType mask_type = is16 ? VarType::VEC16_MASK : VarType::VEC32_MASK;
+
+    struct VecRange {
+        uint32_t lo;
+        uint32_t hi;
+    };
+    std::vector<VecRange> ranges, xranges;
+    auto add_range = [](std::vector<VecRange>& dst, uint32_t lo, uint32_t hi) {
+        if (!dst.empty() && dst.back().hi + 1 == lo) {
+            dst.back().hi = hi;
+        } else {
+            dst.push_back({lo, hi});
+        }
+    };
+
+    const Span* span = s->go.span;
+    uint32_t lb = 0;
+    for (uint32_t i = 0; i < s->go.span_count; ++i) {
+        const uint32_t ub = span[i].ub;
+        if (span[i].to == s->simd_head) {
+            add_range(ranges, lb, ub - 1);
+        } else {
+            add_range(xranges, lb, ub - 1);
+        }
+        lb = ub;
+    }
+    DCHECK(!ranges.empty());
+
+    auto gen_splat = [&](int32_t val) -> const char* {
+        GenVecVal cb(o.stream(), opts, val);
+        return is16 ? opts->gen_code_vec16_splat(o, cb) : opts->gen_code_vec32_splat(o, cb);
+    };
+    auto gen_peek_vec = [&]() -> const char* {
+        GenVecPeek cb(o.stream(), opts);
+        return is16 ? opts->gen_code_yypeek16(o, cb) : opts->gen_code_yypeek32(o, cb);
+    };
+    auto gen_sub = [&](const char* lhs, const char* rhs) -> const char* {
+        GenVecBinary cb(o.stream(), opts, lhs, rhs);
+        return is16 ? opts->gen_code_vec16_sub(o, cb) : opts->gen_code_vec32_sub(o, cb);
+    };
+    auto gen_cmpeq = [&](const char* lhs, const char* rhs) -> const char* {
+        GenVecBinary cb(o.stream(), opts, lhs, rhs);
+        return is16 ? opts->gen_code_vec16_cmpeq(o, cb) : opts->gen_code_vec32_cmpeq(o, cb);
+    };
+    auto gen_cmpgt = [&](const char* lhs, const char* rhs) -> const char* {
+        GenVecBinary cb(o.stream(), opts, lhs, rhs);
+        return is16 ? opts->gen_code_vec16_cmpgt(o, cb) : opts->gen_code_vec32_cmpgt(o, cb);
+    };
+    auto gen_or = [&](const char* lhs, const char* rhs) -> const char* {
+        GenVecBinary cb(o.stream(), opts, lhs, rhs);
+        return is16 ? opts->gen_code_vec16_or(o, cb) : opts->gen_code_vec32_or(o, cb);
+    };
+    auto gen_movemask = [&](const char* expr) -> const char* {
+        GenVecUnary cb(o.stream(), opts, expr);
+        return is16 ? opts->gen_code_vec16_movemask(o, cb) : opts->gen_code_vec32_movemask(o, cb);
+    };
+    auto gen_ctz = [&](const char* expr) -> const char* {
+        GenVecUnary cb(o.stream(), opts, expr);
+        return is16 ? opts->gen_code_vec16_ctz(o, cb) : opts->gen_code_vec32_ctz(o, cb);
+    };
+    auto gen_cleanup = [&]() -> const char* {
+        GenVecCleanup cb(o.stream(), opts);
+        return is16 ? opts->gen_code_vec16_cleanup(o, cb) : opts->gen_code_vec32_cleanup(o, cb);
+    };
+    auto s8 = [](uint32_t v) -> int32_t {
+        return static_cast<int32_t>(static_cast<int8_t>(v & 0xFFu));
+    };
+
+    // Build the length guard via `code:yylessthan` (`YYLESSTHAN(vec_size + reserve)`), ensuring
+    // that after skipping `vec_size` bytes at least `reserve` bytes remain for the subsequent
+    // scalar peek without exceeding the buffer boundary.
+    const uint32_t reserve = static_cast<uint32_t>(std::max<size_t>(1, s->simd_head->fill));
+    const uint32_t need = vec_size + reserve;
+    GenLessThan lt_cb(o.stream(), opts, need);
+    const char* less_than = opts->gen_code_yylessthan(o, lt_cb);
+    const char* not_less_than = o.cstr("!(").cstr(less_than).cstr(")").flush();
+
+    CodeList* vec_stmts = code_list(alc);
+    CodeList* loop_body = code_list(alc);
+
+    if (!xranges.empty()) {
+        CodeList* cmp_stmts = code_list(alc);
+        for (size_t i = 0; i < xranges.size(); ++i) {
+            const uint32_t lo = xranges[i].lo;
+            const uint32_t hi = xranges[i].hi;
+            DCHECK(hi - lo <= 254);
+
+            const char* cmp_expr = nullptr;
+            if (lo == hi) {
+                const char* vname = o.cstr("yys").u64(i).flush();
+                append(vec_stmts, code_var(alc, vec_type, false, vname, gen_splat(s8(lo)), true));
+                cmp_expr = gen_cmpeq("yysimd0", vname);
+            } else if (hi == 127) {
+                const char* vname = o.cstr("yys").u64(i).flush();
+                append(vec_stmts, code_var(alc, vec_type, false, vname,
+                        gen_splat(static_cast<int32_t>(lo) - 1), true));
+                cmp_expr = gen_cmpgt("yysimd0", vname);
+            } else if (lo == 128) {
+                const char* vname = o.cstr("yys").u64(i).flush();
+                append(vec_stmts, code_var(alc, vec_type, false, vname,
+                        gen_splat(static_cast<int32_t>(hi) - 255), true));
+                cmp_expr = gen_cmpgt(vname, "yysimd0");
+            } else {
+                const char* bname = o.cstr("yyb").u64(i).flush();
+                append(vec_stmts, code_var(alc, vec_type, false, bname,
+                        gen_splat(s8(lo + 128u)), true));
+                const char* uname = o.cstr("yyu").u64(i).flush();
+                append(vec_stmts, code_var(alc, vec_type, false, uname,
+                        gen_splat(static_cast<int32_t>(hi - lo) - 127), true));
+                cmp_expr = gen_cmpgt(uname, gen_sub("yysimd0", bname));
+            }
+            if (i == 0) {
+                append(cmp_stmts, code_var(alc, vec_type, false, "yysimd1", cmp_expr));
+            } else {
+                append(cmp_stmts, code_assign(alc, "yysimd1", gen_or("yysimd1", cmp_expr)));
+            }
+        }
+
+        append(loop_body, code_var(alc, vec_type, false, "yysimd0", gen_peek_vec()));
+        append(loop_body, cmp_stmts);
+        append(loop_body, code_var(alc, mask_type, false, "yym", gen_movemask("yysimd1")));
+
+        CodeList* hit_body = code_list(alc);
+        append(hit_body, code_var(alc, VarType::INT, false, "yyn", gen_ctz("yym")));
+        append(hit_body, code_shift_expr(alc, "yyn"));
+        append(hit_body, code_stmt(alc, "break"));
+
+        const char* m_ne_zero = o.cstr("yym ")
+                .cstr(output.block().binops[OP_CMP_NE]).cstr(" 0").flush();
+        append(loop_body, code_if_then_else(alc, m_ne_zero, hit_body, nullptr));
+    }
+
+    append(loop_body, code_shift(alc, -static_cast<int32_t>(vec_size)));
+    CodeList* tail_break = code_list(alc);
+    append(tail_break, code_stmt(alc, "break"));
+    append(loop_body, code_if_then_else(alc, less_than, tail_break, nullptr));
+
+    append(vec_stmts, code_loop(alc, loop_body, nullptr, nullptr, /*labeled=*/false));
+
+    if (xranges.empty()) {
+        append(stmts, code_if_then_else(alc, not_less_than, vec_stmts, nullptr));
+        append(stmts, scalar_trans);
+        return;
+    }
+
+    const char* cleanup = gen_cleanup();
+    if (cleanup[0] != '\0') {
+        append(vec_stmts, code_stmt(alc, cleanup));
+    }
+
+    switch (opts->code_model) {
+    case CodeModel::GOTO_LABEL:
+        DCHECK(s->label->used);
+        append(vec_stmts, code_peek(alc, /*reassign=*/true));
+        append(vec_stmts, code_goto(alc, o.str(opts->label_prefix).label(*s->label).flush()));
+        append(stmts, code_if_then_else(alc, not_less_than, vec_stmts, nullptr));
+        append(stmts, scalar_trans);
+        break;
+    case CodeModel::LOOP_SWITCH:
+        DCHECK(opts->eager_skip && s->simd_head->label->used);
+        gen_continue_yyswitch(output, vec_stmts, *s->simd_head->label);
+        append(stmts, code_if_then_else(alc, not_less_than, vec_stmts, nullptr));
+        append(stmts, scalar_trans);
+        break;
+    case CodeModel::REC_FUNC: {
+        DCHECK(opts->eager_skip && s->simd_head->label->used);
+        const CodeFnCommon* fn = output.block().fn_common;
+        o.str(opts->label_prefix).u32(s->simd_head->label->index);
+        append(vec_stmts, code_tailcall(alc, o.flush(), fn->args, fn->type != nullptr));
+        append(stmts, code_if_then_else(alc, not_less_than, vec_stmts, scalar_trans));
+        break;
+    }}
+}
+
+static CodeList* gen_transitions(Output& output, const Adfa& dfa, const State* s) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
     const CodeGo& go = s->go;
     CodeList* transitions = code_list(alc);
     DCHECK(consume(s) || go.tags == TCID0);
@@ -1163,6 +1536,84 @@ static void emit_state(
         break;
     case CodeGo::Kind::EMPTY:
         break;
+    }
+    return transitions;
+}
+
+// Generate the multi-character (broadword) fast path of state `s` (see `Adfa::coalesce_multichar`).
+// When the next `mchar_n` code units are available (`!(code:yylessthan)`) and equal the packed
+// literal `mchar_value`, advance the cursor via `code:yyshift` and jump to `mchar_to`; otherwise
+// execute the ordinary single-character dispatch.
+//
+// In goto/label mode (including loop/switch) this code is emitted before `gen_peek`, so that no
+// scalar byte load precedes the multi-byte expression and the compiler fuses the byte loads into
+// one word load. In recursive-functions mode every branch of the state function must end with a
+// tailcall, and the ordinary dispatch is emitted once by the caller, after `gen_peek`.
+static CodeList* gen_mchar_fast_path(Output& output, const Adfa& dfa, const State* s) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+    const uint32_t n = s->mchar_n;
+    DCHECK(n == 2 || n == 4 || n == 8);
+
+    // In the default (lazy-skip) mode the last character of the chain will be skipped on entry
+    // to `mchar_to` by its ordinary `code_skip`, so only `n - 1` characters are skipped here;
+    // with `--eager-skip` `mchar_to` has no entry skip and all `n` characters are skipped here.
+    CodeList* fast = code_list(alc);
+    const uint32_t nskip = opts->eager_skip ? n : n - 1;
+    if (nskip > 0) {
+        append(fast, code_shift(alc, -static_cast<int32_t>(nskip)));
+    }
+    const CodeJump jump = {s->mchar_to, TCID0, false, false, false};
+    gen_goto(output, dfa, fast, s, jump);
+
+    GenVecPeek peek_cb(buf.stream(), opts);
+    const char* peek = nullptr;
+    switch (n) {
+    case 2: peek = opts->gen_code_yypeek2(buf, peek_cb); break;
+    case 4: peek = opts->gen_code_yypeek4(buf, peek_cb); break;
+    case 8: peek = opts->gen_code_yypeek8(buf, peek_cb); break;
+    default: UNREACHABLE(); break;
+    }
+
+    GenHexLiteral hex_cb(buf.stream(), opts, s->mchar_value, n);
+    const char* literal = opts->gen_code_hex_literal(buf, hex_cb);
+    const char* match = buf.cstr(peek).cstr(" ")
+            .cstr(output.block().binops[OP_CMP_EQ]).cstr(" ").cstr(literal).flush();
+
+    GenLessThan lt_cb(buf.stream(), opts, n);
+    const char* less_than = opts->gen_code_yylessthan(buf, lt_cb);
+    const char* guard = buf.cstr("!(").cstr(less_than).cstr(")").flush();
+
+    CodeList* stmts = code_list(alc);
+    // The ordinary dispatch is appended by the caller, so it appears exactly once.
+    // In rec/func mode the fast path ends in a tailcall, and the guard's fallthrough reaches the
+    // same ordinary dispatch without duplicating it in both branches.
+    CodeList* inner = code_list(alc);
+    append(inner, code_if_then_else(alc, match, fast, nullptr));
+    append(stmts, code_if_then_else(alc, guard, inner, nullptr));
+    return stmts;
+}
+
+// In goto/label mode the fast path is emitted earlier (before the peek, so that the compiler can
+// fuse the byte loads) and the dispatch alone here. With debug output the fast path stays after the
+// peek so that the entry YYDEBUG statement of the head state runs before the fast path.
+static bool mchar_before_peek(const opt_t* opts, const State* s) {
+    return s->mchar_n > 0 && opts->code_model != CodeModel::REC_FUNC && !opts->debug;
+}
+
+static void emit_state(
+        Output& output, const Adfa& dfa, const State* s, CodeList* stmts, CodeList* continuation) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    CodeList* transitions;
+    if (s->mchar_n > 0 && !mchar_before_peek(opts, s)) {
+        transitions = gen_mchar_fast_path(output, dfa, s);
+        append(transitions, gen_transitions(output, dfa, s));
+    } else {
+        transitions = gen_transitions(output, dfa, s);
     }
     append(transitions, continuation);
 
@@ -1193,6 +1644,10 @@ static void emit_state(
         // All code from YYFILL up to transitions belongs to the ELSE branch of YYEND.
         CodeList* tail = code_list(alc);
         gen_fill_and_label(output, tail, dfa, s);
+        // The multi-character fast path runs before the peek, see `gen_mchar_fast_path`.
+        if (mchar_before_peek(opts, s)) {
+            append(tail, gen_mchar_fast_path(output, dfa, s));
+        }
         gen_peek(alc, s, tail);
         if (is_start && dfa.custom_start_label && opts->debug) {
             append(tail, code_debug(alc, dfa.custom_start_label->index));

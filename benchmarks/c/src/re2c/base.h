@@ -110,4 +110,71 @@ BENCH(submatch_38__rep_23_rep_19_rep_17)
 
 #undef BENCH
 
+// Benchmarks for `--vectorize-loops` (see vec_base.re).
+#define BENCH_VEC(name) \
+namespace re2c_##name { \
+    struct bench_sentinel { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_bounded_scalar { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_bounded_vector_sse2 { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_bounded_vector { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_buffered_scalar { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_buffered_vector_sse2 { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_buffered_vector { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    bool test(const char* input, long expected, long *ref); \
+}
+
+BENCH_VEC(vec_00__strings)
+BENCH_VEC(vec_01__uri_rfc3986)
+BENCH_VEC(vec_02__uri_simple)
+
+namespace re2c_vec_00__strings {
+    void register_regimes();
+}
+
+#undef BENCH_VEC
+
+// Benchmarks for `--vectorize-linear` (see lin_base.re).
+#define BENCH_LIN(name) \
+namespace re2c_##name { \
+    struct bench_sentinel_scalar { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_sentinel_linear { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_bounded_scalar { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_bounded_linear { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_buffered_scalar { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    struct bench_buffered_linear { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    bool test(const char* input, long expected); \
+    void register_regimes(); \
+    bool test_regimes(); \
+}
+
+BENCH_LIN(lin_00__http)
+
+#undef BENCH_LIN
+
 #endif // _RE2C_BENCHMARKS_C_RE2C_BASE_

@@ -39,6 +39,7 @@ class Msg;
 class Warn;
 class RenderCallback;
 class Scratchbuf;
+struct loc_t;
 struct StxCode;
 using StxCodes = list_t<StxCode>;
 
@@ -64,9 +65,12 @@ using StxCodes = list_t<StxCode>;
             ({"goto-label", "loop-switch", "recursive-functions"})) \
     CHECKED_LIST(supported_targets, \
             ({"code", "dot", "skeleton"})) \
+    CHECKED_LIST(supported_archs, \
+            ({"x86"})) \
     CHECKED_LIST(supported_features, \
             ({"nested-ifs", "bitmaps", "computed-gotos", "case-ranges", "unsafe", "monadic", \
-                "tags", "captures", "captvars", "computed-continue"}))
+                "tags", "captures", "captvars", "computed-continue", "vectorize-loops", \
+                "vectorize-linear"}))
 
 #define RE2C_STX_OPTS \
     STX_OPT(bool, semicolons, false) \
@@ -78,10 +82,10 @@ using StxCodes = list_t<StxCode>;
 
 #define RE2C_CODE_TEMPLATES \
     CODE_TEMPLATE(var_local, \
-        ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({StxLOpt::INIT}) \
+        ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({StxLOpt::INIT, StxLOpt::CONST}) \
     ) \
     CODE_TEMPLATE(var_global, \
-        ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({StxLOpt::INIT}) \
+        ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({StxLOpt::INIT, StxLOpt::CONST}) \
     ) \
     CODE_TEMPLATE(const_local, \
         ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({}) \
@@ -113,6 +117,18 @@ using StxCodes = list_t<StxCode>;
         ({}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(type_uint, \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(type_vec16, \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(type_vec32, \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(type_vec16_mask, \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(type_vec32_mask, \
         ({}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(type_yybm, \
@@ -261,7 +277,8 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::RESTORETAG, StxVarId::CURSOR, StxVarId::TAG, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyshift, \
-        ({StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::OFFSET, StxVarId::RECORD}), ({}), ({}) \
+        ({StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::OFFSET, StxVarId::PTYPE, \
+            StxVarId::RECORD}), ({}), ({StxLOpt::BACKWARD}) \
     ) \
     CODE_TEMPLATE(yyshiftstag, \
         ({StxVarId::SHIFTSTAG, StxVarId::TAG, StxVarId::NEG, StxVarId::OFFSET, StxVarId::RECORD}), \
@@ -321,6 +338,72 @@ using StxCodes = list_t<StxCode>;
     ) \
     CODE_TEMPLATE(yytarget_filter, \
         ({StxVarId::CHAR}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(hex_literal, \
+        ({StxVarId::VAL}), ({}), ({StxLOpt::WIDE}) \
+    ) \
+    CODE_TEMPLATE(yypeek2, \
+        ({StxVarId::PEEK2, StxVarId::INPUT, StxVarId::CURSOR, StxVarId::RECORD}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(yypeek4, \
+        ({StxVarId::PEEK4, StxVarId::INPUT, StxVarId::CURSOR, StxVarId::RECORD}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(yypeek8, \
+        ({StxVarId::PEEK8, StxVarId::INPUT, StxVarId::CURSOR, StxVarId::RECORD}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(yypeek16, \
+        ({StxVarId::PEEK16, StxVarId::INPUT, StxVarId::CURSOR, StxVarId::RECORD}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(yypeek32, \
+        ({StxVarId::PEEK32, StxVarId::INPUT, StxVarId::CURSOR, StxVarId::RECORD}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec16_splat, \
+        ({StxVarId::VAL}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec32_splat, \
+        ({StxVarId::VAL}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec16_sub, \
+        ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec32_sub, \
+        ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec16_cmpeq, \
+        ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec32_cmpeq, \
+        ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec16_cmpgt, \
+        ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec32_cmpgt, \
+        ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec16_or, \
+        ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec32_or, \
+        ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec16_movemask, \
+        ({StxVarId::LHS}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec32_movemask, \
+        ({StxVarId::LHS}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec16_ctz, \
+        ({StxVarId::LHS}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec32_ctz, \
+        ({StxVarId::LHS}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec16_cleanup, \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(vec32_cleanup, \
+        ({}), ({}), ({}) \
     )
 
 #define RE2C_ONELINE_CODES \
@@ -391,6 +474,12 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(MTAGN, "YYMTAGN") \
     STX_LOCAL_VAR(MTAGP, "YYMTAGP") \
     STX_LOCAL_VAR(PEEK, "YYPEEK") \
+    STX_LOCAL_VAR(PEEK2, "YYPEEK2") \
+    STX_LOCAL_VAR(PEEK4, "YYPEEK4") \
+    STX_LOCAL_VAR(PEEK8, "YYPEEK8") \
+    STX_LOCAL_VAR(PEEK16, "YYPEEK16") \
+    STX_LOCAL_VAR(PEEK32, "YYPEEK32") \
+    STX_LOCAL_VAR(PTYPE, "YYPTYPE") \
     STX_LOCAL_VAR(RECORD, "yyrecord") \
     STX_LOCAL_VAR(RESTORE, "YYRESTORE") \
     STX_LOCAL_VAR(RESTORECTX, "YYRESTORECTX") \
@@ -496,6 +585,11 @@ enum class StxVarId : uint32_t {
     MUTOPT(bool, nested_ifs, false) \
     MUTOPT(bool, unsafe, true) \
     MUTOPT(bool, monadic, false) \
+    MUTOPT(Arch, arch, Arch::NONE) \
+    MUTOPT(bool, vectorize_loops, false) \
+    MUTOPT(bool, vectorize_linear, false) \
+    MUTOPT(uint32_t, vectorize_size, 32) \
+    MUTOPT(bool, shift_conversion, false) \
     /* YYFILL */ \
     MUTOPT(uint32_t, fill_eof, NOEOF) \
     MUTOPT(uint32_t, fill_sentinel, NOEOF) \
@@ -556,6 +650,7 @@ enum class StxVarId : uint32_t {
 // allows one to set API defauls conditionally based on the chosen API, style, sigil etc.).
 #define RE2C_MUTCODES \
     MUTCODE(api_char_type) \
+    MUTCODE(api_ptr_type) \
     MUTCODE(api_cond_type) \
     MUTCODE(api_input) \
     MUTCODE(api_cursor) \
@@ -565,6 +660,11 @@ enum class StxVarId : uint32_t {
     MUTCODE(api_maxfill) \
     MUTCODE(api_maxnmatch) \
     MUTCODE(api_peek) \
+    MUTCODE(api_peek2) \
+    MUTCODE(api_peek4) \
+    MUTCODE(api_peek8) \
+    MUTCODE(api_peek16) \
+    MUTCODE(api_peek32) \
     MUTCODE(api_skip) \
     MUTCODE(api_backup) \
     MUTCODE(api_backup_ctx) \
@@ -787,9 +887,11 @@ struct opt_t {
 #define MUTCODE(name) bool is_default_##name;
     RE2C_MUTCODES
 #undef MUTCODE
+    const bool user_vectorize_linear;
     symtab_t symtab;
 
-    opt_t(const conopt_t& con, const mutopt_t& mut, const mutdef_t& def, const symtab_t& symtab)
+    opt_t(const conopt_t& con, const mutopt_t& mut, const mutdef_t& def,
+          bool user_vectorize_linear, const symtab_t& symtab)
         : stack_code(),
 #define CONSTOPT(type, name, value) name(con.name),
     RE2C_CONSTOPTS
@@ -815,6 +917,7 @@ struct opt_t {
 #define MUTCODE(name) is_default_##name(def.name),
     RE2C_MUTCODES
 #undef MUTCODE
+    user_vectorize_linear(user_vectorize_linear),
     symtab(symtab) {}
 
 #define CODE_TEMPLATE(name, vars, list_vars, conds) \
@@ -843,6 +946,7 @@ struct opt_t {
             && !is_undefined(code_yyskip_yybackup_yypeek)
             && !is_undefined(code_yybackup_yypeek_yyskip);
     }
+    const char* vectorize_linear_disabled_reason() const;
 
   private:
     void eval_code_conf(StxCodeId id, const char* name, const StxCodes* code,

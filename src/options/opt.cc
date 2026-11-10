@@ -16,6 +16,15 @@ static const char* code_model_name(CodeModel model) {
     return nullptr;
 }
 
+static const char* arch_name(Arch arch) {
+    switch (arch) {
+        case Arch::NONE: return "none";
+        case Arch::X86: return "x86";
+    }
+    UNREACHABLE();
+    return nullptr;
+}
+
 // This function should only change global options.
 LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
     if (glob.target == Target::DOT) {
@@ -67,6 +76,75 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
     return Ret::OK;
 }
 
+// Why `re2c:vectorize:linear` has no effect with the current options, or nullptr if it applies.
+// This is the single source of the policy: `fix_mutopt` clears the real option when a reason
+// exists, and `opt_t::vectorize_linear_disabled_reason` reports the same reason to the user.
+static const char* vectorize_linear_disabled_reason(
+        const Enc& encoding,
+        uint32_t fill_eof,
+        Api api,
+        bool is_default_api_limit,
+        bool is_default_api_less_than,
+        bool fill_enable,
+        bool fill_check,
+        const StxCodes* code_yyshift,
+        const StxCodes* code_yylessthan,
+        const StxCodes* code_hex_literal,
+        const StxCodes* code_yypeek2,
+        const StxCodes* code_yypeek4,
+        const StxCodes* code_yypeek8) {
+    if (is_undefined(code_yyshift)) {
+        return "code:yyshift is undefined";
+    } else if (is_undefined(code_yylessthan)) {
+        return "code:yylessthan is undefined";
+    } else if (is_undefined(code_hex_literal)) {
+        return "code:hex_literal is undefined";
+    } else if (is_undefined(code_yypeek2) && is_undefined(code_yypeek4)
+            && is_undefined(code_yypeek8)) {
+        return "code:yypeek2, code:yypeek4 and code:yypeek8 are undefined";
+    } else if (encoding.cunit_size() != 1) {
+        // Only one-byte code unit encodings can be read as raw bytes.
+        return "target encoding has multi-byte code units";
+    } else if (fill_eof != NOEOF) {
+        // With re2c:eof, YYFILL does not reserve input for the whole chain in advance, so a
+        // multi-character read may go past the end of the buffer.
+        return "re2c:eof is configured";
+    } else if (api != Api::GENERIC && is_default_api_limit) {
+        // The bounds guard for wide reads checks YYLIMIT via `code:yylessthan`, so lexers that do
+        // not check YYFILL (sentinel-only lexers, or YYFILL without the check) must configure an
+        // explicit YYLIMIT.
+        if (!fill_enable) {
+            return "YYFILL is disabled and YYLIMIT is not explicitly configured";
+        } else if (!fill_check) {
+            return "YYFILL check is disabled and YYLIMIT is not explicitly configured";
+        }
+    } else if (api == Api::GENERIC && is_default_api_less_than) {
+        if (!fill_enable) {
+            return "YYFILL is disabled and YYLESSTHAN is not explicitly configured";
+        } else if (!fill_check) {
+            return "YYFILL check is disabled and YYLESSTHAN is not explicitly configured";
+        }
+    }
+    return nullptr;
+}
+
+const char* opt_t::vectorize_linear_disabled_reason() const {
+    return re2c::vectorize_linear_disabled_reason(
+            encoding,
+            fill_eof,
+            api,
+            is_default_api_limit,
+            is_default_api_less_than,
+            fill_enable,
+            fill_check,
+            code_yyshift,
+            code_yylessthan,
+            code_hex_literal,
+            code_yypeek2,
+            code_yypeek4,
+            code_yypeek8);
+}
+
 // This function should only change real mutable options (based on the global options, default
 // mutable options and default flags). User-defined options are intentionally not passed to prevent
 // accidental change, and default flags are passed as read-only.
@@ -90,12 +168,18 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.api_style = defaults.api_style;
         real.api_sigil = defaults.api_sigil;
         real.api_char_type = defaults.api_char_type;
+        real.api_ptr_type = defaults.api_ptr_type;
         real.api_input = defaults.api_input;
         real.api_cursor = defaults.api_cursor;
         real.api_marker = defaults.api_marker;
         real.api_ctxmarker = defaults.api_ctxmarker;
         real.api_limit = defaults.api_limit;
         real.api_peek = defaults.api_peek;
+        real.api_peek2 = defaults.api_peek2;
+        real.api_peek4 = defaults.api_peek4;
+        real.api_peek8 = defaults.api_peek8;
+        real.api_peek16 = defaults.api_peek16;
+        real.api_peek32 = defaults.api_peek32;
         real.api_skip = defaults.api_skip;
         real.api_backup = defaults.api_backup;
         real.api_backup_ctx = defaults.api_backup_ctx;
@@ -158,6 +242,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.tags_negative = defaults.tags_negative;
         real.char_emit = defaults.char_emit;
         real.char_conv = defaults.char_conv;
+        real.shift_conversion = defaults.shift_conversion;
         real.char_literals = defaults.char_literals;
         real.label_loop = defaults.label_loop;
         real.label_fill = defaults.label_fill;
@@ -308,6 +393,70 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (!is_default.monadic && !glob.supported_features_contains("monadic")) {
         RET_FAIL(error("`monadic` feature is not supported for this backend"));
     }
+    if (real.arch != Arch::NONE && !glob.supported_archs_contains(arch_name(real.arch))) {
+        RET_FAIL(error("`%s` architecture is not supported for this backend",
+                       arch_name(real.arch)));
+    }
+    if (!is_default.vectorize_loops && !glob.supported_features_contains("vectorize-loops")) {
+        RET_FAIL(error("`vectorize-loops` feature is not supported for this backend"));
+    }
+    if ((!is_default.vectorize_size || real.vectorize_loops)
+            && real.vectorize_size != 16 && real.vectorize_size != 32) {
+        RET_FAIL(error("unsupported vector size %u (expected 16 or 32)", real.vectorize_size));
+    }
+    if (real.vectorize_loops && glob.target == Target::DOT) {
+        // The DOT target only dumps the DFA graph and does not generate vector loops.
+        real.vectorize_loops = false;
+    }
+    if (real.vectorize_loops) {
+        // Every unsupported option combination is an error rather than a silent fallback.
+        if (real.arch == Arch::NONE) {
+            RET_FAIL(error("`vectorize:loops` requires target architecture (`--arch` / `re2c:arch`)"));
+        }
+        if (glob.target == Target::SKELETON) {
+            RET_FAIL(error("`vectorize:loops` is not supported with --skeleton"));
+        }
+        if (!real.fill_enable || !real.fill_check) {
+            RET_FAIL(error("`vectorize:loops` requires YYFILL with bounds checking "
+                           "(`re2c:yyfill:enable` and `re2c:yyfill:check`)"));
+        }
+        if (real.fill_eof != NOEOF) {
+            RET_FAIL(error("`vectorize:loops` is not supported with the end-of-input rule "
+                           "(`re2c:eof`)"));
+        }
+        if (real.encoding.cunit_size() != 1) {
+            RET_FAIL(error("`vectorize:loops` requires single-byte code units"));
+        }
+    }
+    if (!is_default.vectorize_linear && !glob.supported_features_contains("vectorize-linear")) {
+        RET_FAIL(error("`vectorize-linear` feature is not supported for this backend"));
+    }
+    if (real.vectorize_linear && glob.target == Target::DOT) {
+        // The DOT target only dumps the DFA graph and does not generate wide reads.
+        real.vectorize_linear = false;
+    }
+    if (real.vectorize_linear && glob.target == Target::SKELETON) {
+        RET_FAIL(error("`vectorize:linear` is not supported with --skeleton"));
+    }
+    // Linear vectorization is silently ineffective for some option combinations; the reason is
+    // reported via `opt_t::vectorize_linear_disabled_reason` when the user asked for the option.
+    if (real.vectorize_linear
+            && vectorize_linear_disabled_reason(
+                    real.encoding,
+                    real.fill_eof,
+                    real.api,
+                    is_default.api_limit,
+                    is_default.api_less_than,
+                    real.fill_enable,
+                    real.fill_check,
+                    glob.code_yyshift,
+                    glob.code_yylessthan,
+                    glob.code_hex_literal,
+                    glob.code_yypeek2,
+                    glob.code_yypeek4,
+                    glob.code_yypeek8) != nullptr) {
+        real.vectorize_linear = false;
+    }
     if (!is_default.tags && !glob.supported_features_contains("tags")) {
         RET_FAIL(error("`tags` feature is not supported for this backend"));
     }
@@ -409,7 +558,7 @@ Ret Opt::sync() {
 
 Ret Opt::snapshot(const opt_t** opts) {
     CHECK_RET(sync());
-    *opts = new opt_t(glob, real, is_default, symtab);
+    *opts = new opt_t(glob, real, is_default, user.vectorize_linear, symtab);
     return Ret::OK;
 }
 
@@ -424,6 +573,7 @@ Ret Opt::restore(const opt_t* opts) {
     is_default.name = opts->is_default_##name;
     RE2C_MUTCODES
 #undef MUTCODE
+    user.vectorize_linear = opts->user_vectorize_linear;
 
     symtab = opts->symtab;
 
@@ -446,6 +596,10 @@ Ret Opt::merge(const opt_t* opts, Input& input) {
     }
     RE2C_MUTCODES
 #undef MUTCODE
+    if (!opts->is_default_vectorize_linear) {
+        user.vectorize_linear = opts->user_vectorize_linear;
+        is_default.vectorize_linear = false;
+    }
 
     CHECK_RET(merge_symtab(symtab, opts->symtab, input));
 
@@ -609,7 +763,7 @@ Ret Opt::check_var(
 
     // is this a known configuration-specific variable?
     const std::unordered_set<StxVarId>& v = is_list_var ? list_vars : vars;
-    if (std::find(v.begin(), v.end(), var) != v.end()) return Ret::OK;
+    if (v.find(var) != v.end()) return Ret::OK;
 
     RET_FAIL(error("unknown variable `%s` in configuration `%s`", var_name(var), conf));
 }
@@ -670,6 +824,10 @@ Ret Opt::validate_conf_code(
             break;
         case StxCodeType::LIST:
             if (n == 0) { // recurse into list body
+                if (list_vars.find(x->list.var) == list_vars.end()) {
+                    RET_FAIL(error("unknown list `%s` in configuration `%s`",
+                                   var_name(x->list.var), conf));
+                }
                 stack_code_list.push_back(x);
                 CHECK_RET(check_var(x->list.var, conf, vars, list_vars));
                 stack.push_back({x, 1});
@@ -821,61 +979,68 @@ static bool eval_cond(
     case StxOptKind::LOC:
         DCHECK(callback != nullptr);
         return callback->eval_cond(cond->lopt);
-    case StxOptKind::GLOB:
+    case StxOptKind::GLOB: {
+        bool res = false;
         switch (cond->gopt) {
         case StxGOpt::API_SIMPLE:
-            return opts->api == Api::SIMPLE;
+            res = opts->api == Api::SIMPLE; break;
         case StxGOpt::API_GENERIC:
-            return opts->api == Api::GENERIC;
+            res = opts->api == Api::GENERIC; break;
         case StxGOpt::API_RECORD:
-            return opts->api == Api::RECORD;
+            res = opts->api == Api::RECORD; break;
         case StxGOpt::API_STYLE_FUNCTIONS:
             switch (id) {
-                case StxCodeId::STX_yygetcond: return !opts->cond_get_naked;
-                case StxCodeId::STX_yysetcond: return !opts->cond_set_naked;
-                case StxCodeId::STX_yygetstate: return !opts->state_get_naked;
-                case StxCodeId::STX_yysetstate: return !opts->state_set_naked;
-                default: return opts->api_style == ApiStyle::FUNCTIONS;
+                case StxCodeId::STX_yygetcond: res = !opts->cond_get_naked; break;
+                case StxCodeId::STX_yysetcond: res = !opts->cond_set_naked; break;
+                case StxCodeId::STX_yygetstate: res = !opts->state_get_naked; break;
+                case StxCodeId::STX_yysetstate: res = !opts->state_set_naked; break;
+                default: res = opts->api_style == ApiStyle::FUNCTIONS; break;
             }
+            break;
         case StxGOpt::API_STYLE_FREEFORM:
             switch (id) {
-                case StxCodeId::STX_yygetcond: return opts->cond_get_naked;
-                case StxCodeId::STX_yysetcond: return opts->cond_set_naked;
-                case StxCodeId::STX_yygetstate: return opts->state_get_naked;
-                case StxCodeId::STX_yysetstate: return opts->state_set_naked;
-                default: return opts->api_style == ApiStyle::FREEFORM;
+                case StxCodeId::STX_yygetcond: res = opts->cond_get_naked; break;
+                case StxCodeId::STX_yysetcond: res = opts->cond_set_naked; break;
+                case StxCodeId::STX_yygetstate: res = opts->state_get_naked; break;
+                case StxCodeId::STX_yysetstate: res = opts->state_set_naked; break;
+                default: res = opts->api_style == ApiStyle::FREEFORM; break;
             }
+            break;
         case StxGOpt::CODE_MODEL_GOTO_LABEL:
-            return opts->code_model == CodeModel::GOTO_LABEL;
+            res = opts->code_model == CodeModel::GOTO_LABEL; break;
         case StxGOpt::CODE_MODEL_LOOP_SWITCH:
-            return opts->code_model == CodeModel::LOOP_SWITCH;
+            res = opts->code_model == CodeModel::LOOP_SWITCH; break;
         case StxGOpt::CODE_MODEL_REC_FUNC:
-            return opts->code_model == CodeModel::REC_FUNC;
+            res = opts->code_model == CodeModel::REC_FUNC; break;
         case StxGOpt::COMPUTED_CONTINUE:
-            return opts->computed_continue;
+            res = opts->computed_continue; break;
         case StxGOpt::START_CONDITIONS:
-            return opts->start_conditions;
+            res = opts->start_conditions; break;
         case StxGOpt::STORABLE_STATE:
-            return opts->storable_state;
+            res = opts->storable_state; break;
         case StxGOpt::DATE:
-            return opts->date;
+            res = opts->date; break;
         case StxGOpt::VER:
-            return opts->version;
+            res = opts->version; break;
         case StxGOpt::CASE_RANGES:
-            return opts->case_ranges;
+            res = opts->case_ranges; break;
         case StxGOpt::UNSAFE:
-            return opts->unsafe;
+            res = opts->unsafe; break;
         case StxGOpt::MONADIC:
-            return opts->monadic;
+            res = opts->monadic; break;
         case StxGOpt::LOOP_LABEL:
-            return !opts->label_loop.empty();
+            res = !opts->label_loop.empty(); break;
         case StxGOpt::CGOTO_RELATIVE:
-            return opts->computed_gotos_relative;
+            res = opts->computed_gotos_relative; break;
         case StxGOpt::FILL_ENABLE:
-            return opts->fill_enable;
+            res = opts->fill_enable; break;
         case StxGOpt::FN_THROW:
-            return !opts->fn_throw.empty();
+            res = !opts->fn_throw.empty(); break;
+        case StxGOpt::SHIFT_CONVERSION:
+            res = opts->shift_conversion; break;
         }
+        return callback != nullptr ? callback->eval_glob_cond(cond->gopt, res) : res;
+    }
     }
     UNREACHABLE();
     return false;
@@ -1036,6 +1201,10 @@ bool RenderCallback::next_in_list(StxVarId /*var*/) {
 bool RenderCallback::eval_cond(StxLOpt /*opt*/) {
     UNREACHABLE();
     return false;
+}
+
+bool RenderCallback::eval_glob_cond(StxGOpt /*opt*/, bool defval) {
+    return defval;
 }
 
 } // namespace re2c

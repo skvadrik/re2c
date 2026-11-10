@@ -203,6 +203,7 @@ struct CodeLoop {
     const char* init;
     CodeCases* cases;
     CodeList* body;
+    bool labeled;
 };
 
 struct CodeBlock {
@@ -219,6 +220,7 @@ struct CodeBlock {
 struct CodeVar {
     VarType type;
     bool is_default;
+    bool is_const;
     const char* name;
     const char* init;
 };
@@ -321,6 +323,7 @@ struct CodeDebug {
 struct CodeTag {
     const char* tag1;
     const char* tag2;
+    const char* dist_expr;
     int32_t dist;
 };
 
@@ -351,6 +354,7 @@ struct Code {
         CodeList* rfuncs;
         loc_t loc;
         size_t accept;
+        bool reassign;
     };
 
     CodeKind kind;
@@ -406,11 +410,13 @@ inline Code* code_loop(
         OutAllocator& alc,
         CodeList* body,
         const char* init = nullptr,
-        CodeCases* cases = nullptr) {
+        CodeCases* cases = nullptr,
+        bool labeled = true) {
     Code* x = new_code(alc, CodeKind::LOOP);
     x->loop.init = init;
     x->loop.cases = cases;
     x->loop.body = body;
+    x->loop.labeled = labeled;
     return x;
 }
 
@@ -481,11 +487,16 @@ inline Code* code_line_info_input(OutAllocator& alc, const loc_t& loc) {
     return x;
 }
 
-inline Code* code_var(
-        OutAllocator& alc, VarType type, bool is_default, const char* name, const char* init) {
+inline Code* code_var(OutAllocator& alc,
+                      VarType type,
+                      bool is_default,
+                      const char* name,
+                      const char* init,
+                      bool is_const = false) {
     Code* x = new_code(alc, CodeKind::VAR);
     x->var.type = type;
     x->var.is_default = is_default;
+    x->var.is_const = is_const;
     x->var.name = copystr(name, alc);
     x->var.init = init;
     return x;
@@ -494,6 +505,8 @@ inline Code* code_var(
 inline void init_code_const(Code* x, VarType type, const char* name, const char* init) {
     x->kind = CodeKind::CONST;
     x->var.type = type;
+    x->var.is_default = false;
+    x->var.is_const = true;
     x->var.name = name;
     x->var.init = init;
 }
@@ -519,8 +532,10 @@ inline Code* code_skip(OutAllocator& alc) {
     return new_code(alc, CodeKind::SKIP);
 }
 
-inline Code* code_peek(OutAllocator& alc) {
-    return new_code(alc, CodeKind::PEEK);
+inline Code* code_peek(OutAllocator& alc, bool reassign = false) {
+    Code* x = new_code(alc, CodeKind::PEEK);
+    x->reassign = reassign;
+    return x;
 }
 
 inline Code* code_backup(OutAllocator& alc) {
@@ -543,6 +558,7 @@ inline Code* code_restore_tag(OutAllocator& alc, const char* tag) {
     Code* x = new_code(alc, CodeKind::RESTORETAG);
     x->tag.tag1 = tag;
     x->tag.tag2 = nullptr;
+    x->tag.dist_expr = nullptr;
     x->tag.dist = 0;
     return x;
 }
@@ -551,7 +567,17 @@ inline Code* code_shift(OutAllocator& alc, int32_t dist) {
     Code* x = new_code(alc, CodeKind::SHIFT);
     x->tag.tag1 = nullptr;
     x->tag.tag2 = nullptr;
+    x->tag.dist_expr = nullptr;
     x->tag.dist = dist;
+    return x;
+}
+
+inline Code* code_shift_expr(OutAllocator& alc, const char* expr) {
+    Code* x = new_code(alc, CodeKind::SHIFT);
+    x->tag.tag1 = nullptr;
+    x->tag.tag2 = nullptr;
+    x->tag.dist_expr = expr;
+    x->tag.dist = 0;
     return x;
 }
 
@@ -560,6 +586,7 @@ inline Code* code_shift_tag(
     Code* x = new_code(alc, is_mtag ? CodeKind::SHIFTMTAG : CodeKind::SHIFTSTAG);
     x->tag.tag1 = tag;
     x->tag.tag2 = neg;
+    x->tag.dist_expr = nullptr;
     x->tag.dist = dist;
     return x;
 }
@@ -570,6 +597,7 @@ inline Code* code_set_tag(OutAllocator& alc, const char* tag, bool is_mtag, bool
         : (is_negative ? CodeKind::STAGN : CodeKind::STAGP));
     x->tag.tag1 = tag;
     x->tag.tag2 = nullptr;
+    x->tag.dist_expr = nullptr;
     x->tag.dist = 0;
     return x;
 }
@@ -578,6 +606,7 @@ inline Code* code_copy_tag(OutAllocator& alc, const char* lhs, const char* rhs, 
     Code* x = new_code(alc, is_mtag ? CodeKind::COPYMTAG : CodeKind::COPYSTAG);
     x->tag.tag1 = lhs;
     x->tag.tag2 = rhs;
+    x->tag.dist_expr = nullptr;
     x->tag.dist = 0;
     return x;
 }

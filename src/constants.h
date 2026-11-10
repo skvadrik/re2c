@@ -28,6 +28,11 @@ enum class Lang: uint32_t {
     NONE // no language (no default syntax config will be loaded)
 };
 
+enum class Arch: uint32_t {
+    NONE,
+    X86
+};
+
 enum class Api: uint32_t {
     SIMPLE,
     GENERIC,
@@ -155,7 +160,11 @@ enum class CodeKind: uint32_t {
 enum class VarType: uint32_t {
     INT,
     UINT,
-    YYCTYPE
+    YYCTYPE,
+    VEC16,
+    VEC32,
+    VEC16_MASK,
+    VEC32_MASK
 };
 
 // Bit flags for configurations used in re2c blocks.
@@ -207,7 +216,8 @@ enum class StxGOpt {
     LOOP_LABEL,
     CGOTO_RELATIVE,
     FILL_ENABLE,
-    FN_THROW
+    FN_THROW,
+    SHIFT_CONVERSION
 };
 
 enum class StxLOpt {
@@ -220,7 +230,9 @@ enum class StxLOpt {
     TYPE,
     RETVAL,
     MANY,
-    NESTED
+    BACKWARD,
+    NESTED,
+    WIDE
 };
 
 extern const char* ZERO_COND;

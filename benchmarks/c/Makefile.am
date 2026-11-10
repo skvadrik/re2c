@@ -65,11 +65,20 @@ COMMON_RE2C = \
     $(SRC_DIR)/re2c/base.re \
     $(SRC_DIR)/re2c/base.h
 
+LIN_BENCHMARKS = lin_00__http
+COMMON_LIN = \
+    $(COMMON_SRC) \
+    $(SRC_DIR)/re2c/base.h \
+    $(SRC_DIR)/re2c/lin_base.re \
+    $(SRC_DIR)/re2c/lin_http_rules.re \
+    $(SRC_DIR)/re2c/lin_regimes.h
+
 GEN_RAGEL = $(patsubst %, $(GEN_DIR)/ragel/%.cc, $(BENCHMARKS))
 GEN_RE2C = $(patsubst %, $(GEN_DIR)/re2c/%.cc, $(BENCHMARKS))
-GEN = $(GEN_RAGEL) $(GEN_RE2C)
+GEN_LIN = $(patsubst %, $(GEN_DIR)/re2c/%.cc, $(LIN_BENCHMARKS))
+GEN = $(GEN_RAGEL) $(GEN_RE2C) $(GEN_LIN)
 
-SRC = $(GEN_RAGEL) $(GEN_RE2C)
+SRC = $(GEN_RAGEL) $(GEN_RE2C) $(GEN_LIN)
 
 OBJ_GCC = $(patsubst %.cc, %-gcc.o, $(SRC))
 OBJ_CLANG = $(patsubst %.cc, %-clang.o, $(SRC))
@@ -113,6 +122,11 @@ test: src/test.cc $(OBJ_TEST)
 # always regenerate re2c benchmarks (except for deprecated algorithms)
 
 $(GEN_RE2C): $(GEN_DIR)/%.cc: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE2C)
+	$(AM_V_at)mkdir -p $(@D)
+	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS) $< -o $@
+	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
+
+$(GEN_LIN): $(GEN_DIR)/%.cc: $(SRC_DIR)/%.re $(COMMON_LIN) $(RE2C)
 	$(AM_V_at)mkdir -p $(@D)
 	$(AM_V_GEN)$(RE2C) $(RE2C_FLAGS) $< -o $@
 	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi

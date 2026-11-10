@@ -44,6 +44,8 @@
     re2c:define:YYCONDTYPE = "";
     re2c:YYCTYPE = "";
     re2c:define:YYCTYPE = "";
+    re2c:YYPTYPE = "";
+    re2c:define:YYPTYPE = "";
     re2c:YYCTXMARKER = "";
     re2c:define:YYCTXMARKER = "";
     re2c:YYCURSOR = "";
@@ -79,6 +81,16 @@
     re2c:define:YYMTAGP = "";
     re2c:YYPEEK = "";
     re2c:define:YYPEEK = "";
+    re2c:YYPEEK2 = "";
+    re2c:define:YYPEEK2 = "";
+    re2c:YYPEEK4 = "";
+    re2c:define:YYPEEK4 = "";
+    re2c:YYPEEK8 = "";
+    re2c:define:YYPEEK8 = "";
+    re2c:YYPEEK16 = "";
+    re2c:define:YYPEEK16 = "";
+    re2c:YYPEEK32 = "";
+    re2c:define:YYPEEK32 = "";
     re2c:YYRESTORE = "";
     re2c:define:YYRESTORE = "";
     re2c:YYRESTORECTX = "";
@@ -129,6 +141,7 @@
     re2c:variable:yych = "";
     re2c:yych:conversion = 0;
     re2c:variable:yych:conversion = 0;
+    re2c:yyshift:conversion = 0;
     re2c:yych:emit = 0;
     re2c:variable:yych:emit = 0;
     re2c:yybm = "";
@@ -174,6 +187,14 @@
     re2c:flags:case-inverted = 0;
     re2c:case-ranges = 0;
     re2c:flags:case-ranges = 0;
+    re2c:arch = x86;
+    re2c:arch = none;
+    re2c:vectorize:loops = 0;
+    re2c:vectorize:size = 16;
+    re2c:vectorize:size = 32;
+    re2c:vectorize:linear = 0;
+    re2c:flags:vectorize:linear = 0;
+    re2c:flags:vectorize-linear = 0;
     // re2c:unsafe = 0; // unsupported for C backend
     // re2c:monadic = 0; // unsupported for C backend
 

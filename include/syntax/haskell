@@ -4,6 +4,7 @@ supported_apis = ["record", "generic"];
 supported_api_styles = ["free-form"];
 supported_code_models = ["recursive-functions"];
 supported_targets = ["code", "dot"];
+supported_archs = [];
 supported_features = ["nested-ifs", "bitmaps", "monadic", "tags", "captvars"];
 
 
@@ -94,6 +95,10 @@ re2c:case-inverted = 0;
 re2c:case-ranges = 0;
 re2c:unsafe = 0;
 re2c:monadic = 0;
+re2c:arch = none;
+re2c:vectorize:loops = 0;
+re2c:vectorize:linear = 0;
+re2c:vectorize:size = 32;
 re2c:encoding:ebcdic = 0;
 re2c:encoding:utf32 = 0;
 re2c:encoding:ucs2 = 0;
@@ -135,6 +140,12 @@ re2c:YYMAXNMATCH = "yymaxnmatch";
 re2c:YYMTAGN = "yymtagn";
 re2c:YYMTAGP = "yymtagp";
 re2c:YYPEEK = (.api.record ? "index" : "yypeek");
+re2c:YYPEEK2 = "yypeek2";
+re2c:YYPEEK4 = "yypeek4";
+re2c:YYPEEK8 = "yypeek8";
+re2c:YYPEEK16 = "yypeek16";
+re2c:YYPEEK32 = "yypeek32";
+re2c:YYPTYPE = "Int";
 re2c:YYRESTORE = "yyrestore";
 re2c:YYRESTORECTX = "yyrestorectx";
 re2c:YYRESTORETAG = "yyrestoretag";
@@ -183,6 +194,10 @@ code:assign = <undefined>;
 
 code:type_int = <undefined>;
 code:type_uint = <undefined>;
+code:type_vec16 = <undefined>;
+code:type_vec32 = <undefined>;
+code:type_vec16_mask = <undefined>;
+code:type_vec32_mask = <undefined>;
 code:type_yybm = "Word8";
 code:type_yytarget = <undefined>;
 code:type_yyctable = <undefined>;
@@ -322,8 +337,11 @@ code:yyrestoretag =
 code:yyshift =
     topindent (.api.record
         ? (.monadic
-            ? YYCURSOR " <- return $ " YYCURSOR " - " offset
-            : "let __ = " YYCURSOR " - " offset " in let " YYCURSOR " = __ in")
+            ? YYCURSOR " <- return $ " YYCURSOR " - "
+                (.yyshift.conversion ? "(fromIntegral " offset " :: " YYPTYPE ")" : offset)
+            : "let __ = " YYCURSOR " - "
+                (.yyshift.conversion ? "(fromIntegral " offset " :: " YYPTYPE ")" : offset)
+                " in let " YYCURSOR " = __ in")
         : YYSHIFT
     ) nl;
 
@@ -425,3 +443,26 @@ code:yybm_filter = "(" yych " .&. complement 0xFF) /= 0";
 code:yybm_match = "(" yybm " ! (" offset " + fromIntegral " yych ") .&. " mask ") /= 0";
 
 code:yytarget_filter = <undefined>;
+code:hex_literal = <undefined>;
+
+code:yypeek2 = <undefined>;
+code:yypeek4 = <undefined>;
+code:yypeek8 = <undefined>;
+code:yypeek16 = <undefined>;
+code:yypeek32 = <undefined>;
+code:vec16_splat = <undefined>;
+code:vec32_splat = <undefined>;
+code:vec16_sub = <undefined>;
+code:vec32_sub = <undefined>;
+code:vec16_cmpeq = <undefined>;
+code:vec32_cmpeq = <undefined>;
+code:vec16_cmpgt = <undefined>;
+code:vec32_cmpgt = <undefined>;
+code:vec16_or = <undefined>;
+code:vec32_or = <undefined>;
+code:vec16_movemask = <undefined>;
+code:vec32_movemask = <undefined>;
+code:vec16_ctz = <undefined>;
+code:vec32_ctz = <undefined>;
+code:vec16_cleanup = <undefined>;
+code:vec32_cleanup = <undefined>;

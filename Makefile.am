@@ -264,7 +264,9 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/features/encodings/encodings.rst_ \
 	doc/manual/features/headers/headers.rst_ \
 	doc/manual/features/includes/includes.rst_ \
+	doc/manual/features/linear_vectorization/linear_vectorization.rst_ \
 	doc/manual/features/reuse/reuse.rst_ \
+	doc/manual/features/simd/simd.rst_ \
 	doc/manual/features/skeleton/skeleton.rst_ \
 	doc/manual/features/state/state.rst_ \
 	doc/manual/features/submatch/submatch_example_mtags.rst_ \
@@ -348,8 +350,11 @@ re2c_SRC_DOC_EXT = \
 	examples/go/headers/lexer/state.go \
 	examples/go/includes/definitions.go \
 	examples/go/includes/include.re \
+	examples/go/linear_vectorization/01_headers.re \
 	examples/go/reuse/reuse.re \
 	examples/go/reuse/usedir.re \
+	examples/go/simd/simd.re \
+	examples/go/simd/string_lexer/string_lexer.re \
 	examples/go/state/push.re \
 	examples/go/submatch/01_stags_fill.re \
 	examples/go/submatch/01_stags.re \
@@ -766,6 +771,15 @@ vtests: all $(re2c_TESTSUITE)
 .PHONY: wtests
 wtests: all $(re2c_TESTSUITE)
 	$(PYTHON) $(top_builddir)/$(re2c_TESTSUITE) --wine -j1
+.PHONY: check_vectorize_avx
+check_vectorize_avx: all
+	$(PYTHON) $(top_srcdir)/test/codegen/c/check_vectorize_avx.py $(top_builddir)/re2c
+.PHONY: check_vectorize_loops
+check_vectorize_loops: all
+	$(PYTHON) $(top_srcdir)/test/codegen/c/check_vectorize_loops.py --cc "$(CC)" $(top_builddir)/re2c
+.PHONY: check_vectorize_linear
+check_vectorize_linear: all
+	$(PYTHON) $(top_srcdir)/test/codegen/c/check_vectorize_linear.py --cc "$(CC)" $(top_builddir)/re2c
 
 re2c_test_list_SOURCES = \
 	src/test/list/test.cc

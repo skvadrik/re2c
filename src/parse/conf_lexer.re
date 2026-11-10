@@ -154,6 +154,8 @@ Ret Input::lex_conf(Opt& opts) {
     "yyfn:sep"   { RET_CONF_STR(fn_sep); }
     "yyfn:throw" { RET_CONF_STR(fn_throw); }
 
+    "yyshift:conversion" { RET_CONF_BOOL(shift_conversion); }
+
     "flags:"? "tags" | "flags:T" {
         RET_CONF_BOOL(tags);
     }
@@ -215,6 +217,12 @@ Ret Input::lex_conf(Opt& opts) {
     "define:"? "YYMTAGN"                     { RET_CONF_CODE(api_mtag_neg); }
     "define:"? "YYMTAGP"                     { RET_CONF_CODE(api_mtag_pos); }
     "define:"? "YYPEEK"                      { RET_CONF_CODE(api_peek); }
+    "define:"? "YYPEEK2"                     { RET_CONF_CODE(api_peek2); }
+    "define:"? "YYPEEK4"                     { RET_CONF_CODE(api_peek4); }
+    "define:"? "YYPEEK8"                     { RET_CONF_CODE(api_peek8); }
+    "define:"? "YYPEEK16"                    { RET_CONF_CODE(api_peek16); }
+    "define:"? "YYPEEK32"                    { RET_CONF_CODE(api_peek32); }
+    "define:"? "YYPTYPE"                     { RET_CONF_CODE(api_ptr_type); }
     "define:"? "YYRESTORE"                   { RET_CONF_CODE(api_restore); }
     "define:"? "YYRESTORECTX"                { RET_CONF_CODE(api_restore_ctx); }
     "define:"? "YYRESTORETAG"                { RET_CONF_CODE(api_restore_tag); }
@@ -280,6 +288,12 @@ Ret Input::lex_conf(Opt& opts) {
     "flags:"? "case-ranges"                   { RET_CONF_FEAT(case_ranges, "case-ranges"); }
     "flags:"? "unsafe"                        { RET_CONF_BOOL(unsafe); }
     "flags:"? "monadic"                       { RET_CONF_BOOL(monadic); }
+    "flags:"? "arch"                          { goto arch; }
+    "flags:"? "vectorize:loops"               { RET_CONF_FEAT(vectorize_loops, "vectorize-loops"); }
+    "flags:"? "vectorize:linear" | "flags:vectorize-linear" {
+        RET_CONF_FEAT(vectorize_linear, "vectorize-linear");
+    }
+    "flags:"? "vectorize:size"                { RET_CONF_NUM_NONNEG(vectorize_size); }
 
     "encoding:ebcdic" | "flags:ecb"        | "flags:e" { RET_CONF_ENC(Enc::Type::EBCDIC); }
     "encoding:utf32"  | "flags:unicode"    | "flags:u" { RET_CONF_ENC(Enc::Type::UTF32); }
@@ -393,6 +407,22 @@ char_lit:
     "char"        { SETOPT(char_literals, CharLit::CHAR);        goto end; }
     "hex"         { SETOPT(char_literals, CharLit::HEX);         goto end; }
     "char-or-hex" { SETOPT(char_literals, CharLit::CHAR_OR_HEX); goto end; }
+*/
+
+arch:
+    CHECK_RET(lex_conf_assign());
+/*!local:re2c
+    * {
+        RET_FAIL(error_at_cur("bad configuration value (expected: 'none', 'x86')"));
+    }
+    "none" { SETOPT(arch, Arch::NONE); goto end; }
+    "x86"  {
+        if (!in_syntax_file && !opts.glob.supported_archs_contains("x86")) {
+            RET_FAIL(error_at_cur("`x86` architecture is not supported for this backend"));
+        }
+        SETOPT(arch, Arch::X86);
+        goto end;
+    }
 */
 
 end:
@@ -596,6 +626,10 @@ start:
     "code:array_elem"             { RET_CODE(code_array_elem); }
     "code:type_int"               { RET_CODE(code_type_int); }
     "code:type_uint"              { RET_CODE(code_type_uint); }
+    "code:type_vec16"             { RET_CODE(code_type_vec16); }
+    "code:type_vec32"             { RET_CODE(code_type_vec32); }
+    "code:type_vec16_mask"        { RET_CODE(code_type_vec16_mask); }
+    "code:type_vec32_mask"        { RET_CODE(code_type_vec32_mask); }
     "code:type_yybm"              { RET_CODE(code_type_yybm); }
     "code:type_yytarget"          { RET_CODE(code_type_yytarget); }
     "code:type_yyctable"          { RET_CODE(code_type_yyctable); }
@@ -663,6 +697,28 @@ start:
     "code:yybm_filter"            { RET_CODE(code_yybm_filter); }
     "code:yybm_match"             { RET_CODE(code_yybm_match); }
     "code:yytarget_filter"        { RET_CODE(code_yytarget_filter); }
+    "code:hex_literal"            { RET_CODE(code_hex_literal); }
+    "code:yypeek2"                { RET_CODE(code_yypeek2); }
+    "code:yypeek4"                { RET_CODE(code_yypeek4); }
+    "code:yypeek8"                { RET_CODE(code_yypeek8); }
+    "code:yypeek16"               { RET_CODE(code_yypeek16); }
+    "code:yypeek32"               { RET_CODE(code_yypeek32); }
+    "code:vec16_splat"            { RET_CODE(code_vec16_splat); }
+    "code:vec32_splat"            { RET_CODE(code_vec32_splat); }
+    "code:vec16_sub"              { RET_CODE(code_vec16_sub); }
+    "code:vec32_sub"              { RET_CODE(code_vec32_sub); }
+    "code:vec16_cmpeq"            { RET_CODE(code_vec16_cmpeq); }
+    "code:vec32_cmpeq"            { RET_CODE(code_vec32_cmpeq); }
+    "code:vec16_cmpgt"            { RET_CODE(code_vec16_cmpgt); }
+    "code:vec32_cmpgt"            { RET_CODE(code_vec32_cmpgt); }
+    "code:vec16_or"               { RET_CODE(code_vec16_or); }
+    "code:vec32_or"               { RET_CODE(code_vec32_or); }
+    "code:vec16_movemask"         { RET_CODE(code_vec16_movemask); }
+    "code:vec32_movemask"         { RET_CODE(code_vec32_movemask); }
+    "code:vec16_ctz"              { RET_CODE(code_vec16_ctz); }
+    "code:vec32_ctz"              { RET_CODE(code_vec32_ctz); }
+    "code:vec16_cleanup"          { RET_CODE(code_vec16_cleanup); }
+    "code:vec32_cleanup"          { RET_CODE(code_vec32_cleanup); }
 
     "code:" [a-z0-9_]+ {
         RET_FAIL(error_at_tok("unknown code template: '%.*s'", int(cur - tok), tok));
@@ -729,6 +785,12 @@ start:
     "YYMTAGN"      { RET_VAR(StxVarId::MTAGN); }
     "YYMTAGP"      { RET_VAR(StxVarId::MTAGP); }
     "YYPEEK"       { RET_VAR(StxVarId::PEEK); }
+    "YYPEEK2"      { RET_VAR(StxVarId::PEEK2); }
+    "YYPEEK4"      { RET_VAR(StxVarId::PEEK4); }
+    "YYPEEK8"      { RET_VAR(StxVarId::PEEK8); }
+    "YYPEEK16"     { RET_VAR(StxVarId::PEEK16); }
+    "YYPEEK32"     { RET_VAR(StxVarId::PEEK32); }
+    "YYPTYPE"      { RET_VAR(StxVarId::PTYPE); }
     "yyrecord"     { RET_VAR(StxVarId::RECORD); }
     "YYRESTORE"    { RET_VAR(StxVarId::RESTORE); }
     "YYRESTORECTX" { RET_VAR(StxVarId::RESTORECTX); }
@@ -760,9 +822,18 @@ start:
     //
     // These options are part of the syntax file API.
 
-    ".code_model.goto_label"          { RET_COND(globopts->code_model == CodeModel::GOTO_LABEL); }
-    ".code_model.loop_switch"         { RET_COND(globopts->code_model == CodeModel::LOOP_SWITCH); }
-    ".code_model.recursive_functions" { RET_COND(globopts->code_model == CodeModel::REC_FUNC); }
+    ".code_model.goto_label" {
+        if (allow_raw_nl) RET_COND(globopts->code_model == CodeModel::GOTO_LABEL);
+        RET_GOPT(StxGOpt::CODE_MODEL_GOTO_LABEL);
+    }
+    ".code_model.loop_switch" {
+        if (allow_raw_nl) RET_COND(globopts->code_model == CodeModel::LOOP_SWITCH);
+        RET_GOPT(StxGOpt::CODE_MODEL_LOOP_SWITCH);
+    }
+    ".code_model.recursive_functions" {
+        if (allow_raw_nl) RET_COND(globopts->code_model == CodeModel::REC_FUNC);
+        RET_GOPT(StxGOpt::CODE_MODEL_REC_FUNC);
+    }
 
     // Global (mutable) conditionals.
     //
@@ -789,6 +860,7 @@ start:
     ".cgoto.relative"      { RET_GOPT(StxGOpt::CGOTO_RELATIVE); }
     ".yyfill.enable"       { RET_GOPT(StxGOpt::FILL_ENABLE); }
     ".yyfn.throw"          { RET_GOPT(StxGOpt::FN_THROW); }
+    ".yyshift.conversion"  { RET_GOPT(StxGOpt::SHIFT_CONVERSION); }
 
     // Local conditionals (specific to each code template in syntax file).
     //
@@ -803,7 +875,9 @@ start:
     ".retval"              { RET_LOPT(StxLOpt::RETVAL); }
     ".type"                { RET_LOPT(StxLOpt::TYPE); }
     ".many"                { RET_LOPT(StxLOpt::MANY); }
+    ".backward"            { RET_LOPT(StxLOpt::BACKWARD); }
     ".nested"              { RET_LOPT(StxLOpt::NESTED); }
+    ".wide"                { RET_LOPT(StxLOpt::WIDE); }
 
     "." [a-z0-9_.]+ {
         RET_FAIL(error_at_tok("unknown conditional: '%.*s'", int(cur - tok), tok));
@@ -871,6 +945,7 @@ start:
     "supported_api_styles"  { SAVE_CONF_LIST(supported_api_styles); }
     "supported_code_models" { SAVE_CONF_LIST(supported_code_models); }
     "supported_targets"     { SAVE_CONF_LIST(supported_targets); }
+    "supported_archs"       { SAVE_CONF_LIST(supported_archs); }
     "supported_features"    { SAVE_CONF_LIST(supported_features); }
 
     "semicolons"              { SAVE_CONF_BOOL(semicolons); }
