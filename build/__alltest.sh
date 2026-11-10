@@ -17,6 +17,9 @@ build/__build.sh \
     && cd .. \
     || { cd .. ; echo "*** skeleton failed ***"; exit 1; }
 
+# codegen probes (uses the re2c binary built for the skeleton tests)
+build/__codegen_probes.sh || { echo "*** codegen probes failed ***"; exit 1; }
+
 # mingw
 # - exclude _mingw_slibtool, as it fails to link EXEs due to symbol collisions
 build/__build_mingw.sh \
