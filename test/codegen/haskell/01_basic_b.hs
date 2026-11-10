@@ -15,35 +15,6 @@ data State = State {
 }
 
 
-yy0 :: State -> Bool
-yy0 State{..} =
-    let yych = index _yyinput _yycursor in
-    let __ = _yycursor + 1 in let _yycursor = __ in
-    if yych <= 0x30 then yy1 State{..}
-    else if yych <= 0x39 then yy2 State{..}
-    else yy1 State{..}
-
-yy1 :: State -> Bool
-yy1 State{..} =
-    False
-
-yy2 :: State -> Bool
-yy2 State{..} =
-    let yych = index _yyinput _yycursor in
-    if (yybm ! (0 + fromIntegral yych) .&. 128) /= 0 then
-        let __ = _yycursor + 1 in let _yycursor = __ in
-        yy2 State{..}
-    else
-        yy3 State{..}
-
-yy3 :: State -> Bool
-yy3 State{..} =
-    True
-
-lexer :: State -> Bool
-lexer State{..} =
-    yy0 State{..}
-
 yybm :: Array Int Word8
 yybm = array (0, 256 - 1) $ Prelude.zip [0 .. 256 - 1] [
       0,   0,   0,   0,   0,   0,   0,   0,
@@ -78,6 +49,35 @@ yybm = array (0, 256 - 1) $ Prelude.zip [0 .. 256 - 1] [
       0,   0,   0,   0,   0,   0,   0,   0,
       0,   0,   0,   0,   0,   0,   0,   0,
       0,   0,   0,   0,   0,   0,   0,   0]
+yy0 :: State -> Bool
+yy0 State{..} =
+    let yych = index _yyinput _yycursor in
+    let __ = _yycursor + 1 in let _yycursor = __ in
+    if yych <= 0x30 then yy1 State{..}
+    else if yych <= 0x39 then yy2 State{..}
+    else yy1 State{..}
+
+yy1 :: State -> Bool
+yy1 State{..} =
+    False
+
+yy2 :: State -> Bool
+yy2 State{..} =
+    let yych = index _yyinput _yycursor in
+    if (yybm ! (0 + fromIntegral yych) .&. 128) /= 0 then
+        let __ = _yycursor + 1 in let _yycursor = __ in
+        yy2 State{..}
+    else
+        yy3 State{..}
+
+yy3 :: State -> Bool
+yy3 State{..} =
+    True
+
+lexer :: State -> Bool
+lexer State{..} =
+    yy0 State{..}
+
 
 
 main :: IO ()

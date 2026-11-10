@@ -9,36 +9,7 @@ type state = {
 
 
 #12 "codegen/ocaml/01_basic_b.ml"
-let rec yy0 (st : state) : bool =
-    let yych = st.str.[st.cur] in
-    st.cur <- st.cur + 1;
-    if (yych <= '0') then (yy1 [@tailcall]) st
-    else if (yych <= '9') then (yy2 [@tailcall]) st
-    else (yy1 [@tailcall]) st
-
-and yy1 (st : state) : bool =
-#18 "codegen/ocaml/01_basic_b.re"
-    false
-#23 "codegen/ocaml/01_basic_b.ml"
-
-and yy2 (st : state) : bool =
-    let yych = st.str.[st.cur] in
-    if ((yybm.(0 + Char.code yych) land 128) != 0) then (
-        st.cur <- st.cur + 1;
-        (yy2 [@tailcall]) st
-    ) else (
-        (yy3 [@tailcall]) st
-    )
-
-and yy3 (st : state) : bool =
-#17 "codegen/ocaml/01_basic_b.re"
-    true
-#37 "codegen/ocaml/01_basic_b.ml"
-
-and lex (st : state) : bool =
-    (yy0 [@tailcall]) st
-
-and yybm = [|
+let yybm = [|
       0;   0;   0;   0;   0;   0;   0;   0;
       0;   0;   0;   0;   0;   0;   0;   0;
       0;   0;   0;   0;   0;   0;   0;   0;
@@ -72,6 +43,35 @@ and yybm = [|
       0;   0;   0;   0;   0;   0;   0;   0;
       0;   0;   0;   0;   0;   0;   0;   0;
 |]
+let rec yy0 (st : state) : bool =
+    let yych = st.str.[st.cur] in
+    st.cur <- st.cur + 1;
+    if (yych <= '0') then (yy1 [@tailcall]) st
+    else if (yych <= '9') then (yy2 [@tailcall]) st
+    else (yy1 [@tailcall]) st
+
+and yy1 (st : state) : bool =
+#18 "codegen/ocaml/01_basic_b.re"
+    false
+#57 "codegen/ocaml/01_basic_b.ml"
+
+and yy2 (st : state) : bool =
+    let yych = st.str.[st.cur] in
+    if ((yybm.(0 + Char.code yych) land 128) != 0) then (
+        st.cur <- st.cur + 1;
+        (yy2 [@tailcall]) st
+    ) else (
+        (yy3 [@tailcall]) st
+    )
+
+and yy3 (st : state) : bool =
+#17 "codegen/ocaml/01_basic_b.re"
+    true
+#71 "codegen/ocaml/01_basic_b.ml"
+
+and lex (st : state) : bool =
+    (yy0 [@tailcall]) st
+
 #19 "codegen/ocaml/01_basic_b.re"
 
 

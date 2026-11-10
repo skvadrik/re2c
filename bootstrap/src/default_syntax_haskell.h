@@ -168,7 +168,7 @@ static constexpr const char* DEFAULT_SYNTAX_HASKELL =
     "    topindent name \" :: Array Int \" type nl\n"
     "    topindent name \" = array (0, \" size \" - 1) $ Prelude.zip [0 .. \" size \" - 1] [\" nl indent\n"
     "        [row{0:-2}: topindent [elem{0:-2}: elem \", \"] [elem{-1}: elem \",\"] nl]\n"
-    "        [row{-1}:   topindent [elem{0:-2}: elem \", \"] [elem{-1}: elem \"]\"] nl];\n"
+    "        [row{-1}:   topindent [elem{0:-2}: elem \", \"] [elem{-1}: elem \"]\"] nl] dedent;\n"
     "\n"
     "code:array_elem = array \" ! \" index;\n"
     "\n"

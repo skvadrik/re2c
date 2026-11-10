@@ -2122,6 +2122,10 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
         // In the rec/func mode DFA states are separate co-recursive functions that tail-call
         // other state functions or themselves.
 
+        // Bitmaps are global tables in this mode (gen_bitmap forces local = false), so they
+        // must be emitted before the state functions that reference them (issue #595).
+        gen_bitmaps(output, code); // no local declarations in rec/func mode => ignore return value
+
         CodeList* funcs = code_list(alc);
         for (const std::unique_ptr<Adfa>& dfa : dfas) {
             gen_dfa_as_recursive_functions(output, *dfa, funcs);
@@ -2130,8 +2134,6 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
         CHECK_RET(gen_start_function(output, *dfas[0], funcs));
 
         append(code, code_recursive_functions(alc, funcs));
-
-        gen_bitmaps(output, code); // no local declarations in rec/func mode => ignore return value
     }
 
     // If needed, wrap the block in braces, so that variable declarations have local scope.
