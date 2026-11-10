@@ -167,7 +167,7 @@ code:array_local =
     dedent topindent "}" nl;
 
 code:array_global =
-    topindent "var " name " = {" nl indent
+    topindent "var " name " = [" size "]" type "{" nl indent
         [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
     dedent topindent "}" nl;
 

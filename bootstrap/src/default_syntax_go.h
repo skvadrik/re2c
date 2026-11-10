@@ -168,7 +168,7 @@ static constexpr const char* DEFAULT_SYNTAX_GO =
     "    dedent topindent \"}\" nl;\n"
     "\n"
     "code:array_global =\n"
-    "    topindent \"var \" name \" = {\" nl indent\n"
+    "    topindent \"var \" name \" = [\" size \"]\" type \"{\" nl indent\n"
     "        [row: topindent [elem{0:-2}: elem \", \"] [elem{-1}: elem \",\"] nl]\n"
     "    dedent topindent \"}\" nl;\n"
     "\n"
