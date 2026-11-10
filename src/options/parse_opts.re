@@ -10,6 +10,7 @@
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
 #include "src/parse/input.h"
+#include "src/util/string_utils.h"
 
 namespace re2c {
 
@@ -167,6 +168,7 @@ opt_long: /*!local:re2c
     "case-inverted"           end { opts.set_case_inverted(true);           goto opt; }
     "tags"                    end { opts.set_tags(true);                    goto opt; }
     "no-unsafe"               end { opts.set_unsafe(false);                 goto opt; }
+    "vectorize-loops"         end { opts.set_vectorize_loops(true);         goto opt; }
     "invert-captures"         end { opts.set_captures_invert(true);         goto opt; }
 
     "ebcdic" | "ecb"        end { opts.set_encoding(Enc::Type::EBCDIC, true); goto opt; }
@@ -199,6 +201,8 @@ opt_long: /*!local:re2c
     }
 
     "lang"                  end { NEXT_ARG("--lang",             opt_lang); }
+    "arch"                  end { NEXT_ARG("--arch",             opt_arch); }
+    "vectorize-size"        end { NEXT_ARG("--vectorize-size",   opt_vectorize_size); }
     "output"                end { NEXT_ARG("-o, --output",       opt_output); }
     "type-"? "header"       end { NEXT_ARG("-t, --header, --type-header", opt_header); }
     "depfile"               end { NEXT_ARG("--depfile",          opt_depfile); }
@@ -256,6 +260,25 @@ opt_lang: /*!local:re2c
     "v"       end { *lang = Lang::V;       goto opt; }
     "zig"     end { *lang = Lang::ZIG;     goto opt; }
     "none"    end { *lang = Lang::NONE;    goto opt; }
+*/
+
+opt_arch: /*!local:re2c
+    * { ERRARG("--arch", "none | x86", *argv); }
+    "none" end { opts.set_arch(Arch::NONE); goto opt; }
+    "x86"  end { opts.set_arch(Arch::X86);  goto opt; }
+*/
+
+opt_vectorize_size: /*!local:re2c
+    * { ERRARG("--vectorize-size", "16 | 32", *argv); }
+    ("0" | [1-9][0-9]*) end {
+        uint32_t n = 0;
+        if (!s_to_u32_unsafe(reinterpret_cast<const uint8_t*>(*argv),
+                             reinterpret_cast<const uint8_t*>(YYCURSOR - 1), n)) {
+            ERRARG("--vectorize-size", "16 | 32", *argv);
+        }
+        opts.set_vectorize_size(n);
+        goto opt;
+    }
 */
 
 opt_output: /*!local:re2c

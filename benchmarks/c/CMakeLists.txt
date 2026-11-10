@@ -48,6 +48,30 @@ set(BENCHMARKS
     "submatch_38__rep_23_rep_19_rep_17"
 )
 
+# Benchmarks for `--vectorize-loops`: each one is a single .re file that generates scalar and
+# vectorized (16-byte SSE2 and 32-byte AVX2) lexers side by side (see src/re2c/vec_base.re). The
+# translation units are compiled with -msse2 so that 16-byte SSE2 lexers emit genuine non-VEX SSE2
+# instructions, while 32-byte AVX2 lexers carry per-function target("avx2") attributes; the
+# benchmark and test binaries skip them at run time if the CPU does not support AVX2.
+set(VEC_BENCHMARKS
+    "vec_00__strings"
+    "vec_01__uri_rfc3986"
+    "vec_02__uri_simple"
+)
+# Optional third-party references for the vec_* benchmarks (off by default, found with pkg-config;
+# they must be installed separately, see README).
+option(RE2C_BENCH_SIMDJSON "Add simdjson reference benchmarks on the json data set" OFF)
+option(RE2C_BENCH_HYPERSCAN "Add Hyperscan (or Vectorscan) reference benchmarks" OFF)
+set(VEC_INPUTS "strshort" "strmedium" "strlong" "strescape" "json" "csource")
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|AMD64|amd64|i[3-6]86)$")
+    set(RE2C_BENCH_VECTORIZE ON)
+else()
+    set(RE2C_BENCH_VECTORIZE OFF)
+    set(VEC_BENCHMARKS "")
+    set(VEC_INPUTS "")
+endif()
+set(VEC_CXX_FLAGS "-msse2")
+
 set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(ENG_DIR "${CMAKE_CURRENT_BINARY_DIR}/engines")
 set(GEN_DIR "${CMAKE_CURRENT_BINARY_DIR}/gen")
@@ -107,6 +131,23 @@ foreach(bench ${BENCHMARKS})
     )
     list(APPEND GEN "${gen_file}")
 endforeach()
+set(VEC_GEN "")
+foreach(bench ${VEC_BENCHMARKS})
+    set(src_file "${SRC_DIR}/re2c/${bench}.re")
+    set(gen_file "${GEN_DIR}/re2c/${bench}.cc")
+    set(pregen_file "${PREGEN_DIR}/re2c/${bench}.cc")
+    file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
+    file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
+    add_custom_command(
+        OUTPUT "${gen_file}"
+        COMMAND "${RE2C}" ${RE2C_FLAGS} "${rel_src_file}" -o "${rel_gen_file}"
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${gen_file}" "${pregen_file}"
+        DEPENDS "${src_file}" "${SRC_DIR}/re2c/vec_base.re" "${SRC_DIR}/re2c/vec_strings_rules.re"
+            "${RE2C}"
+    )
+    list(APPEND GEN "${gen_file}")
+    list(APPEND VEC_GEN "${gen_file}")
+endforeach()
 
 # binaries
 if("${GBENCHMARK_INCLUDE_DIR}" STREQUAL "")
@@ -116,18 +157,64 @@ else()
 endif()
 set(RE2C_CXX_FLAGS "-O3" "-g" "-I" "${SRC_DIR}" "-Wall" "-Wno-unused-const-variable"
     "${GBENCHMARK_INCLUDES}" "-std=c++11") # C++11 is needed for some google-benchmark features
+# Hand-written and third-party reference implementations for the vec_* benchmarks (see
+# src/ref/vec_ref.h), compiled with the same flags as vec_* objects.
+set(VEC_REF_SOURCES "")
+set(VEC_REF_LIBS "")
+if(RE2C_BENCH_VECTORIZE)
+    list(APPEND RE2C_CXX_FLAGS "-DRE2C_BENCH_VECTORIZE")
+    list(APPEND VEC_REF_SOURCES "${SRC_DIR}/ref/vec_strings_ref.cc")
+    if(RE2C_BENCH_SIMDJSON)
+        pkg_check_modules(SIMDJSON REQUIRED simdjson)
+        list(APPEND RE2C_CXX_FLAGS "-DRE2C_BENCH_SIMDJSON")
+        list(APPEND VEC_REF_SOURCES "${SRC_DIR}/ref/simdjson_ref.cc")
+        list(APPEND VEC_REF_LIBS ${SIMDJSON_LDFLAGS})
+    endif()
+    if(RE2C_BENCH_HYPERSCAN)
+        pkg_check_modules(HYPERSCAN REQUIRED libhs)
+        list(APPEND RE2C_CXX_FLAGS "-DRE2C_BENCH_HYPERSCAN")
+        list(APPEND VEC_REF_SOURCES "${SRC_DIR}/ref/hyperscan_ref.cc")
+        list(APPEND VEC_REF_LIBS ${HYPERSCAN_LDFLAGS})
+    endif()
+endif()
 list(APPEND COMPILERS "g++" "clang++")
 list(APPEND COMPNAMES "gcc" "clang")
 foreach(compiler IN ZIP_LISTS COMPILERS COMPNAMES)
     set(objects "")
     set(flags ${RE2C_CXX_FLAGS} "-DCXX=\\\"${compiler_1}\\\"")
+    list(APPEND flags "-DRE2C_BENCH_SOURCE_DIR=\\\"${CMAKE_SOURCE_DIR}\\\"")
     foreach(gen_file ${GEN})
         string(REGEX REPLACE
             "^${GEN_DIR}(.+)\.cc$" "${GEN_DIR}\\1-${compiler_1}.o" obj_file "${gen_file}")
+        set(obj_flags ${flags})
+        set(obj_deps "${gen_file}" "${SRC_DIR}/common.h")
+        if("${gen_file}" IN_LIST VEC_GEN)
+            list(APPEND obj_flags ${VEC_CXX_FLAGS})
+            list(APPEND obj_deps "${SRC_DIR}/re2c/vec_regimes.h"
+                "${SRC_DIR}/re2c/base.h" "${SRC_DIR}/ref/vec_ref.h")
+        endif()
         add_custom_command(
             OUTPUT "${obj_file}"
-            COMMAND "${compiler_0}" ${flags} -c "${gen_file}" -o "${obj_file}"
-            DEPENDS "${gen_file}" "${SRC_DIR}/common.h"
+            COMMAND "${compiler_0}" ${obj_flags} -c "${gen_file}" -o "${obj_file}"
+            DEPENDS ${obj_deps}
+        )
+        list(APPEND objects "${obj_file}")
+    endforeach()
+    foreach(ref_file ${VEC_REF_SOURCES})
+        get_filename_component(ref_name "${ref_file}" NAME_WE)
+        set(obj_file "${GEN_DIR}/ref/${ref_name}-${compiler_1}.o")
+        set(obj_flags ${flags} ${VEC_CXX_FLAGS})
+        if(ref_name STREQUAL "simdjson_ref")
+            list(REMOVE_ITEM obj_flags "-std=c++11")
+            list(APPEND obj_flags "-std=c++17" ${SIMDJSON_CFLAGS})
+        elseif(ref_name STREQUAL "hyperscan_ref")
+            list(APPEND obj_flags ${HYPERSCAN_CFLAGS})
+        endif()
+        add_custom_command(
+            OUTPUT "${obj_file}"
+            COMMAND "${CMAKE_COMMAND}" -E make_directory "${GEN_DIR}/ref"
+            COMMAND "${compiler_0}" ${obj_flags} -c "${ref_file}" -o "${obj_file}"
+            DEPENDS "${ref_file}" "${SRC_DIR}/ref/vec_ref.h"
         )
         list(APPEND objects "${obj_file}")
     endforeach()
@@ -137,6 +224,7 @@ foreach(compiler IN ZIP_LISTS COMPILERS COMPNAMES)
     add_custom_command(
         OUTPUT "${output}"
         COMMAND "${compiler_0}" ${flags} ${inputs} "-o" "${output}" ${GBENCHMARK_LINK_LIBRARIES}
+            ${VEC_REF_LIBS}
         DEPENDS ${inputs}
     )
     if(compiler_1 STREQUAL "gcc") # build test only with GCC
@@ -144,6 +232,7 @@ foreach(compiler IN ZIP_LISTS COMPILERS COMPNAMES)
         add_custom_command(
             OUTPUT "test"
             COMMAND "${compiler_0}" ${flags} ${test_inputs} "-o" "test" ${GBENCHMARK_LINK_LIBRARIES}
+                ${VEC_REF_LIBS}
             DEPENDS ${test_inputs}
         )
     endif()
@@ -163,6 +252,7 @@ endfunction()
 set(DAT)
 # Some benchmarks share the same data, like submatch_03__uri_simple and submatch_02__uri_rfc3986.
 regex_replace_list("^[a-z]+_[0-9]+__([^_]+).*" "\\1" INPUTS ${BENCHMARKS})
+list(APPEND INPUTS ${VEC_INPUTS})
 list(REMOVE_DUPLICATES INPUTS)
 foreach(input ${INPUTS})
     set(src_dir "${CMAKE_CURRENT_SOURCE_DIR}/../_data/${input}")

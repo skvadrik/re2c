@@ -18,7 +18,14 @@ for f in $(find -name '*.re'); do
         head -n $l "$gotest" > "$gotest".mod && mv "$gotest".mod "$gotest"
     fi
 
-    GO111MODULE=off go run "$gotest" || { echo "*** error ***"; exit 1; }
+    # Examples that use the experimental SIMD API need the corresponding Go experiment.
+    if grep -q 'simd/archsimd' "$gotest"; then
+        SIMD_ENV="GOEXPERIMENT=simd"
+    else
+        SIMD_ENV=""
+    fi
+
+    env $SIMD_ENV GO111MODULE=off go run "$gotest" || { echo "*** error ***"; exit 1; }
     rm -f "$gotest"
 done
 
