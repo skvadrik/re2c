@@ -60,3 +60,11 @@
     raise a warning, and the user will be notified. If some configurations are
     unused and do not need a definition, they should be explicitly set to
     ``<undefined>``.
+
+``-Wvectorize-linear-disabled``
+    Warn if linear vectorization is requested but disabled because the target
+    encoding has multi-byte code units, ``re2c:eof`` is configured, or ``YYFILL``
+    or its check is disabled without explicitly configuring ``YYLIMIT`` (for the
+    simple and record APIs) or ``YYLESSTHAN`` (for the generic API). This warning
+    is enabled by default. Use ``-Wno-vectorize-linear-disabled`` to suppress it
+    or ``-Werror-vectorize-linear-disabled`` to treat it as an error.

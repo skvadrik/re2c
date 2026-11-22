@@ -1,0 +1,97 @@
+Linear vectorization is supported on backends that declare ``"vectorize-linear"``
+in ``supported_features`` (currently C and Go), independent of ``--arch``. Other
+backends reject both the command-line option and the configuration.
+
+With ``--vectorize-linear`` (or ``re2c:vectorize:linear`` configuration) |re2c|
+looks for *linear chains* in the DFA: sequences of states where every state has
+exactly one single-character transition that continues the chain. Such chains
+appear when the input is dispatched on long fixed strings, for example HTTP
+header names, tag or attribute names, or file signatures. At the first state of
+a chain the generated lexer assembles the next 2, 4 or 8 code units into a
+little-endian word and compares it with the packed characters on the chain. If
+they are equal, it advances the cursor and jumps to the last state of the chain;
+otherwise it continues with the ordinary one-character dispatch. The fast path
+is taken only when the ordinary dispatch would follow the same transitions, so
+the matched rule, the match length and the cursor are the same as without the
+option.
+
+The option can help when the lexer spends its time on long literals that are
+often matched to the end, for example when classifying isolated known header
+names along linear paths. It is not a general keyword-recognition optimization:
+with an identifier rule such as ``[a-zA-Z_][a-zA-Z0-9_]*``, every prefix of a
+keyword is an accepting state, and the chain stops there. On short tokens or
+unknown names that rarely match a literal, the extra comparison may cost more
+than it saves.
+
+There is no universal speedup for C lexers using ``YYFILL``. Comparing isolated
+names with a refilled stream that also scans header values changes several
+factors at once. Benchmark the actual lexer, input distribution and buffer
+contract rather than assuming that fewer character comparisons imply lower
+running time.
+
+Control flow is emitted entirely through |re2c|'s existing IR constructs:
+``code:if_then_else`` for the bounds guard and word comparison,
+``code:yylessthan`` for the remaining-length check, ``code:yyshift`` for the
+cursor advance (by ``n - 1`` code units in default lazy-skip mode because the
+target state consumes one unit on entry, or ``n`` code units with
+``--eager-skip``), and standard state jumps. The atomic wide-read and literal
+expressions are defined in the syntax file (see the section about syntax files):
+
+``code:yypeek2``, ``code:yypeek4``, ``code:yypeek8``
+    Expressions that yield the unsigned 2-byte, 4-byte or 8-byte value at the
+    current input position, where the code unit at offset ``k`` occupies bits
+    ``8*k`` to ``8*k+7``. The packed literal compared against uses the same
+    layout, so the comparison does not depend on the byte order of the host.
+    Supported variables: ``YYPEEK2`` (or ``YYPEEK4``, ``YYPEEK8``), ``YYINPUT``,
+    ``YYCURSOR``, ``yyrecord``.
+
+``code:hex_literal``
+    Packed hexadecimal literal compared against the wide read. The generator
+    supplies the hexadecimal value in ``val``, and the conditional ``.wide``
+    (true for 8-byte literals) lets the template choose an integer suffix: the
+    C syntax file appends ``u`` or ``ull`` while Go uses an unsuffixed literal.
+
+The C and Go syntax files define ``code:yypeek2``, ``code:yypeek4``,
+``code:yypeek8`` and ``code:hex_literal`` for the ``simple``, ``record`` and
+``generic`` APIs:
+
+- In the ``simple`` and ``record`` APIs, the default C templates assemble
+  ``(unsigned char)(YYCURSOR)[k]`` into ``unsigned int`` (widths 2 and 4) or
+  ``unsigned long long`` (width 8, C99 / C++11; for C90 or C++98 override the
+  templates in a custom syntax file or leave the option disabled), and the
+  default Go templates assemble ``uint8(YYINPUT[YYCURSOR:][k])`` into
+  ``uint16``, ``uint32`` or ``uint64``. Combining these byte-shift reads into a
+  single machine load depends on the compiler, optimization flags and
+  surrounding code; in goto/label and loop/switch modes the fast path is emitted
+  before the scalar peek to help load fusion.
+- With ``--api generic``, wide reads invoke ``re2c:YYPEEK2``, ``re2c:YYPEEK4``
+  and ``re2c:YYPEEK8``, bounds checks use ``YYLESSTHAN``, and cursor advancement
+  uses ``YYSHIFT``; no ``YYCURSOR``, ``YYLIMIT`` or ``YYINPUT`` identifier is
+  emitted in generic API output.
+
+Both with and without ``YYFILL``, every wide read is guarded by
+``!(<code:yylessthan(n)>)`` so that a ``YYFILL`` which does not provide the
+requested input (for example a no-op ``YYFILL`` in a sentinel lexer without
+``YYMAXFILL`` padding) cannot read past the end of the input: when fewer than
+``n`` code units remain, the fast path is skipped and the ordinary scalar
+dispatch runs instead. Across all backends supporting linear vectorization (both
+C and Go), if ``YYFILL`` or its check is disabled, the bounds check primitive
+must be explicitly configured (for example, ``re2c:YYLIMIT = YYLIMIT;`` in C or
+``re2c:YYLIMIT = "len(yyinput)";`` in Go for the simple API,
+``re2c:YYLIMIT = "yyrecord->yylimit";`` for a record field, or
+``re2c:YYLESSTHAN = YYLESSTHAN;`` for the generic API); otherwise linear
+vectorization is disabled with a warning so that sentinel-only lexers require no
+``YYLIMIT`` or ``YYLESSTHAN`` declaration.
+
+The optimization applies only to target encodings with one-byte code units,
+including ASCII and UTF-8. For wider target encodings, or when ``re2c:eof`` is
+configured (where ``YYFILL`` does not reserve input in advance), it is disabled
+with a warning controlled by ``-Wvectorize-linear-disabled``. An undefined
+``code:yyshift``, ``code:yylessthan`` or ``code:hex_literal``, or undefined
+wide-read primitives for all three widths, likewise disables the option with an
+explicit warning. The end-of-input
+rule ``$`` alone does not disable it when ``re2c:eof`` is not set. With
+``--skeleton`` it is rejected as an error; with ``--emit-dot`` it is cleared.
+Chains do not pass through accepting states or states with tag operations,
+``YYFILL`` checks, SIMD loops or backtracking save points, though they may end
+in such a state (for example in the accepting state of a literal).

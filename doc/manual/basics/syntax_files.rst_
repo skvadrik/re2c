@@ -34,10 +34,14 @@ language configurations, inplace configurations and code templates.
       A list of supported codegen targets with possible elements ``code``,
       ``dot``, ``skeleton``.
 
+  ``supported_archs``
+      A list of supported target architectures with possible element ``x86``.
+
   ``supported_features``
       A list of supported features with possible elements ``nested-ifs``,
       ``bitmaps``, ``computed-gotos``, ``case-ranges``, ``monadic``, ``unsafe``,
-      ``tags``, ``captures``, ``captvars``, ``computed-continue``.
+      ``tags``, ``captures``, ``captvars``, ``computed-continue``,
+      ``vectorize-loops``.
 
 **Language configurations**
 
@@ -103,7 +107,11 @@ language configurations, inplace configurations and code templates.
   |re2c| repeats expressions the right hand side of the column a few times, each
   time replacing occurrences of the list variable with a value specific to this
   repetition. Lists have optional bounds (negative values are counted from the
-  end, e.g. ``-1`` means the last element). Conditional names start with a dot.
+  end, e.g. ``-1`` means the last element). In all code templates, the right
+  bound is clipped to the last element, and a negative left bound that extends
+  before the list is clipped to zero. Empty lists and intervals with the left
+  bound past the right bound produce no iterations, even with explicit bounds.
+  Conditional names start with a dot.
   Both conditionals and variables may be either local (specific to the given
   code template) or global (allowed in all code templates). When |re2c| reads
   syntax file, it checks that each code template uses only the variables and
@@ -148,7 +156,7 @@ language configurations, inplace configurations and code templates.
       Declaration or definition of a local variable. Supported variables:
       ``type`` (the type of the variable), ``name`` (its name) and ``init``
       (initial value, if any). Conditionals: ``.init`` (true if there is an
-      initializer).
+      initializer) and ``.const`` (true if the variable is immutable).
 
   ``code:var_global``
       Same as ``code:var_local``, except that it's used in top-level.
@@ -199,6 +207,12 @@ language configurations, inplace configurations and code templates.
 
   ``code:type_uint``
       Unsigned integer type.
+
+  ``code:type_vec16``, ``code:type_vec32``
+      16-byte and 32-byte SIMD byte-vector types used with ``--vectorize-loops``.
+
+  ``code:type_vec16_mask``, ``code:type_vec32_mask``
+      Scalar bitmask types returned by ``code:vec16_movemask`` and ``code:vec32_movemask``.
 
   ``code:type_yybm``
       Type of elements in the ``yybm`` table.
@@ -355,6 +369,42 @@ language configurations, inplace configurations and code templates.
       configurations). Conditionals: ``.cast`` (true if
       ``re2c:yych:conversion`` is set to non-zero).
 
+  ``code:yypeek2``, ``code:yypeek4``, ``code:yypeek8``
+      2-byte, 4-byte and 8-byte wide read expressions at the current input
+      position used by ``--vectorize-linear``, possibly specialized for
+      different APIs. The code unit at offset ``k`` occupies bits ``8*k`` to
+      ``8*k+7``. Supported variables: ``YYPEEK2`` (or ``YYPEEK4``, ``YYPEEK8``),
+      ``YYINPUT``, ``YYCURSOR``, ``yyrecord``.
+
+  ``code:yypeek16``, ``code:yypeek32``
+      16-byte and 32-byte SIMD vector load expressions at the current input
+      position, possibly specialized for different APIs. Supported variables:
+      ``YYPEEK16`` (or ``YYPEEK32``), ``YYINPUT``, ``YYCURSOR``, ``yyrecord``.
+
+  ``code:vec16_splat``, ``code:vec32_splat``
+      Broadcast a signed 8-bit constant ``val`` across all lanes of a 16-byte
+      or 32-byte vector. Supported variable: ``val``.
+
+  ``code:vec16_sub``, ``code:vec32_sub``, ``code:vec16_cmpeq``, ``code:vec32_cmpeq``, ``code:vec16_cmpgt``, ``code:vec32_cmpgt``, ``code:vec16_or``, ``code:vec32_or``
+      Lane-wise 8-bit wrapping subtraction, equality comparison, signed
+      greater-than comparison, and bitwise OR on 16-byte or 32-byte vectors.
+      Supported variables: ``lhs`` and ``rhs``.
+
+  ``code:vec16_movemask``, ``code:vec32_movemask``, ``code:vec16_ctz``, ``code:vec32_ctz``
+      Extract an unsigned integer bitmask from the high bit of each lane of a
+      vector mask, and count trailing zero bits of a non-zero bitmask.
+      Supported variable: ``lhs``.
+
+  ``code:vec16_cleanup``, ``code:vec32_cleanup``
+      Optional target cleanup expression emitted as a statement before leaving
+      a non-empty vector loop (empty string if none is needed).
+
+  ``code:hex_literal``
+      Hexadecimal integer literal used for packed multi-character comparisons.
+      Supported variable: ``val`` (the hexadecimal digits of the value with the
+      ``0x`` prefix). Conditional: ``.wide`` (true if the literal is 8 bytes
+      wide, false if it is 2 or 4 bytes wide).
+
   ``code:yyskip``
       ``YYSKIP`` statement, possibly specialized for different APIs.
       Supported variables: ``YYSKIP``, ``YYCURSOR``, ``yyrecord`` (map to the
@@ -420,7 +470,8 @@ language configurations, inplace configurations and code templates.
       ``YYSHIFT`` statement, possibly specialized for different APIs.
       Supported variables: ``YYSHIFT``, ``YYCURSOR``, ``yyrecord`` (map to the
       corresponding ``re2c:`` configurations), ``offset`` (the number of code
-      units to shift the current position).
+      units to shift the current position). Conditional: ``.backward`` (true
+      when shifting backward, false when advancing forward).
 
   ``code:yyshiftstag``
       ``YYSHIFTSTAG`` statement, possibly specialized for different APIs.

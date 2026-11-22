@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "RE2GO" 1 "" "" ""
+.TH "RE2GO" 1 "" ""
 .SH NAME
 re2go \- generate fast lexical analyzers for Go
 .SH SYNOPSIS
@@ -328,6 +328,10 @@ function\-like style).
 This configuration may be overridden for individual API primitives, see for
 example \fBre2c:YYFILL:naked\fP configuration for \fBYYFILL\fP\&.
 .TP
+.B \fBre2c:arch\fP
+Same as the \fB\-\-arch\fP option, but can be configured on per\-block basis.
+Possible values are \fBnone\fP (the default) and \fBx86\fP\&.
+.TP
 .B \fBre2c:bit\-vectors\fP, \fBre2c:flags:bit\-vectors\fP, \fBre2c:flags:b\fP
 Same as the \fB\-\-bit\-vectors\fP option, but can be configured on per\-block
 basis.
@@ -484,6 +488,18 @@ configuration is specific to Haskell).
 Same as the \fB\-\-nested\-ifs\fP option, but can be configured on per\-block
 basis.
 .TP
+.B \fBre2c:vectorize:loops\fP, \fBre2c:flags:vectorize:loops\fP
+Same as the \fB\-\-vectorize\-loops\fP option, but can be configured on per\-block
+basis.
+.TP
+.B \fBre2c:vectorize:size\fP
+Same as the \fB\-\-vectorize\-size\fP option, but can be configured on per\-block
+basis. Supported values are \fB16\fP and \fB32\fP (the default).
+.TP
+.B \fBre2c:vectorize:linear\fP, \fBre2c:flags:vectorize:linear\fP, \fBre2c:flags:vectorize\-linear\fP
+Same as the \fB\-\-vectorize\-linear\fP option, but can be configured on per\-block
+basis.
+.TP
 .B \fBre2c:posix\-captures\fP, \fBre2c:flags:posix\-captures\fP, \fBre2c:flags:P\fP
 Same as the \fB\-\-posix\-captures\fP option, but can be configured on per\-block
 basis.
@@ -613,6 +629,26 @@ Defines generic API primitive \fBYYMTAGP\fP\&.
 .TP
 .B \fBre2c:YYPEEK\fP, \fBre2c:define:YYPEEK\fP
 Defines generic API primitive \fBYYPEEK\fP\&.
+.TP
+.B \fBre2c:YYPEEK2\fP, \fBre2c:define:YYPEEK2\fP
+Defines generic API primitive \fBYYPEEK2\fP (loads a little\-endian 2\-byte
+unsigned word at the current input position with \fB\-\-vectorize\-linear\fP).
+.TP
+.B \fBre2c:YYPEEK4\fP, \fBre2c:define:YYPEEK4\fP
+Defines generic API primitive \fBYYPEEK4\fP (loads a little\-endian 4\-byte
+unsigned word at the current input position with \fB\-\-vectorize\-linear\fP).
+.TP
+.B \fBre2c:YYPEEK8\fP, \fBre2c:define:YYPEEK8\fP
+Defines generic API primitive \fBYYPEEK8\fP (loads a little\-endian 8\-byte
+unsigned word at the current input position with \fB\-\-vectorize\-linear\fP).
+.TP
+.B \fBre2c:YYPEEK16\fP, \fBre2c:define:YYPEEK16\fP
+Defines generic API primitive \fBYYPEEK16\fP (loads a 16\-byte vector at the
+current input position when \fBre2c:vectorize:size = 16\fP).
+.TP
+.B \fBre2c:YYPEEK32\fP, \fBre2c:define:YYPEEK32\fP
+Defines generic API primitive \fBYYPEEK32\fP (loads a 32\-byte vector at the
+current input position when \fBre2c:vectorize:size = 32\fP).
 .TP
 .B \fBre2c:YYRESTORE\fP, \fBre2c:define:YYRESTORE\fP
 Defines generic API primitive \fBYYRESTORE\fP\&.
@@ -1274,6 +1310,12 @@ used when lexer state needs to be stored in a record (struct, class, etc.).
 Option \fBgeneric\fP should be used in complex cases when the other two APIs
 are not flexible enough.
 .TP
+.B \fB\-\-arch <none | x86>\fP
+Specify the target hardware architecture used by architecture\-dependent
+optimizations such as \fB\-\-vectorize\-loops\fP\&. The default is \fBnone\fP (no
+target architecture selected). Currently \fBx86\fP is supported for the C and
+Go backends.
+.TP
 .B \fB\-\-bit\-vectors \-b\fP
 Optimize conditional jumps using bit masks.
 This option implies \fB\-\-nested\-ifs\fP\&.
@@ -1415,6 +1457,42 @@ code model.
 Use nested \fBif\fP statements instead of \fBswitch\fP statements in conditional
 jumps. This usually results in more efficient code with non\-optimizing
 compilers.
+.TP
+.B \fB\-\-vectorize\-loops\fP
+Enable a SIMD\-accelerated loop for DFA base states that have a reflexive
+character class. Requires selecting a supported target architecture with
+\fB\-\-arch\fP (or \fBre2c:arch\fP). Control flow is emitted with ordinary re2go
+IR constructs and atomic target expression primitives (Go 1.27
+\fBsimd/archsimd\fP with \fBGOEXPERIMENT=simd\fP and \fBmath/bits\fP, C with SSE2
+or AVX2 intrinsics and \fB__builtin_ctz\fP), and falls back to the scalar
+dispatcher on exit or near the end of buffer. Generated lexers do not check
+CPU capabilities at run time. Vectorization works with all code models
+(\fB\-\-goto\-label\fP, \fB\-\-loop\-switch\fP and \fB\-\-recursive\-functions\fP), all
+APIs (\fBsimple\fP, \fBrecord\fP and \fBgeneric\fP via \fBYYPEEK16\fP/\fBYYPEEK32\fP),
+\fB\-\-eager\-skip\fP and \fB\-\-storable\-state\fP, and requires enabled \fBYYFILL\fP
+and bounds checks, single\-byte code units, no end\-of\-input rule and no
+\fB\-\-skeleton\fP; any unsupported combination is an error, as is a backend or
+architecture that does not support the feature. Eligible loops have up to 8
+disjoint character ranges, do not record backtracking positions and carry no
+tags on the loop state and its body. Ineligible states retain scalar code
+without a diagnostic. Off by default.
+.TP
+.B \fB\-\-vectorize\-size <16 | 32>\fP
+Specify the SIMD vector width in bytes for \fB\-\-vectorize\-loops\fP\&. On \fBx86\fP,
+\fB16\fP selects 128\-bit SSE2 / \fBInt8x16\fP operations and \fB32\fP (the default)
+selects 256\-bit AVX2 / \fBInt8x32\fP operations.
+.TP
+.B \fB\-\-vectorize\-linear\fP
+Compare linear single\-character chains in the DFA 2, 4 or 8 bytes at a time
+on backends that declare \fB\(dqvectorize\-linear\(dq\fP support (currently C and Go)
+across the \fBsimple\fP, \fBrecord\fP and \fBgeneric\fP APIs (via \fBYYPEEK2\fP,
+\fBYYPEEK4\fP and \fBYYPEEK8\fP), independent of \fB\-\-arch\fP\&. Control flow uses
+ordinary re2go IR constructs (\fBcode:yylessthan\fP for the bounds guard and
+\fBcode:yyshift\fP for the cursor advance). This can help when matching long
+known names along linear paths, while keyword lexers with an identifier rule
+may remain unchanged. Performance depends on the compiler, input and buffer
+handling; a speedup is not guaranteed. See the section about linear
+vectorization for requirements and limitations. Off by default.
 .TP
 .B \fB\-\-no\-debug\-info \-i\fP
 Do not output line directives. This may be useful when the generated code is
@@ -1704,6 +1782,14 @@ syntax files: if a new release adds configurations, old syntax file will
 raise a warning, and the user will be notified. If some configurations are
 unused and do not need a definition, they should be explicitly set to
 \fB<undefined>\fP\&.
+.TP
+.B \fB\-Wvectorize\-linear\-disabled\fP
+Warn if linear vectorization is requested but disabled because the target
+encoding has multi\-byte code units, \fBre2c:eof\fP is configured, or \fBYYFILL\fP
+or its check is disabled without explicitly configuring \fBYYLIMIT\fP (for the
+simple and record APIs) or \fBYYLESSTHAN\fP (for the generic API). This warning
+is enabled by default. Use \fB\-Wno\-vectorize\-linear\-disabled\fP to suppress it
+or \fB\-Werror\-vectorize\-linear\-disabled\fP to treat it as an error.
 .UNINDENT
 .SS Syntax files
 .sp
@@ -1745,10 +1831,14 @@ A list of supported code models with possible elements \fBgoto\-label\fP,
 A list of supported codegen targets with possible elements \fBcode\fP,
 \fBdot\fP, \fBskeleton\fP\&.
 .TP
+.B \fBsupported_archs\fP
+A list of supported target architectures with possible element \fBx86\fP\&.
+.TP
 .B \fBsupported_features\fP
 A list of supported features with possible elements \fBnested\-ifs\fP,
 \fBbitmaps\fP, \fBcomputed\-gotos\fP, \fBcase\-ranges\fP, \fBmonadic\fP, \fBunsafe\fP,
-\fBtags\fP, \fBcaptures\fP, \fBcaptvars\fP, \fBcomputed\-continue\fP\&.
+\fBtags\fP, \fBcaptures\fP, \fBcaptvars\fP, \fBcomputed\-continue\fP,
+\fBvectorize\-loops\fP\&.
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -1832,7 +1922,11 @@ generation phase. List variables are special: when expanding list templates,
 re2go repeats expressions the right hand side of the column a few times, each
 time replacing occurrences of the list variable with a value specific to this
 repetition. Lists have optional bounds (negative values are counted from the
-end, e.g. \fB\-1\fP means the last element). Conditional names start with a dot.
+end, e.g. \fB\-1\fP means the last element). In all code templates, the right
+bound is clipped to the last element, and a negative left bound that extends
+before the list is clipped to zero. Empty lists and intervals with the left
+bound past the right bound produce no iterations, even with explicit bounds.
+Conditional names start with a dot.
 Both conditionals and variables may be either local (specific to the given
 code template) or global (allowed in all code templates). When re2go reads
 syntax file, it checks that each code template uses only the variables and
@@ -1890,7 +1984,7 @@ Any unused code templates should be set to \fB<undefined>\fP\&.
 Declaration or definition of a local variable. Supported variables:
 \fBtype\fP (the type of the variable), \fBname\fP (its name) and \fBinit\fP
 (initial value, if any). Conditionals: \fB\&.init\fP (true if there is an
-initializer).
+initializer) and \fB\&.const\fP (true if the variable is immutable).
 .TP
 .B \fBcode:var_global\fP
 Same as \fBcode:var_local\fP, except that it\(aqs used in top\-level.
@@ -1941,6 +2035,12 @@ Signed integer type.
 .TP
 .B \fBcode:type_uint\fP
 Unsigned integer type.
+.TP
+.B \fBcode:type_vec16\fP, \fBcode:type_vec32\fP
+16\-byte and 32\-byte SIMD byte\-vector types used with \fB\-\-vectorize\-loops\fP\&.
+.TP
+.B \fBcode:type_vec16_mask\fP, \fBcode:type_vec32_mask\fP
+Scalar bitmask types returned by \fBcode:vec16_movemask\fP and \fBcode:vec32_movemask\fP\&.
 .TP
 .B \fBcode:type_yybm\fP
 Type of elements in the \fByybm\fP table.
@@ -2097,6 +2197,42 @@ Supported variables: \fBYYPEEK\fP, \fBYYCTYPE\fP, \fBYYINPUT\fP, \fBYYCURSOR\fP,
 configurations). Conditionals: \fB\&.cast\fP (true if
 \fBre2c:yych:conversion\fP is set to non\-zero).
 .TP
+.B \fBcode:yypeek2\fP, \fBcode:yypeek4\fP, \fBcode:yypeek8\fP
+2\-byte, 4\-byte and 8\-byte wide read expressions at the current input
+position used by \fB\-\-vectorize\-linear\fP, possibly specialized for
+different APIs. The code unit at offset \fBk\fP occupies bits \fB8*k\fP to
+\fB8*k+7\fP\&. Supported variables: \fBYYPEEK2\fP (or \fBYYPEEK4\fP, \fBYYPEEK8\fP),
+\fBYYINPUT\fP, \fBYYCURSOR\fP, \fByyrecord\fP\&.
+.TP
+.B \fBcode:yypeek16\fP, \fBcode:yypeek32\fP
+16\-byte and 32\-byte SIMD vector load expressions at the current input
+position, possibly specialized for different APIs. Supported variables:
+\fBYYPEEK16\fP (or \fBYYPEEK32\fP), \fBYYINPUT\fP, \fBYYCURSOR\fP, \fByyrecord\fP\&.
+.TP
+.B \fBcode:vec16_splat\fP, \fBcode:vec32_splat\fP
+Broadcast a signed 8\-bit constant \fBval\fP across all lanes of a 16\-byte
+or 32\-byte vector. Supported variable: \fBval\fP\&.
+.TP
+.B \fBcode:vec16_sub\fP, \fBcode:vec32_sub\fP, \fBcode:vec16_cmpeq\fP, \fBcode:vec32_cmpeq\fP, \fBcode:vec16_cmpgt\fP, \fBcode:vec32_cmpgt\fP, \fBcode:vec16_or\fP, \fBcode:vec32_or\fP
+Lane\-wise 8\-bit wrapping subtraction, equality comparison, signed
+greater\-than comparison, and bitwise OR on 16\-byte or 32\-byte vectors.
+Supported variables: \fBlhs\fP and \fBrhs\fP\&.
+.TP
+.B \fBcode:vec16_movemask\fP, \fBcode:vec32_movemask\fP, \fBcode:vec16_ctz\fP, \fBcode:vec32_ctz\fP
+Extract an unsigned integer bitmask from the high bit of each lane of a
+vector mask, and count trailing zero bits of a non\-zero bitmask.
+Supported variable: \fBlhs\fP\&.
+.TP
+.B \fBcode:vec16_cleanup\fP, \fBcode:vec32_cleanup\fP
+Optional target cleanup expression emitted as a statement before leaving
+a non\-empty vector loop (empty string if none is needed).
+.TP
+.B \fBcode:hex_literal\fP
+Hexadecimal integer literal used for packed multi\-character comparisons.
+Supported variable: \fBval\fP (the hexadecimal digits of the value with the
+\fB0x\fP prefix). Conditional: \fB\&.wide\fP (true if the literal is 8 bytes
+wide, false if it is 2 or 4 bytes wide).
+.TP
 .B \fBcode:yyskip\fP
 \fBYYSKIP\fP statement, possibly specialized for different APIs.
 Supported variables: \fBYYSKIP\fP, \fBYYCURSOR\fP, \fByyrecord\fP (map to the
@@ -2162,7 +2298,8 @@ variable used to restore position).
 \fBYYSHIFT\fP statement, possibly specialized for different APIs.
 Supported variables: \fBYYSHIFT\fP, \fBYYCURSOR\fP, \fByyrecord\fP (map to the
 corresponding \fBre2c:\fP configurations), \fBoffset\fP (the number of code
-units to shift the current position).
+units to shift the current position). Conditional: \fB\&.backward\fP (true
+when shifting backward, false when advancing forward).
 .TP
 .B \fBcode:yyshiftstag\fP
 \fBYYSHIFTSTAG\fP statement, possibly specialized for different APIs.
@@ -4365,6 +4502,246 @@ type State struct {
 .fi
 .UNINDENT
 .UNINDENT
+.SS SIMD acceleration
+.sp
+re2go can accelerate hot greedy loops in regular expressions using SIMD
+hardware vectorization in C (SSE2 / AVX2 intrinsics) and Go 1.27+
+(\fBsimd/archsimd\fP).
+.sp
+In lexical analysis, a significant percentage of CPU cycles is spent
+consuming long homogeneous byte sequences (such as string literals,
+identifiers, URL fields, or whitespace).
+.sp
+Instead of processing these loops byte\-by\-byte with scalar branch dispatches,
+the vectorization pass emits a fast\-forward loop that loads and evaluates
+blocks of 16 or 32 bytes simultaneously using parallel range checks and bitmask
+extraction, then hands off the first byte outside the class to the ordinary
+scalar DFA dispatcher.
+.sp
+When enabled with \fB\-\-arch x86 \-\-vectorize\-loops\fP (or \fBre2c:arch = x86;
+re2c:vectorize:loops = 1;\fP):
+.INDENT 0.0
+.IP \(bu 2
+Vectorization requires selecting a supported target architecture with
+\fB\-\-arch <arch>\fP / \fBre2c:arch = <arch>\fP (currently \fBx86\fP for the C and
+Go backends). The vector width in bytes is controlled by
+\fB\-\-vectorize\-size <16 | 32>\fP / \fBre2c:vectorize:size\fP (\fB32\fP by default:
+AVX2 \fB__m256i\fP / \fBarchsimd.Int8x32\fP; \fB16\fP selects SSE2 \fB__m128i\fP /
+\fBarchsimd.Int8x16\fP).
+.IP \(bu 2
+Vectorization supports all code models (\fB\-\-goto\-label\fP, \fB\-\-loop\-switch\fP and
+\fB\-\-recursive\-functions\fP), all APIs (\fBsimple\fP, \fBrecord\fP and \fBgeneric\fP),
+\fB\-\-eager\-skip\fP and \fB\-\-storable\-state\fP (\fB\-f\fP). It requires single\-byte code
+units (\fBYYCTYPE\fP must be an unsigned 1\-byte code unit type), \fBYYFILL\fP with
+bounds checking, and no end\-of\-input rule (\fBre2c:eof\fP) or \fB\-\-skeleton\fP\&. Any
+unsupported combination is a configuration error, not a silent fallback. With
+\fB\-\-emit\-dot\fP the option is reset.
+.IP \(bu 2
+The compiler selects base states with a nonzero refill requirement and a
+reflexive character class of at most 8 disjoint ranges. The loop must not record
+backtracking positions, perform tag actions or have end\-of\-input transitions,
+the loop entry state must not have a hoisted cursor increment, and neither the
+loop state nor its body may carry final, fallback or end\-of\-input tags. Tags
+elsewhere in the DFA do not block the loop: they are set and read by scalar code
+at positions the loop never skips.
+.IP \(bu 2
+Both \fBre2c:yyfill:enable\fP and \fBre2c:yyfill:check\fP must be enabled to ensure
+the vector loop stops before the end\-of\-buffer boundary. It reserves enough
+lookahead for the scalar dispatcher via \fBcode:yylessthan\fP and does not
+increase \fBYYMAXFILL\fP\&.
+.IP \(bu 2
+With \fB\-\-api generic\fP, vector loads use the width\-specific primitives
+\fBre2c:YYPEEK16\fP (for width 16) and \fBre2c:YYPEEK32\fP (for width 32), cursor
+advancement uses \fBYYSHIFT\fP, bounds checks use \fBYYLESSTHAN\fP, and reloading
+\fByych\fP uses \fBYYPEEK\fP\&. No \fBYYCURSOR\fP, \fBYYLIMIT\fP or \fBYYINPUT\fP identifier
+is emitted in generic API output.
+.IP \(bu 2
+The vector block is emitted on the reflexive transition of the loop state rather
+than at state entry. Control flow is emitted entirely through re2go\(aqs existing
+IR constructs (\fBcode:if_then_else\fP, \fBcode:loop\fP, \fBcode:var_local\fP,
+\fBcode:assign\fP, \fBcode:yyshift\fP and \fBcode:yypeek\fP), combined with atomic
+target expression templates (\fBcode:type_vec{16,32}\fP,
+\fBcode:type_vec{16,32}_mask\fP, \fBcode:yypeek{16,32}\fP, \fBcode:vec{16,32}_splat\fP,
+\fBcode:vec{16,32}_{sub,cmpeq,cmpgt,or}\fP, \fBcode:vec{16,32}_{movemask,ctz}\fP
+and \fBcode:vec{16,32}_cleanup\fP).
+.IP \(bu 2
+Exit ranges in the complement of the reflexive class are tested with equality
+(\fBcmpeq\fP) for singletons and signed greater\-than (\fBcmpgt\fP) with a
+precomputed \fB+128\fP wrapping bias for byte intervals (a single \fBcmpgt\fP
+without \fBsub\fP when an exit range ends at \fB0x7F\fP or starts at \fB0x80\fP),
+avoiding the extra zero register required by saturating\-subtraction range
+tests.
+.IP \(bu 2
+In C, the generated code uses \fB<immintrin.h>\fP (compile with \fB\-mavx2\fP for
+width 32 or \fB\-msse2\fP for width 16) and \fB__builtin_ctz\fP (GCC / Clang). No
+explicit \fB_mm256_zeroupper()\fP is emitted in C: GCC at \fB\-O2\fP and above and
+Clang insert \fBvzeroupper\fP automatically; when compiling 32\-byte AVX2 lexers
+with GCC below \fB\-O2\fP (e.g. \fB\-O0\fP, \fB\-O1\fP or \fB\-Os\fP) alongside legacy
+non\-VEX SSE code, pass \fB\-mvzeroupper\fP explicitly.
+.IP \(bu 2
+In Go, the generated code requires Go 1.27+ with \fBGOEXPERIMENT=simd\fP and
+imports \fBmath/bits\fP and \fBsimd/archsimd\fP\&. For width 32 (YMM), the Go
+template emits \fBarchsimd.ClearAVXUpperBits()\fP on normal loop exit; for
+width 16 (XMM), no cleanup call is emitted. The caller must maintain
+\fB0 <= YYCURSOR <= YYLIMIT <= len(YYINPUT)\fP and a sound length guard.
+.IP \(bu 2
+The default C vector output mixes declarations and statements inside blocks and
+therefore requires C99 or later (or C++). Generated lexers do not check CPU
+capabilities at run time.
+.UNINDENT
+.SS When vectorization pays off
+.sp
+The vector block has a fixed entry cost, paid once per run of the class that
+is at least two code units long, and a per\-block cost that is small compared
+to one scalar step per code unit. Vectorization therefore wins only when runs
+are longer than a break\-even length (near 9 code units on x86\-64 C), and loses
+below it. On corpora where most runs are short (identifiers, numbers, short
+words), the vectorized lexer is slower than the scalar one; on corpora with
+long runs (string bodies, whitespace, comments, URL and log fields) it is
+faster. Enable it per block for grammars whose hot loops scan long runs, and
+verify on representative input.
+.SS Go string input
+.sp
+In Go \fBsimple\fP and \fBrecord\fP APIs, \fBarchsimd.LoadUint8x16\fP /
+\fBLoadUint8x32\fP require \fBYYINPUT\fP to be a byte slice rather than a
+\fBstring\fP\&. For string input, construct a read\-only byte view once before
+entering the lexer via \fBunsafe.StringData\fP and \fBunsafe.Slice\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+func lex(text string) int {
+    input := unsafe\&.Slice(unsafe\&.StringData(text), len(text))
+    yycursor, yylimit := 0, len(input)
+    /*!re2c
+        re2c:arch = x86;
+        re2c:vectorize:loops = 1;
+        re2c:api = simple;
+        re2c:YYCTYPE = byte;
+        re2c:YYINPUT = input;
+        re2c:YYFILL = \(dqreturn \-2\(dq;
+        re2c:YYFILL:naked = 1;
+        [a\-z]+ { return yycursor }
+        *      { return \-1 }
+    */
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Do not put \fB[]byte(text[...])\fP inside the lexer: Go may copy every block and
+call into the runtime with dirty YMM registers.
+.sp
+In Go, the variable cursor advancement by \fByyn\fP on a vector match is of type
+\fBint\fP (\fByycursor += yyn\fP). For a cursor of another type, such as \fBuint\fP,
+set \fBre2c:yyshift:conversion = 1;\fP and \fBre2c:YYPTYPE = <type>;\fP so that the
+shift is converted explicitly (\fByycursor += uint(yyn)\fP).
+.SS Linear vectorization
+.sp
+Linear vectorization is supported on backends that declare \fB\(dqvectorize\-linear\(dq\fP
+in \fBsupported_features\fP (currently C and Go), independent of \fB\-\-arch\fP\&. Other
+backends reject both the command\-line option and the configuration.
+.sp
+With \fB\-\-vectorize\-linear\fP (or \fBre2c:vectorize:linear\fP configuration) re2go
+looks for \fIlinear chains\fP in the DFA: sequences of states where every state has
+exactly one single\-character transition that continues the chain. Such chains
+appear when the input is dispatched on long fixed strings, for example HTTP
+header names, tag or attribute names, or file signatures. At the first state of
+a chain the generated lexer assembles the next 2, 4 or 8 code units into a
+little\-endian word and compares it with the packed characters on the chain. If
+they are equal, it advances the cursor and jumps to the last state of the chain;
+otherwise it continues with the ordinary one\-character dispatch. The fast path
+is taken only when the ordinary dispatch would follow the same transitions, so
+the matched rule, the match length and the cursor are the same as without the
+option.
+.sp
+The option can help when the lexer spends its time on long literals that are
+often matched to the end, for example when classifying isolated known header
+names along linear paths. It is not a general keyword\-recognition optimization:
+with an identifier rule such as \fB[a\-zA\-Z_][a\-zA\-Z0\-9_]*\fP, every prefix of a
+keyword is an accepting state, and the chain stops there. On short tokens or
+unknown names that rarely match a literal, the extra comparison may cost more
+than it saves.
+.sp
+There is no universal speedup for C lexers using \fBYYFILL\fP\&. Comparing isolated
+names with a refilled stream that also scans header values changes several
+factors at once. Benchmark the actual lexer, input distribution and buffer
+contract rather than assuming that fewer character comparisons imply lower
+running time.
+.sp
+Control flow is emitted entirely through re2go\(aqs existing IR constructs:
+\fBcode:if_then_else\fP for the bounds guard and word comparison,
+\fBcode:yylessthan\fP for the remaining\-length check, \fBcode:yyshift\fP for the
+cursor advance (by \fBn \- 1\fP code units in default lazy\-skip mode because the
+target state consumes one unit on entry, or \fBn\fP code units with
+\fB\-\-eager\-skip\fP), and standard state jumps. The atomic wide\-read and literal
+expressions are defined in the syntax file (see the section about syntax files):
+.INDENT 0.0
+.TP
+.B \fBcode:yypeek2\fP, \fBcode:yypeek4\fP, \fBcode:yypeek8\fP
+Expressions that yield the unsigned 2\-byte, 4\-byte or 8\-byte value at the
+current input position, where the code unit at offset \fBk\fP occupies bits
+\fB8*k\fP to \fB8*k+7\fP\&. The packed literal compared against uses the same
+layout, so the comparison does not depend on the byte order of the host.
+Supported variables: \fBYYPEEK2\fP (or \fBYYPEEK4\fP, \fBYYPEEK8\fP), \fBYYINPUT\fP,
+\fBYYCURSOR\fP, \fByyrecord\fP\&.
+.TP
+.B \fBcode:hex_literal\fP
+Packed hexadecimal literal compared against the wide read. The generator
+supplies the hexadecimal value in \fBval\fP, and the conditional \fB\&.wide\fP
+(true for 8\-byte literals) lets the template choose an integer suffix: the
+C syntax file appends \fBu\fP or \fBull\fP while Go uses an unsuffixed literal.
+.UNINDENT
+.sp
+The C and Go syntax files define \fBcode:yypeek2\fP, \fBcode:yypeek4\fP,
+\fBcode:yypeek8\fP and \fBcode:hex_literal\fP for the \fBsimple\fP, \fBrecord\fP and
+\fBgeneric\fP APIs:
+.INDENT 0.0
+.IP \(bu 2
+In the \fBsimple\fP and \fBrecord\fP APIs, the default C templates assemble
+\fB(unsigned char)(YYCURSOR)[k]\fP into \fBunsigned int\fP (widths 2 and 4) or
+\fBunsigned long long\fP (width 8, C99 / C++11; for C90 or C++98 override the
+templates in a custom syntax file or leave the option disabled), and the
+default Go templates assemble \fBuint8(YYINPUT[YYCURSOR:][k])\fP into
+\fBuint16\fP, \fBuint32\fP or \fBuint64\fP\&. Combining these byte\-shift reads into a
+single machine load depends on the compiler, optimization flags and
+surrounding code; in goto/label and loop/switch modes the fast path is emitted
+before the scalar peek to help load fusion.
+.IP \(bu 2
+With \fB\-\-api generic\fP, wide reads invoke \fBre2c:YYPEEK2\fP, \fBre2c:YYPEEK4\fP
+and \fBre2c:YYPEEK8\fP, bounds checks use \fBYYLESSTHAN\fP, and cursor advancement
+uses \fBYYSHIFT\fP; no \fBYYCURSOR\fP, \fBYYLIMIT\fP or \fBYYINPUT\fP identifier is
+emitted in generic API output.
+.UNINDENT
+.sp
+Both with and without \fBYYFILL\fP, every wide read is guarded by
+\fB!(<code:yylessthan(n)>)\fP so that a \fBYYFILL\fP which does not provide the
+requested input (for example a no\-op \fBYYFILL\fP in a sentinel lexer without
+\fBYYMAXFILL\fP padding) cannot read past the end of the input: when fewer than
+\fBn\fP code units remain, the fast path is skipped and the ordinary scalar
+dispatch runs instead. Across all backends supporting linear vectorization (both
+C and Go), if \fBYYFILL\fP or its check is disabled, the bounds check primitive
+must be explicitly configured (for example, \fBre2c:YYLIMIT = YYLIMIT;\fP in C or
+\fBre2c:YYLIMIT = \(dqlen(yyinput)\(dq;\fP in Go for the simple API,
+\fBre2c:YYLIMIT = \(dqyyrecord\->yylimit\(dq;\fP for a record field, or
+\fBre2c:YYLESSTHAN = YYLESSTHAN;\fP for the generic API); otherwise linear
+vectorization is disabled with a warning so that sentinel\-only lexers require no
+\fBYYLIMIT\fP or \fBYYLESSTHAN\fP declaration.
+.sp
+The optimization applies only to target encodings with one\-byte code units,
+including ASCII and UTF\-8. For wider target encodings, or when \fBre2c:eof\fP is
+configured (where \fBYYFILL\fP does not reserve input in advance), it is disabled
+with a warning controlled by \fB\-Wvectorize\-linear\-disabled\fP\&. An undefined
+\fBcode:yyshift\fP, \fBcode:yylessthan\fP or \fBcode:hex_literal\fP, or undefined
+wide\-read primitives for all three widths, likewise disables the option with an
+explicit warning. The end\-of\-input
+rule \fB$\fP alone does not disable it when \fBre2c:eof\fP is not set. With
+\fB\-\-skeleton\fP it is rejected as an error; with \fB\-\-emit\-dot\fP it is cleared.
+Chains do not pass through accepting states or states with tag operations,
+\fBYYFILL\fP checks, SIMD loops or backtracking save points, though they may end
+in such a state (for example in the accepting state of a literal).
 .SS Skeleton programs
 .sp
 With the \fB\-S, \-\-skeleton\fP option, re2go ignores all non\-re2go code and

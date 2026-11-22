@@ -15,11 +15,11 @@ static void combine_list(CodeList* stmts) {
             CodeKind yk = y->kind;
             CodeKind zk = z->kind;
 
-            if (xk == CodeKind::BACKUP && yk == CodeKind::PEEK && zk == CodeKind::SKIP) {
+            if (xk == CodeKind::BACKUP && yk == CodeKind::PEEK && !y->reassign && zk == CodeKind::SKIP) {
                 x->kind = CodeKind::BACKUP_PEEK_SKIP;
                 x->next = z->next;
                 continue;
-            } else if (xk == CodeKind::SKIP && yk == CodeKind::BACKUP && zk == CodeKind::PEEK) {
+            } else if (xk == CodeKind::SKIP && yk == CodeKind::BACKUP && zk == CodeKind::PEEK && !z->reassign) {
                 x->kind = CodeKind::SKIP_BACKUP_PEEK;
                 x->next = z->next;
                 continue;
@@ -31,11 +31,11 @@ static void combine_list(CodeList* stmts) {
             CodeKind xk = x->kind;
             CodeKind yk = y->kind;
 
-            if (xk == CodeKind::PEEK && yk == CodeKind::SKIP) {
+            if (xk == CodeKind::PEEK && !x->reassign && yk == CodeKind::SKIP) {
                 x->kind = CodeKind::PEEK_SKIP;
                 x->next = y->next;
                 continue;
-            } else if (xk == CodeKind::SKIP && yk == CodeKind::PEEK) {
+            } else if (xk == CodeKind::SKIP && yk == CodeKind::PEEK && !y->reassign) {
                 x->kind = CodeKind::SKIP_PEEK;
                 x->next = y->next;
                 continue;
@@ -43,7 +43,7 @@ static void combine_list(CodeList* stmts) {
                 x->kind = CodeKind::SKIP_BACKUP;
                 x->next = y->next;
                 continue;
-            } else if (xk == CodeKind::BACKUP && yk == CodeKind::PEEK) {
+            } else if (xk == CodeKind::BACKUP && yk == CodeKind::PEEK && !y->reassign) {
                 x->kind = CodeKind::BACKUP_PEEK;
                 x->next = y->next;
                 continue;
