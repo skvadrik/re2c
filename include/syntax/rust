@@ -4,6 +4,7 @@ supported_apis = ["simple", "generic", "record"];
 supported_api_styles = ["free-form"];
 supported_code_models = ["loop-switch", "recursive-functions"];
 supported_targets = ["code", "dot"];
+supported_archs = [];
 supported_features = ["nested-ifs", "bitmaps", "case-ranges", "unsafe",
     "tags", "captures", "captvars"];
 
@@ -95,6 +96,9 @@ re2c:case-inverted = 0;
 re2c:case-ranges = 1;
 re2c:unsafe = 1;
 re2c:monadic = 0;
+re2c:arch = none;
+re2c:vectorize:loops = 0;
+re2c:vectorize:size = 32;
 re2c:encoding:ebcdic = 0;
 re2c:encoding:utf32 = 0;
 re2c:encoding:ucs2 = 0;
@@ -136,6 +140,9 @@ re2c:YYMAXNMATCH = "YYMAXNMATCH";
 re2c:YYMTAGN = "YYMTAGN";
 re2c:YYMTAGP = "YYMTAGP";
 re2c:YYPEEK = (.api.generic ? "YYPEEK" : "get_unchecked");
+re2c:YYPEEK16 = "YYPEEK16";
+re2c:YYPEEK32 = "YYPEEK32";
+re2c:YYPTYPE = "usize";
 re2c:YYRESTORE = "YYRESTORE";
 re2c:YYRESTORECTX = "YYRESTORECTX";
 re2c:YYRESTORETAG = "YYRESTORETAG";
@@ -183,6 +190,10 @@ code:assign = topindent lhs " = " rhs ";" nl;
 
 code:type_int = "isize";
 code:type_uint = "usize";
+code:type_vec16 = <undefined>;
+code:type_vec32 = <undefined>;
+code:type_vec16_mask = <undefined>;
+code:type_vec32_mask = <undefined>;
 code:type_yybm = "u8";
 code:type_yytarget = <undefined>;
 code:type_yyctable = <undefined>;
@@ -322,7 +333,7 @@ code:yyrestoretag =
 code:yyshift =
     topindent (.api.generic
         ? YYSHIFT
-        : YYCURSOR " -= " offset ";"
+        : YYCURSOR " -= " (.yyshift.conversion ? offset " as " YYPTYPE : offset) ";"
     ) nl;
 
 code:yyshiftstag =
@@ -417,3 +428,22 @@ code:yybm_filter = yych " & ~0xFF";
 code:yybm_match = "(" yybm "[" offset "+" yych " as usize] & " mask ") != 0";
 
 code:yytarget_filter = <undefined>;
+
+code:yypeek16 = <undefined>;
+code:yypeek32 = <undefined>;
+code:vec16_splat = <undefined>;
+code:vec32_splat = <undefined>;
+code:vec16_sub = <undefined>;
+code:vec32_sub = <undefined>;
+code:vec16_cmpeq = <undefined>;
+code:vec32_cmpeq = <undefined>;
+code:vec16_cmpgt = <undefined>;
+code:vec32_cmpgt = <undefined>;
+code:vec16_or = <undefined>;
+code:vec32_or = <undefined>;
+code:vec16_movemask = <undefined>;
+code:vec32_movemask = <undefined>;
+code:vec16_ctz = <undefined>;
+code:vec32_ctz = <undefined>;
+code:vec16_cleanup = <undefined>;
+code:vec32_cleanup = <undefined>;

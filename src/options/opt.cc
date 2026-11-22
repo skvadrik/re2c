@@ -16,6 +16,15 @@ static const char* code_model_name(CodeModel model) {
     return nullptr;
 }
 
+static const char* arch_name(Arch arch) {
+    switch (arch) {
+        case Arch::NONE: return "none";
+        case Arch::X86: return "x86";
+    }
+    UNREACHABLE();
+    return nullptr;
+}
+
 // This function should only change global options.
 LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
     if (glob.target == Target::DOT) {
@@ -90,12 +99,15 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.api_style = defaults.api_style;
         real.api_sigil = defaults.api_sigil;
         real.api_char_type = defaults.api_char_type;
+        real.api_ptr_type = defaults.api_ptr_type;
         real.api_input = defaults.api_input;
         real.api_cursor = defaults.api_cursor;
         real.api_marker = defaults.api_marker;
         real.api_ctxmarker = defaults.api_ctxmarker;
         real.api_limit = defaults.api_limit;
         real.api_peek = defaults.api_peek;
+        real.api_peek16 = defaults.api_peek16;
+        real.api_peek32 = defaults.api_peek32;
         real.api_skip = defaults.api_skip;
         real.api_backup = defaults.api_backup;
         real.api_backup_ctx = defaults.api_backup_ctx;
@@ -158,6 +170,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.tags_negative = defaults.tags_negative;
         real.char_emit = defaults.char_emit;
         real.char_conv = defaults.char_conv;
+        real.shift_conversion = defaults.shift_conversion;
         real.char_literals = defaults.char_literals;
         real.label_loop = defaults.label_loop;
         real.label_fill = defaults.label_fill;
@@ -307,6 +320,41 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     }
     if (!is_default.monadic && !glob.supported_features_contains("monadic")) {
         RET_FAIL(error("`monadic` feature is not supported for this backend"));
+    }
+    if (real.arch != Arch::NONE && !glob.supported_archs_contains(arch_name(real.arch))) {
+        RET_FAIL(error("`%s` architecture is not supported for this backend",
+                       arch_name(real.arch)));
+    }
+    if (!is_default.vectorize_loops && !glob.supported_features_contains("vectorize-loops")) {
+        RET_FAIL(error("`vectorize-loops` feature is not supported for this backend"));
+    }
+    if ((!is_default.vectorize_size || real.vectorize_loops)
+            && real.vectorize_size != 16 && real.vectorize_size != 32) {
+        RET_FAIL(error("unsupported vector size %u (expected 16 or 32)", real.vectorize_size));
+    }
+    if (real.vectorize_loops && glob.target == Target::DOT) {
+        // The DOT target only dumps the DFA graph and does not generate vector loops.
+        real.vectorize_loops = false;
+    }
+    if (real.vectorize_loops) {
+        // Every unsupported option combination is an error rather than a silent fallback.
+        if (real.arch == Arch::NONE) {
+            RET_FAIL(error("`vectorize:loops` requires target architecture (`--arch` / `re2c:arch`)"));
+        }
+        if (glob.target == Target::SKELETON) {
+            RET_FAIL(error("`vectorize:loops` is not supported with --skeleton"));
+        }
+        if (!real.fill_enable || !real.fill_check) {
+            RET_FAIL(error("`vectorize:loops` requires YYFILL with bounds checking "
+                           "(`re2c:yyfill:enable` and `re2c:yyfill:check`)"));
+        }
+        if (real.fill_eof != NOEOF) {
+            RET_FAIL(error("`vectorize:loops` is not supported with the end-of-input rule "
+                           "(`re2c:eof`)"));
+        }
+        if (real.encoding.cunit_size() != 1) {
+            RET_FAIL(error("`vectorize:loops` requires single-byte code units"));
+        }
     }
     if (!is_default.tags && !glob.supported_features_contains("tags")) {
         RET_FAIL(error("`tags` feature is not supported for this backend"));
@@ -609,7 +657,7 @@ Ret Opt::check_var(
 
     // is this a known configuration-specific variable?
     const std::unordered_set<StxVarId>& v = is_list_var ? list_vars : vars;
-    if (std::find(v.begin(), v.end(), var) != v.end()) return Ret::OK;
+    if (v.find(var) != v.end()) return Ret::OK;
 
     RET_FAIL(error("unknown variable `%s` in configuration `%s`", var_name(var), conf));
 }
@@ -670,6 +718,10 @@ Ret Opt::validate_conf_code(
             break;
         case StxCodeType::LIST:
             if (n == 0) { // recurse into list body
+                if (list_vars.find(x->list.var) == list_vars.end()) {
+                    RET_FAIL(error("unknown list `%s` in configuration `%s`",
+                                   var_name(x->list.var), conf));
+                }
                 stack_code_list.push_back(x);
                 CHECK_RET(check_var(x->list.var, conf, vars, list_vars));
                 stack.push_back({x, 1});
@@ -821,61 +873,68 @@ static bool eval_cond(
     case StxOptKind::LOC:
         DCHECK(callback != nullptr);
         return callback->eval_cond(cond->lopt);
-    case StxOptKind::GLOB:
+    case StxOptKind::GLOB: {
+        bool res = false;
         switch (cond->gopt) {
         case StxGOpt::API_SIMPLE:
-            return opts->api == Api::SIMPLE;
+            res = opts->api == Api::SIMPLE; break;
         case StxGOpt::API_GENERIC:
-            return opts->api == Api::GENERIC;
+            res = opts->api == Api::GENERIC; break;
         case StxGOpt::API_RECORD:
-            return opts->api == Api::RECORD;
+            res = opts->api == Api::RECORD; break;
         case StxGOpt::API_STYLE_FUNCTIONS:
             switch (id) {
-                case StxCodeId::STX_yygetcond: return !opts->cond_get_naked;
-                case StxCodeId::STX_yysetcond: return !opts->cond_set_naked;
-                case StxCodeId::STX_yygetstate: return !opts->state_get_naked;
-                case StxCodeId::STX_yysetstate: return !opts->state_set_naked;
-                default: return opts->api_style == ApiStyle::FUNCTIONS;
+                case StxCodeId::STX_yygetcond: res = !opts->cond_get_naked; break;
+                case StxCodeId::STX_yysetcond: res = !opts->cond_set_naked; break;
+                case StxCodeId::STX_yygetstate: res = !opts->state_get_naked; break;
+                case StxCodeId::STX_yysetstate: res = !opts->state_set_naked; break;
+                default: res = opts->api_style == ApiStyle::FUNCTIONS; break;
             }
+            break;
         case StxGOpt::API_STYLE_FREEFORM:
             switch (id) {
-                case StxCodeId::STX_yygetcond: return opts->cond_get_naked;
-                case StxCodeId::STX_yysetcond: return opts->cond_set_naked;
-                case StxCodeId::STX_yygetstate: return opts->state_get_naked;
-                case StxCodeId::STX_yysetstate: return opts->state_set_naked;
-                default: return opts->api_style == ApiStyle::FREEFORM;
+                case StxCodeId::STX_yygetcond: res = opts->cond_get_naked; break;
+                case StxCodeId::STX_yysetcond: res = opts->cond_set_naked; break;
+                case StxCodeId::STX_yygetstate: res = opts->state_get_naked; break;
+                case StxCodeId::STX_yysetstate: res = opts->state_set_naked; break;
+                default: res = opts->api_style == ApiStyle::FREEFORM; break;
             }
+            break;
         case StxGOpt::CODE_MODEL_GOTO_LABEL:
-            return opts->code_model == CodeModel::GOTO_LABEL;
+            res = opts->code_model == CodeModel::GOTO_LABEL; break;
         case StxGOpt::CODE_MODEL_LOOP_SWITCH:
-            return opts->code_model == CodeModel::LOOP_SWITCH;
+            res = opts->code_model == CodeModel::LOOP_SWITCH; break;
         case StxGOpt::CODE_MODEL_REC_FUNC:
-            return opts->code_model == CodeModel::REC_FUNC;
+            res = opts->code_model == CodeModel::REC_FUNC; break;
         case StxGOpt::COMPUTED_CONTINUE:
-            return opts->computed_continue;
+            res = opts->computed_continue; break;
         case StxGOpt::START_CONDITIONS:
-            return opts->start_conditions;
+            res = opts->start_conditions; break;
         case StxGOpt::STORABLE_STATE:
-            return opts->storable_state;
+            res = opts->storable_state; break;
         case StxGOpt::DATE:
-            return opts->date;
+            res = opts->date; break;
         case StxGOpt::VER:
-            return opts->version;
+            res = opts->version; break;
         case StxGOpt::CASE_RANGES:
-            return opts->case_ranges;
+            res = opts->case_ranges; break;
         case StxGOpt::UNSAFE:
-            return opts->unsafe;
+            res = opts->unsafe; break;
         case StxGOpt::MONADIC:
-            return opts->monadic;
+            res = opts->monadic; break;
         case StxGOpt::LOOP_LABEL:
-            return !opts->label_loop.empty();
+            res = !opts->label_loop.empty(); break;
         case StxGOpt::CGOTO_RELATIVE:
-            return opts->computed_gotos_relative;
+            res = opts->computed_gotos_relative; break;
         case StxGOpt::FILL_ENABLE:
-            return opts->fill_enable;
+            res = opts->fill_enable; break;
         case StxGOpt::FN_THROW:
-            return !opts->fn_throw.empty();
+            res = !opts->fn_throw.empty(); break;
+        case StxGOpt::SHIFT_CONVERSION:
+            res = opts->shift_conversion; break;
         }
+        return callback != nullptr ? callback->eval_glob_cond(cond->gopt, res) : res;
+    }
     }
     UNREACHABLE();
     return false;
@@ -1036,6 +1095,10 @@ bool RenderCallback::next_in_list(StxVarId /*var*/) {
 bool RenderCallback::eval_cond(StxLOpt /*opt*/) {
     UNREACHABLE();
     return false;
+}
+
+bool RenderCallback::eval_glob_cond(StxGOpt /*opt*/, bool defval) {
+    return defval;
 }
 
 } // namespace re2c
